@@ -1,0 +1,113 @@
+{% extends 'course/courseBase.html' %}
+
+{% block courseBody %}
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、掌握借贷记账法的原理：包括账户结构、记账规则、会计分录编写规范。<br/>
+					2、理解并运用常用会计科目。
+				</span>
+                </div>
+                <div class="panel-body">
+                    <div align="center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li class="active"><a href="">1</a></li>
+                                <li><a href="">2</a></li>
+                                <li><a href="">3</a></li>
+                                <li><a href="">4</a></li>
+                                <li><a href="">5</a></li>
+                                <li><a href="">6</a></li>
+                                <li><a href="">7</a></li>
+                                <li><a href="">8</a></li>
+                                <li><a href="">9</a></li>
+                                <li><a href="">10</a></li>
+                                <li><a href="">11</a></li>
+                                <li><a href="">12</a></li>
+                                <li><a href="">13</a></li>
+                                <li><a href="">14</a></li>
+                                <li><a href="">15</a></li>
+                                <li><a href="">16</a></li>
+                                <li><a href="">17</a></li>
+                                <li><a href="">18</a></li>
+                                <li><a href="">19</a></li>
+                                <li><a href="">20</a></li>
+                                <li><a href="#" aria-label="Next"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <hr class="simple" color="#6f5499"/>
+
+                    <h4><span class="glyphicon glyphicon-bookmark"></span>
+                        <em>01</em></h4>
+                    <div class="ats-subject" style="margin-bottom: 30px">
+                        <blockquote>
+                            <label class="label  label-success">筹资活动</label>
+                            <p><span class="font-red">2020</span>年<span class="font-red">01</span>月<span
+                                    class="font-red">01</span>日，从中国建设银行取得<span class="font-red">3</span>年期贷款<span
+                                    class="font-red">12</span>%，按年结算利息。</p>
+                        </blockquote>
+                    </div>
+
+                    <div class="ats-board">
+                        <div>
+                            <p class="ats-fontsize-20">填写完整分录</p>
+                            <table id="borrowRow" class="table table-bordered"
+                                   style="margin-top: 10px; margin-bottom: 0px; border: 0px;">
+                                <tr>
+                                    <th class="ats-tablecolor-f"
+                                        style="width: 5%; border-right: 0px">借：
+                                    </th>
+                                    <td class="ats-tablecolor-f"
+                                        style="width: 5%; border-left: 0px"></td>
+                                    <td style="width: 40%" contentEditable="true"></td>
+                                    <td style="width: 40%" contentEditable="true"></td>
+                                    <td style="padding: 0px; border: 0px">
+                                        <div align="center">
+                                            <a style="color: green;" type="button" class="btn"
+                                               onclick="addRow('borrow')"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="loanRow" class="table table-bordered"
+                                   style="border: 0px">
+                                <tr>
+                                    <td class="ats-tablecolor-f"
+                                        style="width: 5%; border-right: 0px"></td>
+                                    <th class="ats-tablecolor-f"
+                                        style="width: 5%; border-left: 0px">贷：
+                                    </th>
+                                    <td style="width: 40%" contentEditable="true"></td>
+                                    <td style="width: 40%" contentEditable="true"></td>
+                                    <td style="padding: 0px; border: 0px">
+                                        <div align="center">
+                                            <a style="color: green;" type="button" class="btn"
+                                               onclick="addRow('loan')"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <hr class="simple" style="clear: both;" color="#6f5499"/>
+                    <div align="right">
+                        <input class="btn btn-success right-block" form="courseii-1"
+                               type="submit" value="提交">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock courseBody %}

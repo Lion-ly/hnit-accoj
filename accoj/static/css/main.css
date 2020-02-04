@@ -1,0 +1,85 @@
+footer a {
+    color: white;
+}
+
+#CompanyLawText dt {
+    padding-left: 10px;
+}
+
+#CompanyLawText dd {
+    padding-left: 20px;
+}
+
+.ats-rock {
+    height: 400px;
+}
+
+.ats-subject {
+    margin-left: 4%;
+    margin-right: 4%;
+    font-size: 16px;
+}
+
+.ats-subject input {
+    margin-top: 20px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    width: 40px;
+    height: 16px;
+    text-align: center;
+}
+
+.ats-board {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+.ats-unmargin-tb {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.ats-unpadding-lr {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.ats-fontsize-20 {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.ats-tablecolor-f {
+    background-color: #f5f5f5;
+}
+
+.ats-inputEditable {
+    width: 100%;
+    height: 36px;
+    border: 0;
+}
+
+.ats-tdEditable {
+    padding: 0
+}
+
+.ats-vouchertable th, td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ats-vouchertable-input {
+    width: 40px;
+    border: 0;
+}
+
+/*
+给表单必填项添上*号
+.control-label:after {
+    content: "*";
+    color: red;
+}
+*/

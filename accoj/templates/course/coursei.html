@@ -1,0 +1,256 @@
+{% extends 'course/courseBase.html' %}
+
+{% block courseBody %}
+    <script src="{{ url_for('static', filename='js/ajax/course/coursei.js') }}"></script>
+    <link href="{{ url_for('static', filename='css/course/coursei.css') }}" rel="stylesheet">
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、了解会计主体的含义及公司设立流程。<br/>2、了解会计对象的含义，理解会计核算的内容即交易或事项的含义。
+				</span>
+                </div>
+                <div class="panel-body">
+                    <!-- 作业标签 -->
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a
+                                href="#CreateCompany" aria-controls="CreateCompany" role="tab"
+                                data-toggle="tab">新增公司</a>
+                        </li>
+                        <li role="presentation"><a href="#NewBusiness"
+                                                   aria-controls="NewBusiness" role="tab" data-toggle="tab">新增业务</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- 第一标签 -->
+                        <div role="tabpanel" class="tab-pane active in fade" id="CreateCompany">
+                            <p class="ats-fontsize-20">1、新增公司</p>
+                            <form id="company_form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <table class="table table-bordered ">
+                                    <tr>
+                                        <th class="ats-tablecolor-f">公司名称</th>
+                                        <td id="1-1-1-2" colspan="5">
+                                            <input type="text" name="com_name" id="com_name">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="ats-tablecolor-f">住所</th>
+                                        <td colspan="5"><input type="text" name="com_address" id="com_address"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="ats-tablecolor-f">生产经营地</th>
+                                        <td colspan="5"><input type="text" name="com_business_addr"
+                                                               id="com_business_addr"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="ats-tablecolor-f" style="width: 14%">法定代表人</th>
+                                        <td style="width: 20%"><input type="text" name="com_legal_rep"
+                                                                      id="com_legal_rep"></td>
+                                        <th class="ats-tablecolor-f" style="width: 8%">资本注册</th>
+                                        <td style="width: 20%"><input type="text" name="com_regist_cap"
+                                                                      id="com_regist_cap"></td>
+                                        <th class="ats-tablecolor-f" style="width: 8%">经营期限</th>
+                                        <td style="width: 20%"><input type="text" name="com_operate_period"
+                                                                      id="com_operate_period"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="ats-tablecolor-f" style="height: 100px">经营范围</th>
+                                        <td colspan="5">
+                                            <textarea rows="4" name="com_business_scope"
+                                                      id="com_business_scope"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="ats-tablecolor-f" rowspan="5">股东(发起人)名称或姓名</th>
+                                        <td colspan="5"><input type="text" name="com_shareholder_1"
+                                                               id="com_shareholder_1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"><input type="text" name="com_shareholder_2"
+                                                               id="com_shareholder_2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"><input type="text" name="com_shareholder_3"
+                                                               id="com_shareholder_3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"><input type="text" name="com_shareholder_4"
+                                                               id="com_shareholder_4"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"><input type="text" name="com_shareholder_5"
+                                                               id="com_shareholder_5"></td>
+                                    </tr>
+                                </table>
+                            </form>
+
+                            <div class="panel-group" id="accordion" role="tablist"
+                                 aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse"
+                                               data-parent="#accordion"
+                                               href="#AdministrationforIndustryandCommerce"
+                                               aria-expanded="true"
+                                               aria-controls="AdministrationforIndustryandCommerce"> <span
+                                                    class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;国家市场监督管理总局
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="AdministrationforIndustryandCommerce"
+                                         class="panel-collapse collapse in" role="tabpanel"
+                                         aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            国家市场监督管理总局官方网站：<a href="http://www.samr.gov.cn"
+                                                              target="_blank">www.samr.gov.cn</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                               data-parent="#accordion" href="#CompanyLaw"
+                                               aria-expanded="false" aria-controls="CompanyLaw"><span
+                                                    class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;公司法</a>
+                                        </h4>
+                                    </div>
+                                    <div id="CompanyLaw" class="panel-collapse collapse"
+                                         role="tabpanel" aria-labelledby="headingTwo">
+                                        <div class="panel-body">
+                                            <div class="row pre-scrollable" style="height: 300px"
+                                                 id="CompanyLawText">
+                                                <dl>
+                                                    <dt>有限责任公司的设立</dt>
+                                                    <dt>第一节 设立</dt>
+                                                    <dt>第二十三条 设立有限责任公司，应当具备下列条件：</dt>
+                                                    <dd>(一)股东符合法定人数；</dd>
+                                                    <dd>(二)有符合公司章程规定的全体股东认缴的出资额；</dd>
+                                                    <dd>(三)股东共同制定公司章程；</dd>
+                                                    <dd>(四)有公司名称，建立符合有限责任公司要求的组织机构；</dd>
+                                                    <dd>(五)有公司住所。</dd>
+                                                    <dt>第二十四条</dt>
+                                                    <dd>有限责任公司由五十个以下股东出资设立。</dd>
+                                                    <dt>第二十五条</dt>
+                                                    <dd>有限责任公司章程应当载明下列事项：</dd>
+                                                    <dd>(一)公司名称和住所；</dd>
+                                                    <dd>(二)公司经营范围；</dd>
+                                                    <dd>(三)公司注册资本；</dd>
+                                                    <dd>(四)股东的姓名或者名称；</dd>
+                                                    <dd>(五)股东的出资方式、出资额和出资时间；</dd>
+                                                    <dd>(六)公司的机构及其产生办法、职权、议事规则；</dd>
+                                                    <dd>(七)公司法定代表人；</dd>
+                                                    <dd>(八)股东会会议认为需要规定的其他事项。 股东应当在公司章程上签名、盖章。</dd>
+                                                    <dt>第二十六条</dt>
+                                                    <dd>有限责任公司的注册资本为在公司登记机关登记的全体股东认缴的出资额。
+                                                        法律、行政法规以及国务院决定对有限责任公司注册资本实缴、注册资本最低限额另有规定的，从其规定。
+                                                    </dd>
+                                                    <dt>第二十七条</dt>
+                                                    <dd>
+                                                        股东可以用货币出资，也可以用实物、知识产权、土地使用权等可以用货币估价并可以依法转让的非货币财产作价出资；但是，法律、行政法规规定不得作为出资的财产除外。
+                                                        对作为出资的非货币财产应当评估作价，核实财产，不得高估或者低估作价。法律、行政法规对评估作价有规定的，从其规定。
+                                                    </dd>
+                                                    <dt>第二十八条</dt>
+                                                    <dd>
+                                                        股东应当按期足额缴纳公司章程中规定的各自所认缴的出资额。股东以货币出资的，应当将货币出资足额存入有限责任公司在银行开设的账户；以非货币财产出资的，应当依法办理其财产权的转移手续。
+                                                        股东不按照前款规定缴纳出资的，除应当向公司足额缴纳外，还应当向已按期足额缴纳出资的股东承担违约责任。
+                                                    </dd>
+                                                    <dt>第二十九条</dt>
+                                                    <dd>
+                                                        股东认足公司章程规定的出资后，由全体股东指定的代表或者共同委托的代理人向公司登记机关报送公司登记申请书、公司章程等文件，申请设立登记。
+                                                    </dd>
+                                                    <dt>第三十条</dt>
+                                                    <dd>
+                                                        有限责任公司成立后，发现作为设立公司出资的非货币财产的实际价额显著低于公司章程所定价额的，应当由交付该出资的股东补足其差额；公司设立时的其他股东承担连带责任。
+                                                    </dd>
+                                                    <dt>第三十一条</dt>
+                                                    <dd>有限责任公司成立后，应当向股东签发出资证明书。 出资证明书应当载明下列事项：</dd>
+                                                    <dd>(一)公司名称；</dd>
+                                                    <dd>(二)公司成立日期；</dd>
+                                                    <dd>(三)公司注册资本；</dd>
+                                                    <dd>(四)股东的姓名或者名称、缴纳的出资额和出资日期；</dd>
+                                                    <dd>(五)出资证明书的编号和核发日期。 出资证明书由公司盖章。</dd>
+                                                    <dt>第三十二条</dt>
+                                                    <dd>有限责任公司应当置备股东名册，记载下列事项：</dd>
+                                                    <dd>(一)股东的姓名或者名称及住所；</dd>
+                                                    <dd>(二)股东的出资额；</dd>
+                                                    <dd>
+                                                        (三)出资证明书编号。记载于股东名册的股东，可以依股东名册主张行使股东权利。公司应当将股东的姓名或者名称向公司登记机关登记；登记事项发生变更的，应当办理变更登记。未经登记或者变更登记的，不得对抗第三人。
+                                                    </dd>
+                                                    <dt>第三十三条</dt>
+                                                    <dd>股东有权查阅、复制公司章程、股东会会议记录、董事会会议决议、监事会会议决议和财务会计报告。
+                                                        股东可以要求查阅公司会计账簿。股东要求查阅公司会计账簿的，应当向公司提出书面请求，说明目的。公司有合理根据认为股东查阅会计账簿有不正当目的，可能损害公司合法利益的，可以拒绝提供查阅，并应当自股东提出书面请求之日起十五日内书面答复股东并说明理由。公司拒绝提供查阅的，股东可以请求人民法院要求公司提供查阅。
+                                                    </dd>
+                                                    <dt>第三十四条</dt>
+                                                    <dd>
+                                                        股东按照实缴的出资比例分取红利；公司新增资本时，股东有权优先按照实缴的出资比例认缴出资。但是，全体股东约定不按照出资比例分取红利或者不按照出资比例优先认缴出资的除外。
+                                                    </dd>
+                                                    <dt>第三十五条</dt>
+                                                    <dd>公司成立后，股东不得抽逃出资。</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 第二标签 -->
+                        <div role="tabpanel" class="tab-pane fade" id="NewBusiness">
+
+                            <p class="ats-fontsize-20">2、新增业务</p>
+
+                            <div class="ats-subject" id="body-text">
+                                <div class="btn-group btn-group-justified" role="group" style="margin-top:20px;"
+                                     aria-label="...">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-success"
+                                                onclick="addActivity('success')">新增：筹资活动
+                                        </button>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-info"
+                                                onclick="addActivity('info')">新增：投资活动
+                                        </button>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-warning"
+                                                onclick="addActivity('warning')">新增：经营活动
+                                        </button>
+                                    </div>
+                                </div>
+                                <p>
+                                    <label class="label  label-success">筹资活动</label><input
+                                        type="text">年<input type="text">月<input
+                                        type="text">日，从中国建设银行取得<input type="text">年期贷款<input
+                                        type="text">万元存入银行，年利率为<input type="text">%，按年结算利息。
+                                </p>
+                                <p>
+                                    <label class="label  label-info">投资活动</label><input type="text">年<input
+                                        type="text">月<input type="text">日，从中国建设银行取得<input
+                                        type="text">年期贷款<input type="text">万元存入银行，年利率为<input
+                                        type="text">%，按年结算利息。
+                                </p>
+                                <p>
+                                    <label class="label  label-warning">经营活动</label><input
+                                        type="text">年<input type="text">月<input
+                                        type="text">日，从中国建设银行取得<input type="text">年期贷款<input
+                                        type="text">万元存入银行，年利率为<input type="text">%，按年结算利息。
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr class="simple" color="#6f5499"/>
+                    <div align="right">
+                        <button type="button" class="btn btn-success" id="company_form_button">
+                            <span class="glyphicon"></span>&nbsp;提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock courseBody %}

@@ -1,0 +1,1035 @@
+{% extends 'course/courseBase.html' %}
+
+{% block courseBody %}
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、掌握并识记常用会计科目。
+				</span>
+                </div>
+                <div class="panel-body">
+                    <div align="center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li class="active"><a href="">1</a></li>
+                                <li><a href="">2</a></li>
+                                <li><a href="">3</a></li>
+                                <li><a href="">4</a></li>
+                                <li><a href="">5</a></li>
+                                <li><a href="">6</a></li>
+                                <li><a href="">7</a></li>
+                                <li><a href="">8</a></li>
+                                <li><a href="">9</a></li>
+                                <li><a href="">10</a></li>
+                                <li><a href="">11</a></li>
+                                <li><a href="">12</a></li>
+                                <li><a href="">13</a></li>
+                                <li><a href="">14</a></li>
+                                <li><a href="">15</a></li>
+                                <li><a href="">16</a></li>
+                                <li><a href="">17</a></li>
+                                <li><a href="">18</a></li>
+                                <li><a href="">19</a></li>
+                                <li><a href="">20</a></li>
+                                <li><a href="#" aria-label="Next"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <hr class="simple" color="#6f5499"/>
+                    <!-- 业务一 -->
+                    <div>
+                        <h4><span class="glyphicon glyphicon-bookmark"></span>
+                            <em>01</em></h4>
+                        <div class="ats-subject">
+                            <blockquote>
+                                <label class="label  label-success">筹资活动</label>
+                                <p><span class="font-red">2020</span>年<span class="font-red">01</span>月<span
+                                        class="font-red">01</span>日，从中国建设银行取得<span class="font-red">3</span>年期贷款<span
+                                        class="font-red">12</span>%，按年结算利息。</p>
+                            </blockquote>
+                        </div>
+                        <div class="ats-board">
+                            <div style="">
+                                <p class="ats-fontsize-20">涉及到的会计科目及增减变化</p>
+                            </div>
+
+                            <form class="" id="courseii-1">
+                                <label class="sr-only" for="assets"></label>
+                                <!-- 资产类 -->
+                                <div style="clear: both;">
+                                    <p class="font-CheckBoxTitle"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;资产类
+                                    </p>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">库存现金</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">银行存款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">其他货币资金</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">交易性金融资产</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应收票据</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应收账款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">预付账款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应收股利</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应收利息</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">其他应收款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">坏账准备</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">材料采购</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">在途物资</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">原材料</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">材料成本差异</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">库存商品</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">发出商品</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">商品进销差价</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">委托加工物资</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">存货跌价准备</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">持有至到期投资</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">持有至到期投资减值准备</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">可供出售金融资产</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">长期股权投资</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">长期股权投资减值准备</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">投资性房地产</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">长期应收款</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">固定资产</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">累计折旧</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">固定资产减值准备</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">在建工程</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">工程物资</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">固定资产清理</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">无形资产</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">累计摊销</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">无形资产减值准备</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">商誉</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">递延所得税资产</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                    <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                        <div class="input-group-addon">待处理财产损溢</div>
+                                        <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                    </div>
+                                </div>
+
+
+                                <!-- 负债类 -->
+                                <div style="clear: both;">
+                                    <p class="font-CheckBoxTitle"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;负债类
+                                    </p>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">短期借款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应付票据</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应付账款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">预收账款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应付职工薪酬</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应交税费</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应付利息</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应付股利</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">其他应付款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">长期借款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">应付债券</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">长期应付款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">专项应付款</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">预计负债</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">递延所得税负债</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- 所有者权益 -->
+                                <div style="clear: both;">
+                                    <p class="font-CheckBoxTitle"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;所有者权益
+                                    </p>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">实收资本</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">资本公积</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">盈余公积</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">本年利润</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">利润分配</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- 成本类 -->
+                                <div style="clear: both;">
+                                    <p class="font-CheckBoxTitle"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;成本类
+                                    </p>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">生产成本</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">制造费用</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">劳务成本</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">研发支出</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- 损益类 -->
+                                <div style="clear: both;">
+                                    <p class="font-CheckBoxTitle"><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;损益类
+                                    </p>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">主营业务收入</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">其他业务收入</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">公允价值变动损益</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">投资收益</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">营业外收入</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">主营业务成本</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">其他业务成本</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">税金及附加</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">销售费用</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">财务费用</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">资产减值损失</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">营业外支出</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">所得税费用</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-4 col-md-4">
+                                        <div class="input-group">
+										<span class="input-group-addon"> <input type="checkbox"
+                                                                                aria-label="...">
+										</span>
+                                            <div class="input-group-addon">以前年度损益调整</div>
+                                            <span class="input-group-btn">
+											<button class="btn btn-default btn-sm" type="button"
+                                                    onclick="AddAndSub(this)">+</button>
+										</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <hr class="simple" style="clear: both;" color="#6f5499"/>
+                    <div align="right">
+                        <input class="btn btn-success right-block" form="courseii-1"
+                               type="submit" value="提交">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock courseBody %}

@@ -1,0 +1,161 @@
+{% extends 'course/courseBase.html' %}
+
+{% block courseBody %}
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>1、掌握财务报表基本分析方法及其运用。 </span>
+                </div>
+                <div class="panel-body">
+                    <div align="center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li><a href="{{ url_for('accoj.courseix') }}">趋势分析法</a></li>
+                                <li><a href="{{ url_for('accoj.courseix_2') }}">共同比分析法</a></li>
+                                <li><a href="{{ url_for('accoj.courseix_3') }}">因素分析法</a></li>
+                                <li class="active"><a href="{{ url_for('accoj.courseix_4') }}">比率分析法</a></li>
+                                <li><a href="#" aria-label="Next"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <hr class="simple" color="#6f5499"/>
+
+                    <p class="ats-fontsize-20">4、比率分析法</p>
+                    <p>比率分析法是利用企业同一时期的会计报表中两个或两个以上指标之间的某种关联关系，计算出一系列财务比率，据以考察、分析和评价企业财务状况和经营业绩的分析方法。</p>
+
+                    <div>
+                        <table class="table table-bordered ats-vouchertable">
+                            <tr class="ats-tablecolor-f">
+                                <th colspan="2" style="width: 50%;">项目</th>
+                                <th style="width: 25%;">本期</th>
+                                <th style="width: 25%;">上期</th>
+                            </tr>
+
+                            <tr>
+                                <th rowspan="5" class="ats-tablecolor-f">偿债能力分析</th>
+                                <th class="ats-tablecolor-f">流动比率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">速动比率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">现金比率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">资产负债率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">产权比率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+
+                            <tr>
+                                <th rowspan="5" class="ats-tablecolor-f">盈利能力分析</th>
+                                <th class="ats-tablecolor-f">销售毛利率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">营业利润率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">成本费用利润率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">净利润率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">净资产收益率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+
+                            <tr>
+                                <th rowspan="5" class="ats-tablecolor-f">营运能力分析</th>
+                                <th class="ats-tablecolor-f">流动资产周转率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">应收账款周转率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">存货周转率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">固定资产周转率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">总资产周转率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+
+                            <tr>
+                                <th rowspan="5" class="ats-tablecolor-f">发展能力分析</th>
+                                <th class="ats-tablecolor-f">固定资产增长率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">总资产增长率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">资本积累率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">净利润增长率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                            <tr>
+                                <th class="ats-tablecolor-f">营业收入增长率</th>
+                                <td contentEditable="true"></td>
+                                <td contentEditable="true"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr class="simple" style="clear: both;" color="#6f5499"/>
+
+                    <div align="right" style="margin-top: 10px;">
+                        <input class="btn btn-success right-block" form="courseii-1"
+                               type="submit" value="提交">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock courseBody %}

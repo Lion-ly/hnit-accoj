@@ -1,0 +1,155 @@
+{% extends 'course/courseBase.html' %}
+
+{% block courseBody %}
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、掌握账户及其格式。<br/> 2、掌握本期发生额和期末余额的计算。<br/>
+					3、理解试算平衡的过程和应用。
+				</span>
+                </div>
+                <div class="panel-body">
+                    <!-- 作业标签 -->
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a
+                                href="#CreateAccount" aria-controls="CreateAccount" role="tab"
+                                data-toggle="tab">设立账户</a></li>
+                        <li role="presentation"><a href="#BalanceSheet"
+                                                   aria-controls="BalanceSheet" role="tab" data-toggle="tab">平衡表</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- 第一标签 -->
+                        <div role="tabpanel" class="tab-pane active in fade"
+                             id="CreateAccount">
+
+                            <p class="ats-fontsize-20">1、设立账户，并登记发生额，结算余额</p>
+
+
+                            <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                                 style="">
+                                <button type="button" class="btn btn-success btn-sm">新增</button>
+                                <button type="button"
+                                        class="btn btn-success btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span class="caret"></span> <span class="sr-only">Toggle
+									Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:addTTable('left')">左T表</a></li>
+                                    <li><a href="javascript:addTTable('right')">右T表</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="deleteTTable()">删除
+                            </button>
+                            <!-- T型表格 -->
+                            <div align="center" id="TTable" style="margin-bottom: 20px"></div>
+                        </div>
+                        <!-- 第二标签 -->
+                        <div role="tabpanel" class="tab-pane fade" id="BalanceSheet">
+                            <p class="ats-fontsize-20">2、第1个会计期间的试算平衡表：</p>
+                            <table id="firstRow" class="table table-bordered ats-vouchertable"
+                                   style="border: 0px">
+                                <tr>
+                                    <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+                                    <th colspan="2" class="ats-tablecolor-f">期初余额</th>
+                                    <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+                                    <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+
+                                </tr>
+                                <tr>
+                                    <th class="ats-tablecolor-f">借方</th>
+                                    <th class="ats-tablecolor-f">贷方</th>
+                                    <th class="ats-tablecolor-f">借方</th>
+                                    <th class="ats-tablecolor-f">贷方</th>
+                                    <th class="ats-tablecolor-f">借方</th>
+                                    <th class="ats-tablecolor-f">贷方</th>
+
+                                </tr>
+                                <tr>
+                                    <td class="ats-tablecolor-f">合计</td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                </tr>
+                                <tr>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td style="padding: 0px; border: 0px; width: 5%">
+                                        <div align="center">
+                                            <a style="color: green;" type="button" class="btn"
+                                               onclick="addRowV('first')"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p class="ats-fontsize-20">3、第2个会计期间的试算平衡表：</p>
+                            <table id="secondRow"
+                                   class="table table-bordered ats-vouchertable" style="border: 0px">
+                                <tr>
+                                    <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+                                    <th colspan="2" class="ats-tablecolor-f">期初余额</th>
+                                    <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+                                    <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+
+                                </tr>
+                                <tr>
+                                    <th class="ats-tablecolor-f">借方</th>
+                                    <th class="ats-tablecolor-f">贷方</th>
+                                    <th class="ats-tablecolor-f">借方</th>
+                                    <th class="ats-tablecolor-f">贷方</th>
+                                    <th class="ats-tablecolor-f">借方</th>
+                                    <th class="ats-tablecolor-f">贷方</th>
+
+                                </tr>
+                                <tr>
+                                    <td class="ats-tablecolor-f">合计</td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                </tr>
+                                <tr>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td contentEditable="true"></td>
+                                    <td style="padding: 0px; border: 0px; width: 5%">
+                                        <div align="center">
+                                            <a style="color: green;" type="button" class="btn"
+                                               onclick="addRowV('second')"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr class="simple" style="clear: both;" color="#6f5499"/>
+                    <div align="right">
+                        <input class="btn btn-success right-block" onclick="submitV()"
+                               type="submit" value="提交">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock courseBody %}
