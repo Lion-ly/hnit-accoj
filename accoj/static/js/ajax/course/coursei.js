@@ -7,6 +7,7 @@ $(function () {
             type: "post",
             data: data,
             dataType: "json",
+            cache: false,
             async: true,
             success: function (data) {
                 if (data["result"] === "true") {
@@ -41,6 +42,7 @@ function getCompanyInfo() {
         type: "post",
         data: data,
         dataType: "json",
+        cache: false,
         async: true,
         success: function (data) {
             // 公司已经创立过，将值填充，并将按钮置为不可点击以及表单不可编辑
