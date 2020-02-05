@@ -25,7 +25,9 @@
 &nbsp;&nbsp;创建环境`pipenv install`<br/>
 &nbsp;&nbsp;进入环境`pipenv shell`<br/>
 &nbsp;&nbsp;运行应用`flask run --host=0.0.0.0 --port=80`<br/>
-&nbsp;&nbsp;查看路由`flask routes`
+&nbsp;&nbsp;查看路由`flask routes`<br/>
+3.mongo windows安装见https://www.cnblogs.com/coodyz/p/12219823.html<br/>
+&nbsp;&nbsp;linux见https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat
 ## 四、后端进度
 1.项目后端架构完成 2020-1-20<br/>
 2.登陆功能完成 2020-1-21<br/>
