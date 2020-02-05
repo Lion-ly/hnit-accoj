@@ -10,14 +10,14 @@ $(function () {
             success: function (data) {
                 if (data["result"] === "true") {
                     $('#signin_form').append("<div class='alert alert-info' style='text-align: center'> <strong>登陆成功 1s后自动跳转</strong></div>");
-                    setTimeout("location.href='localhost:80';location.reload();", 1000)
+                    setTimeout("location.href='localhost:80';location.reload();", 1000);
                 } else {
                     $('#signin_form').append("<div class='alert alert-danger' id='signin_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
-                    setTimeout("$('#signin_danger').remove()", 1000)
+                    setTimeout("$('#signin_danger').remove()", 1000);
                 }
             },
-            error: function (e) {
-
+            error: function (err) {
+                console.log(err.statusText + "异常");
             }
         })
 

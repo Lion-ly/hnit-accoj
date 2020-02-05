@@ -1,10 +1,9 @@
 {% extends 'course/courseBase.html' %}
 
 {% block courseBody %}
-    <script src="{{ url_for('static', filename='js/ajax/course/coursei.js') }}"></script>
     <link href="{{ url_for('static', filename='css/course/coursei.css') }}" rel="stylesheet">
     <div class="courseBody">
-        <!-- 习题主体 --> 
+        <!-- 习题主体 -->
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -14,7 +13,7 @@
                 <div class="panel-body">
                     <!-- 作业标签 -->
                     <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a
+                        <li role="presentation" class="active" id="CreateCompany-li"><a
                                 href="#CreateCompany" aria-controls="CreateCompany" role="tab"
                                 data-toggle="tab">新增公司</a>
                         </li>
@@ -45,12 +44,15 @@
                                                                id="com_business_addr"></td>
                                     </tr>
                                     <tr>
-                                        <th class="ats-tablecolor-f" style="width: 17%">法定代表人</th>
-					<td style="width: 17%" contentEditable="true"></td>
-					<th class="ats-tablecolor-f" style="width: 16%">资本注册</th>
-					<td style="width: 16%" contentEditable="true"></td>
-					<th class="ats-tablecolor-f" style="width: 16%">经营期限</th>
-					<td style="width: 16%" contentEditable="true"></td>
+                                        <th class="ats-tablecolor-f" style="width: 14%">法定代表人</th>
+                                        <td style="width: 20%"><input type="text" name="com_legal_rep"
+                                                                      id="com_legal_rep"></td>
+                                        <th class="ats-tablecolor-f" style="width: 8%">资本注册</th>
+                                        <td style="width: 20%"><input type="text" name="com_regist_cap"
+                                                                      id="com_regist_cap"></td>
+                                        <th class="ats-tablecolor-f" style="width: 8%">经营期限</th>
+                                        <td style="width: 20%"><input type="text" name="com_operate_period"
+                                                                      id="com_operate_period"></td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f" style="height: 100px">经营范围</th>

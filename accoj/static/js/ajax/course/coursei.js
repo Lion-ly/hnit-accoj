@@ -1,6 +1,7 @@
 $(function () {
     $('#company_form_button').click(function () {
         var data = $('#company_form').serialize();
+        // 提交表单
         $.ajax({
             url: "/company_form_submit",
             type: "post",
@@ -20,13 +21,52 @@ $(function () {
                     }
                     alert(data["message"]);
                 } else {
+                    getCompanyInfo();
                     alert(data["message"])
                 }
             },
-            error: function (e) {
-                alert("error?:" + e);
+            error: function (err) {
+                console.log(err.statusText + "异常");
             }
         })
 
     })
+});
+
+function getCompanyInfo() {
+    // 获取公司信息
+    var data = $('#company_form').serialize();
+    $.ajax({
+        url: "/get_company_info",
+        type: "post",
+        data: data,
+        dataType: "json",
+        async: true,
+        success: function (data) {
+            // 公司已经创立过，将值填充，并将按钮置为不可点击以及表单不可编辑
+            $("#company_form_button").attr("disabled", true);
+            $(":text").attr("readonly", "readonly");
+            $("textarea").attr("readonly", "readonly");
+            company_info = data["company_info"];
+            for (var prop in company_info) {
+                if (prop === "com_shareholder") {
+                    com_shareholders = company_info[prop];
+                    for (var i = 0; i < com_shareholders.length; i++) {
+                        $("#com_shareholder_" + i).val(com_shareholders[i]["com_shareholder"]);
+                    }
+                } else {
+                    $("#" + prop).val(company_info[prop]);
+                }
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText + "异常");
+        }
+    })
+
+}
+
+$(function () {
+    // CreateCompany-li标签获取公司信息数据
+    $('#CreateCompany-li').click(getCompanyInfo());
 });
