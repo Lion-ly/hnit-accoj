@@ -17,15 +17,28 @@ def index():
     return render_template('index.html')
 
 
-@accoj_bp.route('/coursei')
+@accoj_bp.route('/coursei', methods=['POST', 'GET'])
 @login_required
 def coursei():
     return render_template('course/coursei.html')
 
 
+@accoj_bp.route('/get_company_info', methods=['POST', 'GET'])
+@login_required
+def get_company_info():
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session["username"]})
+        # 公司已经创立过，填充表单
+        if company is not None:
+            company.pop("_id")
+            return jsonify(company_info=company)
+    return redirect('/coursei')
+
+
 @accoj_bp.route('/company_form_submit', methods=['POST', 'GET'])
 @login_required
 def company_form_submit():
+    """提交公司创立信息表单"""
     if request.method == "POST":
         company = mongo.db.company.find_one({"student_no": session["username"]})
         if company is not None:
@@ -34,7 +47,8 @@ def company_form_submit():
         data_list = ["com_name", "com_address", "com_business_addr", "com_legal_rep", "com_regist_cap",
                      "com_operate_period", "com_business_scope", "com_shareholder_1", "com_shareholder_2",
                      "com_shareholder_3", "com_shareholder_4", "com_shareholder_5"]
-        data_dict = {}
+        data_dict = dict()
+        data_dict["com_shareholder"] = []
         err_pos = []
 
         for data_name in data_list:
@@ -47,10 +61,17 @@ def company_form_submit():
         for key, value in data_dict.items():
             if value is "":
                 err_pos.append({"err_pos": key})
-                if key.startswith("com_shareholder") is False:
+                if key.startswith("com_shareholder_") is False:
                     flag = False
                 else:
                     shareholder_num += 1
+            if key.startswith("com_shareholder_"):
+                data_dict["com_shareholder"].append({"com_shareholder": value})
+
+        for key in list(data_dict.keys()):
+            if key.startswith("com_shareholder_"):
+                data_dict.pop(key)
+
         if shareholder_num == 0:
             flag = False
         if flag is False:
