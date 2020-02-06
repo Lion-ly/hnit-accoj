@@ -1,6 +1,7 @@
 # 当前为终端操作
 # Flask-PyMongo见https://flask-pymongo.readthedocs.io/en/latest/
 # 建议用notepad++打开
+# new Date()在python中为`datetime.datetime`对象，获取当前时间datetime.datetime.now()
 
 # 用户表(已确定)
 db.accoj.users.insert({"student_no": "17020340111", 	# 学号
@@ -19,18 +20,23 @@ db.accoj.subject.insert({"subject_no": 1,				# 科目编号
 						 "subject_type": " "			# 科目类别（资产类，权益类，成本类，费用类，收入类，利润类）		
 						})
 
-# 题库表
+# 题库表(已确定)
 db.accoj.problem.insert({"content": "...", 	    		# 内容
-						 "date": "2019-12-29",  		# 日期
-						 "subjects": [], 				# 科目
-						 "key_element": [],				# 要素
-						 "valuenum": 5, 				# 变量数目
-						 "values": [{"value": 1, "low": 0, "high": 10}] # 值，下限，上限
+						 "date": new Date(),  			# 日期
+						 "business_type": "",			# 业务类型（筹资活动、投资活动、经营活动）
+						 "affect_type": 1,				# 对会计等式影响类型
+						 "subjects": [], 				# 科目列表
+						 "values": [{"is_random": boolean, "is_num": boolean, "value": num or str}] # 是否需要随机生成，数值/字符串，值
+						 "key_element_infos": [					# 会计要素信息
+											  {"key_element": [],	# 会计要素
+											   "money": {"value_pos": 1, "value": 1, "low": 0, "high": 10}, # 在上述values的位置（数组下标），值，下限，上限
+											   "is_up": boolean	# 增减判定
+											  }]
 						})
 
 (用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为"student_no_cp")				 
 # 公司表
-db.accoj.company.insert({"student_no": student_no,		 	# 用户ID
+db.accoj.company.insert({"student_no": student_no,		# 用户ID
 						 "com_name": " ",	  			# 公司名称
 						 "com_address": " ",	  		# 公司地址
 						 "com_business_addr": " ",		# 公司经营地址
@@ -40,20 +46,18 @@ db.accoj.company.insert({"student_no": student_no,		 	# 用户ID
 						 "com_business_scope": " ",		# 经营范围
 						 "com_shareholder": [],			# 股东姓名
 						 # 公司业务
-						 "business": [{"business_id": 1,# 公司业务id，从1开始增加
-									   "content": "..." 
-									   "date": "2019-12-29",
-									   "subjects": [],
-									   "valuenum": 5,
-									   "values": []
-									   "affect_type": 1,						# 对会计等式影响类型
+						 "business": [{"content": "...", 	    		# 内容
+									   "date": new Date(),  			# 日期
+									   "business_type": "",			# 业务类型（筹资活动、投资活动、经营活动）
+									   "affect_type": 1,				# 对会计等式影响类型
+									   "subjects": [], 				# 科目列表
+									   "values": [{"is_random": boolean, "is_num": boolean, "value": num or str}] # 是否需要随机生成，数值/字符串，值
 									   "key_element_infos": [					# 会计要素信息
-															{
-															 "key_element": [],	# 会计要素
-															 "money": 1,		# 金额
-															 "is_up": boolean	# 增减
+															{"key_element": [],	# 会计要素
+															 "money": {"value_pos": 1, "value": 1}, # 在上述values的位置（数组下标），值
+															 "is_up": boolean	# 增减判定
 															}]
-									  }]
+						}]
 						 # 会计分录
 						 "entry_infos": [{
 										  "entry_name": " ",# 分录名称
