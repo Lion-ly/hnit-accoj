@@ -16,6 +16,7 @@ password = parse.quote_plus("Love199805#")
 
 class BaseConfig(object):
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev key')
+    TEMPLATES_AUTO_RELOAD = True
 
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 

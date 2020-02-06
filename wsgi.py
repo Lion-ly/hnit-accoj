@@ -8,3 +8,4 @@ if os.path.exists(dotenv_path):
 from accoj import create_app
 
 app = create_app('development')
+app.jinja_env.auto_reload = True
