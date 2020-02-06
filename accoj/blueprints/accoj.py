@@ -8,6 +8,7 @@
 from flask import Blueprint, render_template, redirect, request, jsonify, session
 from accoj.utils import login_required
 from accoj.extensions import mongo
+import datetime
 
 accoj_bp = Blueprint('accoj', __name__)
 
@@ -65,8 +66,8 @@ def company_form_submit():
                     flag = False
                 else:
                     shareholder_num += 1
-            if key.startswith("com_shareholder_"):
-                data_dict["com_shareholder"].append({"com_shareholder": value})
+            elif key.startswith("com_shareholder_"):
+                data_dict["com_shareholder"].append(value)
 
         for key in list(data_dict.keys()):
             if key.startswith("com_shareholder_"):

@@ -54,7 +54,7 @@ function getCompanyInfo() {
                 if (prop === "com_shareholder") {
                     com_shareholders = company_info[prop];
                     for (var i = 0; i < com_shareholders.length; i++) {
-                        $("#com_shareholder_" + i).val(com_shareholders[i]["com_shareholder"]);
+                        $("#com_shareholder_" + i).val(com_shareholders[i]);
                     }
                 } else {
                     $("#" + prop).val(company_info[prop]);
