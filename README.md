@@ -22,10 +22,11 @@
 1.Python先安装pipenv
 `pip install pipenv`<br/>
 2.终端cd切换到项目根目录<br/>
-&nbsp;&nbsp;创建环境`pipenv install`<br/>
-&nbsp;&nbsp;进入环境`pipenv shell`<br/>
-&nbsp;&nbsp;运行应用`flask run --host=0.0.0.0 --port=80`<br/>
-&nbsp;&nbsp;查看路由`flask routes`<br/>
+  创建环境`pipenv install`<br/>
+  进入环境`pipenv shell`<br/>
+  安装环境`pip install -r requirements.txt`<br/>
+  运行应用`flask run --host=0.0.0.0 --port=80`<br/>
+  查看路由`flask routes`<br/>
 3.mongo windows安装见https://www.cnblogs.com/coodyz/p/12219823.html<br/>
 &nbsp;&nbsp;linux见https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat
 ## 四、后端进度
