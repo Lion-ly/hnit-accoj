@@ -10,6 +10,7 @@ $(function () {
             success: function (data) {
                 if (data["result"] === "true") {
                     $('#signin_form').append("<div class='alert alert-info' style='text-align: center'> <strong>登陆成功 1s后自动跳转</strong></div>");
+                    $('#signin_button').attr("disabled", true);
                     setTimeout("location.href='localhost:80';location.reload();", 1000);
                 } else {
                     $('#signin_form').append("<div class='alert alert-danger' id='signin_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
@@ -36,6 +37,7 @@ $(function () {
             success: function (data) {
                 if (data["result"] === "true") {
                     $('#login_form').append("<div class='alert alert-info' style='text-align: center'> <strong>注册成功 1s后自动跳转</strong></div>");
+                    $('#login_button').attr("disabled", true);
                     setTimeout("location.href='localhost:80';location.reload();", 1000)
                 } else {
                     $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
@@ -62,6 +64,7 @@ $(function () {
             success: function (data) {
                 if (data["result"] === "true") {
                     $('#update_pwd_form').append("<div class='alert alert-info' style='text-align: center'> <strong>更改成功 1s后自动跳转</strong></div>");
+                    $('#update_pwd_button').attr("disabled", true);
                     setTimeout("location.href='localhost:80';location.reload();", 1000)
                 } else {
                     $('#update_pwd_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
