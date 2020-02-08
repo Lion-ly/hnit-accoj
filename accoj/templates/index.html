@@ -7,8 +7,8 @@
 {% block meun %}{% endblock meun %}
 
 {% block courseBody %}
-    <!-- 巨幕 -->
-    <div class="jumbotron">
+    <!-- 巨幕 --> 
+    <div class="jumbotron" style="background: no-repeat center;background-image: url('{{ url_for('static', filename='img/EMC.png') }}')">
         <div class="container">
             <div>
                 <h1>经济与管理学院
@@ -19,6 +19,7 @@
                     阿里小贷胜出》。随着网络的发展，社会的进步，此种金融服务的正规性与合法性会逐步加强，在有效的监管下发挥网络技术优势，实现普惠金融的理想。跨界，在商业模式快速更迭演进的进程中，“跨界”代表一种新锐的生活态度和审美方式的融合。互联网正在用技术的的力量撬开所有传统行业的大门，这似乎是一种侵略性的“跨界”;也有先行者试图主动突破既有的门框，跨入新世界，拓展自己的地盘。
                 </p>
                 <p>
+                
                     {% if username %}
                         <a class="btn btn-primary btn-lg" href="{{ url_for('accoj.coursei') }}"
                            role="button">开启旅途&nbsp;GO!</a>
@@ -26,48 +27,23 @@
                         <a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#signin"
                            role="button">开启旅途&nbsp;GO!</a>
                     {% endif %}
+                 
                 </p>
             </div>
         </div>
     </div>
     <!-- 公告栏 -->
-    <div class="container" style="margin-top: 50px; margin-bottom: 50px">
+    <div class="container" style="margin-top: 50px; margin-bottom: 20px">
         <div class="media">
-            <div class="media-left media-middle">
-                <a href="#"> <img class="media-object"
-                                  style="width: 64px; height: 64px;"
-                                  src="{{ url_for('static',filename='img/demoimg1.jpg') }}" alt="...">
-                </a>
-            </div>
             <div class="media-body">
-                <h4 class="media-heading">公告标题位置预留</h4>
-                <p>
-                    公告简介位置预留<br> 公告简介位置预留<br> 公告简介位置预留
-                </p>
-            </div>
-        </div>
-        <div class="media">
-            <div class="media-left media-middle">
-                <a href="#"> <img class="media-object"
-                                  style="width: 64px; height: 64px;"
-                                  src="{{ url_for('static',filename='img/demoimg1.jpg') }}" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">增值税消费税等立法密集启幕 明年税收立法将再提速</h4>
+                <h4 class="media-heading"><a href="#">增值税消费税等立法密集启幕 明年税收立法将再提速</a></h4>
                 <p>
                     “落实税收法定原则”，首次明确提出是在2013年，党的十八届三中全会通过的《中共中央关于全面深化改革若干重大问题的决定》中提出。按照这一原则，新开征的税种应制定相应的税收法律，现行的税收条例应通过修改上升为法律。近年来，我国多项财政法律、法规制定工作蹄疾步稳。尤其是自2018年下半年以来，几乎每次人大常委会会议都有相关税收法律审议内容，税收法定步入快车道。</p>
             </div>
         </div>
         <div class="media">
-            <div class="media-left media-middle">
-                <a href="#"> <img class="media-object"
-                                  style="width: 64px; height: 64px;"
-                                  src="{{ url_for('static',filename='img/demoimg1.jpg') }}" alt="...">
-                </a>
-            </div>
             <div class="media-body">
-                <h4 class="media-heading">全国人大启动明年预算审查工作 财政支出有保有压</h4>
+                <h4 class="media-heading"><a href="#">全国人大启动明年预算审查工作 财政支出有保有压</a></h4>
                 <p>
                     早在2018年3月，中共中央办公厅印发了《关于人大预算审查监督重点向支出预算和政策拓展的指导意见》，要求加强人大对支出预算和政府的全口径审查，全过程监管，使预算安排和政策更好地贯彻落实党中央重大方针政策和决策部署。
                     <br>
@@ -75,6 +51,17 @@
                 </p>
             </div>
         </div>
+        <div class="media">
+            <div class="media-body">
+                <h4 class="media-heading"><a href="#">公告标题位置预留</a></h4>
+                <p>
+                    公告简介位置预留<br> 中国国家主席习近平7日应约同美国总统特朗普通电话，强调中国完全有信心、有能力战胜疫情，中国经济长期向好发展的趋势不会改变。同一天，中国国务院应对新型冠状病毒感染的肺炎疫情联防联控机制举行发布会，介绍了支持新冠肺炎防控相关财税政策、缓解小微企业融资难融资贵有关情况，指出中国宏观调控政策的空间十分充足，中国经济长期向好、高质量增长的基本面不会因为这次短暂的疫情而发生改变。
+                </p>
+            </div>
+        </div>
+        <ul class="pager">
+        <li><a href="#">more</a></li>
+     	</ul>
     </div>
     <!-- 占位块 -->
     <div class="container-full" id="background">

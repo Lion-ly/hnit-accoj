@@ -1,452 +1,456 @@
-{% extends 'course/courseBase.html' %}
+{% extends 'course/courseBase.html' %} {% block courseBody %}
+<div class="courseBody">
+	<!-- 习题主体 -->
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span>1、掌握财务报表基本分析方法及其运用。 </span>
+			</div>
+			<div class="panel-body">
+				<div align="center">
+					<nav aria-label="Page navigation">
+						<ul class="pagination">
+							<li><a href="#" aria-label="Previous"> <span
+									aria-hidden="true">&laquo;</span>
+							</a></li>
+							<li class="active"><a href="{{ url_for('accoj.courseix') }}">趋势分析法</a></li>
+							<li><a href="{{ url_for('accoj.courseix_2') }}">共同比分析法</a></li>
+							<li><a href="{{ url_for('accoj.courseix_3') }}">因素分析法</a></li>
+							<li><a href="{{ url_for('accoj.courseix_4') }}">比率分析法</a></li>
+							<li><a href="#" aria-label="Next"> <span
+									aria-hidden="true">&raquo;</span>
+							</a></li>
+						</ul>
+					</nav>
+				</div>
+				<hr class="simple" color="#6f5499" />
 
-{% block courseBody %}
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span>1、掌握财务报表基本分析方法及其运用。 </span>
-                </div>
-                <div class="panel-body">
-                    <div align="center">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li><a href="#" aria-label="Previous"> <span
-                                        aria-hidden="true">&laquo;</span>
-                                </a></li>
-                                <li class="active"><a href="{{ url_for('accoj.courseix') }}">趋势分析法</a></li>
-                                <li><a href="{{ url_for('accoj.courseix_2') }}">共同比分析法</a></li>
-                                <li><a href="{{ url_for('accoj.courseix_3') }}">因素分析法</a></li>
-                                <li><a href="{{ url_for('accoj.courseix_4') }}">比率分析法</a></li>
-                                <li><a href="#" aria-label="Next"> <span
-                                        aria-hidden="true">&raquo;</span>
-                                </a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <hr class="simple" color="#6f5499"/>
+				<p class="ats-fontsize-20">1、趋势分析法</p>
+				<p>趋势分析法是根据企业连续几个时期的会计报表，比较、分析各有关项目增减变化情况，从而判断其财务状况、经营成果、现金流量等发展变化趋势和变化规律，并对未来的结果作出预测的一种分析方法。</p>
 
-                    <p class="ats-fontsize-20">1、趋势分析法</p>
-                    <p>趋势分析法是根据企业连续几个时期的会计报表，比较、分析各有关项目增减变化情况，从而判断其财务状况、经营成果、现金流量等发展变化趋势和变化规律，并对未来的结果作出预测的一种分析方法。</p>
+				<div>
+					<!-- 作业标签 -->
+					<ul class="nav nav-tabs">
+						<li role="presentation" class="active"><a
+							href="#AssetLiability" aria-controls="AssetLiability" role="tab"
+							data-toggle="tab">资产负债表</a></li>
+						<li role="presentation"><a href="#Profit"
+							aria-controls="Profit" role="tab" data-toggle="tab">利润表</a></li>
+					</ul>
+					<div class="tab-content">
+						<!-- 第一标签 -->
+						<div role="tabpanel" class="tab-pane active in fade"
+							id="AssetLiability">
+							<table class="table table-bordered ats-vouchertable">
+								<tr class="ats-tablecolor-f">
+									<th style="width: 16%">资产</th>
+									<th style="width: 17%">本期比上期增加额</th>
+									<th style="width: 17%">本期比上期增加率</th>
+									<th style="width: 16%">负债及所有者权益</th>
+									<th style="width: 17%">本期比上期增加额</th>
+									<th style="width: 17%">本期比上期增加率</th>
+								</tr>
+								<tr class="ats-tablecolor-f">
+									<th style="text-align: left">流动资产：</th>
+									<td></td>
+									<td></td>
+									<th style="text-align: left">流动负债：</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">货币资金</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">短期借款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">金融资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">金融负债</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">应收票据</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应付票据</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">应收账款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应付账款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">预付账款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">预收账款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">应收利息</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应付职工薪酬</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">应收股利</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应交税费</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">其他应收款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应付利息</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">存货</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应付股利</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">一年内到期的非流动资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">其他应付款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">其他流动资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">一年内到期的非流动负债</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<th class="ats-tablecolor-f">流动资产合计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">其他流动负债</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 
-                    <div>
-                        <!-- 作业标签 -->
-                        <ul class="nav nav-tabs">
-                            <li role="presentation" class="active"><a
-                                    href="#AssetLiability" aria-controls="AssetLiability" role="tab"
-                                    data-toggle="tab">资产负债表</a></li>
-                            <li role="presentation"><a href="#Profit"
-                                                       aria-controls="Profit" role="tab" data-toggle="tab">利润表</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <!-- 第一标签 -->
-                            <div role="tabpanel" class="tab-pane active in fade"
-                                 id="AssetLiability">
-                                <table class="table table-bordered ats-vouchertable">
-                                    <tr class="ats-tablecolor-f">
-                                        <th>资产</th>
-                                        <th>本期比上期增加额</th>
-                                        <th>本期比上期增加率</th>
-                                        <th>负债及所有者权益</th>
-                                        <th>本期比上期增加额</th>
-                                        <th>本期比上期增加率</th>
-                                    </tr>
-                                    <tr class="ats-tablecolor-f">
-                                        <th style="text-align: left">流动资产：</th>
-                                        <td></td>
-                                        <td></td>
-                                        <th style="text-align: left">流动负债：</th>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">货币资金</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">短期借款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">金融资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">金融负债</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">应收票据</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应付票据</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">应收账款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应付账款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">预付账款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">预收账款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">应收利息</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应付职工薪酬</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">应收股利</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应交税费</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">其他应收款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应付利息</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">存货</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应付股利</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">一年内到期的非流动资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">其他应付款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">其他流动资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">一年内到期的非流动负债</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ats-tablecolor-f">流动资产合计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">其他流动负债</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
+								<tr>
+									<th class="ats-tablecolor-f" style="text-align: left">非流动资产：</th>
+									<td class="ats-tablecolor-f"></td>
+									<td class="ats-tablecolor-f"></td>
+									<th class="ats-tablecolor-f">流动负债合计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">可供出售金融资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<th class="ats-tablecolor-f" style="text-align: left">非流动负债：</th>
+									<td class="ats-tablecolor-f"></td>
+									<td class="ats-tablecolor-f"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">持有至到期投资</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">长期借款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">长期应收款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">应付债券</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">长期股权投资</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">长期应付款</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">投资性房地产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">预计负债</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">固定资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">递延所得税负债</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">在建工程</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">其他非流动负债</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">工程物资</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<th class="ats-tablecolor-f">非流动负债合计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">固定资产清理</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<th class="ats-tablecolor-f">负债合计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">无形资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<th class="ats-tablecolor-f" style="text-align: left">所有者权益：</th>
+									<td class="ats-tablecolor-f"></td>
+									<td class="ats-tablecolor-f"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">开发支出</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">实收资本（股本）</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">长期待摊费用</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">资本公积</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">递延所得税资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">盈余公积</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">其他非流动资产</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td class="ats-tablecolor-f">未分配利润</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<th class="ats-tablecolor-f">非流动资产合计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<th class="ats-tablecolor-f">所有者权益合计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<th class="ats-tablecolor-f">资产总计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<th class="ats-tablecolor-f">负债及所有者权益总计</th>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+							</table>
 
-                                    <tr>
-                                        <th class="ats-tablecolor-f" style="text-align: left">非流动资产：</th>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <th class="ats-tablecolor-f">流动负债合计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">可供出售金融资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <th class="ats-tablecolor-f" style="text-align: left">非流动负债：</th>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <td class="ats-tablecolor-f"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">持有至到期投资</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">长期借款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">长期应收款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">应付债券</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">长期股权投资</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">长期应付款</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">投资性房地产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">预计负债</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">固定资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">递延所得税负债</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">在建工程</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">其他非流动负债</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">工程物资</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <th class="ats-tablecolor-f">非流动负债合计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">固定资产清理</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <th class="ats-tablecolor-f">负债合计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">无形资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <th class="ats-tablecolor-f" style="text-align: left">所有者权益：</th>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <td class="ats-tablecolor-f"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">开发支出</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">实收资本（股本）</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">长期待摊费用</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">资本公积</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">递延所得税资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">盈余公积</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">其他非流动资产</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <td class="ats-tablecolor-f">未分配利润</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ats-tablecolor-f">非流动资产合计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <th class="ats-tablecolor-f">所有者权益合计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ats-tablecolor-f">资产总计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                        <th class="ats-tablecolor-f">负债及所有者权益总计</th>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                </table>
+							<p class="ats-fontsize-20">结论：</p>
+							<textarea class="form-control" rows="5"></textarea>
+							<hr class="simple" style="clear: both;" color="#6f5499" />
+							<div align="right">
+								<button type="button" class="btn btn-success" id="">
+									<span class="glyphicon"></span>&nbsp;提交
+								</button>
+							</div>
+						</div>
+						<!-- 第二标签 -->
+						<div role="tabpanel" class="tab-pane fade" id="Profit">
+							<table class="table table-bordered ats-vouchertable">
+								<tr class="ats-tablecolor-f">
+									<th style="width: 50%;">项目</th>
+									<th style="width: 25%;">本期比上期增加额</th>
+									<th style="width: 25%;">本期比上期增加率</th>
+								</tr>
+								<tr class="ats-tablecolor-f">
+									<th style="text-align: left">一、营业收入</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">减：营业成本</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">税金及附加</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">销售费用</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">管理费用</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">财务费用</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">资产减值损失</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">加：公允价值变动收益（损失以“-”号填列）</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">投资收益（损失以“-”号填列）</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 
-                                <p class="ats-fontsize-20">结论：</p>
-                                <textarea class="form-control" rows="5"></textarea>
-                            </div>
-                            <!-- 第二标签 -->
-                            <div role="tabpanel" class="tab-pane fade" id="Profit">
-                                <table class="table table-bordered ats-vouchertable">
-                                    <tr class="ats-tablecolor-f">
-                                        <th style="width: 50%;">项目</th>
-                                        <th style="width: 25%;">本期比上期增加额</th>
-                                        <th style="width: 25%;">本期比上期增加率</th>
-                                    </tr>
-                                    <tr class="ats-tablecolor-f">
-                                        <th style="text-align: left">一、营业收入</th>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">减：营业成本</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">税金及附加</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">销售费用</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">管理费用</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">财务费用</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">资产减值损失</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">加：公允价值变动收益（损失以“-”号填列）</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">投资收益（损失以“-”号填列）</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
+								<tr>
+									<th class="ats-tablecolor-f" style="text-align: left">二、营业利润（亏损以“-”号填列）</th>
+									<td class="ats-tablecolor-f"></td>
+									<td class="ats-tablecolor-f"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">加：营业外收入</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">其中：对联营企业和合营企业的投资收益</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">减：营业外支出</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">其中，非流动资产处置损失</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 
-                                    <tr>
-                                        <th class="ats-tablecolor-f" style="text-align: left">二、营业利润（亏损以“-”号填列）</th>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <td class="ats-tablecolor-f"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">加：营业外收入</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">其中：对联营企业和合营企业的投资收益</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">减：营业外支出</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">其中，非流动资产处置损失</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
+								<tr>
+									<th class="ats-tablecolor-f" style="text-align: left">三、利润总额（亏损总额以“-”号填列）</th>
+									<td class="ats-tablecolor-f"></td>
+									<td class="ats-tablecolor-f"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">减：所得税费用</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 
-                                    <tr>
-                                        <th class="ats-tablecolor-f" style="text-align: left">三、利润总额（亏损总额以“-”号填列）</th>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <td class="ats-tablecolor-f"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">减：所得税费用</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
+								<tr>
+									<th class="ats-tablecolor-f" style="text-align: left">四、净利润（净亏损以“-”号填列）</th>
+									<td class="ats-tablecolor-f"></td>
+									<td class="ats-tablecolor-f"></td>
+								</tr>
 
-                                    <tr>
-                                        <th class="ats-tablecolor-f" style="text-align: left">四、净利润（净亏损以“-”号填列）</th>
-                                        <td class="ats-tablecolor-f"></td>
-                                        <td class="ats-tablecolor-f"></td>
-                                    </tr>
+								<tr class="ats-tablecolor-f">
+									<th style="text-align: left">五、其他综合收益的税后净额</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">（一）以后不能重分类净损益的其他综合收益</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">（二）以后将重分类净损益的其他综合收益</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 
-                                    <tr class="ats-tablecolor-f">
-                                        <th style="text-align: left">五、其他综合收益的税后净额</th>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">（一）以后不能重分类净损益的其他综合收益</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">（二）以后将重分类净损益的其他综合收益</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
+								<tr class="ats-tablecolor-f">
+									<th style="text-align: left">六、综合收益总额</th>
+									<td></td>
+									<td></td>
+								</tr>
 
-                                    <tr class="ats-tablecolor-f">
-                                        <th style="text-align: left">六、综合收益总额</th>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+								<tr class="ats-tablecolor-f">
+									<th style="text-align: left">七、每股收益</th>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">（一）基本每股收益</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr>
+									<td class="ats-tablecolor-f">（二）稀释每股收益</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+							</table>
 
-                                    <tr class="ats-tablecolor-f">
-                                        <th style="text-align: left">七、每股收益</th>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">（一）基本每股收益</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ats-tablecolor-f">（二）稀释每股收益</td>
-                                        <td contentEditable="true"></td>
-                                        <td contentEditable="true"></td>
-                                    </tr>
-                                </table>
-
-                                <p class="ats-fontsize-20">结论：</p>
-                                <textarea class="form-control" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="simple" style="clear: both;" color="#6f5499"/>
-
-                    <div align="right" style="margin-top: 10px;">
-                        <input class="btn btn-success right-block" form="courseii-1"
-                               type="submit" value="提交">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+							<p class="ats-fontsize-20">结论：</p>
+							<textarea class="form-control" rows="5"></textarea>
+							<hr class="simple" style="clear: both;" color="#6f5499" />
+							<div align="right">
+								<button type="button" class="btn btn-success" id="">
+									<span class="glyphicon"></span>&nbsp;提交
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock courseBody %}

@@ -1,514 +1,516 @@
-{% extends 'course/courseBase.html' %}
-
-{% block courseBody %}
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <div class="container-fluid">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-				<span>1、理解会计账簿的分类；<br/>2、掌握明细账的登记方法。
+{% extends 'course/courseBase.html' %} {% block courseBody %}
+<div class="courseBody">
+	<!-- 习题主体 -->
+	<div class="container-fluid">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span>1、理解会计账簿的分类；<br />2、掌握明细账的登记方法。
 				</span>
-                </div>
-                <div class="panel-body">
-                    <div align="center">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li><a href="#" aria-label="Previous"> <span
-                                        aria-hidden="true">&laquo;</span>
-                                </a></li>
-                                <li class="active"><a href="">1</a></li>
-                                <li><a href="">2</a></li>
-                                <li><a href="">3</a></li>
-                                <li><a href="">4</a></li>
-                                <li><a href="">5</a></li>
-                                <li><a href="">6</a></li>
-                                <li><a href="">7</a></li>
-                                <li><a href="">8</a></li>
-                                <li><a href="">9</a></li>
-                                <li><a href="">10</a></li>
-                                <li><a href="">11</a></li>
-                                <li><a href="">12</a></li>
-                                <li><a href="">13</a></li>
-                                <li><a href="">14</a></li>
-                                <li><a href="">15</a></li>
-                                <li><a href="">16</a></li>
-                                <li><a href="">17</a></li>
-                                <li><a href="">18</a></li>
-                                <li><a href="">19</a></li>
-                                <li><a href="">20</a></li>
-                                <li><a href="#" aria-label="Next"> <span
-                                        aria-hidden="true">&raquo;</span>
-                                </a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <hr class="simple" color="#6f5499"/>
-                    <!-- 业务一 -->
-                    <div>
-                        <h4><span class="glyphicon glyphicon-bookmark"></span>
-                            <em>01</em></h4>
-                        <div class="ats-subject">
-                            <blockquote>
-                                <label class="label  label-success">筹资活动</label>
-                                <p><span class="font-red">2020</span>年<span class="font-red">01</span>月<span
-                                        class="font-red">01</span>日，从中国建设银行取得<span class="font-red">3</span>年期贷款<span
-                                        class="font-red">12</span>%，按年结算利息。</p>
-                            </blockquote>
-                        </div>
-                        <div class="ats-board">
-                            <!-- 作业标签 -->
-                            <ul class="nav nav-tabs">
-                                <li role="presentation" class="active"><a href="#first"
-                                                                          aria-controls="first" role="tab"
-                                                                          data-toggle="tab">登记各账户明细账</a></li>
-                                <li role="presentation"><a href="#second"
-                                                           aria-controls="second" role="tab"
-                                                           data-toggle="tab">登记科目余额表</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <!-- 第一标签 -->
-                                <div role="tabpanel" class="tab-pane active in fade" id="first">
+			</div>
+			<div class="panel-body">
+				<div align="center">
+					<nav aria-label="Page navigation">
+						<ul class="pagination">
+							<li><a href="#" aria-label="Previous"> <span
+									aria-hidden="true">&laquo;</span>
+							</a></li>
+							<li class="active"><a href="">1</a></li>
+							<li><a href="">2</a></li>
+							<li><a href="">3</a></li>
+							<li><a href="">4</a></li>
+							<li><a href="">5</a></li>
+							<li><a href="">6</a></li>
+							<li><a href="">7</a></li>
+							<li><a href="">8</a></li>
+							<li><a href="">9</a></li>
+							<li><a href="">10</a></li>
+							<li><a href="">11</a></li>
+							<li><a href="">12</a></li>
+							<li><a href="">13</a></li>
+							<li><a href="">14</a></li>
+							<li><a href="">15</a></li>
+							<li><a href="">16</a></li>
+							<li><a href="">17</a></li>
+							<li><a href="">18</a></li>
+							<li><a href="">19</a></li>
+							<li><a href="">20</a></li>
+							<li><a href="#" aria-label="Next"> <span
+									aria-hidden="true">&raquo;</span>
+							</a></li>
+						</ul>
+					</nav>
+				</div>
+				<hr class="simple" color="#6f5499" />
+				<!-- 业务一 -->
+				<div>
+					<h4>
+						<span class="glyphicon glyphicon-bookmark"></span> <em>01</em>
+					</h4>
+					<div class="ats-subject">
+						<blockquote>
+							<label class="label  label-success">筹资活动</label>
+							<p>
+								<span class="font-red">2020</span>年<span class="font-red">01</span>月<span
+									class="font-red">01</span>日，从中国建设银行取得<span class="font-red">3</span>年期贷款<span
+									class="font-red">12</span>%，按年结算利息。
+							</p>
+						</blockquote>
+					</div>
+					<div class="ats-board">
+						<!-- 作业标签 -->
+						<ul class="nav nav-tabs">
+							<li role="presentation" class="active"><a href="#first"
+								aria-controls="first" role="tab" data-toggle="tab">登记各账户明细账</a></li>
+							<li role="presentation"><a href="#second"
+								aria-controls="second" role="tab" data-toggle="tab">登记科目余额表</a></li>
+						</ul>
+						<div class="tab-content">
+							<!-- 第一标签 -->
+							<div role="tabpanel" class="tab-pane active in fade" id="first">
 
-                                    <div>
-                                        <p class="ats-fontsize-20">1、登记各账户明细账</p>
-                                        <div style="margin-bottom: 10px">
-                                            <button type="button" class="btn btn-success btn-sm"
-                                                    onclick="">新增
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="">删除</button>
-                                        </div>
-                                        <table class="table table-bordered ats-vouchertable"
-                                               style="border: 0px; margin-bottom: 0px;">
-                                            <tr>
-                                                <td style="width: 50%; text-align: right; border: 0px;">
-                                                    <select class="form-control pull-right" style="width: 160px">
-                                                        <option>银行存款</option>
-                                                        <option>长期存款</option>
-                                                    </select></td>
-                                                <th
-                                                        style="width: 50%; text-align: left; border: 0px; font-size: 24px;">
-                                                    明&nbsp;细&nbsp;账
-                                                </th>
-                                            </tr>
-                                        </table>
+								<div>
+									<p class="ats-fontsize-20">1、登记各账户明细账</p>
+									<div style="margin-bottom: 10px">
+										<button type="button" class="btn btn-success btn-sm"
+											onclick="">新增</button>
+										<button type="button" class="btn btn-danger btn-sm" onclick="">删除</button>
+									</div>
+									<table class="table table-bordered ats-vouchertable"
+										style="border: 0px; margin-bottom: 0px;">
+										<tr>
+											<td style="width: 50%; text-align: right; border: 0px;">
+												<select class="form-control pull-right" style="width: 160px">
+													<option>银行存款</option>
+													<option>长期存款</option>
+											</select>
+											</td>
+											<th
+												style="width: 50%; text-align: left; border: 0px; font-size: 24px;">
+												明&nbsp;细&nbsp;账</th>
+										</tr>
+									</table>
 
-                                        <table class="table table-bordered ats-vouchertable">
-                                            <tr>
-                                                <td style="border-right: 0;" contentEditable="true">2020</td>
-                                                <th style="border-left: 0;">年</th>
-                                                <th class="ats-tablecolor-f" colspan="2">计账凭证</th>
-                                                <th class="ats-tablecolor-f" rowspan="2">摘要</th>
-                                                <th class="ats-tablecolor-f" colspan="10">借方</th>
-                                                <th class="ats-tablecolor-f" colspan="10">贷方</th>
-                                                <th class="ats-tablecolor-f" rowspan="2">方向</th>
-                                                <th class="ats-tablecolor-f" colspan="10">贷方</th>
-                                            </tr>
-                                            <tr class="ats-tablecolor-f">
-                                                <th>月</th>
-                                                <th>日</th>
-                                                <th>字</th>
-                                                <th>号</th>
+									<table class="table table-bordered ats-vouchertable">
+										<tr>
+											<td style="border-right: 0;" contentEditable="true">2020</td>
+											<th style="border-left: 0;">年</th>
+											<th class="ats-tablecolor-f" colspan="2">计账凭证</th>
+											<th class="ats-tablecolor-f" rowspan="2">摘要</th>
+											<th class="ats-tablecolor-f" colspan="10">借方</th>
+											<th class="ats-tablecolor-f" colspan="10">贷方</th>
+											<th class="ats-tablecolor-f" rowspan="2">方向</th>
+											<th class="ats-tablecolor-f" colspan="10">贷方</th>
+										</tr>
+										<tr class="ats-tablecolor-f">
+											<th>月</th>
+											<th>日</th>
+											<th>字</th>
+											<th>号</th>
 
-                                                <th>千</th>
-                                                <th>百</th>
-                                                <th>十</th>
-                                                <th>万</th>
-                                                <th>千</th>
-                                                <th>百</th>
-                                                <th>十</th>
-                                                <th>元</th>
-                                                <th>角</th>
-                                                <th>分</th>
+											<th>千</th>
+											<th>百</th>
+											<th>十</th>
+											<th>万</th>
+											<th>千</th>
+											<th>百</th>
+											<th>十</th>
+											<th>元</th>
+											<th>角</th>
+											<th>分</th>
 
-                                                <th>千</th>
-                                                <th>百</th>
-                                                <th>十</th>
-                                                <th>万</th>
-                                                <th>千</th>
-                                                <th>百</th>
-                                                <th>十</th>
-                                                <th>元</th>
-                                                <th>角</th>
-                                                <th>分</th>
+											<th>千</th>
+											<th>百</th>
+											<th>十</th>
+											<th>万</th>
+											<th>千</th>
+											<th>百</th>
+											<th>十</th>
+											<th>元</th>
+											<th>角</th>
+											<th>分</th>
 
-                                                <th>千</th>
-                                                <th>百</th>
-                                                <th>十</th>
-                                                <th>万</th>
-                                                <th>千</th>
-                                                <th>百</th>
-                                                <th>十</th>
-                                                <th>元</th>
-                                                <th>角</th>
-                                                <th>分</th>
-                                            </tr>
-                                            <tr>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true">期初余额</td>
+											<th>千</th>
+											<th>百</th>
+											<th>十</th>
+											<th>万</th>
+											<th>千</th>
+											<th>百</th>
+											<th>十</th>
+											<th>元</th>
+											<th>角</th>
+											<th>分</th>
+										</tr>
+										<tr>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true">期初余额</td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true">...</td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+										</tr>
+										<tr>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true">...</td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true">本期合计</td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+										</tr>
+										<tr>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true">本期合计</td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true">...</td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+										</tr>
+										<tr>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true">...</td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true">本期合计</td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+										</tr>
+										<tr>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true">本期合计</td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                            </tr>
-                                            <tr>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true">本年累计</td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+										</tr>
+										<tr>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true">本年累计</td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
+											<td contentEditable="true"></td>
 
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                                <td contentEditable="true"></td>
-                                            </tr>
-                                        </table>
-                                    </div>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+											<td contentEditable="true"></td>
+										</tr>
+									</table>
+								</div>
+								<hr class="simple" style="clear: both;" color="#6f5499" />
+								<div align="right">
+									<button type="button" class="btn btn-success" id="">
+										<span class="glyphicon"></span>&nbsp;提交
+									</button>
+								</div>
+							</div>
+							<!-- 第二标签 -->
+							<div role="tabpanel" class="tab-pane fade" id="second">
+								<div>
+									<p class="ats-fontsize-20">2、登记科目余额表</p>
+									<div class="container">
+										<table id="firstRow"
+											class="table table-bordered ats-vouchertable"
+											style="border: 0px">
+											<tr>
+												<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+												<th colspan="2" class="ats-tablecolor-f">期初余额</th>
+												<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+												<th colspan="2" class="ats-tablecolor-f">期末余额</th>
 
-                                </div>
-                                <!-- 第二标签 -->
-                                <div role="tabpanel" class="tab-pane fade" id="second">
-                                    <div>
-                                        <p class="ats-fontsize-20">2、登记科目余额表</p>
-                                        <div class="container">
-                                            <table id="firstRow"
-                                                   class="table table-bordered ats-vouchertable"
-                                                   style="border: 0px">
-                                                <tr>
-                                                    <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期初余额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+											</tr>
+											<tr>
+												<th class="ats-tablecolor-f">借方</th>
+												<th class="ats-tablecolor-f">贷方</th>
+												<th class="ats-tablecolor-f">借方</th>
+												<th class="ats-tablecolor-f">贷方</th>
+												<th class="ats-tablecolor-f">借方</th>
+												<th class="ats-tablecolor-f">贷方</th>
 
-                                                </tr>
-                                                <tr>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
+											</tr>
+											<tr>
+												<td class="ats-tablecolor-f">合计</td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+											</tr>
+											<tr>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td style="padding: 0px; border: 0px; width: 5%">
+													<div align="center">
+														<a style="color: green;" type="button" class="btn"
+															onclick="addRowV('first')"><span
+															class="glyphicon glyphicon-plus-sign"></span></a>
+													</div>
+												</td>
+											</tr>
+										</table>
 
-                                                </tr>
-                                                <tr>
-                                                    <td class="ats-tablecolor-f">合计</td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td style="padding: 0px; border: 0px; width: 5%">
-                                                        <div align="center">
-                                                            <a style="color: green;" type="button" class="btn"
-                                                               onclick="addRowV('first')"><span
-                                                                    class="glyphicon glyphicon-plus-sign"></span></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
+										<table id="secondRow"
+											class="table table-bordered ats-vouchertable"
+											style="border: 0px">
+											<tr>
+												<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+												<th colspan="2" class="ats-tablecolor-f">期初余额</th>
+												<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+												<th colspan="2" class="ats-tablecolor-f">期末余额</th>
 
-                                            <table id="secondRow"
-                                                   class="table table-bordered ats-vouchertable"
-                                                   style="border: 0px">
-                                                <tr>
-                                                    <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期初余额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+											</tr>
+											<tr>
+												<th class="ats-tablecolor-f">借方</th>
+												<th class="ats-tablecolor-f">贷方</th>
+												<th class="ats-tablecolor-f">借方</th>
+												<th class="ats-tablecolor-f">贷方</th>
+												<th class="ats-tablecolor-f">借方</th>
+												<th class="ats-tablecolor-f">贷方</th>
 
-                                                </tr>
-                                                <tr>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-
-                                                </tr>
-                                                <tr>
-                                                    <td class="ats-tablecolor-f">合计</td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td style="padding: 0px; border: 0px; width: 5%">
-                                                        <div align="center">
-                                                            <a style="color: green;" type="button" class="btn"
-                                                               onclick="addRowV('second')"><span
-                                                                    class="glyphicon glyphicon-plus-sign"></span></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="simple" color="#6f5499"/>
-                    <div align="right">
-                        <input class="btn btn-success right-block" form="courseii-1"
-                               type="submit" value="提交">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
+											</tr>
+											<tr>
+												<td class="ats-tablecolor-f">合计</td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+											</tr>
+											<tr>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td style="padding: 0px; border: 0px; width: 5%">
+													<div align="center">
+														<a style="color: green;" type="button" class="btn"
+															onclick="addRowV('second')"><span
+															class="glyphicon glyphicon-plus-sign"></span></a>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<hr class="simple" style="clear: both;" color="#6f5499" />
+								<div align="right">
+									<button type="button" class="btn btn-success" id="">
+										<span class="glyphicon"></span>&nbsp;提交
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock courseBody %}
