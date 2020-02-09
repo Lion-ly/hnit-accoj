@@ -126,7 +126,7 @@ function iv_DeleteRow(obj){
  * ? 表格增加行
  */
 function v_AddRow(obj){
-	$("#"+obj+"Row").append(
+	$("#"+obj+"Row").before(
 			"<tr>"
 		+	"<td contentEditable='true'></td>"
 		+	"<td contentEditable='true'></td>"
@@ -172,8 +172,11 @@ function addTTable(t){
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>借方</th>"
 			+			"<th "
-			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'"
-			+				"contentEditable='true'>银行存款</th>"
+			+				"style='border: 0px;width: 33%'>"
+			+				"<select class='form-control pull-right'> "
+			+					"<option>银行存款</option> "
+			+					"<option>...</option> "
+			+				"</select> </th>"
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>贷方</th>"
 			+		"</tr>"
@@ -240,8 +243,11 @@ function addTTable(t){
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>借方</th>"
 			+			"<th "
-			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'"
-			+				"contentEditable='true'>银行存款</th>"
+			+				"style='border: 0px;width: 33%'>"
+			+				"<select class='form-control pull-right'> "
+			+					"<option>长期借款</option> "
+			+					"<option>...</option> "
+			+				"</select> </th>"
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>贷方</th>"
 			+		"</tr>"
@@ -315,6 +321,70 @@ function deleteTTable(){
 	}
 	$("#"+tableNum).remove();	
 }
+
+//==================================coursevi==================================//
+
+
+/* @
+ * # coursevi
+ * ? 表格增加行
+ */
+function vi_AddRow(){
+	$("#anchor").before(
+			"<tr>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td style='padding: 0px; border: 0px; width: 4%'>"
+		+			"<div align='center'>"
+		+				"<a style='color: red;' type='button' class='btn' onclick='vi_DeleteRow(this)'>"
+		+				"<span class='glyphicon glyphicon-minus-sign'></span></a>"
+		+			"</div>"
+		+		"</td>"
+		+	"</tr>"
+	);
+}
+
+
+/* @
+ * # coursevi
+ * ? 表格删除行
+ */
+function vi_DeleteRow(obj){
+	$(obj).parent().parent().parent().remove();
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

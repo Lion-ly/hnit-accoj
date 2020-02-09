@@ -406,15 +406,13 @@
 								<div>
 									<p class="ats-fontsize-20">2、登记科目余额表</p>
 									<div class="container">
-										<table id="firstRow"
-											class="table table-bordered ats-vouchertable"
+										<table class="table table-bordered ats-vouchertable"
 											style="border: 0px">
 											<tr>
 												<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
 												<th colspan="2" class="ats-tablecolor-f">期初余额</th>
 												<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
 												<th colspan="2" class="ats-tablecolor-f">期末余额</th>
-
 											</tr>
 											<tr>
 												<th class="ats-tablecolor-f">借方</th>
@@ -423,9 +421,25 @@
 												<th class="ats-tablecolor-f">贷方</th>
 												<th class="ats-tablecolor-f">借方</th>
 												<th class="ats-tablecolor-f">贷方</th>
-
+												<td style="padding: 0px; border: 0px; width: 5%">
+													<div align="center">
+														<a style="color: green;" type="button" class="btn"
+															onclick="v_AddRow('first')"><span
+															class="glyphicon glyphicon-plus-sign"></span></a>
+													</div>
+												</td>
 											</tr>
+
 											<tr>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+											</tr>
+											<tr id="firstRow">
 												<td class="ats-tablecolor-f">合计</td>
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
@@ -433,27 +447,10 @@
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
-											</tr>
-											<tr>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td style="padding: 0px; border: 0px; width: 5%">
-													<div align="center">
-														<a style="color: green;" type="button" class="btn"
-															onclick="addRowV('first')"><span
-															class="glyphicon glyphicon-plus-sign"></span></a>
-													</div>
-												</td>
 											</tr>
 										</table>
-
-										<table id="secondRow"
-											class="table table-bordered ats-vouchertable"
+										
+										<table class="table table-bordered ats-vouchertable"
 											style="border: 0px">
 											<tr>
 												<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
@@ -469,9 +466,25 @@
 												<th class="ats-tablecolor-f">贷方</th>
 												<th class="ats-tablecolor-f">借方</th>
 												<th class="ats-tablecolor-f">贷方</th>
+												<td style="padding: 0px; border: 0px; width: 5%">
+													<div align="center">
+														<a style="color: green;" type="button" class="btn"
+															onclick="v_AddRow('second')"><span
+															class="glyphicon glyphicon-plus-sign"></span></a>
+													</div>
+												</td>
 
 											</tr>
 											<tr>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+												<td contentEditable="true"></td>
+											</tr>
+											<tr id="secondRow">
 												<td class="ats-tablecolor-f">合计</td>
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
@@ -479,22 +492,6 @@
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
-											</tr>
-											<tr>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td contentEditable="true"></td>
-												<td style="padding: 0px; border: 0px; width: 5%">
-													<div align="center">
-														<a style="color: green;" type="button" class="btn"
-															onclick="addRowV('second')"><span
-															class="glyphicon glyphicon-plus-sign"></span></a>
-													</div>
-												</td>
 											</tr>
 										</table>
 									</div>
