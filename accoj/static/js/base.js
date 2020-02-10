@@ -1,4 +1,7 @@
-//控制li标签active状态
+/*	@ 导航当前位置
+ *  # courseBase
+ *	? 控制导航栏的active，确定当前处于导航栏的位置
+ */
 $(function () {
     $(".nav").find("li").each(function () {
         const a = $(this).find("a:first")[0];

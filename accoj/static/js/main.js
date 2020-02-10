@@ -2,6 +2,12 @@ function remove(rm) {
 	$(rm).parent().remove();
 }
 
+//==================================coursei==================================//
+
+/* @
+ * # coursei -> 新增业务
+ * ? 新增业务的三个选项
+ */
 function addActivity(labeltype){
 	var text;
 	switch(labeltype){
@@ -17,62 +23,143 @@ function addActivity(labeltype){
 	}
 	$("#body-text").append(
 			"<p><label class='label  label-"+labeltype+"'>"+text+"</label><input type='text'>年<input type='text'>月<input type='text'>日，从中国建设银行取得<input type='text'>年期贷款<input type='text'>万元存入银行，年利率为<input type='text'>%，按年结算利息。</p>"
-	);
-	
+	);	
 }
 
-function AddAndSub(aas){
-	var mark = $(aas).text();
-	var changemark = mark == '+' ? '-' : '+';
-	$(aas).text(changemark);
+//==================================courseiii==================================//
+
+/* @
+ * # courseiii
+ * ? 穿梭框
+ */
+function ctol(){
+	$centerbox = $('#centerbox');
+	$leftbox = $('#leftbox');
+	$rightbox = $('#rightbox');
+	$input = $centerbox.find('input');
+	for(var k=0;k<$input.length;k++){
+			if($input[k].checked){
+				$leftbox.append(
+					$($input[k]).parent()
+				);
+			}
+	   	}
 }
 
-function addRow(llr){
-		$("#"+llr+"Row").append(
-				"<tr>"
-			+	"<td class='ats-tablecolor-f' style='border-right: 0px'></td>"
-			+	"<td class='ats-tablecolor-f' style='border-left: 0px'></td>"
-			+	"<td contentEditable='true'></td>"
-			+	"<td contentEditable='true'></td>"
-			+	"<td style='padding:0px;border:0px'>"
-			+	"<div align='center'>"
-			+			"<a style='color: red' type='button' class='btn' onclick='deleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
-			+		"</div>"
-			+	"</td>"
-			+	"</tr>"
+function ctol_cancel(){
+	$centerbox = $('#centerbox');
+	$leftbox = $('#leftbox');
+	$rightbox = $('#rightbox');
+	$input = $leftbox.find('input');
+	for(var k=0;k<$input.length;k++){
+			if($input[k].checked){
+				$centerbox.append(
+					$($input[k]).parent()
+				);
+			}
+	   	}
+}
+
+function ctor(){
+	$centerbox = $('#centerbox');
+	$leftbox = $('#leftbox');
+	$rightbox = $('#rightbox');
+	$input = $centerbox.find('input');
+	for(var k=0;k<$input.length;k++){
+			if($input[k].checked){
+				$rightbox.append(
+					$($input[k]).parent()
+				);
+			}
+	   	}
+}
+
+function ctor_cancel(){
+	$centerbox = $('#centerbox');
+	$leftbox = $('#leftbox');
+	$rightbox = $('#rightbox');
+	$input = $rightbox.find('input');
+	for(var k=0;k<$input.length;k++){
+			if($input[k].checked){
+				$centerbox.append(
+					$($input[k]).parent()
+				);
+			}
+	   	}
+}
+
+//==================================courseiv==================================//
+
+/* @
+ * # courseiv
+ * ? 表格增加行
+ */
+function iv_AddRow(obj){
+		$("#"+obj+"Row").append(
+					"<tr>"
+				+	"<td class='ats-tablecolor-f' style='border-right: 0px'></td>"
+				+	"<td class='ats-tablecolor-f' style='border-left: 0px'></td>"
+				+	"<td contentEditable='true'><br></td>"
+				+	"<td contentEditable='true'><br></td>"
+				+	"<td style='padding:0px;border:0px'>"
+				+	"<div align='center'>"
+				+			"<a style='color: red' type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+				+		"</div>"
+				+	"</td>"
+				+	"</tr>"
 		);
 	}
 
-function deleteRow(llr){
-	var td = $(llr).parent().parent().parent().remove();
+
+/* @
+ * # courseiv
+ * ? 表格删除行
+ */
+function iv_DeleteRow(obj){
+	$(obj).parent().parent().parent().remove();
 }
 
-function addRowV(bs){
-	$("#"+bs+"Row").append(
+//==================================coursev==================================//
+
+/* @
+ * # coursev -> 平衡表
+ * ? 表格增加行
+ */
+function v_AddRow(obj){
+	$("#"+obj+"Row").before(
 			"<tr>"
-		+	"<td contentEditable='true'></td>"
-		+	"<td contentEditable='true'></td>"
-		+	"<td contentEditable='true'></td>"
-		+	"<td contentEditable='true'></td>"
-		+	"<td contentEditable='true'></td>"
-		+	"<td contentEditable='true'></td>"
-		+	"<td contentEditable='true'></td>"
+		+	"<td contentEditable='true'><br></td>"
+		+	"<td contentEditable='true'><br></td>"
+		+	"<td contentEditable='true'><br></td>"
+		+	"<td contentEditable='true'><br></td>"
+		+	"<td contentEditable='true'><br></td>"
+		+	"<td contentEditable='true'><br></td>"
+		+	"<td contentEditable='true'><br></td>"
 		+	"<td style='padding: 0px; border: 0px'>"
-		+		"<div align='center'>"
-		+			"<a style='color: red' type='button' class='btn' onclick='deleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
-		+		"</div>"
-		+	"</td>"
+		+		"<div align='center'> "
+		+			"<a style='color: red' type='button' class='btn' onclick='v_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+		+		"</div> "
+		+	"</td> "
 		+	"</tr>"
 	);
 	
 	
 }
 
-function deleteRowV(bs){
-	var td = $(bs).parent().parent().parent().remove();
+
+/* @
+ * # coursev -> 平衡表
+ * ? 表格删除行
+ */
+function v_DeleteRow(obj){
+	$(obj).parent().parent().parent().remove();
 }
 
 
+/* @
+ * # coursev -> 设立账户
+ * ? 新建左/右T表
+ */
 var tableNum = 101;
 var tableName = "ttable-" + tableNum;
 function addTTable(t){
@@ -85,8 +172,11 @@ function addTTable(t){
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>借方</th>"
 			+			"<th "
-			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'"
-			+				"contentEditable='true'>银行存款</th>"
+			+				"style='border: 0px;width: 33%'>"
+			+				"<select class='form-control pull-right'> "
+			+					"<option>银行存款</option> "
+			+					"<option>...</option> "
+			+				"</select> </th>"
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>贷方</th>"
 			+		"</tr>"
@@ -153,8 +243,11 @@ function addTTable(t){
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>借方</th>"
 			+			"<th "
-			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'"
-			+				"contentEditable='true'>银行存款</th>"
+			+				"style='border: 0px;width: 33%'>"
+			+				"<select class='form-control pull-right'> "
+			+					"<option>长期借款</option> "
+			+					"<option>...</option> "
+			+				"</select> </th>"
 			+			"<th "
 			+				"style='text-align: center; vertical-align: middle; border: 0px;width: 33%'>贷方</th>"
 			+		"</tr>"
@@ -215,16 +308,83 @@ function addTTable(t){
 	}
 }
 
+
+/* @
+ * # coursev -> 设立账户
+ * ? 删除左/右T表
+ */
 function deleteTTable(){
 	if(tableNum-1<101){
 		tableNum = 101;
 	}else {
 		tableNum = tableNum-1;
 	}
-	
-	$("#"+tableNum).remove();
-	
+	$("#"+tableNum).remove();	
 }
+
+//==================================coursevi==================================//
+
+
+/* @
+ * # coursevi
+ * ? 表格增加行
+ */
+function vi_AddRow(){
+	$("#anchor").before(
+			"<tr>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td style='padding: 0px; border: 0px; width: 4%'>"
+		+			"<div align='center'>"
+		+				"<a style='color: red;' type='button' class='btn' onclick='vi_DeleteRow(this)'>"
+		+				"<span class='glyphicon glyphicon-minus-sign'></span></a>"
+		+			"</div>"
+		+		"</td>"
+		+	"</tr>"
+	);
+}
+
+
+/* @
+ * # coursevi
+ * ? 表格删除行
+ */
+function vi_DeleteRow(obj){
+	$(obj).parent().parent().parent().remove();
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
