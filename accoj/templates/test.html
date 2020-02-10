@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="../static/jquery-3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="form-group" id="subject_submit">
+    <label class="control-label" for="subject">科目</label>
+    <input type="text" class="form-control" id="subject"
+           name="studentid" placeholder="请输入科目" required>
+    <button type="button" class="btn btn-success" id="submit_button" title="确定">
+        <span class="glyphicon glyphicon-ok"></span>确定
+    </button>
+</div>
+
+<script type="text/javascript">
+    "use strict";
+    $(function () {
+        $("#submit_button").click(function () {
+                let subjects = ["库存现金", "银行存款", "其他货币资金", "交易性金融资产"];
+                let subject_value = $("#subject").val();
+                let index = subjects.indexOf(subject_value);
+                if (index === -1) {
+                    alert("科目不正确");
+                } else {
+                    $("#subject_submit").append("<div><input type='text' class='form-control' disabled=true value='" + subject_value + "'" + " required></div>");
+                }
+            }
+        )
+    })
+</script>
+</body>
+</html>

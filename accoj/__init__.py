@@ -12,6 +12,7 @@ from accoj.blueprints.admin import admin_bp
 from accoj.blueprints.auth import auth_bp
 from settings import config
 from accoj.extensions import mongo, mail, csrf
+from accoj.utils.add_question import add_question
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -24,6 +25,13 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     register_extensions(app)
     register_blueprints(app)
+    try:
+        if add_question() is False:
+            print("\n创建题库时出错，未写入数据库!")
+    except:
+        print("\nExcel格式检查中断!格式出错!")
+        print("创建题库时出错，未写入数据库!")
+        pass
 
     return app
 
