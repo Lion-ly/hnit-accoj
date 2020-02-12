@@ -54,7 +54,7 @@ function getCompanyInfo() {
                 if (prop === "com_shareholder") {
                     com_shareholders = company_info[prop];
                     for (var i = 0; i < com_shareholders.length; i++) {
-                        $("#com_shareholder_" + i).val(com_shareholders[i]);
+                        $("#com_shareholder_" + (i + 1)).val(com_shareholders[i]);
                     }
                 } else {
                     $("#" + prop).val(company_info[prop]);
@@ -70,5 +70,7 @@ function getCompanyInfo() {
 
 $(function () {
     // CreateCompany-li标签获取公司信息数据
-    $('#CreateCompany-li').click(getCompanyInfo());
+    $('#CreateCompany-li').click(function () {
+        getCompanyInfo();
+    })
 });

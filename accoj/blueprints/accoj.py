@@ -86,6 +86,12 @@ def company_form_submit():
     return redirect('/coursei')
 
 
+@accoj_bp.route('/add_business')
+@login_required
+def add_business():
+    pass
+
+
 @accoj_bp.route('/courseii')
 @login_required
 def courseii():
