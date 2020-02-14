@@ -8,6 +8,7 @@ function remove(rm) {
  * # coursei -> 新增业务
  * ? 新增业务的三个选项
  */
+/*
 function addActivity(labeltype){
 	var text;
 	switch(labeltype){
@@ -25,6 +26,7 @@ function addActivity(labeltype){
 			"<p><label class='label  label-"+labeltype+"'>"+text+"</label><input type='text'>年<input type='text'>月<input type='text'>日，从中国建设银行取得<input type='text'>年期贷款<input type='text'>万元存入银行，年利率为<input type='text'>%，按年结算利息。</p>"
 	);	
 }
+*/
 
 //==================================courseiii==================================//
 

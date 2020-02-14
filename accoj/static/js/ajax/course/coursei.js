@@ -1,3 +1,4 @@
+//==================================新增业务==================================//
 $(function () {
     $('#company_form_button').click(function () {
         var data = $('#company_form').serialize();
@@ -74,3 +75,22 @@ $(function () {
         getCompanyInfo();
     })
 });
+
+//==================================新增业务==================================//
+function addActivity(labeltype) {
+    var text;
+    switch (labeltype) {
+        case "success":
+            text = "筹资活动";
+            break;
+        case "info":
+            text = "投资活动";
+            break;
+        case "warning":
+            text = "经营活动";
+            break;
+    }
+    $("#body-text").append(
+        "<p><label class='label  label-" + labeltype + "'>" + text + "</label><input type='text' readonly='readonly' value='2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。'></p>"
+    );
+}

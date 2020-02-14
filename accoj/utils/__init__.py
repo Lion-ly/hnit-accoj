@@ -10,6 +10,8 @@ from flask import session, redirect, url_for
 
 
 def login_required(func):
+    """需要登陆装饰器函数"""
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if session.get('username'):
@@ -21,6 +23,7 @@ def login_required(func):
 
 
 def is_number(s):
+    """判断字符串能否转换为数字"""
     try:
         float(s)
         return True

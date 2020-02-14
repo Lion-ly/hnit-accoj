@@ -11,6 +11,7 @@ from accoj.utils import is_number
 
 
 def add_question(filename="accoj/utils/questions.xlsx"):
+    """读取excel表创建题库"""
     workbook = open_workbook("{}".format(filename))  # 用wlrd提供的方法读取一个excel文件
     sheet1 = workbook.sheet_by_index(0)  # 根据序号获取sheet
     sheet_rows = sheet1.nrows  # sheet总的行数
@@ -38,7 +39,8 @@ def add_question(filename="accoj/utils/questions.xlsx"):
         if question_exit:
             question_exit_list.append(question_no)
             continue
-        document = dict(question_no=question_no,
+        document = dict(questions_no=1,
+                        question_no=question_no,
                         content=content,
                         business_type=business_type,
                         affect_type=affect_type,
@@ -62,6 +64,7 @@ def add_question(filename="accoj/utils/questions.xlsx"):
 
 
 def sheet_row_parsing(sheet_row):
+    """excel表结构解析"""
     values = list()
     key_element_infos = list()
     subjects_infos = list()
@@ -79,13 +82,19 @@ def sheet_row_parsing(sheet_row):
     is_random = False
     low, high = 0, 0
     content_len = len(content)
+    replace_list = list()
+    replace_start = None
+    replace_end = None
     for i in range(0, content_len):
+        # 解析变量
         if content[i] == "{":
             value_index_start = i
+            replace_start = i
             if i < content_len and content[i + 1] == "\"":
                 value_type = "asset"
         elif content[i] == "}":
             value = content[value_index_start + 1:i]
+            replace_end = i
             if is_number(value):
                 value_type = "num"
             if i != 0 and content[i - 1] == "%":
@@ -108,6 +117,7 @@ def sheet_row_parsing(sheet_row):
                 is_random = False
                 low, high = 0, 0
         elif is_random and content[i] == ")":
+            replace_end = i
             value_range = content[range_start + 2:i]
             value_range = value_range.rstrip("%").split("-")
             low, high = int(value_range[0]), int(value_range[1])
@@ -122,6 +132,26 @@ def sheet_row_parsing(sheet_row):
             range_start = None
             is_random = False
             low, high = 0, 0
+        if replace_start is not None and replace_end is not None:
+            replace_list.append({"start": replace_start, "end": replace_end})
+            replace_start = None
+            replace_end = None
+
+    new_content = ""
+    index_last = 0
+    replace_list_len = len(replace_list)
+    if replace_list:
+        for i in range(0, replace_list_len):
+            # 将题目内容中的变量替换为v1,v2等形式，方便生成业务时，直接替换
+            start = replace_list[i].get("start")
+            end = replace_list[i].get("end")
+            sub_s = content[index_last:start]
+            new_content = new_content + (sub_s)
+            new_content = new_content + ("v{}".format(i + 1))
+            index_last = end + 1
+            if i == replace_list_len - 1:
+                new_content = new_content + (content[index_last:])
+
     if key_elements:
         for x in key_elements.split("；"):
             key_element, value_position = x.split(":")
@@ -148,7 +178,7 @@ def sheet_row_parsing(sheet_row):
                                        value_pos=value_pos,
                                        is_up=is_up))
 
-    return question_no, content, business_type, affect_type, values, key_element_infos, subjects_infos
+    return question_no, new_content, business_type, affect_type, values, key_element_infos, subjects_infos
 
 
 if __name__ == '__main__':
