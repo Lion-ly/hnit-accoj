@@ -97,11 +97,14 @@ def sheet_row_parsing(sheet_row):
             replace_end = i
             if is_number(value):
                 value_type = "num"
+                value = float(value)
             if i != 0 and content[i - 1] == "%":
                 value_type = "percent"
+                value = float(value.rstrip("%"))
             if i < content_len and content[i + 1] == "(":
                 range_start = i
                 is_random = True
+                replace_end = None
             else:
                 if value_type == "asset":
                     value = value.replace("\"", "")
@@ -120,7 +123,7 @@ def sheet_row_parsing(sheet_row):
             replace_end = i
             value_range = content[range_start + 2:i]
             value_range = value_range.rstrip("%").split("-")
-            low, high = int(value_range[0]), int(value_range[1])
+            low, high = float(value_range[0]), float(value_range[1])
             values.append(dict(value_type=value_type,
                                value=value,
                                is_random=is_random,
@@ -156,26 +159,27 @@ def sheet_row_parsing(sheet_row):
         for x in key_elements.split("；"):
             key_element, value_position = x.split(":")
             is_up = value_position[0]
-            value_pos = value_position[1:]
+            value_index = value_position[1:].replace("v", "")
             if is_up == "-":
                 is_up = False
             else:
                 is_up = True
             key_element_infos.append(dict(key_element=key_element,
-                                          value_pos=value_pos,
+                                          value_index=value_index,
                                           is_up=is_up))
-
+    if not new_content:
+        new_content = content
     if subjects:
         for x in subjects.split("；"):
             subject, value_position = x.split(":")
             is_up = value_position[0]
-            value_pos = value_position[1:]
+            value_index = value_position[1:].replace("v", "")
             if is_up == "-":
                 is_up = False
             else:
                 is_up = True
             subjects_infos.append(dict(subject=subject,
-                                       value_pos=value_pos,
+                                       value_index=value_index,
                                        is_up=is_up))
 
     return question_no, new_content, business_type, affect_type, values, key_element_infos, subjects_infos

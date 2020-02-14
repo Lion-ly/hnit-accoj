@@ -91,6 +91,6 @@ function addActivity(labeltype) {
             break;
     }
     $("#body-text").append(
-        "<p><label class='label  label-" + labeltype + "'>" + text + "</label><input type='text' readonly='readonly' value='2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。'></p>"
+        "<p><label class='label  label-" + labeltype + "'>" + text + "</label><input type='text' readonly='readonly' >2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</p>"
     );
 }

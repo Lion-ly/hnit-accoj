@@ -89,7 +89,7 @@ def company_form_submit():
             # 副本公司同时创建
             data_dict["com_bank_savings"] = data_dict["com_regist_cap"]
             data_dict["com_cash"] = 0
-            data_dict["business_num"] = 0
+            data_dict["business_day"] = 0
             data_dict_cp = data_dict.copy()
             data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
             mongo.db.company.insert_many([data_dict, data_dict_cp])
@@ -119,7 +119,10 @@ def add_business():
             question = mongo.db.qustion.find_one(dict(questions_no=questions_no,
                                                       question_no=1))
             date = datetime.now()
-            date = datetime(date.year, date.month, 1)
+            year = date.year
+            month = date.month
+            day = 1
+            date = datetime(year, month, day)
             content = question.get("content")
             content = content.replace("v1", company.get("com_shareholder")[0])
             num = company.get("com_regist_cap")
@@ -130,24 +133,22 @@ def add_business():
                       {"value_type": "num", "value": num}]
             key_element_infos = question.get("key_element_infos")
             for key_element_info in key_element_infos:
-                key_element_info["money"] = values[int(key_element_info.get("value_pos").replace("v")) - 1].get("value")
-                key_element_info.pop("value_pos")
+                key_element_info["money"] = values[int(key_element_info.get("value_index")) - 1].get("value")
             subjects_infos = question.get("subjects_infos")
             for subjects_info in key_element_infos:
-                subjects_info["money"] = values[int(subjects_info.get("value_pos").replace("v")) - 1].get("value")
-                subjects_info.pop("value_pos")
+                subjects_info["money"] = values[int(subjects_info.get("value_index")) - 1].get("value")
+            content = "{}年{}月{}日，".format(year, month, day) + content
             first_business = dict(questions_no=questions_no,
                                   question_no=1,
                                   content=content,
                                   date=date,
                                   business_type=business_type,
                                   affect_type=affect_type,
-                                  values=values,
                                   key_element_infos=key_element_infos,
                                   subjects_infos=subjects_infos)
             # 副本公司存储答案，业务数增1
             mongo.db.company.update({"student_no": "{}_cp".format(session["username"])},
-                                    {"$set": {"businesses": [first_business]}, "$inc": {"business_num": 1}})
+                                    {"$set": {"businesses": [first_business]}, "$inc": {"business_day": 1}})
 
         elif company["businesses"][0]["questions_no"] == 1:
             # 公司已存在业务，题库号为1
@@ -157,47 +158,154 @@ def add_business():
 
 
 def deal_question_1(company, com_business_type):
-    """题库1的处理
-    返回业务内容，报错信息
+    """
+    题库1的处理，返回业务内容，报错信息
+    :param company: company document
+    :param com_business_type: business_type
+    :return: business content,message
     """
 
-    def deal_with_question(businesses, question_no):
-        """对应题号生成对应业务，返回业务内容"""
+    def deal_with_question(businesses, assets, question_no):
+        """
+        对应题号生成对应业务
+        :param businesses: company document
+        :param assets: company assets list
+        :param question_no: question no
+        :return: business content
+        """
         question = mongo.db.qustion.find_one(dict(questions_no=1,
                                                   question_no=question_no))
         date = datetime.now()
-        date = datetime(date.year, date.month, businesses.get("business_num"))
+        year = date.year
+        month = date.month
+        day = businesses.get("business_day")
+        business_day_add = 1
+        if day % 6 == 0:
+            day += 2
+            business_day_add = 2
+        date = datetime(year, month, day)
         content = question.get("content")
-        content = content.replace("v1", company.get("com_shareholder")[0])
-        num = company.get("com_regist_cap")
-        content = content.replace("v2", num)
         business_type = question.get("business_type")
         affect_type = question.get("affect_type")
-        values = [{"value_type": "common", "value": company.get("com_regist_cap")},
-                  {"value_type": "num", "value": num}]
+
+        # deal values and content------------------------------------------------------------------------
+        values = question.get("values")
+        values_len = len(values)
+        values_list = list()
+        for i in range(0, values_len):
+            value = values[i]
+            value_type = value.get("value_type")
+            is_random = value.get("is_random")
+            low = value.get("low")
+            high = value.get("high")
+            if value_type == "asset":
+                if value.startwith("*"):
+                    value = value.lstrip("*", "")
+                elif value.startwith("+"):
+                    value = value.lstrip("+", "")
+                    assets.append(value)
+                elif value.startwith("-"):
+                    value = value.lstrip("-", "")
+                    assets.remove(value)
+            elif value_type == "num":
+                if is_random:
+                    value = random.randrange(low, high, 100)
+                if question_no == 2 and i == 0:
+                    value = random.randint(low, high)
+                elif question_no == 14:
+                    value = 1000 * values[i - 1]
+                elif question_no == 18:
+                    for business in businesses:
+                        if business.get("question_no") == 17:
+                            high = business.get("key_element_infos")[0].get("money")
+                            value = random.randrange(90000, high, 100)
+                            break
+                elif question_no == 20:
+                    for business in businesses:
+                        if business.get("question_no") == 15:
+                            high = business.get("key_element_infos")[0].get("money")
+                            value = random.randrange(1000, high, 100)
+                            break
+                elif question_no == 23:
+                    for business in businesses:
+                        if business.get("question_no") == 20:
+                            medium = business.get("key_element_infos")[0].get("money")
+                            value = random.randrange(medium - 1000, medium + 1000, 100)
+                            break
+                elif question_no == 27:
+                    pass
+                elif question_no == 28:
+                    for business in businesses:
+                        value = 0
+                        if business.get("question_no") in [24, 25, 26, 27]:
+                            value += business.get("subjects_infos")[0].get("money")
+                elif question_no == 30:
+                    if i == 2:
+                        for business in businesses:
+                            if business.get("question_no") == 28:
+                                tmp = business.get("key_element_infos")[0].get("money")
+                                value = tmp / 2
+                                break
+                    if i == 3:
+                        value = int(values[i - 1] * 0.8)
+                elif question_no == 31:
+                    if i == 2:
+                        for business in businesses:
+                            if business.get("question_no") == 30:
+                                value = business.get("key_element_infos")[0].get("money")
+                                break
+                    if i == 3:
+                        value = int(values[i - 1] * 0.8)
+                elif question_no == 33:
+                    if i == 2:
+                        for business in businesses:
+                            if business.get("question_no") == 28:
+                                tmp = business.get("key_element_infos")[2].get("money")
+                                value = tmp / 2
+                                break
+                    if i == 3:
+                        value = int(values[i - 1] * 0.8)
+
+            elif value_type == "percent":
+                if is_random:
+                    value = random.randint(low, high)
+            values_list.append(value)
+            content = content.replace("v{}".format(i + 1), value)
+        # end---------------------------------------------------------------------------
+
+        # 待修改deal key_element_infos--------------------------------------------------------
         key_element_infos = question.get("key_element_infos")
         for key_element_info in key_element_infos:
-            key_element_info["money"] = values[int(key_element_info.get("value_pos").replace("v")) - 1].get("value")
-            key_element_info.pop("value_pos")
+            key_element_info["money"] = values_list[int(key_element_info.get("value_index")) - 1]
+        # end---------------------------------------------------------------------------
+
+        # 待修改deal subjects_infos-----------------------------------------------------------
         subjects_infos = question.get("subjects_infos")
         for subjects_info in key_element_infos:
-            subjects_info["money"] = values[int(subjects_info.get("value_pos").replace("v")) - 1].get("value")
-            subjects_info.pop("value_pos")
+            subjects_info["money"] = values_list[int(subjects_info.get("value_index")) - 1]
+        # end---------------------------------------------------------------------------
+
+        if question_no == 34:
+            day = 30
+        content = "{}年{}月{}日，".format(year, month, day) + content
         business = dict(questions_no=1,
                         question_no=question_no,
                         content=content,
                         date=date,
                         business_type=business_type,
                         affect_type=affect_type,
-                        values=values,
                         key_element_infos=key_element_infos,
                         subjects_infos=subjects_infos)
         mongo.db.company.update({"student_no": "{}_cp".format(session["username"])},
-                                {"$push": {"businesses": business}, "$inc": {"business_num": 1}})
+                                {"$push": {"businesses": business},
+                                 "$set": {"com_assets": assets},
+                                 "$inc": {"business_day": business_day_add}})
         return content
+        # def end
 
     message = ""
     com_businesses = company["businesses"]
+    com_assets = company["com_assets"]
     # 公司已有的业务
     question_list = list()
     for com_business in com_businesses:
@@ -205,8 +313,12 @@ def deal_question_1(company, com_business_type):
 
     add_question_content = None
     add_question_no_list = list()
-    if len(question_list) >= 20:
+    question_list_len = len(question_list)
+    if question_list_len == 20:
         add_question_no_list.append(34)
+        add_question_content = deal_with_question(com_businesses, com_assets, 34)
+    elif question_list_len == 21:
+        message = "业务数已达上限"
     else:
         # 筹资活动
         random_list = list(range(2, 8))
@@ -220,51 +332,58 @@ def deal_question_1(company, com_business_type):
         if not random_list:
             message = "请选择其他活动"
             return add_question_content, message
-        # 设置循环次数，防止死循环
-        random_times = 0
-        random_times_high = 500
         while True:
             # 随机选择题目
-            random_times += 1
-            if random_times >= random_times_high:
-                message = "请重选活动或选择其他活动"
+            if not random_list:
+                # 随机数序列为空
+                message = "请选择其他活动"
                 return add_question_content, message
             add_question_no = random.choice(random_list)
             if add_question_no in question_list:
                 continue
             elif add_question_no == 3 and 2 not in question_list:
                 # 业务2为业务3前提
+                random_list.remove(3)
                 continue
             elif add_question_no == 13 and 12 not in question_list:
                 # 业务12为业务13前提
+                random_list.remove(13)
                 continue
             elif add_question_no == 18 and 17 not in question_list:
                 # 业务17为业务18前提
+                random_list.remove(18)
                 continue
-            elif add_question_no == 19 and 15 not in question_list:
-                # 业务15为业务19前提
+            elif add_question_no == 20 and 15 not in question_list:
+                # 业务15为业务20前提
+                random_list.remove(15)
                 continue
             elif add_question_no == 23 and 19 not in question_list:
                 # 业务19为业务23前提
+                random_list.remove(23)
                 continue
             elif add_question_no == 27 and 5 not in question_list and 8 not in question_list and 9 not in question_list:
                 # 业务[5,8,8]为业务27前提
+                random_list.remove(27)
                 continue
             elif add_question_no == 28 and 24 not in question_list and 25 not in question_list and \
                     26 not in question_list and 27 not in question_list:
                 # 业务[24,45,26,27]为业务28前提
+                random_list.remove(28)
                 continue
             elif add_question_no == 30 and 28 not in question_list:
                 # 业务28为业务30前提
+                random_list.remove(30)
                 continue
-            elif add_question_no == 31 and 28 not in question_list:
+            elif add_question_no == 31 and 28 not in question_list and 30 not in question_list:
                 # 业务28为业务31前提
+                random_list.remove(31)
                 continue
             elif add_question_no == 33 and 25 not in question_list:
                 # 业务25为业务33前提
+                random_list.remove(33)
                 continue
             else:
-                add_question_content = deal_with_question(com_businesses, add_question_no)
+                add_question_content = deal_with_question(com_businesses, com_assets, add_question_no)
                 break
 
     return add_question_content, message
