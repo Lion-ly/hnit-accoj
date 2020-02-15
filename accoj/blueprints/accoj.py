@@ -101,6 +101,7 @@ def company_form_submit():
 @login_required
 def add_business():
     """增加业务"""
+    # 待测试--------------------------------------------------------------------------------
     if request.method == "POST":
         business_types = ["筹资活动", "投资活动", '经营活动']
         form = request.form
@@ -132,11 +133,15 @@ def add_business():
             values = [{"value_type": "common", "value": company.get("com_regist_cap")},
                       {"value_type": "num", "value": num}]
             key_element_infos = question.get("key_element_infos")
-            for key_element_info in key_element_infos:
-                key_element_info["money"] = values[int(key_element_info.get("value_index")) - 1].get("value")
+            key_element_infos_len = len(key_element_infos)
+            for i in range(0, key_element_infos_len):
+                key_element_infos[i]["money"] = values[int(key_element_infos[i].get("value_index")) - 1].get("value")
+                key_element_infos[i].pop("value_pos")
             subjects_infos = question.get("subjects_infos")
-            for subjects_info in key_element_infos:
-                subjects_info["money"] = values[int(subjects_info.get("value_index")) - 1].get("value")
+            subjects_infos_len = len(subjects_infos)
+            for i in range(0, subjects_infos_len):
+                subjects_infos[i]["money"] = values[int(subjects_infos[i].get("value_index")) - 1].get("value")
+                key_element_infos[i].pop("value_pos")
             content = "{}年{}月{}日，".format(year, month, day) + content
             first_business = dict(questions_no=questions_no,
                                   question_no=1,
@@ -164,7 +169,7 @@ def deal_question_1(company, com_business_type):
     :param com_business_type: business_type
     :return: business content,message
     """
-
+    # 待测试--------------------------------------------------------------------------------------------
     def deal_with_question(businesses, assets, question_no):
         """
         对应题号生成对应业务
@@ -187,59 +192,112 @@ def deal_question_1(company, com_business_type):
         content = question.get("content")
         business_type = question.get("business_type")
         affect_type = question.get("affect_type")
+        key_element_infos = question.get("key_element_infos")
+        subjects_infos = question.get("subjects_infos")
 
         # deal values and content------------------------------------------------------------------------
         values = question.get("values")
         values_len = len(values)
         values_list = list()
         for i in range(0, values_len):
-            value = values[i]
-            value_type = value.get("value_type")
-            is_random = value.get("is_random")
-            low = value.get("low")
-            high = value.get("high")
-            if value_type == "asset":
-                if value.startwith("*"):
+            value = values[i].get("value")
+            value_type = values[i].get("value_type")
+            is_random = values[i].get("is_random")
+            low = values[i].get("low")
+            high = values[i].get("high")
+            if question_no == 13 and i == 3:
+                # 问题13特判
+                value_tmp = 0
+                for asset in assets:
+                    if asset.get("asset_name") == values_list[0]:
+                        value_tmp = values_list[1] - asset.get("asset_value")
+                        break
+                if values_list[1] >= value_tmp:
+                    value = value.split("/")[0]
+                else:
+                    value = value.split("/")[1]
+                    # 收益为负
+                    subjects_infos[i]["is_up"] = False
+            elif question_no == 23 and (i == 2 or i == 3):
+                # 问题23特判
+                for business in businesses:
+                    if business.get("question_no") == 20:
+                        value_tmp = business.get("key_element_infos")[0].get("money")
+                        if values_list[1] > value_tmp:
+                            value = value.split("/")[0]
+                        elif values_list[1] < value_tmp:
+                            value = value.split("/")[1]
+                        else:
+                            if i == 2:
+                                content_tmp = content.split("，")
+                                content_tmp.pop(-1)
+                                content = "，".join(content_tmp)
+                        break
+            elif value_type == "asset":
+                if value[0] == "*":
                     value = value.lstrip("*", "")
-                elif value.startwith("+"):
-                    value = value.lstrip("+", "")
-                    assets.append(value)
-                elif value.startwith("-"):
+                elif value[0] == "-":
                     value = value.lstrip("-", "")
-                    assets.remove(value)
+                    for asset in assets:
+                        if question_no == 30:
+                            # 问题30特判
+                            break
+                        if asset.get("asset_name") == value:
+                            assets.remove(asset)
+                            break
             elif value_type == "num":
                 if is_random:
                     value = random.randrange(low, high, 100)
+                if i and question_no != 28 and values[i - 1].get("value_type") == "asset" and \
+                        values[i - 1].get("value")[0] == "+":
+                    # 公司资产增加处理
+                    content = content.replace("+", "")
+                    assets.append(dict(asset_name=values_list[i - 1], market_value=value))
                 if question_no == 2 and i == 0:
                     value = random.randint(low, high)
+                elif question_no == 13 and i == 2:
+                    # 问题13特判
+                    for asset in assets:
+                        if asset.get("asset_name") == values_list[0]:
+                            value = abs(values_list[1] - asset.get("asset_value"))
+                            break
                 elif question_no == 14:
-                    value = 1000 * values[i - 1]
+                    # 问题14特判
+                    value = 1000 * values_list[1]
                 elif question_no == 18:
+                    # 问题18特判
                     for business in businesses:
                         if business.get("question_no") == 17:
                             high = business.get("key_element_infos")[0].get("money")
                             value = random.randrange(90000, high, 100)
                             break
                 elif question_no == 20:
+                    # 问题20特判
                     for business in businesses:
                         if business.get("question_no") == 15:
                             high = business.get("key_element_infos")[0].get("money")
                             value = random.randrange(1000, high, 100)
                             break
                 elif question_no == 23:
+                    # 问题23特判
                     for business in businesses:
                         if business.get("question_no") == 20:
                             medium = business.get("key_element_infos")[0].get("money")
                             value = random.randrange(medium - 1000, medium + 1000, 100)
                             break
                 elif question_no == 27:
+                    # 问题27特判
                     pass
                 elif question_no == 28:
+                    # 问题28特判
+                    content = content.replace("+", "")
+                    assets.append(dict(asset_name=values_list[0], market_value=value))
                     for business in businesses:
                         value = 0
                         if business.get("question_no") in [24, 25, 26, 27]:
                             value += business.get("subjects_infos")[0].get("money")
                 elif question_no == 30:
+                    # 问题30特判
                     if i == 2:
                         for business in businesses:
                             if business.get("question_no") == 28:
@@ -247,16 +305,18 @@ def deal_question_1(company, com_business_type):
                                 value = tmp / 2
                                 break
                     if i == 3:
-                        value = int(values[i - 1] * 0.8)
+                        value = int(values_list[i - 1] * 0.8)
                 elif question_no == 31:
+                    # 问题31特判
                     if i == 2:
                         for business in businesses:
                             if business.get("question_no") == 30:
                                 value = business.get("key_element_infos")[0].get("money")
                                 break
                     if i == 3:
-                        value = int(values[i - 1] * 0.8)
+                        value = int(values_list[i - 1] * 0.8)
                 elif question_no == 33:
+                    # 问题33特判
                     if i == 2:
                         for business in businesses:
                             if business.get("question_no") == 28:
@@ -264,7 +324,7 @@ def deal_question_1(company, com_business_type):
                                 value = tmp / 2
                                 break
                     if i == 3:
-                        value = int(values[i - 1] * 0.8)
+                        value = int(values_list[i - 1] * 0.8)
 
             elif value_type == "percent":
                 if is_random:
@@ -273,20 +333,108 @@ def deal_question_1(company, com_business_type):
             content = content.replace("v{}".format(i + 1), value)
         # end---------------------------------------------------------------------------
 
-        # 待修改deal key_element_infos--------------------------------------------------------
-        key_element_infos = question.get("key_element_infos")
-        for key_element_info in key_element_infos:
-            key_element_info["money"] = values_list[int(key_element_info.get("value_index")) - 1]
+        # deal key_element_infos--------------------------------------------------------
+        key_element_infos_len = len(key_element_infos)
+        for i in range(0, key_element_infos_len):
+            value_index = key_element_infos[i].get("key_element")
+            if value_index[0] != "(":
+                money = values_list[int(value_index) - 1]
+            else:
+                value_index_len = len(value_index)
+                money = values_list[int(value_index[1]) - 1]
+                symbol = True
+                for j in range(2, value_index_len - 1):
+                    if j % 2 == 0:
+                        if value_index[j] == "+":
+                            symbol = True
+                        else:
+                            symbol = False
+                    else:
+                        if symbol:
+                            money += values_list[int(value_index[j]) - 1]
+                        else:
+                            money -= values_list[int(value_index[1]) - 1]
+            key_element_infos[i]["money"] = money
+            key_element_infos[i].pop("value_pos")
         # end---------------------------------------------------------------------------
 
-        # 待修改deal subjects_infos-----------------------------------------------------------
-        subjects_infos = question.get("subjects_infos")
-        for subjects_info in key_element_infos:
-            subjects_info["money"] = values_list[int(subjects_info.get("value_index")) - 1]
+        # deal subjects_infos-----------------------------------------------------------
+        subjects_infos_len = len(subjects_infos)
+        for i in range(0, subjects_infos_len):
+            value_index = subjects_infos[i].get("key_element")
+            if (i and question_no == 2) or (not i and question_no == 3):
+                content_tmp = None
+                if question_no == 2:
+                    # 问题2特判
+                    year_tmp = int(content.find("年") - 1)
+                else:
+                    # 问题3特判
+                    for business in businesses:
+                        if business.get("question_no") == 2:
+                            content_tmp = business.get("content")
+                            break
+                    year_tmp = int(content_tmp.find("年") - 1)
+                subject_temp = subjects_infos[i].get("subject")
+                if year_tmp == 1:
+                    subjects_infos[i]["subject"] = subject_temp.split("/")[0]
+                else:
+                    subjects_infos[i]["subject"] = subject_temp.split("/")[1]
+            if question_no == 23:
+                # 问题23特判
+                money = None
+                if content.find("多于"):
+                    value_tmp = 0
+                    for business in businesses:
+                        if business.get("question_no") == 20:
+                            value_tmp = business.get("key_element_infos")[0].get("money")
+                            break
+                    if i == 0:
+                        money = values_list[0]
+                    elif i == 1:
+                        money = value_tmp
+                    else:
+                        subjects_infos.append(dict(subject="银行存款", money=values_list[0] - value_tmp, is_up=False))
+                elif content.find("少于"):
+                    if i == 0:
+                        money = values_list[0]
+                    elif i == 1:
+                        money = values_list[0]
+                    else:
+                        value_tmp = 0
+                        for business in businesses:
+                            if business.get("question_no") == 20:
+                                value_tmp = business.get("key_element_infos")[0].get("money")
+                                break
+                        subjects_infos.append(dict(subject="银行存款",
+                                                   money=abs(values_list[0] - value_tmp),
+                                                   is_up=False))
+                else:
+                    money = values_list[int(value_index) - 1]
+            elif value_index[0] != "(":
+                money = values_list[int(value_index) - 1]
+            else:
+                value_index_len = len(value_index)
+                money = values_list[int(value_index[1]) - 1]
+                symbol = True
+                for j in range(2, value_index_len - 1):
+                    if j % 2 == 0:
+                        if value_index[j] == "+":
+                            symbol = True
+                        else:
+                            symbol = False
+                    else:
+                        if symbol:
+                            money += values_list[int(value_index[j]) - 1]
+                        else:
+                            money -= values_list[int(value_index[1]) - 1]
+            if money:
+                subjects_infos[i]["money"] = money
+            subjects_infos[i].pop("value_pos")
         # end---------------------------------------------------------------------------
 
         if question_no == 34:
             day = 30
+        # 对于闰年以及二月的处理待做
         content = "{}年{}月{}日，".format(year, month, day) + content
         business = dict(questions_no=1,
                         question_no=question_no,
