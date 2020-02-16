@@ -77,20 +77,45 @@ $(function () {
 });
 
 //==================================新增业务==================================//
+var rowNumI = 101;
 function addActivity(labeltype) {
+	var rowName = "row-" + rowNumI;
     var text;
+    var bg;
     switch (labeltype) {
         case "success":
             text = "筹资活动";
+            bg = "#5cb85c"
             break;
         case "info":
             text = "投资活动";
+            bg = "#5bc0de"
             break;
         case "warning":
             text = "经营活动";
+            bg = "#f0ad4e"
             break;
     }
     $("#body-text").append(
-        "<p><label class='label  label-" + labeltype + "'>" + text + "</label><input type='text' readonly='readonly' >2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</p>"
+    	"<tr id='" + rowName + "'>"
+	+		"<th style='background-color: " + bg + ";width: 5%'>"
+	+		text
+	+		"</th>"
+	+		"<td style='text-align: left'>"
+	+		"2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。"
+	+		"</td>"
+	+		
+	+	"</tr>"
     );
+    rowNumI++;
+}
+
+function i_DeleteRow(){
+	if(rowNumI-1<101){
+		rowNumI = 101;
+	}else {
+		rowNumI = rowNumI-1;
+	}
+	var rowName = "row-" + rowNumI;
+	$("#"+rowName).remove();	
 }

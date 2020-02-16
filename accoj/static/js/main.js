@@ -28,6 +28,16 @@ function addActivity(labeltype){
 }
 */
 
+/* @
+ * # coursei
+ * ? 表格删除行
+ */
+/*
+function i_DeleteRow(obj){
+	$(obj).parent().parent().parent().remove();
+}
+*/
+
 //==================================courseiii==================================//
 
 /* @
@@ -376,10 +386,76 @@ function vi_DeleteRow(obj){
 	$(obj).parent().parent().parent().remove();
 }
 
+//==================================coursevii==================================//
 
 
+/* @
+ * # coursevii -> 登记各账户明细表
+ * ? 表格增加行
+ */
+function vii_AddRow(){
+	$('#detailed').append(
+			"<tr>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+	
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+	
+		+		"<td contentEditable='true'><br></td>"
+	
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+		
+		+		"<td style='width: 1%; border: 0px; background: #ffffff'>"
+		+			"<div align='center'>"
+		+				"<a style='color: red; padding: 0px 0px' type='button' "
+		+					"class='btn' onclick='vii_DeleteRow(this)'><span "
+		+					"class='glyphicon glyphicon-minus-sign'></span></a>"
+		+			"</div>"
+		+		"</td>"
+		+	"</tr>"
+	);
+}
 
 
+/* @
+ * # coursevii
+ * ? 表格删除行
+ */
+function vii_DeleteRow(obj){
+	$(obj).parent().parent().parent().remove();
+}
 
 
 

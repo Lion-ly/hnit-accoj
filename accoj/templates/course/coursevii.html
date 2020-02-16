@@ -90,16 +90,17 @@
 										</tr>
 									</table>
 
-									<table class="table table-bordered ats-vouchertable">
+									<table class="table table-bordered ats-vouchertable" style="border: 0px;">
+										<tbody id="detailed">
 										<tr>
 											<td style="border-right: 0;" contentEditable="true">2020</td>
 											<th style="border-left: 0;">年</th>
-											<th class="ats-tablecolor-f" colspan="2">计账凭证</th>
+											<th class="ats-tablecolor-f" colspan="2">记账凭证</th>
 											<th class="ats-tablecolor-f" rowspan="2">摘要</th>
 											<th class="ats-tablecolor-f" colspan="10">借方</th>
 											<th class="ats-tablecolor-f" colspan="10">贷方</th>
 											<th class="ats-tablecolor-f" rowspan="2">方向</th>
-											<th class="ats-tablecolor-f" colspan="10">贷方</th>
+											<th class="ats-tablecolor-f" colspan="10">余额</th>
 										</tr>
 										<tr class="ats-tablecolor-f">
 											<th>月</th>
@@ -139,6 +140,13 @@
 											<th>元</th>
 											<th>角</th>
 											<th>分</th>
+											<th style="width: 1%; border: 0px; background: #ffffff">
+												<div align="center">
+													<a style="color: green; padding: 0px 0px" type="button"
+														class="btn" onclick="vii_AddRow()"><span
+														class="glyphicon glyphicon-plus-sign"></span></a>
+												</div>
+											</th>
 										</tr>
 										<tr>
 											<td contentEditable="true"></td>
@@ -392,6 +400,7 @@
 											<td contentEditable="true"></td>
 											<td contentEditable="true"></td>
 										</tr>
+										</tbody>
 									</table>
 								</div>
 								<hr class="simple" style="clear: both;" color="#6f5499" />
@@ -408,6 +417,7 @@
 									<div class="container">
 										<table class="table table-bordered ats-vouchertable"
 											style="border: 0px">
+											<tbody>
 											<tr>
 												<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
 												<th colspan="2" class="ats-tablecolor-f">期初余额</th>
@@ -448,10 +458,12 @@
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
 											</tr>
+											</tbody>
 										</table>
 										
 										<table class="table table-bordered ats-vouchertable"
 											style="border: 0px">
+											<tbody>
 											<tr>
 												<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
 												<th colspan="2" class="ats-tablecolor-f">期初余额</th>
@@ -493,6 +505,7 @@
 												<td contentEditable="true"></td>
 												<td contentEditable="true"></td>
 											</tr>
+											</tbody>
 										</table>
 									</div>
 								</div>
