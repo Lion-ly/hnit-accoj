@@ -20,8 +20,10 @@
 <!-- local -->
 <link href="{{ url_for('static', filename='css/main.css') }}"
 	rel="stylesheet">
+<script src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ajax/auth.js') }}"></script>
+
 
 </head>
 <body>
@@ -145,7 +147,7 @@
 							<div class="form-group">
 								<label class="control-label" for="login-studentid">学&nbsp;&nbsp;号</label>
 								<input type="text" class="form-control" id="login-studentid"
-									name="studentid" placeholder="11位学号" required>
+									name="studentid" placeholder="Student ID" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="login-faculty">学&nbsp;&nbsp;院</label>
@@ -172,7 +174,7 @@
 								<label class="control-label" for="login-password-again">确认密码</label>
 								<input type="password" class="form-control"
 									id="login-password-again" name="password_again"
-									placeholder="Password again" required>
+									placeholder="Password_again" required>
 							</div>
 							<div class="form-group">
 								<label class="control-label" for="login-email">密保邮箱</label> <a
@@ -274,7 +276,7 @@
 							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 							<div class="form-group">
 							<label class="control-label" for="origin_pwd">原密码</label>
-							<input type="password" class="form-control" id="origin_pwd" 
+							<input type="password" class="form-control" id="origin_pwd"
 								name="origin_pwd" placeholder="Origin Password" required>
 							</div>
 							<div class="form-group">
