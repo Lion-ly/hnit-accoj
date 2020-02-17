@@ -48,6 +48,7 @@ footer a {
 }
 
 .ats-fontsize-20 {
+	margin-top:20px;
     font-size: 18px;
     font-weight: 800;
 }
@@ -83,3 +84,11 @@ footer a {
     color: red;
 }
 */
+
+.ats-i-NewBusiness th{
+	color:#ffffff;
+}
+
+.ats-i-NewBusiness td{
+	text-align: left;
+}

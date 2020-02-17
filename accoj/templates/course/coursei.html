@@ -203,29 +203,63 @@
 
 						<p class="ats-fontsize-20">2、新增业务</p>
 
-						<div class="ats-subject" id="body-text">
-							<div class="btn-group btn-group-justified" role="group"
-								style="margin-top: 20px;" aria-label="...">
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-success"
-										onclick="addActivity('success')">新增：筹资活动</button>
-								</div>
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-info"
-										onclick="addActivity('info')">新增：投资活动</button>
-								</div>
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-warning"
-										onclick="addActivity('warning')">新增：经营活动</button>
-								</div>
-							</div>
-                            <!--
+						<div class="btn-group btn-group-sm" role="group" aria-label="..."
+							style="">
+							<button type="button" class="btn btn-success btn-sm">新增</button>
+							<button type="button"
+								class="btn btn-success btn-sm dropdown-toggle"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								<span class="caret"></span> <span class="sr-only">Toggle
+									Dropdown</span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="javascript:addActivity('success')"
+									style="color: #ffffff; background-color: #449d44">筹资活动</a></li>
+								<li><a href="javascript:addActivity('info')"
+									style="color: #ffffff; background-color: #5bc0de">投资活动</a></li>
+								<li><a href="javascript:addActivity('warning')"
+									style="color: #ffffff; background-color: #f0ad4e">经营活动</a></li>
+							</ul>
+						</div>
+						<button type="button" class="btn btn-danger btn-sm" onclick="i_DeleteRow()">撤销</button>
+
+						<div class="ats-subject">
+							<table class="table table-hover ats-i-NewBusiness"
+								style="margin-top: 20px;">
+								<tbody id="body-text">
+									<tr hidden="hidden">
+										<td style="width: 5%"></td>
+										<td></td>
+									</tr>
+									<tr>
+										<th style="background-color: #5cb85c;">筹集活动</th>
+										<td style="text-align: left;">
+											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</td>
+										
+									</tr>
+									<tr>
+										<th style="background-color: #5cb85c; width: 5%">筹集活动</th>
+										<td style="text-align: left">
+											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</td>
+										
+									</tr>
+									<tr>
+										<th style="background-color: #5cb85c; width: 5%">筹集活动</th>
+										<td style="text-align: left">
+											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。
+											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。
+											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</td>
+										
+									</tr>
+								</tbody>
+							</table>
+
+							<!--
 							<p>
-								<label class="label  label-success">筹资活动</label><input
-									type="text">年<input type="text">月<input
-									type="text">日，从中国建设银行取得<input type="text">年期贷款<input
-									type="text">万元存入银行，年利率为<input type="text">%，按年结算利息。
+								<label class="label  label-success">筹集活动
+								</label><input type="text" readonly="readonly">2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。
 							</p>
+							
 							<p>
 								<label class="label  label-info">投资活动</label><input type="text">年<input
 									type="text">月<input type="text">日，从中国建设银行取得<input
@@ -240,7 +274,7 @@
 							</p>
 							-->
 						</div>
-						<hr class="simple" color="#6f5499" />
+						<hr style="clear: both;" class="simple" color="#6f5499" />
 						<div align="right">
 							<button type="button" class="btn btn-success" id="">
 								<span class="glyphicon"></span>&nbsp;提交
