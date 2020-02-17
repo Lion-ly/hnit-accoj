@@ -74,7 +74,9 @@ footer a {
 
 .ats-vouchertable-input {
     width: 40px;
-    border: 0;
+    border-left: 0px;
+    border-top: 0px;
+    border-right: 0px;  
 }
 
 /*
@@ -92,3 +94,18 @@ footer a {
 .ats-i-NewBusiness td{
 	text-align: left;
 }
+
+.ats-v-Ttable {
+	width: 100%;
+}
+
+.ats-v-Ttable input{
+	border-width: thin;
+	width: 100%;
+    height: 100%;
+    border-left: 0px;
+    border-top: 0px;
+    border-right: 0px;  
+}
+
+

@@ -1,4 +1,8 @@
 {% extends 'course/courseBase.html' %} {% block courseBody %}
+<!-- 单独引入coursei -->
+<link href="{{ url_for('static', filename='css/course/coursei.css') }}"
+	rel="stylesheet">
+	
 <div class="courseBody">
 	<!-- 习题主体 -->
 	<div class="container">
@@ -59,41 +63,41 @@
 				<div class="ats-board">
 					<div>
 						<p class="ats-fontsize-20">填写完整分录</p>
-						<table id="borrowRow" class="table table-bordered"
-							style="margin-top: 10px; margin-bottom: 0px; border: 0px;">
-							<tr>
-								<th class="ats-tablecolor-f"
-									style="width: 5%; border-right: 0px">借：</th>
-								<td class="ats-tablecolor-f" style="width: 5%; border-left: 0px"></td>
-								<td style="width: 40%" contentEditable="true"></td>
-								<td style="width: 40%" contentEditable="true"></td>
-								<td style="padding: 0px; border: 0px">
-									<div align="center">
-										<a style="color: green;" type="button" class="btn"
-											onclick="iv_AddRow('borrow')"><span
-											class="glyphicon glyphicon-plus-sign"></span></a>
-									</div>
-								</td>
-							</tr>
+						
+						<table class="table table-bordered" style="border: 0px">
+							<tbody>
+								<tr>
+									<th style="width: 8%; border-right:0px" class="ats-tablecolor-f">借：</th>
+									<td style="width: 8%; border-left:0px" class="ats-tablecolor-f"></td>
+									<td style="width: 40%;"><input type="text" name="" id="" placeholder="科目"></td>
+									<td style="width: 40%;"><input type="text" name="" id="" placeholder="金额"></td>
+									<td style="width: 4%;border: 0px;padding: 0px;">
+										<div align="center">
+											<a style="color: green;" type="button" class="btn"
+												onclick="iv_AddRow('borrow')"><span
+												class="glyphicon glyphicon-plus-sign"></span></a>
+										</div>
+									</td>
+								</tr>
+								<tr id="borrowRow">
+									<td style="border-right:0px" class="ats-tablecolor-f"></td>
+									<th style="border-left:0px" class="ats-tablecolor-f">贷：</th>
+									<td><input type="text" name="" id="" placeholder="科目"></td>
+									<td><input type="text" name="" id="" placeholder="金额"></td>
+									<td style="padding: 0px; border: 0px">
+										<div align="center">
+											<a style="color: green;" type="button" class="btn"
+												onclick="iv_AddRow('loan')"><span
+												class="glyphicon glyphicon-plus-sign"></span></a>
+										</div>
+									</td>
+								</tr>
+								<tr id="loanRow"></tr>
+							</tbody>
 						</table>
-						<table id="loanRow" class="table table-bordered"
-							style="border: 0px">
-							<tr>
-								<td class="ats-tablecolor-f"
-									style="width: 5%; border-right: 0px"></td>
-								<th class="ats-tablecolor-f" style="width: 5%; border-left: 0px">贷：
-								</th>
-								<td style="width: 40%" contentEditable="true"></td>
-								<td style="width: 40%" contentEditable="true"></td>
-								<td style="padding: 0px; border: 0px">
-									<div align="center">
-										<a style="color: green;" type="button" class="btn"
-											onclick="iv_AddRow('loan')"><span
-											class="glyphicon glyphicon-plus-sign"></span></a>
-									</div>
-								</td>
-							</tr>
-						</table>
+						
+						
+						
 					</div>
 				</div>
 				<hr class="simple" style="clear: both;" color="#6f5499" />

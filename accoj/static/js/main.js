@@ -107,12 +107,12 @@ function ctor_cancel(){
  * ? 表格增加行
  */
 function iv_AddRow(obj){
-		$("#"+obj+"Row").append(
+		$("#"+obj+"Row").before(
 					"<tr>"
 				+	"<td class='ats-tablecolor-f' style='border-right: 0px'></td>"
 				+	"<td class='ats-tablecolor-f' style='border-left: 0px'></td>"
-				+	"<td contentEditable='true'><br></td>"
-				+	"<td contentEditable='true'><br></td>"
+				+	"<td><input type='text' name='' id='' placeholder='科目'></td>"
+				+	"<td><input type='text' name='' id='' placeholder='金额'></td>"
 				+	"<td style='padding:0px;border:0px'>"
 				+	"<div align='center'>"
 				+			"<a style='color: red' type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
@@ -133,9 +133,52 @@ function iv_DeleteRow(obj){
 
 //==================================coursev==================================//
 
-/* @
- * # coursev -> 平衡表
- * ? 表格增加行
+/*
+ * @ # coursev ? 表格增加行
+ */
+function v_AddLeftRow(obj, pm) {
+	var title = "";
+	if (pm == "plus") {
+		title = "增加额";
+	} else {
+		title = "减少额";
+	}
+	$(obj).parent().parent().parent().after(
+			"<tr>" + "<td>" + "<div align='left'>"
+					+ "<a style='color: red; padding: 0px 0px' type='button' "
+					+ "class='btn' onclick='v_DeleteRowT(this)'><span "
+					+ "class='glyphicon glyphicon-minus-sign'></span></a>"
+					+ "</div>" + "</td>" + "<th>" + title + "</th>"
+					+ "<td><input type='number' name='' id='' "
+					+ "placeholder='0'></td>" + "</tr>");
+}
+
+function v_AddRightRow(obj, pm) {
+	var title = "";
+	if (pm == "plus") {
+		title = "增加额";
+	} else {
+		title = "减少额";
+	}
+	$(obj).parent().parent().parent().after(
+			"<tr>" + "<th style='width: 30%;'>" + title + "</th>"
+					+ "<td style='width: 30%;'><input type='number' "
+					+ "name='' id='' placeholder='0'></td>"
+					+ "<td style='width: 40%;'>" + "<div align='right'>"
+					+ "<a style='color: red; padding: 0px 0px' "
+					+ "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
+					+ "class='glyphicon glyphicon-minus-sign'></span></a>"
+					+ "</div>" + "</td>" + "</tr>");
+}
+
+function v_DeleteRowT(obj){
+	$(obj).parent().parent().parent().remove();
+}
+
+
+
+/*
+ * @ # coursev -> 平衡表 ? 表格增加行
  */
 function v_AddRow(obj){
 	$("#"+obj+"Row").before(

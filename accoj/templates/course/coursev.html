@@ -1,4 +1,5 @@
 {% extends 'course/courseBase.html' %} {% block courseBody %}
+
 <div class="courseBody">
 	<!-- 习题主体 -->
 	<div class="container">
@@ -43,7 +44,246 @@
 						<button type="button" class="btn btn-danger btn-sm"
 							onclick="deleteTTable()">删除</button>
 						<!-- T型表格 -->
-						<div align="center" id="TTable" style="margin-bottom: 20px"></div>
+						<div align="center" id="TTable" style="margin-bottom: 20px">
+							<!-- 左T表 -->
+							<div>
+								<table class="table table-bordered"
+									style="border: 0px; width: 50%; margin-bottom: 0px">
+									<tbody>
+										<tr>
+											<th
+												style="text-align: center; vertical-align: middle; border: 0px; width: 33%">
+
+												借方</th>
+											<th style="border: 0px; width: 33%"><select
+												class="form-control pull-right">
+													<option>银行存款</option>
+													<option>...</option>
+											</select></th>
+											<th
+												style="text-align: center; vertical-align: middle; border: 0px; width: 33%">贷方
+
+											</th>
+										</tr>
+									</tbody>
+								</table>
+								<table class="table table-bordered"
+									style="border: 0px; width: 50%">
+									<tbody>
+										<tr>
+											<td style="width: 50%; border-left: 0px">
+												<div align="right">
+													<table class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<td style="width: 40%;">
+																	<div align="left">
+																		<a style="color: green; padding: 0px 0px"
+																			type="button" class="btn" onclick="v_AddLeftRow(this,'plus')"><span
+																			class="glyphicon glyphicon-plus-sign"></span></a>
+																	</div>
+																</td>
+																<th style="width: 30%;">期初余额</th>
+																<td style="width: 30%;"><input type="number"
+																	name="" id="" placeholder="0"></td>
+															</tr>
+
+															<tr>
+																<td>
+																	<div align="left">
+																		<a style="color: red; padding: 0px 0px" type="button"
+																			class="btn" onclick="v_DeleteRowT(this)"><span
+																			class="glyphicon glyphicon-minus-sign"></span></a>
+																	</div>
+																</td>
+																<th>增加额</th>
+																<td><input type="number" name="" id=""
+																	placeholder="0"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+											<td style="width: 50%; border-right: 0px">
+												<div align="left">
+													<table id="ttable-01" class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<th style="width: 30%;"></th>
+																<td style="width: 30%;"></td>
+																<td style="width: 40%;">
+																	<div align="right">
+																		<a style="color: green; padding: 0px 0px"
+																			type="button" class="btn" onclick="v_AddRightRow(this,'minus')"><span
+																			class="glyphicon glyphicon-plus-sign"></span></a>
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 50%; border-left: 0px; border-bottom: 0px">
+												<div align="right">
+													<table class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<td style="width: 40%;"></td>
+																<th style="width: 30%;">本期发生额</th>
+																<td style="width: 30%;"><input type="number"
+																	name="" id="" placeholder="0"></td>
+															</tr>
+															<tr>
+																<td></td>
+																<th>期末余额</th>
+																<td><input type="number" name="" id=""
+																	placeholder="0"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+											<td style="width: 50%; border-right: 0px; border-bottom: 0px">
+												<div align="left">
+													<table class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<th style="width: 30%;">本期发生额</th>
+																<td style="width: 30%;"><input type="number"
+																	name="" id="" placeholder="0"></td>
+																<td style="width: 40%;"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<!-- 右T表 -->
+							<div>
+								<table class="table table-bordered"
+									style="border: 0px; width: 50%; margin-bottom: 0px">
+									<tbody>
+										<tr>
+											<th
+												style="text-align: center; vertical-align: middle; border: 0px; width: 33%">
+
+												借方</th>
+											<th style="border: 0px; width: 33%"><select
+												class="form-control pull-right">
+													<option>长期借款</option>
+													<option>...</option>
+											</select></th>
+											<th
+												style="text-align: center; vertical-align: middle; border: 0px; width: 33%">贷方
+
+											</th>
+										</tr>
+									</tbody>
+								</table>
+								<table class="table table-bordered"
+									style="border: 0px; width: 50%">
+									<tbody>
+										<tr>
+											<td style="width: 50%; border-left: 0px">
+												<div align="right">
+													<table class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<td style="width: 40%;">
+																	<div align="left">
+																		<a style="color: green; padding: 0px 0px"
+																			type="button" class="btn" onclick="v_AddLeftRow(this,'minus')"><span
+																			class="glyphicon glyphicon-plus-sign"></span></a>
+																	</div>
+																</td>
+																<th style="width: 30%;"></th>
+																<td style="width: 30%;"></td>
+															</tr>
+
+														</tbody>
+													</table>
+												</div>
+											</td>
+											<td style="width: 50%; border-right: 0px">
+												<div align="left">
+													<table id="ttable-01" class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<th style="width: 30%;">期初余额</th>
+																<td style="width: 30%;"><input type="number"
+																	name="" id="" placeholder="0"></td>
+																<td style="width: 40%;">
+																	<div align="right">
+																		<a style="color: green; padding: 0px 0px"
+																			type="button" class="btn" onclick="v_AddRightRow(this,'plus')"><span
+																			class="glyphicon glyphicon-plus-sign"></span></a>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th>增加额</th>
+																<td><input type="number" name="" id=""
+																	placeholder="0"></td>
+																	<td>
+																	<div align="right">
+																		<a style="color: red; padding: 0px 0px" type="button"
+																			class="btn" onclick="v_DeleteRowT(this)"><span
+																			class="glyphicon glyphicon-minus-sign"></span></a>
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 50%; border-left: 0px; border-bottom: 0px">
+												<div align="right">
+													<table class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<td style="width: 40%;"></td>
+																<th style="width: 30%;">本期发生额</th>
+																<td style="width: 30%;"><input type="number"
+																	name="" id="" placeholder="0"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+											<td style="width: 50%; border-right: 0px; border-bottom: 0px">
+												<div align="left">
+													<table class="ats-v-Ttable">
+														<tbody>
+															<tr>
+																<th style="width: 30%;">本期发生额</th>
+																<td style="width: 30%;"><input type="number"
+																	name="" id="" placeholder="0"></td>
+																<td style="width: 40%;"></td>
+															</tr>
+															<tr>
+																<th>期末余额</th>
+																<td><input type="number" name="" id=""
+																	placeholder="0"></td>
+																<td></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
 						<hr class="simple" style="clear: both;" color="#6f5499" />
 						<div align="right">
 							<button type="button" class="btn btn-success" id="">
@@ -57,93 +297,93 @@
 						<table class="table table-bordered ats-vouchertable"
 							style="border: 0px">
 							<tbody>
-							<tr>
-								<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-								<th colspan="2" class="ats-tablecolor-f">期初余额</th>
-								<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-								<th colspan="2" class="ats-tablecolor-f">期末余额</th>
-							</tr>
-							<tr>
-								<th class="ats-tablecolor-f">借方</th>
-								<th class="ats-tablecolor-f">贷方</th>
-								<th class="ats-tablecolor-f">借方</th>
-								<th class="ats-tablecolor-f">贷方</th>
-								<th class="ats-tablecolor-f">借方</th>
-								<th class="ats-tablecolor-f">贷方</th>
-								<td style="padding: 0px; border: 0px; width: 5%">
-									<div align="center">
-										<a style="color: green;" type="button" class="btn"
-											onclick="v_AddRow('first')"><span
-											class="glyphicon glyphicon-plus-sign"></span></a>
-									</div>
-								</td>
-							</tr>
-							
-							<tr>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-							</tr>
-							<tr id="firstRow">
-								<td class="ats-tablecolor-f">合计</td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-							</tr>
+								<tr>
+									<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+									<th colspan="2" class="ats-tablecolor-f">期初余额</th>
+									<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+									<th colspan="2" class="ats-tablecolor-f">期末余额</th>
+								</tr>
+								<tr>
+									<th class="ats-tablecolor-f">借方</th>
+									<th class="ats-tablecolor-f">贷方</th>
+									<th class="ats-tablecolor-f">借方</th>
+									<th class="ats-tablecolor-f">贷方</th>
+									<th class="ats-tablecolor-f">借方</th>
+									<th class="ats-tablecolor-f">贷方</th>
+									<td style="padding: 0px; border: 0px; width: 5%">
+										<div align="center">
+											<a style="color: green;" type="button" class="btn"
+												onclick="v_AddRow('first')"><span
+												class="glyphicon glyphicon-plus-sign"></span></a>
+										</div>
+									</td>
+								</tr>
+
+								<tr>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr id="firstRow">
+									<td class="ats-tablecolor-f">合计</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 							</tbody>
 						</table>
 						<p class="ats-fontsize-20">3、第2个会计期间的试算平衡表：</p>
-						<table
-							class="table table-bordered ats-vouchertable" style="border: 0px">
+						<table class="table table-bordered ats-vouchertable"
+							style="border: 0px">
 							<tbody>
-							<tr>
-								<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-								<th colspan="2" class="ats-tablecolor-f">期初余额</th>
-								<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-								<th colspan="2" class="ats-tablecolor-f">期末余额</th>
+								<tr>
+									<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+									<th colspan="2" class="ats-tablecolor-f">期初余额</th>
+									<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+									<th colspan="2" class="ats-tablecolor-f">期末余额</th>
 
-							</tr>
-							<tr>
-								<th class="ats-tablecolor-f">借方</th>
-								<th class="ats-tablecolor-f">贷方</th>
-								<th class="ats-tablecolor-f">借方</th>
-								<th class="ats-tablecolor-f">贷方</th>
-								<th class="ats-tablecolor-f">借方</th>
-								<th class="ats-tablecolor-f">贷方</th>
-								<td style="padding: 0px; border: 0px; width: 5%">
-									<div align="center">
-										<a style="color: green;" type="button" class="btn"
-											onclick="v_AddRow('second')"><span
-											class="glyphicon glyphicon-plus-sign"></span></a>
-									</div>
-								</td>
+								</tr>
+								<tr>
+									<th class="ats-tablecolor-f">借方</th>
+									<th class="ats-tablecolor-f">贷方</th>
+									<th class="ats-tablecolor-f">借方</th>
+									<th class="ats-tablecolor-f">贷方</th>
+									<th class="ats-tablecolor-f">借方</th>
+									<th class="ats-tablecolor-f">贷方</th>
+									<td style="padding: 0px; border: 0px; width: 5%">
+										<div align="center">
+											<a style="color: green;" type="button" class="btn"
+												onclick="v_AddRow('second')"><span
+												class="glyphicon glyphicon-plus-sign"></span></a>
+										</div>
+									</td>
 
-							</tr>
-							<tr>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-							</tr>
-							<tr id="secondRow">
-								<td class="ats-tablecolor-f">合计</td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-								<td contentEditable="true"></td>
-							</tr>
+								</tr>
+								<tr>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
+								<tr id="secondRow">
+									<td class="ats-tablecolor-f">合计</td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+									<td contentEditable="true"></td>
+								</tr>
 							</tbody>
 						</table>
 						<hr class="simple" style="clear: both;" color="#6f5499" />
