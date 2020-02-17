@@ -559,6 +559,12 @@ def courseiv():
 @login_required
 def coursev():
     return render_template('course/coursev.html')
+    
+    
+@accoj_bp.route('/coursev_2')
+@login_required
+def coursev_2():
+    return render_template('course/coursev_2.html')
 
 
 @accoj_bp.route('/coursevi')
