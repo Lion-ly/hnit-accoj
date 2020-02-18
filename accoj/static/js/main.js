@@ -207,7 +207,7 @@ function v_createNewPage(obj,lcr){
 	case "left":
 		$('#TTablePage').append(	
 				"<div role='tabpanel' class='tab-pane fade' id='ttable-" + pageNum + "'>"
-			+	"<div align='center' style='margin-bottom: 20px'>"
+			+	"<div align='center' style='margin-top: 80px;margin-bottom: 100px'>"
 			+		"<table class='table table-bordered' "
 			+			"style='border: 0px; width: 50%; margin-bottom: 0px'>"
 			+			"<tbody>"
@@ -332,7 +332,7 @@ function v_createNewPage(obj,lcr){
 	case "right":
 		$('#TTablePage').append(
 				"<div role='tabpanel' class='tab-pane fade' id='ttable-" + pageNum + "'>"
-			+	"<div align='center' style='margin-bottom: 20px'>"
+			+	"<div align='center' style='margin-top: 80px;margin-bottom: 100px'>"
 			+		"<table class='table table-bordered' "
 			+			"style='border: 0px; width: 50%; margin-bottom: 0px'>"
 			+			"<tbody>"
@@ -493,12 +493,13 @@ function vi_AddRow(){
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
-		+		"<td style='padding: 0px; border: 0px; width: 4%'>"
+		+		"<th style='width: 4%; border: 0px; background: #ffffff'>"
 		+			"<div align='center'>"
-		+				"<a style='color: red;' type='button' class='btn' onclick='vi_DeleteRow(this)'>"
-		+				"<span class='glyphicon glyphicon-minus-sign'></span></a>"
+		+				"<a style='color: red; padding: 0px 0px' type='button' "
+		+					"class='btn' onclick='vi_DeleteRow(this)'><span "
+		+					"class='glyphicon glyphicon-minus-sign'></span></a>"
 		+			"</div>"
-		+		"</td>"
+		+		"</th>"
 		+	"</tr>"
 	);
 }
