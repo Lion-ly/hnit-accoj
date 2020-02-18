@@ -14,6 +14,11 @@ $(function () {
     });
 });
 
+function getPosition(obj){
+	$(obj).addClass("active");
+	$(obj).siblings().removeClass("active");
+}
+
 
 /*	@ 返回首页
  *  # base -> 会计实训系统Accountiong training system
@@ -34,6 +39,7 @@ $(function () {
 $(function () {
     $("#findpwd-help").tooltip();
 });
+
 
 
 /*	@ 验证码

@@ -13,6 +13,8 @@
 	rel="stylesheet">
 <script
 	src="{{ url_for('static', filename='bootstrap-3.3.7/js/bootstrap.min.js') }}"></script>
+<!-- font-awesome -->
+<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
 <!-- base -->
 <link href="{{ url_for('static', filename='css/base.css') }}"
 	rel="stylesheet">
@@ -307,28 +309,41 @@
 
 	{% block meun %}{% endblock meun %} {% block courseBody %}{% endblock
 	courseBody %}
-
-	<!-- 防尾前移 -->
-	<div class="ats-rock"></div>
-
+	
 	<!-- 尾引入： -->
 	<footer class="bs-docs-footer"
 		style="background-color: #2a2730; color: #99979c;">
 		<div class="container" style="padding-top: 50px; padding-bottom: 30px">
-			<ul class="list-inline">
-				<li><a href="" target="_blank">标签</a></li>
-				<li><a href="{{ url_for('accoj.detail') }}#help"
-					target="_blank">帮助</a></li>
-				<li><a href="{{ url_for('accoj.detail') }}#feedback"
-					target="_blank">反馈</a></li>
-				<li><a href="{{ url_for('accoj.detail') }}#about"
-					target="_blank">关于</a></li>
-			</ul>
-			<p>
-				Designed and built with all the love in the world by <a href=""
-					target="_blank">@Hooyantsing</a>
-			</p>
-			<p>本项目处于开发阶段，仅作为Demo展示。</p>
+			<div style="width: 80%;float: left">
+				<ul class="list-inline">
+					<li><a href="{{ url_for('accoj.detail') }}#help"
+						target="_blank">帮助</a></li>
+					<li><a href="{{ url_for('accoj.detail') }}#feedback"
+						target="_blank">反馈</a></li>
+					<li><a href="{{ url_for('accoj.detail') }}#about"
+						target="_blank">关于</a></li>
+				</ul>
+				<p>
+					Copyright © 2019-2020 <a href="">null</a>. All Rights Reserved.
+				</p>
+				<p>本项目处于开发阶段，仅作为Demo展示。</p>
+			</div>
+			<div style="width: 20%;height:100%;float: right;">
+				<ul class="list-inline">
+					<li><a class="footlogo"> <i
+							class="fa fa-qq fa-2x" aria-hidden="true"></i> <img
+							class="footlogotext" src="../static/img/qqcode.jpg" style="width:100px">
+					</a></li>
+					<li><a class="footlogo">
+						<i class="fa fa-weixin fa-2x" aria-hidden="true"></i>
+						<img
+							class="footlogotext" src="../static/img/qqcode.jpg" style="width:100px">
+					</a></li>
+					<li><a href="https://github.com/HNIT-ACCOJ/hnit-accoj" target="_blank">
+						<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+					</a></li>
+				</ul>
+			</div>
 		</div>
 	</footer>
 
