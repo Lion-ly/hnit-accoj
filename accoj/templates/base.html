@@ -1,336 +1,343 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 <head>
-<meta charset="UTF-8">
-<title>{% block title %}{% endblock title %}</title>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
 
-<!-- jQuery -->
-<script
-	src="{{ url_for('static', filename='jquery-3.1.1/jquery.min.js') }}"></script>
-<!-- bootstrap -->
-<link
-	href="{{ url_for('static', filename='bootstrap-3.3.7/css/bootstrap.min.css') }}"
-	rel="stylesheet">
-<script
-	src="{{ url_for('static', filename='bootstrap-3.3.7/js/bootstrap.min.js') }}"></script>
-<!-- base -->
-<link href="{{ url_for('static', filename='css/base.css') }}"
-	rel="stylesheet">
-<script src="{{ url_for('static', filename='js/base.js') }}"></script>
-<!-- local -->
-<link href="{{ url_for('static', filename='css/main.css') }}"
-	rel="stylesheet">
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script src="{{ url_for('static', filename='js/ajax/auth.js') }}"></script>
+    <!-- jQuery -->
+    <script
+            src="{{ url_for('static', filename='jquery-3.1.1/jquery.min.js') }}"></script>
+    <!-- bootstrap -->
+    <link
+            href="{{ url_for('static', filename='bootstrap-3.3.7/css/bootstrap.min.css') }}"
+            rel="stylesheet">
+    <script
+            src="{{ url_for('static', filename='bootstrap-3.3.7/js/bootstrap.min.js') }}"></script>
+    <!-- base -->
+    <link href="{{ url_for('static', filename='css/base.css') }}"
+          rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <!-- local -->
+    <link href="{{ url_for('static', filename='css/main.css') }}"
+          rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ajax/auth.js') }}"></script>
+    <script type="text/javascript">
+        // csrf防御模块
+        var csrf_token = {"csrf_token": "{{ csrf_token() }}"};
+    </script>
 
 </head>
 <body>
 
-	<!-- 头引入： -->
-	<div class="header">
-		<div class="container">
-			<!-- 项目标题 -->
-			<nav class="navbar navbar-default" id="project-title">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-						aria-expanded="false">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="glyphicon glyphicon-user"></span>
-					</button>
-					<a class="navbar-brand" href="{{ url_for('accoj.index') }}">会计实训系统
-						Accounting training system</a>
-				</div>
+<!-- 头引入： -->
+<div class="header">
+    <div class="container">
+        <!-- 项目标题 -->
+        <nav class="navbar navbar-default" id="project-title">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span> <span
+                        class="glyphicon glyphicon-user"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('index.index') }}">会计实训系统
+                    Accounting training system</a>
+            </div>
 
-				<div class="collapse navbar-collapse"
-					id="bs-example-navbar-collapse-1">
-					<div class="nav navbar-nav navbar-right"
-						style="margin-top: 10px; margin-right: 20px" id="login_signin">
-						<!-- 登录验证 -->
-						{% if username %}
-						<div class="btn-group btn-group-sm" role="group" aria-label="..."
-							id="logged_in">
-							<!-- 已登录 -->
-							<button type="button" class="btn btn-default btn-sm"
-								disabled="disabled" id="username">
-								<span class="glyphicon glyphicon-user"></span>&nbsp;{{ username
-								}}
-							</button>
-							<button type="button"
-								class="btn btn-default btn-sm dropdown-toggle"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-								<span class="caret"></span> <span class="sr-only">Toggle
+            <div class="collapse navbar-collapse"
+                 id="bs-example-navbar-collapse-1">
+                <div class="nav navbar-nav navbar-right"
+                     style="margin-top: 10px; margin-right: 20px" id="login_signin">
+                    <!-- 登录验证 -->
+                    {% if username %}
+                        <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                             id="logged_in">
+                            <!-- 已登录 -->
+                            <button type="button" class="btn btn-default btn-sm"
+                                    disabled="disabled" id="username">
+                                <span class="glyphicon glyphicon-user"></span>&nbsp;{{ username }}
+                            </button>
+                            <button type="button"
+                                    class="btn btn-default btn-sm dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="caret"></span> <span class="sr-only">Toggle
 									Dropdown</span>
-							</button>
+                            </button>
 
-							<ul class="dropdown-menu">
-								<li><a href="#">个人</a></li>
-								<li><a href="#" data-toggle="modal"
-									data-target="#update-password">更改密码</a></li>
-								<li role="separator" class="divider"></li>
-								<li><a href="{{ url_for('auth.logout') }}" id="logout"><span
-										class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;注销</a></li>
-							</ul>
-						</div>
-						{% else %}
-						<!-- 未登录 -->
-						<div class="btn-group btn-group-sm" role="group" aria-label="..."
-							id="not_logged_in">
-							<button type="button" class="btn btn-default" data-toggle="modal"
-								data-target="#signin">登录</button>
-							<button type="button" class="btn btn-default" data-toggle="modal"
-								data-target="#login">注册</button>
-							<button type="button" class="btn btn-default" data-toggle="modal"
-								data-target="#findpwd">忘记了</button>
-						</div>
-						{% endif %}
-					</div>
-				</div>
-			</nav>
-		</div>
-		<!-- 登录模态框 -->
-		<div class="modal fade " id="signin" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="myModalLabel">用户登录</h4>
-					</div>
-					<div class="modal-body form-group">
-						<form id="signin_form">
-							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-							<label class="control-label" for="signin-studentid">学&nbsp;&nbsp;号</label>
-							<input type="text" class="form-control" id="signin-studentid"
-								name="studentid" placeholder="Student ID" required> <label
-								class="control-label" for="signin-password">密&nbsp;&nbsp;码</label>
-							<input type="password" class="form-control" id="signin-password"
-								name="password" placeholder="Password" required> <label
-								for="signin-rememberme"> <input id="signin-rememberme"
-								type="checkbox" name="rememberme">&nbsp;&nbsp;记住我
-							</label>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success" id="signin_button">
-									<span class="glyphicon glyphicon-ok"></span>&nbsp;登录
-								</button>
-								<button type="button" class="btn btn-default"
-									data-dismiss="modal">
-									<span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 注册模态框 -->
-		<div class="modal fade " id="login" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="myModalLabel">用户注册</h4>
-					</div>
-					<div class="modal-body">
-						<!--  -->
-						<form id="login_form">
-							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-							<div class="form-group">
-								<label class="control-label" for="login-studentid">学&nbsp;&nbsp;号</label>
-								<input type="text" class="form-control" id="login-studentid"
-									name="studentid" placeholder="11位学号" required>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="login-faculty">学&nbsp;&nbsp;院</label>
-								<select class="form-control" id="login-faculty"
-									name="login_faculty" onchange="login_select_change()">
-									<option>计算机与信息科学学院</option>
-									<option>经济与管理学院</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="login-class">班&nbsp;&nbsp;级</label>
-								<select class="form-control" id="login-class" name="login_class">
-									<option>网络1701</option>
-									<option>网络1702</option>
-									<option>网络1703</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="login-password">密&nbsp;&nbsp;码</label>
-								<input type="password" class="form-control" id="login-password"
-									name="password" placeholder="Password" required>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="login-password-again">确认密码</label>
-								<input type="password" class="form-control"
-									id="login-password-again" name="password_again"
-									placeholder="Password again" required>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="login-email">密保邮箱</label> <a
-									id="login-help" class="btn-xs" data-toggle="tooltip"
-									data-placement="right" title="请牢记，将用于找回密码"> <span
-									class="glyphicon glyphicon-question-sign"></span>
-								</a> <input type="email" class="form-control" id="login-email"
-									name="email" placeholder="Email" required>
-							</div>
-							<div class="form-group">
-								<label for="register-VCode">验证码</label>
-								<div class="form-inline">
-									<input type="email" class="form-control" id="register-VCode"
-										name="vcode" placeholder="VCode">
-									<button type="button" id="register-getvcode"
-										class="btn btn-primary" onclick="getVCode(this)">发送验证码</button>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success" id="login_button">
-									<span class="glyphicon glyphicon-ok"></span>&nbsp;注册
-								</button>
-								<button type="button" class="btn btn-default"
-									data-dismiss="modal">
-									<span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 忘记了模态框 -->
-		<div class="modal fade " id="findpwd" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="myModalLabel">找回密码</h4>
-					</div>
-					<div class="modal-body">
-						<form id="findpwd_form">
-							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-							<div class="form-group">
-								<label class="control-label" for="findpwd-studentid">学&nbsp;&nbsp;号</label>
-								<input type="text" class="form-control" id="findpwd-studentid"
-									name="studentid" placeholder="Student ID" required>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="findpwd-email">密保邮箱 </label> <a
-									id="findpwd-help" class="btn-xs" data-toggle="tooltip"
-									data-placement="right" title="请填写注册时密保邮箱"> <span
-									class="glyphicon glyphicon-question-sign"></span>
-								</a> <input type="email" class="form-control" id="findpwd-email"
-									name="email" placeholder="Email" required>
-							</div>
-							<div class="form-group">
-								<label for="findpwd-VCode">验证码</label>
-								<div class="form-inline">
-									<input type="email" class="form-control" id="findpwd-VCode"
-										name="vcode" placeholder="VCode" required>
-									<button type="button" id="findpwd-getvcode"
-										class="btn btn-primary" onclick="getVCode(this)">发送验证码</button>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success"
-									id="findpwd_button">
-									<span class="glyphicon glyphicon-ok"></span>&nbsp;找回
-								</button>
-								<button type="button" class="btn btn-default"
-									data-dismiss="modal">
-									<span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 更改密码模态框 -->
-		<div class="modal fade " id="update-password" tabindex="-1"
-			role="dialog" aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="myModalLabel">更改密码</h4>
-					</div>
-					<div class="modal-body form-group">
-						<form id="update_pwd_form">
-							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-							<div class="form-group">
-							<label class="control-label" for="origin_pwd">原密码</label>
-							<input type="password" class="form-control" id="origin_pwd" 
-								name="origin_pwd" placeholder="Origin Password" required>
-							</div>
-							<div class="form-group">
-							<label class="control-label" for="new_pwd">新密码</label>
-							<input type="password" class="form-control" id="new_pwd" name="new_pwd"
-								placeholder="New Password" required>
-							</div>
-							<div class="form-group">
-							<label class="control-label" for="new_pwd_again">确认新密码</label>
-							<input type="password" class="form-control" id="new_pwd_again" name="new_pwd_again"
-								placeholder="Password_again " required>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success"
-									id="update_pwd_button">
-									<span class="glyphicon glyphicon-ok"></span>&nbsp;更改
-								</button>
-								<button type="button" class="btn btn-default"
-									data-dismiss="modal">
-									<span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">个人</a></li>
+                                <li><a href="#" data-toggle="modal"
+                                       data-target="#update-password">更改密码</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
+                                        class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;注销</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <!-- 未登录 -->
+                        <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                             id="not_logged_in">
+                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                    data-target="#signin">登录
+                            </button>
+                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                    data-target="#login">注册
+                            </button>
+                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                    data-target="#findpwd">忘记了
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- 登录模态框 -->
+    <div class="modal fade " id="signin" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">用户登录</h4>
+                </div>
+                <div class="modal-body form-group">
+                    <form id="signin_form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <label class="control-label" for="signin-studentid">学&nbsp;&nbsp;号</label>
+                        <input type="text" class="form-control" id="signin-studentid"
+                               name="studentid" placeholder="Student ID" required> <label
+                            class="control-label" for="signin-password">密&nbsp;&nbsp;码</label>
+                        <input type="password" class="form-control" id="signin-password"
+                               name="password" placeholder="Password" required> <label
+                            for="signin-rememberme"> <input id="signin-rememberme"
+                                                            type="checkbox" name="rememberme">&nbsp;&nbsp;记住我
+                    </label>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="signin_button">
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;登录
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 注册模态框 -->
+    <div class="modal fade " id="login" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">用户注册</h4>
+                </div>
+                <div class="modal-body">
+                    <!--  -->
+                    <form id="login_form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label class="control-label" for="login-studentid">学&nbsp;&nbsp;号</label>
+                            <input type="text" class="form-control" id="login-studentid"
+                                   name="studentid" placeholder="11位学号" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="login-faculty">学&nbsp;&nbsp;院</label>
+                            <select class="form-control" id="login-faculty"
+                                    name="login_faculty" onchange="login_select_change()">
+                                <option>计算机与信息科学学院</option>
+                                <option>经济与管理学院</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="login-class">班&nbsp;&nbsp;级</label>
+                            <select class="form-control" id="login-class" name="login_class">
+                                <option>网络1701</option>
+                                <option>网络1702</option>
+                                <option>网络1703</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="login-password">密&nbsp;&nbsp;码</label>
+                            <input type="password" class="form-control" id="login-password"
+                                   name="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="login-password-again">确认密码</label>
+                            <input type="password" class="form-control"
+                                   id="login-password-again" name="password_again"
+                                   placeholder="Password again" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="login-email">密保邮箱</label> <a
+                                id="login-help" class="btn-xs" data-toggle="tooltip"
+                                data-placement="right" title="请牢记，将用于找回密码"> <span
+                                class="glyphicon glyphicon-question-sign"></span>
+                        </a> <input type="email" class="form-control" id="login-email"
+                                    name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-VCode">验证码</label>
+                            <div class="form-inline">
+                                <input type="email" class="form-control" id="register-VCode"
+                                       name="vcode" placeholder="VCode">
+                                <button type="button" id="register-getvcode"
+                                        class="btn btn-primary" onclick="getVCode(this)">发送验证码
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="login_button">
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;注册
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 忘记了模态框 -->
+    <div class="modal fade " id="findpwd" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">找回密码</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="findpwd_form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label class="control-label" for="findpwd-studentid">学&nbsp;&nbsp;号</label>
+                            <input type="text" class="form-control" id="findpwd-studentid"
+                                   name="studentid" placeholder="Student ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="findpwd-email">密保邮箱 </label> <a
+                                id="findpwd-help" class="btn-xs" data-toggle="tooltip"
+                                data-placement="right" title="请填写注册时密保邮箱"> <span
+                                class="glyphicon glyphicon-question-sign"></span>
+                        </a> <input type="email" class="form-control" id="findpwd-email"
+                                    name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="findpwd-VCode">验证码</label>
+                            <div class="form-inline">
+                                <input type="email" class="form-control" id="findpwd-VCode"
+                                       name="vcode" placeholder="VCode" required>
+                                <button type="button" id="findpwd-getvcode"
+                                        class="btn btn-primary" onclick="getVCode(this)">发送验证码
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success"
+                                    id="findpwd_button">
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;找回
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 更改密码模态框 -->
+    <div class="modal fade " id="update-password" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">更改密码</h4>
+                </div>
+                <div class="modal-body form-group">
+                    <form id="update_pwd_form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label class="control-label" for="origin_pwd">原密码</label>
+                            <input type="password" class="form-control" id="origin_pwd"
+                                   name="origin_pwd" placeholder="Origin Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="new_pwd">新密码</label>
+                            <input type="password" class="form-control" id="new_pwd" name="new_pwd"
+                                   placeholder="New Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="new_pwd_again">确认新密码</label>
+                            <input type="password" class="form-control" id="new_pwd_again" name="new_pwd_again"
+                                   placeholder="Password_again " required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success"
+                                    id="update_pwd_button">
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;更改
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp;关闭
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-	{% block meun %}{% endblock meun %} {% block courseBody %}{% endblock
-	courseBody %}
+{% block meun %}{% endblock meun %} {% block courseBody %}{% endblock courseBody %}
 
-	<!-- 防尾前移 -->
-	<div class="ats-rock"></div>
+<!-- 防尾前移 -->
+<div class="ats-rock"></div>
 
-	<!-- 尾引入： -->
-	<footer class="bs-docs-footer"
-		style="background-color: #2a2730; color: #99979c;">
-		<div class="container" style="padding-top: 50px; padding-bottom: 30px">
-			<ul class="list-inline">
-				<li><a href="" target="_blank">标签</a></li>
-				<li><a href="{{ url_for('accoj.detail') }}#help"
-					target="_blank">帮助</a></li>
-				<li><a href="{{ url_for('accoj.detail') }}#feedback"
-					target="_blank">反馈</a></li>
-				<li><a href="{{ url_for('accoj.detail') }}#about"
-					target="_blank">关于</a></li>
-			</ul>
-			<p>
-				Designed and built with all the love in the world by <a href=""
-					target="_blank">@Hooyantsing</a>
-			</p>
-			<p>本项目处于开发阶段，仅作为Demo展示。</p>
-		</div>
-	</footer>
+<!-- 尾引入： -->
+<footer class="bs-docs-footer"
+        style="background-color: #2a2730; color: #99979c;">
+    <div class="container" style="padding-top: 50px; padding-bottom: 30px">
+        <ul class="list-inline">
+            <li><a href="" target="_blank">标签</a></li>
+            <li><a href="{{ url_for('accoj.detail') }}#help"
+                   target="_blank">帮助</a></li>
+            <li><a href="{{ url_for('accoj.detail') }}#feedback"
+                   target="_blank">反馈</a></li>
+            <li><a href="{{ url_for('accoj.detail') }}#about"
+                   target="_blank">关于</a></li>
+        </ul>
+        <p>
+            Designed and built with all the love in the world by <a href=""
+                                                                    target="_blank">@Hooyantsing</a>
+        </p>
+        <p>本项目处于开发阶段，仅作为Demo展示。</p>
+    </div>
+</footer>
 
 </body>
 </html>

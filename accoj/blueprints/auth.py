@@ -15,6 +15,10 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/signin', methods=['POST', 'GET'])
 def signin():
+    """
+    注册
+    :return:
+    """
     if request.method == "POST":
         form = request.form
         student_no = form.get("studentid")
@@ -40,6 +44,10 @@ def signin():
 
 @auth_bp.route('/login', methods=['POST', 'GET'])
 def login():
+    """
+    登陆
+    :return:
+    """
     if request.method == "POST":
         form = request.form
         student_no = form.get("studentid")
@@ -87,6 +95,10 @@ def login():
 
 @auth_bp.route('/logout')
 def logout():
+    """
+    注销登陆
+    :return:
+    """
     session.clear()
     return redirect('/')
 
@@ -94,6 +106,10 @@ def logout():
 @auth_bp.route('/update_password', methods=['POST', 'GET'])
 @login_required
 def update_password():
+    """
+    更改密码
+    :return:
+    """
     if request.method == "POST":
         form = request.form
         origin_pwd = form["origin_pwd"]
@@ -124,5 +140,9 @@ def update_password():
 
 @auth_bp.app_context_processor
 def my_app_context_processor():
+    """
+    全局上下文处理函数
+    :return:
+    """
     username = session.get("username")
     return {"username": username}
