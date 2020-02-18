@@ -10,6 +10,7 @@ from flask import Flask
 from accoj.blueprints.accoj import accoj_bp
 from accoj.blueprints.admin import admin_bp
 from accoj.blueprints.auth import auth_bp
+from accoj.blueprints.index import index_bp
 from settings import config
 from accoj.extensions import mongo, mail, csrf
 from accoj.utils.add_question import add_question
@@ -40,6 +41,7 @@ def register_blueprints(app):
     app.register_blueprint(accoj_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(index_bp)
 
 
 def register_extensions(app):

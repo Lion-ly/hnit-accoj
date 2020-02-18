@@ -17,13 +17,17 @@ def login_required(func):
         if session.get('username'):
             return func(*args, **kwargs)
         else:
-            return redirect(url_for('accoj.index'))
+            return redirect(url_for('index.index'))
 
     return wrapper
 
 
 def is_number(s):
-    """判断字符串能否转换为数字"""
+    """
+    判断字符串能否转换为数字
+    :param s: 字符串
+    :return: 能转换为数字为True，否则为False
+    """
     try:
         float(s)
         return True
