@@ -42,19 +42,38 @@ $(function () {
  */
 function getVCode(obj) {
     var $obj = $(obj);
-    var second = 10;
-    var stop = setInterval(
-        function () {
-            if (second > 0) {
-                $obj.attr("disabled", true);
-                var message = "重发(" + second + "s)";
-                $obj.text(message);
-                second--;
-            } else {
-                clearTimeout(stop);
-                $obj.text("发送验证码");
-                $obj.attr("disabled", false);
+    var second = 60;
+    if(check_email($('#login-email').val())) {
+        var stop = setInterval(
+            function () {
+                if (second > 0) {
+                    $obj.attr("disabled", true);
+                    var message = "重发(" + second + "s)";
+                    $obj.text(message);
+                    second--;
+                } else {
+                    clearTimeout(stop);
+                    $obj.text("发送验证码");
+                    $obj.attr("disabled", false);
+                }
             }
-        }
-        , 1000);
+            , 1000);
+    }
+    else {
+            $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
+        setTimeout("$('#login_danger').remove()", 1000)
+    }
+}
+
+
+/*
+验证邮箱格式
+ */
+
+function check_email(email) {
+    var myreg=/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+    if(myreg.test(email)){
+        return true;
+    }
+    return false;
 }
