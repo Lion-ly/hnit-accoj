@@ -3,3 +3,50 @@
 	background-color: #ffffff;
 	border-color:#ffffff
 }
+
+footer a {
+    color: white;
+}
+
+footer a:visited{
+	color: #ffffff;
+}
+
+.ats-friendshipLinks li{
+	width: 19%;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+
+.footlogo {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.footlogo .footlogotext {
+    visibility: hidden;
+    width: 120p
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    top:-120px;
+    right:-34px;
+}
+
+.footlogo:hover .footlogotext {
+    visibility: visible;
+}
+
+.ats-hnitinfo p{
+	font-size: 14px;
+	font-family: 楷体;
+	text-indent:2em; 
+}
