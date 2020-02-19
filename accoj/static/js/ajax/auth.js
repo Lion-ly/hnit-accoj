@@ -1,5 +1,6 @@
 $(function () {
     $('#signin_button').click(function () {
+        save_cookies();
         data = $('#signin_form').serialize();
         $.ajax({
             url: "/signin",
@@ -96,3 +97,69 @@ function login_select_change() {
 
     }
 }
+
+
+/*
+  加载时检查cookie的值
+ */
+$(function () {
+    var rem=$.cookie('remember');
+    if(rem)
+    {
+        $("#signin-rememberme").prop("checked",true);
+        $("#signin-studentid").val($.cookie("studentid"));
+        $("#signin-password").val($.cookie("psw"));
+    }
+
+})
+
+/*
+把输入的值保存到cookie，保存期为7天
+ */
+
+function save_cookies() {
+    if($("#signin-rememberme").prop("checked"))
+    {
+        var stu=$("#signin-studentid").val();
+        var psw=$("#signin-password").val();
+        $.cookie("remember","true",{expires:7});
+        $.cookie("studentid",stu,{expires:7});
+        $.cookie("psw",psw,{expires:7});
+    }else{
+        $.cookie("remember","false",{expires:-1});
+        $.cookie("studentid","",{expires:-1});
+        $.cookie("psw","",{expires:-1});
+    }
+}
+
+/*
+ajax发送邮箱验证码
+ */
+
+$(function () {
+        $("#register-getvcode").click(function () {
+            if(check_email($('#login-email').val())) {
+                var data = $('#login_form').serialize();
+            $.ajax({
+                url: "/VCode",
+                type: "post",
+                dataType: "json",
+                data:data,
+                async: true,
+                success: function (data) {
+                    if (data["result"] === "true") {
+                        $('#login_form').append("<div class='alert alert-info' id='login_info' style='text-align: center'> <strong>发送邮件成功，请注意查收</strong></div>")
+                        setTimeout("$('#login_info').remove()", 3000)
+                    }
+                    else {
+                        $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>发送邮件失败</strong></div>")
+                        setTimeout("$('#login_danger').remove()", 3000)
+                    }
+                }
+
+            })
+        } else {
+        $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
+        setTimeout("$('#login_danger').remove()", 1000)
+    }})
+    });

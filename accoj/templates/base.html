@@ -24,6 +24,9 @@
 	rel="stylesheet">
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ajax/auth.js') }}"></script>
+<script type="text/javascript">
+    var csrf_token = {{ csrf_token() }};
+</script>
 
 </head>
 <body>

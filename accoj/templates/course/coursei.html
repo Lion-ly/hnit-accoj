@@ -12,10 +12,10 @@
 			<div class="panel-body">
 				<!-- 作业标签 -->
 				<ul class="nav nav-tabs">
-					<li role="presentation" class="active" id="CreateCompany-li"><a
+					<li role="presentation" class="active" onclick="getCompanyInfo()"><a
 						href="#CreateCompany" aria-controls="CreateCompany" role="tab"
 						data-toggle="tab">新增公司</a></li>
-					<li role="presentation"><a href="#NewBusiness"
+					<li role="presentation" onclick="get_business_infos()"><a href="#NewBusiness"
 						aria-controls="NewBusiness" role="tab" data-toggle="tab">新增业务</a>
 					</li>
 				</ul>
@@ -192,8 +192,8 @@
 						</div>
 						<hr class="simple" color="#6f5499" />
 						<div align="right">
-							<button type="button" class="btn btn-success"
-								id="company_form_button">
+							<button type="button" class="btn btn-success" id="submit_company_button"
+                                    onclick="submit_company_infos()">
 								<span class="glyphicon"></span>&nbsp;提交
 							</button>
 						</div>
@@ -213,11 +213,11 @@
 									Dropdown</span>
 							</button>
 							<ul class="dropdown-menu">
-								<li><a href="javascript:addActivity('success')"
+								<li><a href="javascript:addActivity('筹资活动')"
 									style="color: #ffffff; background-color: #449d44">筹资活动</a></li>
-								<li><a href="javascript:addActivity('info')"
+								<li><a href="javascript:addActivity('投资活动')"
 									style="color: #ffffff; background-color: #5bc0de">投资活动</a></li>
-								<li><a href="javascript:addActivity('warning')"
+								<li><a href="javascript:addActivity('经营活动')"
 									style="color: #ffffff; background-color: #f0ad4e">经营活动</a></li>
 							</ul>
 						</div>
@@ -231,52 +231,14 @@
 										<td style="width: 5%"></td>
 										<td></td>
 									</tr>
-									<tr>
-										<th style="background-color: #5cb85c;">筹集活动</th>
-										<td style="text-align: left;">
-											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</td>
-										
-									</tr>
-									<tr>
-										<th style="background-color: #5cb85c; width: 5%">筹集活动</th>
-										<td style="text-align: left">
-											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</td>
-										
-									</tr>
-									<tr>
-										<th style="background-color: #5cb85c; width: 5%">筹集活动</th>
-										<td style="text-align: left">
-											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。
-											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。
-											2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。</td>
-										
-									</tr>
+
 								</tbody>
 							</table>
-
-							<!--
-							<p>
-								<label class="label  label-success">筹集活动
-								</label><input type="text" readonly="readonly">2020年2月1日，从中国建设银行取得年期贷款20万元存入银行，年利率为6%，按年结算利息。
-							</p>
-							
-							<p>
-								<label class="label  label-info">投资活动</label><input type="text">年<input
-									type="text">月<input type="text">日，从中国建设银行取得<input
-									type="text">年期贷款<input type="text">万元存入银行，年利率为<input
-									type="text">%，按年结算利息。
-							</p>
-							<p>
-								<label class="label  label-warning">经营活动</label><input
-									type="text">年<input type="text">月<input
-									type="text">日，从中国建设银行取得<input type="text">年期贷款<input
-									type="text">万元存入银行，年利率为<input type="text">%，按年结算利息。
-							</p>
-							-->
 						</div>
 						<hr style="clear: both;" class="simple" color="#6f5499" />
 						<div align="right">
-							<button type="button" class="btn btn-success" id="">
+							<button type="button" class="btn btn-success" id="submit_business_button"
+                                    onclick="submit_business_infos()">
 								<span class="glyphicon"></span>&nbsp;提交
 							</button>
 						</div>

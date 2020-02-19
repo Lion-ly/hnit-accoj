@@ -9,6 +9,9 @@ from flask import Blueprint, jsonify, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from accoj.extensions import mongo
 from accoj.utils import login_required
+import re
+import random
+from accoj.emails import send_mail
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -40,6 +43,7 @@ def signin():
 
 @auth_bp.route('/login', methods=['POST', 'GET'])
 def login():
+    myreg= re.compile(r'[1-9][0-9]{4,}@qq.com')
     if request.method == "POST":
         form = request.form
         student_no = form.get("studentid")
@@ -48,6 +52,12 @@ def login():
         student_class = form.get("login_class")
         password = form.get("password")
         password_again = form.get("password_again")
+        vcode=form.get("vcode")
+
+        test_email=re.match(myreg,email)
+        mail=dict(email="{}".format(email))
+        right_email=mongo.db.other.find_one(mail,{"_id":0,"VCode":1})
+        print(right_email)
 
         if student_no is "" or email is "" or student_faculty is "" \
                 or student_class is "" or password is "" or password_again is "":
@@ -68,6 +78,15 @@ def login():
             elif len(student_no) != 11:
                 message = "请确认学号格式正确"
                 return jsonify(result="false", message="{}".format(message))
+            elif test_email is None:
+                message = "请确保邮箱填写正确"
+                return jsonify(result="false", message="{}".format(message))
+            elif right_email is None:
+                message="请勿修改邮箱"
+                return jsonify(result="false", message="{}".format(message))
+            elif vcode != right_email['VCode']:
+                message = "请输入正确的验证码"
+                return jsonify(result="false", message="{}".format(message))
             else:
                 session["username"] = student_no
                 post = dict(student_no="{}".format(student_no),
@@ -81,6 +100,7 @@ def login():
                             email="{}".format(email),
                             company_ids=[])
                 mongo.db.user.insert_one(post)
+                mongo.db.other.update(mail, {"$set": {"VCode":"xxxxxx"}})
                 return jsonify(result="true")
     return redirect("/")
 
@@ -120,6 +140,34 @@ def update_password():
                     return jsonify(result="true")
 
     return redirect('/')
+
+
+@auth_bp.route('/VCode', methods=['GET','POST'])
+def check_email():
+    if request.method == "POST":
+        form = request.form
+        email = form.get("email")
+        mail_random = ''
+        for i in range(6):
+            index = random.randrange(0, 3)
+            if index != i:
+                mail_random += str(random.randint(1, 9))
+            elif index + 1 == i:
+                mail_random += chr(random.randint(97, 122))
+            else:
+                mail_random += chr(random.randint(97, 122))
+        temp = dict(VCode="{}".format(mail_random))
+        mail=dict(email="{}".format(email))
+        if send_mail(email,mail_random):
+            if mongo.db.other.find_one(mail):
+                mongo.db.other.update(mail, {"$set": temp})
+            else:
+                mongo.db.other.insert_one(mail)
+                mongo.db.other.update(mail, {"$set": temp})
+            return jsonify(result="true")
+        else:
+            return jsonify(result="false")
+    return redirect("/")
 
 
 @auth_bp.app_context_processor
