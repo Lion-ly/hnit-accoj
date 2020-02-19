@@ -696,11 +696,21 @@ def courseiv():
 @accoj_bp.route('/coursev')
 def coursev():
     """
-    第五次课程
+    第五次课程第一部分
     :return:
     """
     # Todo
     return render_template('course/coursev.html')
+
+
+@accoj_bp.route('/coursev_2')
+def coursev_2():
+    """
+    第五次课程第一部分
+    :return:
+    """
+    # Todo
+    return render_template('course/coursev_2.html')
 
 
 @accoj_bp.route('/coursevi')
