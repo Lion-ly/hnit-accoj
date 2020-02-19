@@ -121,8 +121,12 @@ def submit_business_infos():
     """
     if request.method == "POST":
         company_info = mongo.db.company.find_one(dict(student_no="{}".format(session["username"])),
-                                                 dict(business_num=1, _id=0))
-        if company_info and company_info.get("business_num") >= 20:
+                                                 dict(business_num=1, business_confirm=1, _id=0))
+        if not company_info:
+            return jsonify(result=False, message="公司未创立")
+        business_num = company_info.get("business_num")
+        business_confirm = company_info.get("business_confirm")
+        if company_info and business_num >= 20 and not business_confirm:
             mongo.db.company.update(dict(student_no="{}".format(session["username"])),
                                     {"$set": {"business_confirm": True}})
             mongo.db.company.update(dict(student_no="{}_cp".format(session["username"])),

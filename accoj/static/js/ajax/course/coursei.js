@@ -36,7 +36,7 @@ function submit_company_infos() {
 
 function getCompanyInfo() {
     // 获取公司信息
-    var data = $.param(csrf_token);
+    var data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/get_company_info",
         type: "post",
@@ -102,7 +102,7 @@ function body_text_append(labelType, content) {
 
 function addActivity(labelType) {
     // 新增业务
-    var data = $.param({"business_type": labelType}) + "&" + $.param(csrf_token);
+    var data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/add_business",
         type: "post",
@@ -136,7 +136,7 @@ function remove_business_row() {
 
 function i_DeleteRow() {
     // 撤销新增业务
-    var data = $.param(csrf_token);
+    var data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/revoke_add_business",
         type: "post",
@@ -159,7 +159,7 @@ function i_DeleteRow() {
 
 function submit_business_infos() {
     // 提交业务信息，提交成功后不可更改
-    var data = $.param(csrf_token);
+    var data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/get_business_infos",
         type: "post",
@@ -180,7 +180,7 @@ function submit_business_infos() {
 
 function get_business_infos() {
     // 获取业务内容信息
-    var data = $.param(csrf_token);
+    var data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/get_business_infos",
         type: "post",
