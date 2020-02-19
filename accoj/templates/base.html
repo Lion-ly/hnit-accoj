@@ -7,6 +7,8 @@
 <!-- jQuery -->
 <script
 	src="{{ url_for('static', filename='jquery-3.1.1/jquery.min.js') }}"></script>
+<script
+	src="{{ url_for('static', filename='jquery-3.1.1/jquery.cookie.js') }}"></script>
 <!-- bootstrap -->
 <link
 	href="{{ url_for('static', filename='bootstrap-3.3.7/css/bootstrap.min.css') }}"
@@ -25,7 +27,7 @@
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ajax/auth.js') }}"></script>
 <script type="text/javascript">
-    var csrf_token = {{ csrf_token() }};
+    var csrf_token = "{{ csrf_token() }}";
 </script>
 
 </head>
@@ -43,7 +45,7 @@
 						<span class="sr-only">Toggle navigation</span> <span
 							class="glyphicon glyphicon-user"></span>
 					</button>
-					<a class="navbar-brand" href="{{ url_for('accoj.index') }}">会计实训系统
+					<a class="navbar-brand" href="{{ url_for('index.index') }}">会计实训系统
 						Accounting training system</a>
 				</div>
 
