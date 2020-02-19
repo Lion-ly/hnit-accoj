@@ -161,7 +161,7 @@ function submit_business_infos() {
     // 提交业务信息，提交成功后不可更改
     var data = $.param({"csrf_token": csrf_token});
     $.ajax({
-        url: "/get_business_infos",
+        url: "/submit_business_infos",
         type: "post",
         data: data,
         dataType: "json",
@@ -169,7 +169,9 @@ function submit_business_infos() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                $("#submit_business_button").attr("disable", true);
+                $("#submit_business_button").attr("disable", "disable");
+            } else {
+                alert(data["message"]);
             }
         },
         error: function (err) {
@@ -190,7 +192,7 @@ function get_business_infos() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                while (rowNumI > 101){
+                while (rowNumI > 101) {
                     remove_business_row();
                 }
                 content_list = data["content_list"];
@@ -201,7 +203,7 @@ function get_business_infos() {
                     body_text_append(labelType, content);
                 }
                 if (data["business_confirm"]) {
-                    $("#submit_business_button").attr("disable", true);
+                    $("#submit_business_button").attr("disable", "disable");
                 }
             } else {
                 if (data["message"] !== "暂无业务")

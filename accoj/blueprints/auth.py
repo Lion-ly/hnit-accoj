@@ -52,12 +52,12 @@ def login():
         student_class = form.get("login_class")
         password = form.get("password")
         password_again = form.get("password_again")
-        vcode=form.get("vcode")
+        # vcode=form.get("vcode")
 
         test_email=re.match(myreg,email)
-        mail=dict(email="{}".format(email))
-        right_email=mongo.db.other.find_one(mail,{"_id":0,"VCode":1})
-        print(right_email)
+        # mail=dict(email="{}".format(email))
+        # right_email=mongo.db.other.find_one(mail,{"_id":0,"VCode":1})
+        # print(right_email)
 
         if student_no is "" or email is "" or student_faculty is "" \
                 or student_class is "" or password is "" or password_again is "":
@@ -81,12 +81,12 @@ def login():
             elif test_email is None:
                 message = "请确保邮箱填写正确"
                 return jsonify(result="false", message="{}".format(message))
-            elif right_email is None:
-                message="请勿修改邮箱"
-                return jsonify(result="false", message="{}".format(message))
-            elif vcode != right_email['VCode']:
-                message = "请输入正确的验证码"
-                return jsonify(result="false", message="{}".format(message))
+            #elif right_email is None:
+            #    message="请勿修改邮箱"
+            #    return jsonify(result="false", message="{}".format(message))
+            #elif vcode != right_email['VCode']:
+            #    message = "请输入正确的验证码"
+            #    return jsonify(result="false", message="{}".format(message))
             else:
                 session["username"] = student_no
                 post = dict(student_no="{}".format(student_no),
@@ -100,7 +100,7 @@ def login():
                             email="{}".format(email),
                             company_ids=[])
                 mongo.db.user.insert_one(post)
-                mongo.db.other.update(mail, {"$set": {"VCode":"xxxxxx"}})
+                #mongo.db.other.update(mail, {"$set": {"VCode":"xxxxxx"}})
                 return jsonify(result="true")
     return redirect("/")
 
@@ -145,6 +145,7 @@ def update_password():
 @auth_bp.route('/VCode', methods=['GET','POST'])
 def check_email():
     if request.method == "POST":
+        """
         form = request.form
         email = form.get("email")
         mail_random = ''
@@ -167,6 +168,8 @@ def check_email():
             return jsonify(result="true")
         else:
             return jsonify(result="false")
+        """
+        return jsonify(result="false")
     return redirect("/")
 
 

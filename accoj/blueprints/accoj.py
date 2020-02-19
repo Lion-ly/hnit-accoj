@@ -14,7 +14,7 @@ import random
 
 accoj_bp = Blueprint('accoj', __name__)
 
-
+# 第一次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/coursei', methods=['POST', 'GET'])
 def coursei():
     """
@@ -177,7 +177,6 @@ def revoke_add_business():
             if not businesses:
                 return jsonify(result=False, message="暂无业务")
             question_no = company.get("businesses")[-1].get("question_no")
-            print("question_no:{}".format(question_no))
             mongo.db.company.update(dict(_id=_id),
                                     {"$pop": {"businesses": 1},
                                      "$inc": {"business_num": -1},
@@ -202,10 +201,9 @@ def add_business():
         business_types = ["筹资活动", "投资活动", '经营活动']
         form = request.form
         business_type = form.get("business_type")
-        result = jsonify(result=False, message="公司未创立！")
         company = mongo.db.company.find_one({"student_no": "{}".format(session["username"])})
         if company is None:
-            return result
+            return jsonify(result=False, message="公司未创立！")
         if business_type not in business_types:
             return jsonify(result=False, message="业务类型错误！")
 
@@ -239,7 +237,7 @@ def add_business():
                 subjects_infos[i]["money"] = values[int(subjects_infos[i].get("value_index")) - 1].get("value")
                 subjects_infos[i].pop("value_index")
             content = "{}年{}月{}日，".format(year, month, day) + content
-            result = content
+            business_content = content
             first_business = dict(questions_no=questions_no,
                                   question_no=1,
                                   content=content,
@@ -261,15 +259,18 @@ def add_business():
             mongo.db.company.update({"student_no": "{}_cp".format(session["username"])},
                                     {"$push": {"businesses": first_business_cp},
                                      "$inc": {"business_num": 1}})
-            return jsonify(result=True, content=result)
+            return jsonify(result=True, content=business_content)
 
+        elif company.get("business_num") == 25:
+            message = "业务数已达上限"
+            return jsonify(result=False, message=message)
         elif company["businesses"][0]["questions_no"] == 1:
             # 公司已存在业务，且题库号为1
-            result, message = deal_business_1(company, business_type)
-            if message:
+            business_content, message = deal_business_1(company, business_type)
+            if not business_content:
                 return jsonify(result=False, message=message)
             else:
-                return jsonify(result=True, content=result)
+                return jsonify(result=True, content=business_content)
 
     return redirect('/coursei')
 
@@ -283,29 +284,27 @@ def deal_business_1(company, com_business_type):
     """
     message = ""
     com_businesses = company["businesses"]
-    # 公司已有的业务
-    question_list = list()
-    for com_business in com_businesses:
-        question_list.append(com_business["question_no"])
-
+    business_num = company["business_num"]
     add_question_content = None
-    add_question_no_list = list()
-    question_list_len = len(question_list)
-    if question_list_len == 25:
-        add_question_no_list.append(34)
-        add_question_content = deal_with_question_1(com_businesses, 34)
-    elif question_list_len == 25:
-        message = "业务数已达上限"
+
+    if business_num == 24:
+        add_question_content = deal_with_question_1(company, 34)
     else:
-        # 筹资活动
+        # 公司已有的业务
+        question_list = list()
+        for com_business in com_businesses:
+            question_list.append(com_business["question_no"])
+        # 筹资活动2-7
         random_list = list(range(2, 8))
         if com_business_type == "投资活动":
             random_list = list(range(8, 15))
         elif com_business_type == "经营活动":
             random_list = list(range(15, 34))
-        for random_num in random_list:
-            if random_num in question_list:
-                random_list.remove(random_num)
+        for question_no in question_list:
+            if question_no in random_list:
+                random_list.remove(question_no)
+        print("question_list:{}".format(question_list))
+        print("random_list:{}".format(random_list))
         if not random_list:
             message = "请选择其他活动"
             return add_question_content, message
@@ -314,6 +313,7 @@ def deal_business_1(company, com_business_type):
             if not random_list:
                 # 随机数序列为空
                 message = "请选择其他活动"
+                print(message)
                 return add_question_content, message
             add_question_no = random.choice(random_list)
             if add_question_no in question_list:
@@ -661,146 +661,153 @@ def deal_with_question_1(company, question_no):
                              "$inc": {"business_num": 1}}
                             )
     return content
+# 第一次课程----end---------------------------------------------------------------------------------
 
 
+# 第二次课程----start-------------------------------------------------------------------------------
+# Todo 第二次课程
 @accoj_bp.route('/courseii')
 def courseii():
     """
-    第二次课程
     :return:
     """
-    # Todo
     return render_template('course/courseii.html')
+# 第二次课程----end---------------------------------------------------------------------------------
 
 
+# 第三次课程----start-------------------------------------------------------------------------------
+# Todo 第三次课程
 @accoj_bp.route('/courseiii')
 def courseiii():
     """
-    第三次课程
     :return:
     """
-    # Todo
     return render_template('course/courseiii.html')
+# 第三次课程----end---------------------------------------------------------------------------------
 
 
+# 第四次课程----start-------------------------------------------------------------------------------
+# Todo 第四次课程
 @accoj_bp.route('/courseiv')
 def courseiv():
     """
-    第四次课程
     :return:
     """
-    # Todo
     return render_template('course/courseiv.html')
+# 第四次课程----end---------------------------------------------------------------------------------
 
 
+# 第五次课程----start-------------------------------------------------------------------------------
+# Todo 第五次课程第一部分
 @accoj_bp.route('/coursev')
 def coursev():
     """
-    第五次课程第一部分
     :return:
     """
-    # Todo
     return render_template('course/coursev.html')
 
 
+# Todo 第五次课程第二部分
 @accoj_bp.route('/coursev_2')
 def coursev_2():
     """
-    第五次课程第一部分
     :return:
     """
-    # Todo
     return render_template('course/coursev_2.html')
+# 第五次课程----end---------------------------------------------------------------------------------
 
 
+# 第六次课程----start-------------------------------------------------------------------------------
+# Todo 第六次课程
 @accoj_bp.route('/coursevi')
 def coursevi():
     """
-    第六次课程
     :return:
     """
-    # Todo
     return render_template('course/coursevi.html')
+# 第六次课程----end---------------------------------------------------------------------------------
 
 
+# 第七次课程----start-------------------------------------------------------------------------------
+# Todo 第七次课程
 @accoj_bp.route('/coursevii')
 def coursevii():
     """
-    第七次课程
     :return:
     """
-    # Todo
     return render_template('course/coursevii.html')
+# 第七次课程----end---------------------------------------------------------------------------------
 
 
+# 第八次课程----start-------------------------------------------------------------------------------
+# Todo 第八次课程
 @accoj_bp.route('/courseviii')
 def courseviii():
     """
-    第八次课程
     :return:
     """
-    # Todo
     return render_template('course/courseviii.html')
+# 第八次课程----end---------------------------------------------------------------------------------
 
 
+# 第九次课程----start-------------------------------------------------------------------------------
+# Todo 第九次课程第一部分
 @accoj_bp.route('/courseix')
 def courseix():
     """
-    第九次课程第一部分
     :return:
     """
-    # Todo
     return render_template('course/courseix.html')
 
 
+# Todo 第九次课程第二部分
 @accoj_bp.route('/courseix_2')
 def courseix_2():
     """
-    第九次课程第二部分
     :return:
     """
-    # Todo
     return render_template('course/courseix_2.html')
 
 
+# Todo 第九次课程第三部分
 @accoj_bp.route('/courseix_3')
 def courseix_3():
     """
-    第九次课程第三部分
     :return:
     """
-    # Todo
     return render_template('course/courseix_3.html')
 
 
+# Todo 第九次课程第四部分
 @accoj_bp.route('/courseix_4')
 def courseix_4():
     """
-    第九次课程第四部分
     :return:
     """
-    # Todo
     return render_template('course/courseix_4.html')
+# 第九次课程----end---------------------------------------------------------------------------------
 
 
+# 第十次课程----start-------------------------------------------------------------------------------
+# Todo 第十次课程
 @accoj_bp.route('/coursex')
 def coursex():
     """
-    第十次课程
     :return:
     """
-    # Todo
     return render_template('course/coursex.html')
+# 第十次课程----end---------------------------------------------------------------------------------
 
 
+# 用户个人中心----start-----------------------------------------------------------------------------
+# Todo 用户个人中心
 @accoj_bp.route('/detail')
 def detail():
     """
-    用户个人中心
     :return:
     """
-    # Todo
     return render_template('detail.html')
+# 用户个人中心----end-------------------------------------------------------------------------------
 
 
 @accoj_bp.before_request
