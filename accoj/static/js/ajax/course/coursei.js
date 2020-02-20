@@ -113,6 +113,9 @@ function addActivity(labelType) {
         success: function (data) {
             if (data["result"] === true) {
                 content = data["content"];
+                if(content.match("月1日")){
+                    labelType = "筹资活动";
+                }
                 body_text_append(labelType, content);
             } else {
                 alert(data["message"]);
