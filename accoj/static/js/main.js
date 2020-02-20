@@ -23,6 +23,18 @@ function remove(rm) {
  * function i_DeleteRow(obj){ $(obj).parent().parent().parent().remove(); }
  */
 
+
+//===================================courseii===================================//
+function iconChange(obj){
+	var $obj = $(obj).children();
+	var className = $obj.attr("class");
+	var newClass = className == "glyphicon glyphicon-plus" ? "glyphicon glyphicon-minus" : "glyphicon glyphicon-plus";
+	$obj.removeClass(className);
+	$obj.addClass(newClass);
+}
+
+
+
 // ==================================courseiii==================================//
 
 /*
