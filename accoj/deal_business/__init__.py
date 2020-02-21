@@ -40,8 +40,8 @@ def deal_business_1(company, business_type):
     if business_num == 0:
         # 第一笔业务
         business_content = deal_with_question_1(company, 1)
-    if business_num == 24:
-        # 最多25笔业务
+    elif business_num == 20:
+        # 最多20笔业务
         business_content = deal_with_question_1(company, 34)
     else:
         # 公司已有的业务
@@ -57,8 +57,6 @@ def deal_business_1(company, business_type):
         for question_no_tmp in question_list:
             if question_no_tmp in random_list:
                 random_list.remove(question_no_tmp)
-        print("question_list:{}".format(question_list))
-        print("random_list:{}".format(random_list))
         if not random_list:
             message = "请选择其他活动"
             return business_content, message

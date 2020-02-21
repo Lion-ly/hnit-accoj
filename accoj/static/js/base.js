@@ -43,7 +43,7 @@ $(function () {
 function getVCode(obj) {
     var $obj = $(obj);
     var second = 60;
-    if(check_email($('#login-email').val())) {
+    if (check_email($('#login-email').val())) {
         var stop = setInterval(
             function () {
                 if (second > 0) {
@@ -58,9 +58,8 @@ function getVCode(obj) {
                 }
             }
             , 1000);
-    }
-    else {
-            $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
+    } else {
+        $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
         setTimeout("$('#login_danger').remove()", 1000)
     }
 }
@@ -71,9 +70,22 @@ function getVCode(obj) {
  */
 
 function check_email(email) {
-    var myreg=/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-    if(myreg.test(email)){
+    var myreg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+    if (myreg.test(email)) {
         return true;
     }
     return false;
+}
+
+/**
+ *
+ * @param id
+ * @param message
+ * @param message_type danger or info
+ * @param timeout ms
+ */
+function show_message(id, message, message_type, timeout) {
+    if(document.getElementById("show_message")) return;
+    $('#' + id).append("<div class='alert alert-" + message_type + "' id='show_message' style='text-align: center'> <strong>" + message + "</strong></div>");
+    setTimeout("$('#show_message').remove()", timeout);
 }

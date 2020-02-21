@@ -127,12 +127,14 @@ def submit_business_infos():
             return jsonify(result=False, message="公司未创立")
         business_num = company_info.get("business_num")
         business_confirm = company_info.get("business_confirm")
-        if company_info and business_num >= 20 and not business_confirm:
+        if company_info and business_num == 20 and not business_confirm:
             mongo.db.company.update(dict(student_no="{}".format(session["username"])),
                                     {"$set": {"business_confirm": True}})
             mongo.db.company.update(dict(student_no="{}_cp".format(session["username"])),
                                     {"$set": {"business_confirm": True}})
             return jsonify(result=True)
+        elif business_num == 20 and business_confirm:
+            return jsonify(result=False, message="已经提交过")
         else:
             return jsonify(result=False, message="公司业务数量过少")
     return redirect('/coursei')
@@ -171,12 +173,15 @@ def revoke_add_business():
     """
     if request.method == "POST":
         company = mongo.db.company.find_one(dict(student_no="{}".format(session["username"])),
-                                            dict(businesses=1, _id=1))
+                                            dict(businesses=1, business_confirm=1, _id=1))
         if company:
             businesses = company.get("businesses")
+            business_confirm = company.get("business_confirm")
             _id = company.get("_id")
             if not businesses:
                 return jsonify(result=False, message="暂无业务")
+            if business_confirm:
+                return jsonify(result=False, message="已经确认提交，无法撤销")
             question_no = company.get("businesses")[-1].get("question_no")
             mongo.db.company.update(dict(_id=_id),
                                     {"$pop" : {"businesses": 1},
@@ -202,7 +207,7 @@ def add_business():
         business_types = ["筹资活动", "投资活动", '经营活动']
         form = request.form
         business_type = form.get("business_type")
-        company = mongo.db.company.find_one({"student_no": "{}".format(session["username"])})
+        company = mongo.db.company.find_one({"student_no": "{}_cp".format(session["username"])})
         if company is None:
             return jsonify(result=False, message="公司未创立！")
         if business_type not in business_types:
@@ -216,10 +221,10 @@ def add_business():
             questions_no = random.randint(questions_no_low, questions_no_high)
             # 第一笔业务，注册资本存入银行
             if questions_no == 1:
-                business_content = deal_business(company=company, business_type="筹资业务", questions_no=1)
+                business_content, _ = deal_business(company=company, business_type="筹资业务", questions_no=1)
                 return jsonify(result=True, content=business_content)
 
-        elif company.get("business_num") == 25:
+        elif company.get("business_num") == 20:
             message = "业务数已达上限"
             return jsonify(result=False, message=message)
         else:
