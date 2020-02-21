@@ -14,17 +14,18 @@ function submit_company_infos() {
                 $(":text").css({"border-style": "none"});
                 $("#com_business_scope").css({"border-style": "none"});
                 $("#submit_company_button").attr("disabled", true);
-                alert("提交成功");
+                show_message("submit_company_button_div", "提交成功", "info", 1000);
+                //alert("提交成功");
             } else if (data.hasOwnProperty("err_pos")) {
                 var data_err_pos = data["err_pos"];
                 for (var x = 0; x < data_err_pos.length; x++) {
                     var err_pos = data_err_pos[x]["err_pos"];
                     $("#" + err_pos).css({"border-style": "solid"});
                 }
-                alert(data["message"]);
+                show_message("submit_company_button_div", data["message"], "danger", 1000);
             } else {
                 getCompanyInfo();
-                alert(data["message"])
+                show_message("submit_company_button_div", data["message"], "danger", 1000);
             }
         },
         error: function (err) {
@@ -113,12 +114,12 @@ function addActivity(labelType) {
         success: function (data) {
             if (data["result"] === true) {
                 content = data["content"];
-                if(content.match("月1日")){
+                if (content.match("月1日")) {
                     labelType = "筹资活动";
                 }
                 body_text_append(labelType, content);
             } else {
-                alert(data["message"]);
+                show_message("add_business_message", data["message"], "danger", 1000);
             }
         },
         error: function (err) {
@@ -149,9 +150,10 @@ function i_DeleteRow() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
+                show_message("add_business_message", data["message"], "info", 500);
                 remove_business_row();
             } else {
-                alert(data["message"])
+                show_message("add_business_message", data["message"], "danger", 1000);
             }
         },
         error: function (err) {
@@ -173,8 +175,9 @@ function submit_business_infos() {
         success: function (data) {
             if (data["result"] === true) {
                 $("#submit_business_button").attr("disable", "disable");
+                show_message("submit_business_button_div", data["message"], "info", 1000);
             } else {
-                alert(data["message"]);
+                show_message("submit_business_button_div", data["message"], "danger", 1000);
             }
         },
         error: function (err) {
@@ -205,12 +208,9 @@ function get_business_infos() {
                         content = content_list[i]["content"];
                     body_text_append(labelType, content);
                 }
-                if (data["business_confirm"]) {
-                    $("#submit_business_button").attr("disable", "disable");
-                }
             } else {
                 if (data["message"] !== "暂无业务")
-                    alert(data["message"]);
+                    show_message("submit_business_button_div", data["message"], "danger", 1000);
             }
         },
         error: function (err) {

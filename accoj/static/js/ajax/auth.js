@@ -10,12 +10,10 @@ $(function () {
             async: true,
             success: function (data) {
                 if (data["result"] === "true") {
-                    $('#signin_form').append("<div class='alert alert-info' style='text-align: center'> <strong>登陆成功 1s后自动跳转</strong></div>");
-                    $('#signin_button').attr("disabled", true);
+                    show_message("signin_form", "登陆成功 1s后自动跳转", "info", 1000);
                     setTimeout("location.href='localhost:80';location.reload();", 1000);
                 } else {
-                    $('#signin_form').append("<div class='alert alert-danger' id='signin_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
-                    setTimeout("$('#signin_danger').remove()", 1000);
+                    show_message("signin_form", data["message"], "danger", 1000);
                 }
             },
             error: function (err) {
@@ -37,12 +35,10 @@ $(function () {
             async: true,
             success: function (data) {
                 if (data["result"] === "true") {
-                    $('#login_form').append("<div class='alert alert-info' style='text-align: center'> <strong>注册成功 1s后自动跳转</strong></div>");
-                    $('#login_button').attr("disabled", true);
+                    show_message("login_form", "注册成功 1s后自动跳转", "info", 1000);
                     setTimeout("location.href='localhost:80';location.reload();", 1000)
                 } else {
-                    $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
-                    setTimeout("$('#login_danger').remove()", 1000)
+                    show_message("login_form", data["message"], "danger", 1000);
                 }
             },
             error: function (e) {
@@ -103,10 +99,9 @@ function login_select_change() {
   加载时检查cookie的值
  */
 $(function () {
-    var rem=$.cookie('remember');
-    if(rem)
-    {
-        $("#signin-rememberme").prop("checked",true);
+    var rem = $.cookie('remember');
+    if (rem) {
+        $("#signin-rememberme").prop("checked", true);
         $("#signin-studentid").val($.cookie("studentid"));
         $("#signin-password").val($.cookie("psw"));
     }
@@ -118,17 +113,16 @@ $(function () {
  */
 
 function save_cookies() {
-    if($("#signin-rememberme").prop("checked"))
-    {
-        var stu=$("#signin-studentid").val();
-        var psw=$("#signin-password").val();
-        $.cookie("remember","true",{expires:7});
-        $.cookie("studentid",stu,{expires:7});
-        $.cookie("psw",psw,{expires:7});
-    }else{
-        $.cookie("remember","false",{expires:-1});
-        $.cookie("studentid","",{expires:-1});
-        $.cookie("psw","",{expires:-1});
+    if ($("#signin-rememberme").prop("checked")) {
+        var stu = $("#signin-studentid").val();
+        var psw = $("#signin-password").val();
+        $.cookie("remember", "true", {expires: 7});
+        $.cookie("studentid", stu, {expires: 7});
+        $.cookie("psw", psw, {expires: 7});
+    } else {
+        $.cookie("remember", "false", {expires: -1});
+        $.cookie("studentid", "", {expires: -1});
+        $.cookie("psw", "", {expires: -1});
     }
 }
 
@@ -137,21 +131,20 @@ ajax发送邮箱验证码
  */
 
 $(function () {
-        $("#register-getvcode").click(function () {
-            if(check_email($('#login-email').val())) {
-                var data = $('#login_form').serialize();
+    $("#register-getvcode").click(function () {
+        if (check_email($('#login-email').val())) {
+            var data = $('#login_form').serialize();
             $.ajax({
                 url: "/VCode",
                 type: "post",
                 dataType: "json",
-                data:data,
+                data: data,
                 async: true,
                 success: function (data) {
                     if (data["result"] === "true") {
                         $('#login_form').append("<div class='alert alert-info' id='login_info' style='text-align: center'> <strong>发送邮件成功，请注意查收</strong></div>")
                         setTimeout("$('#login_info').remove()", 3000)
-                    }
-                    else {
+                    } else {
                         $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>发送邮件失败</strong></div>")
                         setTimeout("$('#login_danger').remove()", 3000)
                     }
@@ -159,7 +152,8 @@ $(function () {
 
             })
         } else {
-        $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
-        setTimeout("$('#login_danger').remove()", 1000)
-    }})
-    });
+            $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
+            setTimeout("$('#login_danger').remove()", 1000)
+        }
+    })
+});
