@@ -265,7 +265,7 @@ def deal_with_question_1(company, question_no):
                                 value = tmp / 2
                                 break
                     if i == 3:
-                        value = int(values_list[i - 1] * 0.8)
+                        value = values_list[i - 1] * 0.8
                 elif question_no == 31:
                     # 问题31特判
                     if i == 2:
@@ -274,7 +274,7 @@ def deal_with_question_1(company, question_no):
                                 value = business.get("key_element_infos")[0].get("money")
                                 break
                     if i == 3:
-                        value = int(values_list[i - 1] * 0.8)
+                        value = values_list[i - 1] * 0.8
                 elif question_no == 33:
                     # 问题33特判
                     if i == 2:
@@ -284,7 +284,7 @@ def deal_with_question_1(company, question_no):
                                 value = tmp / 2
                                 break
                     if i == 3:
-                        value = int(values_list[i - 1] * 0.8)
+                        value = values_list[i - 1] * 0.8
 
             elif value_type == "percent":
                 if is_random:
