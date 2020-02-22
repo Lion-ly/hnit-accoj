@@ -14,26 +14,26 @@
 							<li><a href="#" aria-label="Previous"> <span
 									aria-hidden="true">&laquo;</span>
 							</a></li>
-							<li class="active"><a onclick="get_key_element_info(1)" href="">1</a></li>
-							<li><a onclick="get_key_element_info(2)" href="">2</a></li>
-							<li><a onclick="get_key_element_info(3)" href="">3</a></li>
-							<li><a onclick="get_key_element_info(4)" href="">4</a></li>
-							<li><a onclick="get_key_element_info(5)" href="">5</a></li>
-							<li><a onclick="get_key_element_info(6)" href="">6</a></li>
-							<li><a onclick="get_key_element_info(7)" href="">7</a></li>
-							<li><a onclick="get_key_element_info(8)" href="">8</a></li>
-							<li><a onclick="get_key_element_info(9)" href="">9</a></li>
-							<li><a onclick="get_key_element_info(10)" href="">10</a></li>
-							<li><a onclick="get_key_element_info(11)" href="">11</a></li>
-							<li><a onclick="get_key_element_info(12)" href="">12</a></li>
-							<li><a onclick="get_key_element_info(13)" href="">13</a></li>
-							<li><a onclick="get_key_element_info(14)" href="">14</a></li>
-							<li><a onclick="get_key_element_info(15)" href="">15</a></li>
-							<li><a onclick="get_key_element_info(16)" href="">16</a></li>
-							<li><a onclick="get_key_element_info(17)" href="">17</a></li>
-							<li><a onclick="get_key_element_info(18)" href="">18</a></li>
-							<li><a onclick="get_key_element_info(19)" href="">19</a></li>
-							<li><a onclick="get_key_element_info(20)" href="">20</a></li>
+							<li id="courseii_split_li_1" class="active"><a onclick="get_key_element_info(1)" >1</a></li>
+							<li id="courseii_split_li_2"><a onclick="get_key_element_info(2)">2</a></li>
+							<li id="courseii_split_li_3"><a onclick="get_key_element_info(3)">3</a></li>
+							<li id="courseii_split_li_4"><a onclick="get_key_element_info(4)">4</a></li>
+							<li id="courseii_split_li_5"><a onclick="get_key_element_info(5)">5</a></li>
+							<li id="courseii_split_li_6"><a onclick="get_key_element_info(6)">6</a></li>
+							<li id="courseii_split_li_7"><a onclick="get_key_element_info(7)">7</a></li>
+							<li id="courseii_split_li_8"><a onclick="get_key_element_info(8)">8</a></li>
+							<li id="courseii_split_li_9"><a onclick="get_key_element_info(9)">9</a></li>
+							<li id="courseii_split_li_10"><a onclick="get_key_element_info(10)">10</a></li>
+							<li id="courseii_split_li_11"><a onclick="get_key_element_info(11)">11</a></li>
+							<li id="courseii_split_li_12"><a onclick="get_key_element_info(12)">12</a></li>
+							<li id="courseii_split_li_13"><a onclick="get_key_element_info(13)">13</a></li>
+							<li id="courseii_split_li_14"><a onclick="get_key_element_info(14)">14</a></li>
+							<li id="courseii_split_li_15"><a onclick="get_key_element_info(15)">15</a></li>
+							<li id="courseii_split_li_16"><a onclick="get_key_element_info(16)">16</a></li>
+							<li id="courseii_split_li_17"><a onclick="get_key_element_info(17)">17</a></li>
+							<li id="courseii_split_li_18"><a onclick="get_key_element_info(18)">18</a></li>
+							<li id="courseii_split_li_19"><a onclick="get_key_element_info(19)">19</a></li>
+							<li id="courseii_split_li_20"><a onclick="get_key_element_info(20)">20</a></li>
 							<li><a href="#" aria-label="Next"> <span
 									aria-hidden="true">&raquo;</span>
 							</a></li>
@@ -58,184 +58,198 @@
 							<p class="ats-fontsize-20">1、会计要素及增减金额</p>
 						</div>
 
-						<form class="" id="courseii-1">
+						<form class="" id="courseii-1-1">
 							<label class="sr-only" for="assets"></label>
 							<div class="form-group col-xs-12 col-sm-6 col-md-6">
 								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check1">
 									</span>
 									<div class="input-group-addon">资产</div>
 									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
+									<input type="text" class="form-control  input-sm" name="+资产" id="key_elem1"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
 									<div class="input-group-addon">￥</div>
 								</div>
 							</div>
 							<div class="form-group col-xs-12 col-sm-6 col-md-6">
 								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check2">
 									</span>
 									<div class="input-group-addon">资产</div>
 									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">负债</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">负债</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">收入</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">收入</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">费用</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">费用</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">利润</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">利润</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">所有者权益</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
-									<span class="input-group-addon"> <input type="checkbox">
-									</span>
-									<div class="input-group-addon">所有者权益</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" id="assets"
-										placeholder="0.0">
+									<input type="text" class="form-control  input-sm" name="-资产" id="key_elem2"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
 									<div class="input-group-addon">￥</div>
 								</div>
 							</div>
 
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check3">
+									</span>
+									<div class="input-group-addon">负债</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+									<input type="text" class="form-control  input-sm" name="+负债" id="key_elem3"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check4">
+									</span>
+									<div class="input-group-addon">负债</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
+									<input type="text" class="form-control  input-sm" name="-负债" id="key_elem4"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
 
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check5">
+									</span>
+									<div class="input-group-addon">收入</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+									<input type="text" class="form-control  input-sm" name="+收入" id="key_elem5"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check6">
+									</span>
+									<div class="input-group-addon">收入</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
+									<input type="text" class="form-control  input-sm" name="-收入=" id="key_elem6"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check7">
+									</span>
+									<div class="input-group-addon">费用</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+									<input type="text" class="form-control  input-sm" name="+费用" id="key_elem7"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check8">
+									</span>
+									<div class="input-group-addon">费用</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
+									<input type="text" class="form-control  input-sm" name="-费用" id="key_elem8"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check9">
+									</span>
+									<div class="input-group-addon">利润</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+									<input type="text" class="form-control  input-sm" name="+利润" id="key_elem9"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check10">
+									</span>
+									<div class="input-group-addon">利润</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
+									<input type="text" class="form-control  input-sm" name="-利润" id="key_elem10"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check11">
+									</span>
+									<div class="input-group-addon">所有者权益</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
+									<input type="text" class="form-control  input-sm" name="owners_equity_up" id="key_elem11"
+										placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+							<div class="form-group col-xs-12 col-sm-6 col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+                                        <input class="form-check-input" type="checkbox" id="check12">
+									</span>
+									<div class="input-group-addon">所有者权益</div>
+									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
+									<input type="text" class="form-control  input-sm" name="owners_equity_down" id="key_elem12"
+                                           placeholder="0.0" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<div class="input-group-addon">￥</div>
+								</div>
+							</div>
+                        </form>
+
+                        <form>
 							<div style="clear: both;">
 								<p class="ats-fontsize-20">2、属于对会计等式“资产=负债+所有者权益”影响的哪种类型？</p>
 							</div>
 							<div class="radio">
 								<!-- aer = AccountingEquationRadio : 会计等式单选框-->
 								<label> <input type="radio" name="aer" id="aer1"
-									value="1" checked> <span>引起资产项目内部此增彼减，增减金额相等。</span>
+									value=1 checked> <span>引起资产项目内部此增彼减，增减金额相等。</span>
 								</label>
 							</div>
 							<div class="radio">
 								<label> <input type="radio" name="aer" id="aer2"
-									value="2"> <span>引起负债与所有者权益项目内部此增彼减，增减金额相等。</span>
+									value=2> <span>引起负债与所有者权益项目内部此增彼减，增减金额相等。</span>
 								</label>
 							</div>
 							<div class="radio">
 								<label> <input type="radio" name="aer" id="aer3"
-									value="3"> <span>引起资产和负债与所有者权益项目同时增加，增加的金额相等。</span>
+									value=3> <span>引起资产和负债与所有者权益项目同时增加，增加的金额相等。</span>
 								</label>
 							</div>
 							<div class="radio ">
 								<label> <input type="radio" name="aer" id="aer4"
-									value="4"> <span>引起资产和负债与所有者权益项目同时减少，减少的金额相等。</span>
+									value=4> <span>引起资产和负债与所有者权益项目同时减少，减少的金额相等。</span>
 								</label>
 							</div>
                             <div class="radio ">
-								<label> <input type="radio" name="aer" id="aer5"
-									value="0"> <span>无（难以判别）。</span>
+								<label> <input type="radio" name="aer" id="aer0"
+									value=0> <span>无（难以判别）。</span>
 								</label>
 							</div>
 						</form>
 					</div>
 					<hr class="simple" color="#6f5499" style="clear: both;"/>
 					<div align="right">
-						<button type="button" class="btn btn-success" id="">
+						<button type="button" class="btn btn-success" onclick="submit_key_element_info()">
 							<span class="glyphicon"></span>&nbsp;提交
 						</button>
 					</div>
+                    <div id="course_ii_message"></div>
 				</div>
 			</div>
 		</div>

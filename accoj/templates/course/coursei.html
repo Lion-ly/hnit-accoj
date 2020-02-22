@@ -1,6 +1,7 @@
 {% extends 'course/courseBase.html' %} {% block courseBody %}
 <link href="{{ url_for('static', filename='css/course/coursei.css') }}"
 	rel="stylesheet">
+<script src="{{ url_for('static', filename='js/ajax/course/coursei.js') }}" charset="UTF-8"></script>
 <div class="courseBody">
 	<!-- 习题主体 -->
 	<div class="container">
@@ -12,10 +13,10 @@
 			<div class="panel-body">
 				<!-- 作业标签 -->
 				<ul class="nav nav-tabs">
-					<li role="presentation" class="active" id="CreateCompany-li" onclick="getCompanyInfo()"><a
+					<li role="presentation" class="active" id="CreateCompany-li" onclick="get_company_info()"><a
 						href="#CreateCompany" aria-controls="CreateCompany" role="tab"
 						data-toggle="tab">新增公司</a></li>
-					<li role="presentation" onclick="get_business_infos()"><a href="#NewBusiness"
+					<li role="presentation" onclick="get_business_info()"><a href="#NewBusiness"
 						aria-controls="NewBusiness" role="tab" data-toggle="tab">新增业务</a>
 					</li>
 				</ul>
@@ -193,7 +194,7 @@
 						<hr class="simple" color="#6f5499" />
 						<div align="right" id="submit_company_button_div">
 							<button type="button" class="btn btn-success" id="submit_company_button"
-                                    onclick="submit_company_infos()">
+                                    onclick="company_form_submit()">
 								<span class="glyphicon"></span>&nbsp;提交
 							</button>
 						</div>
@@ -221,7 +222,7 @@
 									style="color: #ffffff; background-color: #f0ad4e">经营活动</a></li>
 							</ul>
 						</div>
-						<button type="button" class="btn btn-danger btn-sm" onclick="i_DeleteRow()">撤销</button>
+						<button type="button" class="btn btn-danger btn-sm" onclick="revoke_add_business()">撤销</button>
                         <div  id="add_business_message"></div>
 
 						<div class="ats-subject">

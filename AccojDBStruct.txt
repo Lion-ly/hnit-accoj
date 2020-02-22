@@ -3,7 +3,7 @@
 # 建议用notepad++打开
 # new Date()在python中为`datetime.datetime`对象，获取当前时间datetime.datetime.now()
 
-# 用户表(已确定)
+# 用户集合(已确定)
 db.accoj.users.insert({"student_no": "17020340111", 	# 学号
 					   "student_name": "郭雄",  		# 姓名
 					   "student_faculty": "计算机与信息科学学院", # 学院
@@ -14,49 +14,68 @@ db.accoj.users.insert({"student_no": "17020340111", 	# 学号
 					   "password": "...", 				# 密码
 					   "email": "1848600800@qq.com"		# 邮箱
 					  })
-# 科目库表
+# 科目库集合
 db.accoj.subject.insert({"subject_no": 1,				# 科目编号
 						 "subject_name": " ",			# 科目名称
-						 "subject_type": " "			# 科目类别（资产类，权益类，成本类，费用类，收入类，利润类）		
+						 "subject_type": " "			# 科目类别（资产类，权益类，成本类，费用类，收入类，利润类）
 						})
 
-# 题库表(已确定)
-db.accoj.problem.insert({"content": "...", 	    		# 内容
-						 "date": new Date(),  			# 日期
+# 题库集合(已确定)
+db.accoj.question.insert({"questions_no": 1， 			# 题库号
+						 "question_no": 1,				# 题目编号
+						 "content": "...", 	    		# 内容
 						 "business_type": "",			# 业务类型（筹资活动、投资活动、经营活动）
 						 "affect_type": 1,				# 对会计等式影响类型
-						 "subjects": [], 				# 科目列表
-						 "values": [{"is_random": boolean, "is_num": boolean, "value": num or str}] # 是否需要随机生成，数值/字符串，值
-						 "key_element_infos": [					# 会计要素信息
-											  {"key_element": [],	# 会计要素
-											   "money": {"value_pos": 1, "value": 1, "low": 0, "high": 10}, # 在上述values的位置（数组下标），值，下限，上限
-											   "is_up": boolean	# 增减判定
+						 "values": [{"value_type": common/asset/num/percent, "value": "", is_random": boolean, "low": 0, "high": 10}] # 变量列表，变量类型，值，是否是数字变量，如果是，最低值，最高值，0，0代表不变
+						 "key_element_infos": [						# 会计要素信息列表
+											  {"key_element": "",	# 会计要素
+											   "value_index": "", 	# 在上述values的位置, 下标或四则运算表达式
+											   "is_up": boolean		# 正负判定
 											  }]
+						 "subjects_infos": [			# 科目列表
+									 {"subject": "",	# 科目
+									  "value_index": "", # 在上述values的位置, 下标或四则运算表达式
+									  "is_up": boolean	# 增减判定
+									 }]
 						})
 
-(用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为"student_no_cp")				 
-# 公司表
+(用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为"student_no_cp")
+# 公司集合
 db.accoj.company.insert({"student_no": student_no,		# 用户ID
 						 "com_name": " ",	  			# 公司名称
 						 "com_address": " ",	  		# 公司地址
 						 "com_business_addr": " ",		# 公司经营地址
 						 "com_legal_rep": " ",			# 法人
-						 "com_regist_cap": " ",			# 注册资本
+						 "com_regist_cap": 0,			# 注册资本
 						 "com_operate_period: " ",		# 经营期限
 						 "com_business_scope": " ",		# 经营范围
 						 "com_shareholder": [],			# 股东姓名
+						 "com_bank_savings": 0.0,		# 公司银行存款
+						 "com_cash": 0.0,				# 公司现金存量
+						 "com_assets: [{"asset_name": "", "market_value": 1, "question_no", 1}],	# 公司资产列表
+						 "business_num": 0,				# 公司业务数
+						 "schedule": { 					# 课程进度
+							"business_confirm": false,	# 增加业务部分是否完成
+							"key_element_confirm": [],	# 会计要素部分进度
+							"subjects_confirm": [],		# 会计科目部分进度
+						 },
 						 # 公司业务
-						 "business": [{"content": "...", 	    		# 内容
+						 "businesses": [{"questions_no": 1， 			# 题库号
+									   "question_no": 1,				# 题目编号
+									   "content": "...", 	    		# 内容
 									   "date": new Date(),  			# 日期
-									   "business_type": "",			# 业务类型（筹资活动、投资活动、经营活动）
+									   "business_type": "",				# 业务类型（筹资活动、投资活动、经营活动）
 									   "affect_type": 1,				# 对会计等式影响类型
-									   "subjects": [], 				# 科目列表
-									   "values": [{"is_random": boolean, "is_num": boolean, "value": num or str}] # 是否需要随机生成，数值/字符串，值
 									   "key_element_infos": [					# 会计要素信息
-															{"key_element": [],	# 会计要素
-															 "money": {"value_pos": 1, "value": 1}, # 在上述values的位置（数组下标），值
-															 "is_up": boolean	# 增减判定
-															}]
+															{"key_element": "",	# 会计要素
+															 "money": 1, 		# 金额
+															 "is_up": boolean	# 正负判定
+															}],
+									   "subjects_infos": [						# 科目列表
+														 {"subject": "",		# 科目
+														 "money": 1,			# 金额
+														 "is_up": boolean		# 增减判定
+														 }]
 						}]
 						 # 会计分录
 						 "entry_infos": [{
@@ -74,14 +93,14 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 										   "decrease_in_this_period": []		# 本期减少额
 										   "is_borrow: boolean					# 借贷标志位
 										   }]
-						 # 试算平衡表
+						 # 试算平衡集合
 						 "trial_balance": [
 										   "subject": subject,			 		# 会计科目
 										   "borrow_1": 1,				 		# 借方期初余额
 										   "lend_1": 1,					 		# 贷方期初余额
 										   "borrow_2": 1,				 		# 借方本期发生额
 										   "lend_2": 1,					 		# 贷方本期发生额
-										   "borrow_3": 1,				 		# 借方期末余额 
+										   "borrow_3": 1,				 		# 借方期末余额
 										   "lend_3": 1					 		# 贷方期末余额
 										   ]
 						 # 会计凭证
@@ -97,7 +116,7 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 										   "lend_money": 1				 		# 贷方金额
 										   }]
 						})
-						
+
 # 判断会计要素和增减金额以及对会计等式的影响类型
 db.accoj.problem_1.insert({"company_id": com_id,								# 公司ID
 						   "affect_type": 1,									# 对会计等式影响类型
@@ -106,7 +125,7 @@ db.accoj.problem_1.insert({"company_id": com_id,								# 公司ID
 												 "key_element": [],				# 会计要素
 												 "money": 1,					# 金额
 												 "is_up": boolean				# 增减
-												}]		
+												}]
 						  })
 
 # 会计分录
@@ -135,7 +154,7 @@ db.accoj.trial_balance.insert({"subject": subject,			 # 会计科目
 							   "lend_1": 1,					 # 贷方期初余额
 							   "borrow_2": 1,				 # 借方本期发生额
 							   "lend_2": 1,					 # 贷方本期发生额
-							   "borrow_3": 1,				 # 借方期末余额 
+							   "borrow_3": 1,				 # 借方期末余额
 							   "lend_3": 1					 # 贷方期末余额
 							  })
 
@@ -157,13 +176,13 @@ db.accoj.acc_documents.insert({"com_id": com_id,
 db.accoj.subsidiary_ledger.insert({
 								  })
 
-# 资产负债表
+# 资产负债集合
 db.accoj.balance_sheet.insert({
 							  })
-							  
-# 利润表
+
+# 利润集合
 db.accoj.income_statement.insert({
 							     })
-# 比率分析法表
+# 比率分析法集合
 db.accoj.ratio_analysis.insert({
 							   })

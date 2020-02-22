@@ -149,7 +149,7 @@ def sheet_row_parsing(sheet_row):
             start = replace_list[i].get("start")
             end = replace_list[i].get("end")
             sub_s = content[index_last:start]
-            new_content = new_content + (sub_s)
+            new_content = new_content + sub_s
             new_content = new_content + ("v{}".format(i + 1))
             index_last = end + 1
             if i == replace_list_len - 1:

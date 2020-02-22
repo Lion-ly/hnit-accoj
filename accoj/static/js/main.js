@@ -8,7 +8,7 @@ function remove(rm) {
  * @ # coursei -> 新增业务 ? 新增业务的三个选项
  */
 /*
- * function addActivity(labeltype){ var text; switch(labeltype){ case "success":
+ * function addActivity(labeltype){ let text; switch(labeltype){ case "success":
  * text = "筹资活动"; break; case "info": text = "投资活动"; break; case "warning": text =
  * "经营活动"; break; } $("#body-text").append( "<p><label class='label
  * label-"+labeltype+"'>"+text+"</label><input type='text'>年<input
@@ -26,9 +26,9 @@ function remove(rm) {
 
 //===================================courseii===================================//
 function iconChange(obj){
-	var $obj = $(obj).children();
-	var className = $obj.attr("class");
-	var newClass = className == "glyphicon glyphicon-plus" ? "glyphicon glyphicon-minus" : "glyphicon glyphicon-plus";
+	let $obj = $(obj).children();
+	let className = $obj.attr("class");
+	let newClass = className === "glyphicon glyphicon-plus" ? "glyphicon glyphicon-minus" : "glyphicon glyphicon-plus";
 	$obj.removeClass(className);
 	$obj.addClass(newClass);
 }
@@ -40,12 +40,12 @@ function iconChange(obj){
 /*
  * @ # courseiii ? 穿梭框
  */
+let $centerbox = $('#centerbox');
+let $leftbox = $('#leftbox');
+let $rightbox = $('#rightbox');
 function ctol(){
-	$centerbox = $('#centerbox');
-	$leftbox = $('#leftbox');
-	$rightbox = $('#rightbox');
-	$input = $centerbox.find('input');
-	for(var k=0;k<$input.length;k++){
+	let $input = $centerbox.find('input');
+	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
 				$leftbox.append(
 					$($input[k]).parent()
@@ -55,11 +55,8 @@ function ctol(){
 }
 
 function ctol_cancel(){
-	$centerbox = $('#centerbox');
-	$leftbox = $('#leftbox');
-	$rightbox = $('#rightbox');
-	$input = $leftbox.find('input');
-	for(var k=0;k<$input.length;k++){
+	let $input = $leftbox.find('input');
+	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
 				$centerbox.append(
 					$($input[k]).parent()
@@ -69,11 +66,8 @@ function ctol_cancel(){
 }
 
 function ctor(){
-	$centerbox = $('#centerbox');
-	$leftbox = $('#leftbox');
-	$rightbox = $('#rightbox');
-	$input = $centerbox.find('input');
-	for(var k=0;k<$input.length;k++){
+	let $input = $centerbox.find('input');
+	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
 				$rightbox.append(
 					$($input[k]).parent()
@@ -83,11 +77,8 @@ function ctor(){
 }
 
 function ctor_cancel(){
-	$centerbox = $('#centerbox');
-	$leftbox = $('#leftbox');
-	$rightbox = $('#rightbox');
-	$input = $rightbox.find('input');
-	for(var k=0;k<$input.length;k++){
+	let $input = $rightbox.find('input');
+	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
 				$centerbox.append(
 					$($input[k]).parent()
@@ -104,11 +95,11 @@ function ctor_cancel(){
 function iv_AddRow(obj){
 		$("#"+obj+"Row").before(
 					"<tr>"
-				+	"<td class='ats-tablecolor-f' style='border-right: 0px'></td>"
-				+	"<td class='ats-tablecolor-f' style='border-left: 0px'></td>"
+				+	"<td class='ats-tablecolor-f' style='border-right: 0'></td>"
+				+	"<td class='ats-tablecolor-f' style='border-left: 0'></td>"
 				+	"<td><input type='text' name='' id='' placeholder='科目'></td>"
 				+	"<td><input type='text' name='' id='' placeholder='金额'></td>"
-				+	"<td style='padding:0px;border:0px'>"
+				+	"<td style='padding:0;border:0'>"
 				+	"<div align='center'>"
 				+			"<a style='color: red' type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
 				+		"</div>"
@@ -131,7 +122,7 @@ function iv_DeleteRow(obj){
  * @ # coursev ? 表格增加行
  */
 function v_AddLeftRow(obj, pm) {
-	var title = "";
+	let title = "";
 	if (pm == "plus") {
 		title = "增加额";
 	} else {
@@ -139,7 +130,7 @@ function v_AddLeftRow(obj, pm) {
 	}
 	$(obj).parent().parent().parent().after(
 			"<tr>" + "<td>" + "<div align='left'>"
-					+ "<a style='color: red; padding: 0px 0px' type='button' "
+					+ "<a style='color: red; padding: 0 0' type='button' "
 					+ "class='btn' onclick='v_DeleteRowT(this)'><span "
 					+ "class='glyphicon glyphicon-minus-sign'></span></a>"
 					+ "</div>" + "</td>" + "<th>" + title + "</th>"
@@ -148,7 +139,7 @@ function v_AddLeftRow(obj, pm) {
 }
 
 function v_AddRightRow(obj, pm) {
-	var title = "";
+	let title = "";
 	if (pm == "plus") {
 		title = "增加额";
 	} else {
@@ -159,7 +150,7 @@ function v_AddRightRow(obj, pm) {
 					+ "<td style='width: 30%;'><input type='number' "
 					+ "name='' id='' placeholder='0'></td>"
 					+ "<td style='width: 40%;'>" + "<div align='right'>"
-					+ "<a style='color: red; padding: 0px 0px' "
+					+ "<a style='color: red; padding: 0 0' "
 					+ "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
 					+ "class='glyphicon glyphicon-minus-sign'></span></a>"
 					+ "</div>" + "</td>" + "</tr>");
@@ -183,15 +174,15 @@ function v_AddRow(obj){
 		+	"<td contentEditable='true'><br></td>"
 		+	"<td contentEditable='true'><br></td>"
 		+	"<td contentEditable='true'><br></td>"
-		+	"<td style='padding: 0px; border: 0px'>"
+		+	"<td style='padding: 0; border: 0'>"
 		+		"<div align='center'> "
 		+			"<a style='color: red' type='button' class='btn' onclick='v_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
 		+		"</div> "
 		+	"</td> "
 		+	"</tr>"
 	);
-	
-	
+
+
 }
 
 
@@ -203,13 +194,13 @@ function v_DeleteRow(obj){
 }
 
 
-var pageNum = 3;
+let pageNum = 3;
 function v_createNewPage(obj,lcr){
 	$(obj).parent().parent().parent().before(
 			"<li role='presentation'><a href='#ttable-" + pageNum + "' "
-			+	"aria-controls='ttable-" + pageNum + "' role='tab' data-toggle='tab'>新建T表" + pageNum 
-			+	"<button " 
-			+		"style='color: red; font-size: 14px; margin-left: 6px; padding: 0px; background-color: #ffffff' "
+			+	"aria-controls='ttable-" + pageNum + "' role='tab' data-toggle='tab'>新建T表" + pageNum
+			+	"<button "
+			+		"style='color: red; font-size: 14px; margin-left: 6px; padding: 0; background-color: #ffffff' "
 			+		"type='button' class='btn' onclick='v_DeleteTTable(this)'>"
 			+		"<span class='glyphicon glyphicon-remove'></span>"
 			+	"</button>"
@@ -217,39 +208,39 @@ function v_createNewPage(obj,lcr){
 	);
 	switch(lcr){
 	case "left":
-		$('#TTablePage').append(	
+		$('#TTablePage').append(
 				"<div role='tabpanel' class='tab-pane fade' id='ttable-" + pageNum + "'>"
 			+	"<div align='center' style='margin-top: 80px;margin-bottom: 100px'>"
 			+		"<table class='table table-bordered' "
-			+			"style='border: 0px; width: 50%; margin-bottom: 0px'>"
+			+			"style='border: 0; width: 50%; margin-bottom: 0'>"
 			+			"<tbody>"
 			+				"<tr>"
 			+					"<th "
-			+						"style='text-align: center; vertical-align: middle; border: 0px; width: 33%'>"
+			+						"style='text-align: center; vertical-align: middle; border: 0; width: 33%'>"
 			+						"借方</th>"
-			+					"<th style='border: 0px; width: 33%'><select "
+			+					"<th style='border: 0; width: 33%'><select "
 			+						"class='form-control pull-right'>"
 			+							"<option>银行存款</option>"
 			+							"<option>...</option>"
 			+					"</select></th>"
 			+					"<th "
-			+						"style='text-align: center; vertical-align: middle; border: 0px; width: 33%'>贷方"
+			+						"style='text-align: center; vertical-align: middle; border: 0; width: 33%'>贷方"
 			+					"</th>"
 			+				"</tr>"
 			+			"</tbody>"
 			+		"</table>"
 			+		"<table class='table table-bordered' "
-			+			"style='border: 0px; width: 50%'>"
+			+			"style='border: 0; width: 50%'>"
 			+			"<tbody>"
 			+				"<tr>"
-			+					"<td style='width: 50%; border-left: 0px'>"
+			+					"<td style='width: 50%; border-left: 0'>"
 			+						"<div align='right'>"
 			+							"<table class='ats-v-Ttable'>"
 			+								"<tbody>"
 			+									"<tr>"
 			+										"<td style='width: 40%;'>"
 			+											"<div align='left'>"
-			+												"<a style='color: green; padding: 0px 0px' type='button' "
+			+												"<a style='color: green; padding: 0 0' type='button' "
 			+													"class='btn' onclick='v_AddLeftRow(this,\"plus\")'><span "
 			+													"class='glyphicon glyphicon-plus-sign'></span></a>"
 			+											"</div>"
@@ -261,7 +252,7 @@ function v_createNewPage(obj,lcr){
 			+									"<tr>"
 			+										"<td>"
 			+											"<div align='left'>"
-			+												"<a style='color: red; padding: 0px 0px' type='button' "
+			+												"<a style='color: red; padding: 0 0' type='button' "
 			+													"class='btn' onclick='v_DeleteRowT(this)'><span "
 			+													"class='glyphicon glyphicon-minus-sign'></span></a>"
 			+											"</div>"
@@ -274,7 +265,7 @@ function v_createNewPage(obj,lcr){
 			+							"</table>"
 			+						"</div>"
 			+					"</td>"
-			+					"<td style='width: 50%; border-right: 0px'>"
+			+					"<td style='width: 50%; border-right: 0'>"
 			+						"<div align='left'>"
 			+							"<table id='ttable-01' class='ats-v-Ttable'>"
 			+								"<tbody>"
@@ -283,7 +274,7 @@ function v_createNewPage(obj,lcr){
 			+										"<td style='width: 30%;'></td>"
 			+										"<td style='width: 40%;'>"
 			+											"<div align='right'>"
-			+												"<a style='color: green; padding: 0px 0px' type='button' "
+			+												"<a style='color: green; padding: 0 0' type='button' "
 			+													"class='btn' onclick='v_AddRightRow(this,\"minus\")'><span "
 			+													"class='glyphicon glyphicon-plus-sign'></span></a>"
 			+											"</div>"
@@ -295,7 +286,7 @@ function v_createNewPage(obj,lcr){
 			+					"</td>"
 			+				"</tr>"
 			+				"<tr>"
-			+					"<td style='width: 50%; border-left: 0px; border-bottom: 0px'>"
+			+					"<td style='width: 50%; border-left: 0; border-bottom: 0'>"
 			+						"<div align='right'>"
 			+							"<table class='ats-v-Ttable'>"
 			+								"<tbody>"
@@ -315,7 +306,7 @@ function v_createNewPage(obj,lcr){
 			+							"</table>"
 			+						"</div>"
 			+					"</td>"
-			+					"<td style='width: 50%; border-right: 0px; border-bottom: 0px'>"
+			+					"<td style='width: 50%; border-right: 0; border-bottom: 0'>"
 			+						"<div align='left'>"
 			+							"<table class='ats-v-Ttable'>"
 			+								"<tbody>"
@@ -338,7 +329,7 @@ function v_createNewPage(obj,lcr){
 		break;
 	case "center":
 		$('#TTablePage').append(
-				
+
 		);
 		break;
 	case "right":
@@ -346,35 +337,35 @@ function v_createNewPage(obj,lcr){
 				"<div role='tabpanel' class='tab-pane fade' id='ttable-" + pageNum + "'>"
 			+	"<div align='center' style='margin-top: 80px;margin-bottom: 100px'>"
 			+		"<table class='table table-bordered' "
-			+			"style='border: 0px; width: 50%; margin-bottom: 0px'>"
+			+			"style='border: 0; width: 50%; margin-bottom: 0'>"
 			+			"<tbody>"
 			+				"<tr>"
 			+					"<th "
-			+						"style='text-align: center; vertical-align: middle; border: 0px; width: 33%'>"
+			+						"style='text-align: center; vertical-align: middle; border: 0; width: 33%'>"
 			+						"借方</th>"
-			+					"<th style='border: 0px; width: 33%'><select "
+			+					"<th style='border: 0; width: 33%'><select "
 			+						"class='form-control pull-right'>"
 			+							"<option>长期借款</option>"
 			+							"<option>...</option>"
 			+					"</select></th>"
 			+					"<th "
-			+						"style='text-align: center; vertical-align: middle; border: 0px; width: 33%'>贷方"
+			+						"style='text-align: center; vertical-align: middle; border: 0; width: 33%'>贷方"
 			+					"</th>"
 			+				"</tr>"
 			+			"</tbody>"
 			+		"</table>"
 			+		"<table class='table table-bordered' "
-			+			"style='border: 0px; width: 50%'>"
+			+			"style='border: 0; width: 50%'>"
 			+			"<tbody>"
 			+				"<tr>"
-			+					"<td style='width: 50%; border-left: 0px'>"
+			+					"<td style='width: 50%; border-left: 0'>"
 			+						"<div align='right'>"
 			+							"<table class='ats-v-Ttable'>"
 			+								"<tbody>"
 			+									"<tr>"
 			+										"<td style='width: 40%;'>"
 			+											"<div align='left'>"
-			+												"<a style='color: green; padding: 0px 0px' type='button' "
+			+												"<a style='color: green; padding: 0 0' type='button' "
 			+													"class='btn' onclick='v_AddLeftRow(this,\"minus\")'><span "
 			+													"class='glyphicon glyphicon-plus-sign'></span></a>"
 			+											"</div>"
@@ -386,7 +377,7 @@ function v_createNewPage(obj,lcr){
 			+							"</table>"
 			+						"</div>"
 			+					"</td>"
-			+					"<td style='width: 50%; border-right: 0px'>"
+			+					"<td style='width: 50%; border-right: 0'>"
 			+						"<div align='left'>"
 			+							"<table id='ttable-01' class='ats-v-Ttable'>"
 			+								"<tbody>"
@@ -396,7 +387,7 @@ function v_createNewPage(obj,lcr){
 			+											"id='' placeholder='0'></td>"
 			+										"<td style='width: 40%;'>"
 			+											"<div align='right'>"
-			+												"<a style='color: green; padding: 0px 0px' type='button' "
+			+												"<a style='color: green; padding: 0 0' type='button' "
 			+													"class='btn' onclick='v_AddRightRow(this,\"plus\")'><span "
 			+													"class='glyphicon glyphicon-plus-sign'></span></a>"
 			+											"</div>"
@@ -408,7 +399,7 @@ function v_createNewPage(obj,lcr){
 			+											"placeholder='0'></td>"
 			+										"<td>"
 			+											"<div align='right'>"
-			+												"<a style='color: red; padding: 0px 0px' type='button' "
+			+												"<a style='color: red; padding: 0 0' type='button' "
 			+													"class='btn' onclick='v_DeleteRowT(this)'><span "
 			+													"class='glyphicon glyphicon-minus-sign'></span></a>"
 			+											"</div>"
@@ -420,7 +411,7 @@ function v_createNewPage(obj,lcr){
 			+					"</td>"
 			+				"</tr>"
 			+				"<tr>"
-			+					"<td style='width: 50%; border-left: 0px; border-bottom: 0px'>"
+			+					"<td style='width: 50%; border-left: 0; border-bottom: 0'>"
 			+						"<div align='right'>"
 			+							"<table class='ats-v-Ttable'>"
 			+								"<tbody>"
@@ -434,12 +425,12 @@ function v_createNewPage(obj,lcr){
 			+							"</table>"
 			+						"</div>"
 			+					"</td>"
-			+					"<td style='width: 50%; border-right: 0px; border-bottom: 0px'>"
+			+					"<td style='width: 50%; border-right: 0; border-bottom: 0'>"
 			+						"<div align='left'>"
 			+							"<table class='ats-v-Ttable'>"
 			+								"<tbody>"
 			+									"<tr>"
-			+										"<th style='width: 30%;'>本期发生额</th>" 
+			+										"<th style='width: 30%;'>本期发生额</th>"
 			+										"<td style='width: 30%;'><input type='number' name='' "
 			+											"id='' placeholder='0'></td>"
 			+										"<td style='width: 40%;'></td>"
@@ -467,7 +458,7 @@ function v_createNewPage(obj,lcr){
 
 
 function v_DeleteTTable(obj){
-	var pageName = $(obj).parent().attr("aria-controls");
+	let pageName = $(obj).parent().attr("aria-controls");
 	$(obj).parent().parent().remove();
 	$('#'+pageName).remove();
 }
@@ -505,9 +496,9 @@ function vi_AddRow(){
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
-		+		"<th style='width: 4%; border: 0px; background: #ffffff'>"
+		+		"<th style='width: 4%; border: 0; background: #ffffff'>"
 		+			"<div align='center'>"
-		+				"<a style='color: red; padding: 0px 0px' type='button' "
+		+				"<a style='color: red; padding: 0 0' type='button' "
 		+					"class='btn' onclick='vi_DeleteRow(this)'><span "
 		+					"class='glyphicon glyphicon-minus-sign'></span></a>"
 		+			"</div>"
@@ -532,10 +523,10 @@ function vi_DeleteRow(obj){
  */
 function vii_AddTable(){
 	$('#tablePanel').prepend(
-					"<table class='table table-bordered ats-vouchertable' style='border: 0px;'>"
+					"<table class='table table-bordered ats-vouchertable' style='border: 0;'>"
 							+ "<tbody id='detailed'>"
 							+ "<tr>"
-							+ "<td colspan='37' style='border: 0px'>"
+							+ "<td colspan='37' style='border: 0'>"
 							+ "<div align='center'>"
 							+ "<select class='form-control' "
 							+ "style='width: 160px; display: inline-block;'>"
@@ -545,7 +536,7 @@ function vii_AddTable(){
 							+ "<p style='font-size: 24px; display: inline-block;'>&nbsp;明&nbsp;细&nbsp;账</p>"
 							+ "<div align='center' style='float: right; margin-top: 5px'>"
 							+ "<a "
-							+ "style='color: red; font-size: 18px; padding-right: 0px;padding-left: 0px' "
+							+ "style='color: red; font-size: 18px; padding-right: 0;padding-left: 0' "
 							+ "type='button' class='btn' onclick='vii_DeleteTable(this)'><span "
 							+ "class='glyphicon glyphicon-remove'></span></a>"
 							+ "</div>"
@@ -600,9 +591,9 @@ function vii_AddTable(){
 							+ "<th>元</th>"
 							+ "<th>角</th>"
 							+ "<th>分</th>"
-							+ "<th style='width: 1%; border: 0px; background: #ffffff'>"
+							+ "<th style='width: 1%; border: 0; background: #ffffff'>"
 							+ "<div align='center'>"
-							+ "<a style='color: green; padding: 0px 0px' type='button' "
+							+ "<a style='color: green; padding: 0 0' type='button' "
 							+ "class='btn' onclick='vii_AddRow(this)'><span "
 							+ "class='glyphicon glyphicon-plus-sign'></span></a>"
 							+ "</div>" + "</th>" + "</tr>" + "<tr>"
@@ -881,7 +872,7 @@ function vii_AddRow(obj){
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
-	
+
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
@@ -892,11 +883,9 @@ function vii_AddRow(obj){
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
-	
+
 		+		"<td contentEditable='true'><br></td>"
-	
-		+		"<td contentEditable='true'><br></td>"
-		+		"<td contentEditable='true'><br></td>"
+
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
@@ -905,10 +894,12 @@ function vii_AddRow(obj){
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
 		+		"<td contentEditable='true'><br></td>"
-		
-		+		"<td style='width: 1%; border: 0px; background: #ffffff'>"
+		+		"<td contentEditable='true'><br></td>"
+		+		"<td contentEditable='true'><br></td>"
+
+		+		"<td style='width: 1%; border: 0; background: #ffffff'>"
 		+			"<div align='center'>"
-		+				"<a style='color: red; padding: 0px 0px' type='button' "
+		+				"<a style='color: red; padding: 0 0' type='button' "
 		+					"class='btn' onclick='vii_DeleteRow(this)'><span "
 		+					"class='glyphicon glyphicon-minus-sign'></span></a>"
 		+			"</div>"

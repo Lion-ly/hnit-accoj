@@ -1,6 +1,9 @@
 //==================================新增公司==================================//
-function submit_company_infos() {
-    var data = $('#company_form').serialize();
+$(document).ready(function () {
+   get_company_info();
+});
+function company_form_submit() {
+    let data = $('#company_form').serialize();
     // 提交表单
     $.ajax({
         url: "/company_form_submit",
@@ -17,14 +20,14 @@ function submit_company_infos() {
                 show_message("submit_company_button_div", "提交成功", "info", 1000);
                 //alert("提交成功");
             } else if (data.hasOwnProperty("err_pos")) {
-                var data_err_pos = data["err_pos"];
-                for (var x = 0; x < data_err_pos.length; x++) {
-                    var err_pos = data_err_pos[x]["err_pos"];
+                let data_err_pos = data["err_pos"];
+                for (let x = 0; x < data_err_pos.length; x++) {
+                    let err_pos = data_err_pos[x]["err_pos"];
                     $("#" + err_pos).css({"border-style": "solid"});
                 }
                 show_message("submit_company_button_div", data["message"], "danger", 1000);
             } else {
-                getCompanyInfo();
+                get_company_info();
                 show_message("submit_company_button_div", data["message"], "danger", 1000);
             }
         },
@@ -35,9 +38,9 @@ function submit_company_infos() {
 
 }
 
-function getCompanyInfo() {
+function get_company_info() {
     // 获取公司信息
-    var data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/get_company_info",
         type: "post",
@@ -50,12 +53,12 @@ function getCompanyInfo() {
             $("#submit_company_button").attr("disabled", true);
             $(":text").attr("readonly", "readonly");
             $("textarea").attr("readonly", "readonly");
-            company_info = data["company_info"];
-            for (var prop in company_info) {
+            let company_info = data["company_info"];
+            for (let prop in company_info) {
                 if (!company_info.hasOwnProperty(prop)) continue;
                 if (prop === "com_shareholder") {
-                    com_shareholders = company_info[prop];
-                    for (var i = 0; i < com_shareholders.length; i++) {
+                    let com_shareholders = company_info[prop];
+                    for (let i = 0; i < com_shareholders.length; i++) {
                         $("#com_shareholder_" + (i + 1)).val(com_shareholders[i]);
                     }
                 } else {
@@ -71,11 +74,11 @@ function getCompanyInfo() {
 }
 
 //==================================新增业务==================================//
-var rowNumI = 101;
+let rowNumI = 101;
 
 function body_text_append(labelType, content) {
-    var rowName = "row-" + rowNumI;
-    var bg;
+    let rowName = "row-" + rowNumI;
+    let bg;
     switch (labelType) {
         case "筹资活动":
             bg = "#5cb85c";
@@ -103,7 +106,7 @@ function body_text_append(labelType, content) {
 
 function addActivity(labelType) {
     // 新增业务
-    var data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": csrf_token});
+    let data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/add_business",
         type: "post",
@@ -113,7 +116,7 @@ function addActivity(labelType) {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                content = data["content"];
+                let content = data["content"];
                 if (content.match("月1日")) {
                     labelType = "筹资活动";
                 }
@@ -134,13 +137,13 @@ function remove_business_row() {
     } else {
         rowNumI = rowNumI - 1;
     }
-    var rowName = "row-" + rowNumI;
+    let rowName = "row-" + rowNumI;
     $("#" + rowName).remove();
 }
 
-function i_DeleteRow() {
+function revoke_add_business() {
     // 撤销新增业务
-    var data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/revoke_add_business",
         type: "post",
@@ -164,7 +167,7 @@ function i_DeleteRow() {
 
 function submit_business_infos() {
     // 提交业务信息，提交成功后不可更改
-    var data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": csrf_token});
     $.ajax({
         url: "/submit_business_infos",
         type: "post",
@@ -174,7 +177,7 @@ function submit_business_infos() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                $("#submit_business_button").attr("disable", "disable");
+                // $("#submit_business_button").attr("disable", "disable");
                 show_message("submit_business_button_div", data["message"], "info", 1000);
             } else {
                 show_message("submit_business_button_div", data["message"], "danger", 1000);
@@ -186,11 +189,11 @@ function submit_business_infos() {
     });
 }
 
-function get_business_infos() {
+function get_business_info() {
     // 获取业务内容信息
-    var data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": csrf_token});
     $.ajax({
-        url: "/get_business_infos",
+        url: "/get_business_info",
         type: "post",
         data: data,
         dataType: "json",
@@ -201,10 +204,10 @@ function get_business_infos() {
                 while (rowNumI > 101) {
                     remove_business_row();
                 }
-                content_list = data["content_list"];
-                for (var i in content_list) {
+                let content_list = data["content_list"];
+                for (let i in content_list) {
                     if (!content_list.hasOwnProperty(i)) continue;
-                    var labelType = content_list[i]["business_type"],
+                    let labelType = content_list[i]["business_type"],
                         content = content_list[i]["content"];
                     body_text_append(labelType, content);
                 }
