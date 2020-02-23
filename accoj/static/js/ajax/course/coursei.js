@@ -9,7 +9,7 @@ function company_submit() {
 
 function company_form_submit() {
     let data = $('#company_form').serialize();
-    // 提交表单
+    // 提交公司表单
     $.ajax({
         url: "/company_form_submit",
         type: "post",
@@ -21,7 +21,7 @@ function company_form_submit() {
             if (data["result"] === true) {
                 $(":text").css({"border-style": "none"});
                 $("#com_business_scope").css({"border-style": "none"});
-                $("#submit_company_button").attr("disabled", true);
+                // $("#submit_company_button").attr("disabled", true);
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
             } else if (data.hasOwnProperty("err_pos")) {
                 let data_err_pos = data["err_pos"];
@@ -39,20 +39,14 @@ function company_form_submit() {
             console.log(err.statusText + "异常");
         },
         complete: function () {
-            $("#submit_confirm_message_origin").remove();
-            setTimeout(function () {
-                close_submit_confirm();
-            }, 2000);
-            setTimeout(function () {
-                remove_submit_confirm();
-            }, 2500);
+            submit_confirm_clicked();
         }
     });
 }
 
 function get_company_info() {
     // 获取公司信息
-    let data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/get_company_info",
         type: "post",
@@ -62,7 +56,7 @@ function get_company_info() {
         async: true,
         success: function (data) {
             // 公司已经创立过，将值填充，表单不可编辑
-            $("#submit_company_button").attr("disabled", true);
+            // $("#submit_company_button").attr("disabled", true);
             $(":text").attr("readonly", "readonly");
             $("textarea").attr("readonly", "readonly");
             let company_info = data["company_info"];
@@ -91,6 +85,7 @@ let rowNumI = 101;
 function body_text_append(labelType, content) {
     let rowName = "row-" + rowNumI;
     let bg;
+    let business_no = rowNumI > 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
     switch (labelType) {
         case "筹资活动":
             bg = "#5cb85c";
@@ -108,6 +103,7 @@ function body_text_append(labelType, content) {
         + labelType
         + "</th>"
         + "<td style='text-align: left'>"
+        + "<strong style='color: " + bg + "'>" + business_no + ".&nbsp;&nbsp;</strong>"
         + content
         + "</td>"
         +
@@ -116,9 +112,9 @@ function body_text_append(labelType, content) {
     rowNumI++;
 }
 
-function addActivity(labelType) {
+function add_business(labelType) {
     // 新增业务
-    let data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": csrf_token});
+    let data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/add_business",
         type: "post",
@@ -155,7 +151,7 @@ function remove_business_row() {
 
 function revoke_add_business() {
     // 撤销新增业务
-    let data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/revoke_add_business",
         type: "post",
@@ -178,12 +174,12 @@ function revoke_add_business() {
 }
 
 function submit_business() {
-    show_submit_confirm("submit_business_infos()")
+    show_submit_confirm("submit_business_infos()");
 }
 
 function submit_business_infos() {
     // 提交业务信息，提交成功后不可更改
-    let data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/submit_business_infos",
         type: "post",
@@ -202,20 +198,14 @@ function submit_business_infos() {
             console.log(err.statusText + "异常")
         },
         complete: function () {
-            $("#submit_confirm_message_origin").remove();
-            setTimeout(function () {
-                close_submit_confirm();
-            }, 2000);
-            setTimeout(function () {
-                remove_submit_confirm();
-            }, 2500);
+            submit_confirm_clicked();
         }
     });
 }
 
 function get_business_info() {
     // 获取业务内容信息
-    let data = $.param({"csrf_token": csrf_token});
+    let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/get_business_info",
         type: "post",

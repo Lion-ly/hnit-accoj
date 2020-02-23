@@ -211,9 +211,9 @@ def add_business():
         form = request.form
         business_type = form.get("business_type")
         company = mongo.db.company.find_one({"student_no": "{}_cp".format(session.get("username"))})
-        if not company:
+        if not company or not g.schedule:
             return jsonify(result=False, message="公司未创立！")
-        schedule = company.get("schedule")
+        schedule = g.schedule
         business_confirm = schedule.get("business_confirm")
         if business_type not in business_types:
             return jsonify(result=False, message="业务类型错误！")
@@ -267,12 +267,12 @@ def submit_key_element_info():
     """
     :return:
     """
-    if not g.get("schedule") or not g.schedule.get("business_confirm"):
-        return redirect("/coursei")
-    if request.method == "post":
+    if request.method == "POST":
+        if not g.get("schedule") or not g.schedule.get("business_confirm"):
+            return redirect("/coursei")
         form = request.form
-        company = mongo.db.find_one({"student_no": session.get("username")},
-                                    dict(businesses=1, schedule=1))
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule=1))
         _id = company.get("_id")
         # businesses = company.get("businesses")
         schedule = company.get("schedule")
@@ -302,18 +302,24 @@ def get_key_element_info():
     """
     :return:
     """
-    if not g.get("schedule") or not g.schedule.get("business_confirm"):
-        return redirect("/coursei")
-    if request.method == "post":
-        company = mongo.db.find_one({"student_no": session.get("username")}, {"businesses": 1})
+    if request.method == "POST":
+        if not g.get("schedule") or not g.schedule.get("business_confirm"):
+            print("redirect true")
+            return redirect("/coursei")
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
         businesses = company.get("businesses")
-        key_element_infos_list = list()
-        for business in businesses:
-            key_element_infos = business.get("key_element_infos")
-            if not key_element_infos:
-                continue
-            key_element_infos_list.append(key_element_infos)
-        return jsonify(result=True, key_element_infos_list=key_element_infos_list)
+        business_list = list()
+        businesses_len = len(businesses)
+        for i in range(0, businesses_len):
+            key_element_infos = businesses[i].get("key_element_infos")
+            confirmed = False if not key_element_infos else True
+            content = businesses[i].get("content")
+            affect_type = businesses[i].get("affect_type")
+            business_type = businesses[i].get("business_type")
+            business_no = i + 1
+            business_list.append(dict(business_no=business_no, content=content, key_element_infos=key_element_infos,
+                                      affect_type=affect_type, confirmed=confirmed, business_type=business_type))
+        return jsonify(result=True, business_list=business_list)
     return redirect('/courseii')
 
 
@@ -480,7 +486,8 @@ def accoj_bp_before_request():
     局部请求前钩子函数
     :return:
     """
-    company = mongo.db.company.find_one(dict(student_no=session.get("username")))
+    company = mongo.db.company.find_one(dict(student_no=session.get("username")),
+                                        dict(schedule=1))
     if company:
         schedule = company.get("schedule")
         g.schedule = schedule
