@@ -1,7 +1,12 @@
 //==================================新增公司==================================//
 $(document).ready(function () {
-   get_company_info();
+    get_company_info();
 });
+
+function company_submit() {
+    show_submit_confirm("company_form_submit()");
+}
+
 function company_form_submit() {
     let data = $('#company_form').serialize();
     // 提交表单
@@ -17,25 +22,32 @@ function company_form_submit() {
                 $(":text").css({"border-style": "none"});
                 $("#com_business_scope").css({"border-style": "none"});
                 $("#submit_company_button").attr("disabled", true);
-                show_message("submit_company_button_div", "提交成功", "info", 1000);
-                //alert("提交成功");
+                show_message("submit_confirm_message", "提交成功", "info", 1000);
             } else if (data.hasOwnProperty("err_pos")) {
                 let data_err_pos = data["err_pos"];
                 for (let x = 0; x < data_err_pos.length; x++) {
                     let err_pos = data_err_pos[x]["err_pos"];
                     $("#" + err_pos).css({"border-style": "solid"});
                 }
-                show_message("submit_company_button_div", data["message"], "danger", 1000);
+                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
             } else {
                 get_company_info();
-                show_message("submit_company_button_div", data["message"], "danger", 1000);
+                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
             }
         },
         error: function (err) {
             console.log(err.statusText + "异常");
+        },
+        complete: function () {
+            $("#submit_confirm_message_origin").remove();
+            setTimeout(function () {
+                close_submit_confirm();
+            }, 2000);
+            setTimeout(function () {
+                remove_submit_confirm();
+            }, 2500);
         }
-    })
-
+    });
 }
 
 function get_company_info() {
@@ -122,7 +134,7 @@ function addActivity(labelType) {
                 }
                 body_text_append(labelType, content);
             } else {
-                show_message("add_business_message", data["message"], "danger", 1000);
+                show_message("add_business_message", data["message"], "warning", 1000);
             }
         },
         error: function (err) {
@@ -153,16 +165,20 @@ function revoke_add_business() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                show_message("add_business_message", data["message"], "info", 500);
+                show_message("add_business_message", "撤销成功", "info", 500);
                 remove_business_row();
             } else {
-                show_message("add_business_message", data["message"], "danger", 1000);
+                show_message("add_business_message", data["message"], "warning", 1000, "撤销失败！");
             }
         },
         error: function (err) {
             console.log(err.statusText + "异常");
         }
     });
+}
+
+function submit_business() {
+    show_submit_confirm("submit_business_infos()")
 }
 
 function submit_business_infos() {
@@ -177,14 +193,22 @@ function submit_business_infos() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                // $("#submit_business_button").attr("disable", "disable");
-                show_message("submit_business_button_div", data["message"], "info", 1000);
+                show_message("submit_confirm_message", "提交成功", "info", 1000);
             } else {
-                show_message("submit_business_button_div", data["message"], "danger", 1000);
+                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
             }
         },
         error: function (err) {
             console.log(err.statusText + "异常")
+        },
+        complete: function () {
+            $("#submit_confirm_message_origin").remove();
+            setTimeout(function () {
+                close_submit_confirm();
+            }, 2000);
+            setTimeout(function () {
+                remove_submit_confirm();
+            }, 2500);
         }
     });
 }
@@ -213,7 +237,7 @@ function get_business_info() {
                 }
             } else {
                 if (data["message"] !== "暂无业务")
-                    show_message("submit_business_button_div", data["message"], "danger", 1000);
+                    show_message("submit_business_button_div", data["message"], "warning", 1000);
             }
         },
         error: function (err) {

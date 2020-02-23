@@ -34,7 +34,7 @@
 <body>
 
 	<!-- 头引入： -->
-	<div class="header">
+	<div class="header" id="base_header">
 		<div class="container">
 			<!-- 项目标题 -->
 			<nav class="navbar navbar-default" id="project-title">
@@ -281,7 +281,7 @@
 							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 							<div class="form-group">
 							<label class="control-label" for="origin_pwd">原密码</label>
-							<input type="password" class="form-control" id="origin_pwd" 
+							<input type="password" class="form-control" id="origin_pwd"
 								name="origin_pwd" placeholder="Origin Password" required>
 							</div>
 							<div class="form-group">
@@ -312,9 +312,9 @@
 	</div>
 
 
-	{% block meun %}{% endblock meun %} {% block courseBody %}{% endblock
-	courseBody %}
-	
+	{% block meun %}{% endblock meun %}
+    {% block courseBody %}{% endblock courseBody %}
+
 	<!-- 尾引入： -->
 	<footer class="bs-docs-footer"
 		style="background-color: #2a2730; color: #99979c;">
@@ -344,7 +344,7 @@
 						<img
 							class="footlogotext" src="../static/img/qqcode.jpg" style="width:100px">
 					</a></li>
-					<!-- 
+					<!--
 					<li><a href="https://github.com/HNIT-ACCOJ/hnit-accoj" target="_blank">
 						<i class="fa fa-github fa-2x" aria-hidden="true"></i>
 					</a></li>

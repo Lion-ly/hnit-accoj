@@ -211,10 +211,10 @@ def add_business():
         form = request.form
         business_type = form.get("business_type")
         company = mongo.db.company.find_one({"student_no": "{}_cp".format(session.get("username"))})
+        if not company:
+            return jsonify(result=False, message="公司未创立！")
         schedule = company.get("schedule")
         business_confirm = schedule.get("business_confirm")
-        if company is None:
-            return jsonify(result=False, message="公司未创立！")
         if business_type not in business_types:
             return jsonify(result=False, message="业务类型错误！")
 

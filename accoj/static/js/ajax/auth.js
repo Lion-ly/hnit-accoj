@@ -60,12 +60,10 @@ $(function () {
             async: true,
             success: function (data) {
                 if (data["result"] === "true") {
-                    $('#update_pwd_form').append("<div class='alert alert-info' style='text-align: center'> <strong>更改成功 1s后自动跳转</strong></div>");
-                    $('#update_pwd_button').attr("disabled", true);
+                    show_message("update_pwd_form", "密码更改成功", "info", 1000);
                     setTimeout("location.href='localhost:80';location.reload();", 1000)
                 } else {
-                    $('#update_pwd_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>" + data["message"] + "</strong></div>");
-                    setTimeout("$('#login_danger').remove()", 1000)
+                    show_message("update_pwd_form", data["message"], "info", 1000, "更改失败!");
                 }
 
             },
@@ -106,7 +104,7 @@ $(function () {
         $("#signin-password").val($.cookie("psw"));
     }
 
-})
+});
 
 /*
 把输入的值保存到cookie，保存期为7天
