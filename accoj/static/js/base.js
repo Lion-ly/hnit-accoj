@@ -2,7 +2,7 @@
  *  # courseBase
  *	? 控制导航栏的active，确定当前处于导航栏的位置
  */
-
+let csrf_token;
 $(function () {
     $(".navbar-nav").find("li").each(function () {
         let a = $(this).find("a:first")[0];
@@ -20,7 +20,7 @@ $(function () {
  *	? 页面跳转
  */
 function gohome() {
-    window.location.href = "{{url_for('accoj.index')}}";
+    window.location.href = "{{url_for('index.index')}}";
 }
 
 
@@ -110,46 +110,11 @@ function show_message(id, message, message_type, timeout, message_head = false) 
 }
 
 function show_submit_confirm(submit_deal_fun) {
-    submit_confirm_append(submit_deal_fun);
-    $('#submit_confirm').modal('show');
+    $("#submit_confirm_button").attr("onclick", submit_deal_fun);
+    $("#submit_confirm_button").attr("disabled", false);
+    $("#submit_confirm").modal('show');
 }
 
-function close_submit_confirm() {
-    $('#submit_confirm').modal('hide');
-}
-
-function remove_submit_confirm() {
-    $('#submit_confirm').remove();
-}
-
-function submit_confirm_append(submit_deal_fun) {
-    let div_content = "<!-- 确认提交模态框（Modal） -->" +
-        '        <div class="modal fade" id="submit_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-        '            <div class="modal-dialog">' +
-        '                <div class="modal-content">' +
-        '                     <div class="modal-header">' +
-        '                        <button type="button" class="close" data-dismiss="modal"' +
-        '                                aria-hidden="true">×' +
-        '                        </button>' +
-        '                        <h4 class="modal-title" id="myModalLabel" style="text-align: center">' +
-        '                            确认提交' +
-        '                        </h4>' +
-        '                    </div>' +
-        '                    <div id="submit_confirm_message_origin" class="alert alert-info" style="text-align: center">' +
-        '		                <strong>提示！</strong>确认提交后将不可更改。' +
-        '	                 </div>' +
-        '                    <div id="submit_confirm_message">' +
-        '                    </div>' +
-        '                    <div class="modal-footer">' +
-        '                        <button type="button" class="btn btn-default"' +
-        '                                data-dismiss="modal">关闭' +
-        '                        </button>' +
-        '                        <button type="button" class="btn btn-primary" id="submit_confirm_button" onclick="' + submit_deal_fun + '">' +
-        '                            确认提交' +
-        '                        </button>' +
-        '                    </div>' +
-        '                </div><!-- /.modal-content -->' +
-        '            </div><!-- /.modal-dialog -->' +
-        '        </div><!-- /.modal -->';
-    $("#base_header").append(div_content);
+function submit_confirm_clicked() {
+    $("#submit_confirm_button").attr("disabled", true);
 }

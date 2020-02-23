@@ -63,7 +63,7 @@ $(function () {
                     show_message("update_pwd_form", "密码更改成功", "info", 1000);
                     setTimeout("location.href='localhost:80';location.reload();", 1000)
                 } else {
-                    show_message("update_pwd_form", data["message"], "info", 1000, "更改失败!");
+                    show_message("update_pwd_form", data["message"], "danger", 1000, "更改失败!");
                 }
 
             },

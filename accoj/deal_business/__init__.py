@@ -40,7 +40,7 @@ def deal_business_1(company, business_type):
     if business_num == 0:
         # 第一笔业务
         business_content = deal_with_question_1(company, 1)
-    elif business_num == 20:
+    elif business_num == 19:
         # 最多20笔业务
         business_content = deal_with_question_1(company, 34)
     else:
