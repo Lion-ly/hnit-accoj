@@ -1,15 +1,22 @@
 //==================================新增公司==================================//
+// 页面加载完成填充数据
 $(document).ready(function () {
     get_company_info();
 });
 
+/**
+ * 将处理函数绑定到模态框的确认提交按钮
+ */
 function company_submit() {
     show_submit_confirm("company_form_submit()");
 }
 
+/**
+ * 提交公司信息
+ */
 function company_form_submit() {
     let data = $('#company_form').serialize();
-    // 提交公司表单
+    // 提交公司信息
     $.ajax({
         url: "/company_form_submit",
         type: "post",
@@ -21,7 +28,7 @@ function company_form_submit() {
             if (data["result"] === true) {
                 $(":text").css({"border-style": "none"});
                 $("#com_business_scope").css({"border-style": "none"});
-                // $("#submit_company_button").attr("disabled", true);
+                $("#company_confirmed_span").show();
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
             } else if (data.hasOwnProperty("err_pos")) {
                 let data_err_pos = data["err_pos"];
@@ -56,7 +63,7 @@ function get_company_info() {
         async: true,
         success: function (data) {
             // 公司已经创立过，将值填充，表单不可编辑
-            // $("#submit_company_button").attr("disabled", true);
+            $("#company_confirmed_span").show();
             $(":text").attr("readonly", "readonly");
             $("textarea").attr("readonly", "readonly");
             let company_info = data["company_info"];
@@ -85,7 +92,7 @@ let rowNumI = 101;
 function body_text_append(labelType, content) {
     let rowName = "row-" + rowNumI;
     let bg;
-    let business_no = rowNumI > 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
+    let business_no = rowNumI >= 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
     switch (labelType) {
         case "筹资活动":
             bg = "#5cb85c";
@@ -127,6 +134,9 @@ function add_business(labelType) {
                 let content = data["content"];
                 if (content.match("月1日")) {
                     labelType = "筹资活动";
+                }
+                if (content.match("结转本月损益")) {
+                    labelType = "经营活动";
                 }
                 body_text_append(labelType, content);
             } else {
@@ -173,6 +183,9 @@ function revoke_add_business() {
     });
 }
 
+/**
+ * 将处理函数绑定到模态框的确认提交按钮
+ */
 function submit_business() {
     show_submit_confirm("submit_business_infos()");
 }
@@ -189,6 +202,7 @@ function submit_business_infos() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
+                $("#business_confirmed_span").show();
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
             } else {
                 show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
@@ -215,10 +229,14 @@ function get_business_info() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
+                let content_list = data["content_list"];
+                let business_confirm = data["business_confirm"];
+                if(business_confirm) {
+                    $("#business_confirmed_span").show();
+                }
                 while (rowNumI > 101) {
                     remove_business_row();
                 }
-                let content_list = data["content_list"];
                 for (let i in content_list) {
                     if (!content_list.hasOwnProperty(i)) continue;
                     let labelType = content_list[i]["business_type"],

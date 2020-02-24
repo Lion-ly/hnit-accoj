@@ -13,7 +13,7 @@ from accoj.blueprints.auth import auth_bp
 from accoj.blueprints.index import index_bp
 from settings import config
 from accoj.extensions import mongo, mail, csrf
-from accoj.utils.add_question import add_question
+from accoj.utils.create_questions import add_question
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
