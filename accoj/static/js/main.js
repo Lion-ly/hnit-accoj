@@ -25,13 +25,13 @@ function remove(rm) {
 
 
 //===================================courseii===================================//
-function iconChange(obj){
+/*function iconChange(obj){
 	let $obj = $(obj).children();
 	let className = $obj.attr("class");
 	let newClass = className === "glyphicon glyphicon-plus" ? "glyphicon glyphicon-minus" : "glyphicon glyphicon-plus";
 	$obj.removeClass(className);
 	$obj.addClass(newClass);
-}
+}*/
 
 
 
