@@ -265,6 +265,7 @@ def courseii():
 @accoj_bp.route('/submit_key_element_info', methods=['POST', 'GET'])
 def submit_key_element_info():
     """
+    提交会计要素信息
     :return:
     """
     if request.method == "POST":
@@ -274,7 +275,6 @@ def submit_key_element_info():
         company = mongo.db.company.find_one({"student_no": session.get("username")},
                                             dict(businesses=1, schedule=1))
         _id = company.get("_id")
-        # businesses = company.get("businesses")
         schedule = company.get("schedule")
         affect_type = form.get("affect_type")
         business_no = form.get("business_no")
@@ -283,8 +283,9 @@ def submit_key_element_info():
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
-            if 1 <= int(business_no) <= 20:
+            if business_no > 19 or business_no < 0:
                 return jsonify(result=False, message="前端数据错误")
+        # 若当前业务信息提交未确认，则确认提交
         if business_no not in schedule.get("key_element_confirm"):
             mongo.db.company.update({"_id": _id},
                                     {"$set"    : {
@@ -292,6 +293,7 @@ def submit_key_element_info():
                                         ("businesses." + str(business_no) + ".key_element_infos"): key_element_infos},
                                         "$push": {"schedule.key_element_confirm": business_no}}
                                     )
+            return jsonify(result=True)
         else:
             return jsonify(result=False, message="此业务已经提交过")
     return redirect('/courseii')
@@ -300,6 +302,7 @@ def submit_key_element_info():
 @accoj_bp.route('/get_key_element_info', methods=['POST', 'GET'])
 def get_key_element_info():
     """
+    # 获取会计要素信息
     :return:
     """
     if request.method == "POST":
@@ -308,11 +311,12 @@ def get_key_element_info():
             return redirect("/coursei")
         company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
         businesses = company.get("businesses")
+        schedule = g.schedule
         business_list = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
             key_element_infos = businesses[i].get("key_element_infos")
-            confirmed = False if not key_element_infos else True
+            confirmed = True if i in schedule.get("key_element_confirm") else False
             content = businesses[i].get("content")
             affect_type = businesses[i].get("affect_type")
             business_type = businesses[i].get("business_type")

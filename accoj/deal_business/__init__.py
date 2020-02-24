@@ -25,6 +25,16 @@ def deal_business(company, business_type, questions_no):
     return business_content, message
 
 
+def set1_all_in_set2(set1, set2):
+    """
+    judge set1 all in set2
+    :param set1:
+    :param set2:
+    :return: Boolean
+    """
+    return True if (set1 and set2) == set2 else False
+
+
 def deal_business_1(company, business_type):
     """
     题库1的处理，返回业务内容，报错信息
@@ -45,16 +55,17 @@ def deal_business_1(company, business_type):
         business_content = deal_with_question_1(company, 34)
     else:
         # 公司已有的业务
-        question_list = list()
+        success_flag = False
+        question_set = set()
         for com_business in com_businesses:
-            question_list.append(com_business["question_no"])
+            question_set.add(com_business["question_no"])
         # 筹资活动2-7
         random_list = list(range(2, 8))
         if business_type == "投资活动":
             random_list = list(range(8, 15))
         elif business_type == "经营活动":
-            random_list = list(range(15, 34))
-        for question_no_tmp in question_list:
+            random_list = list(range(15, 33))
+        for question_no_tmp in question_set:
             if question_no_tmp in random_list:
                 random_list.remove(question_no_tmp)
         if not random_list:
@@ -68,52 +79,62 @@ def deal_business_1(company, business_type):
                 print(message)
                 return business_content, message
             question_no = random.choice(random_list)
-            if question_no in question_list:
+            if question_no in question_set:
                 continue
-            elif question_no == 3 and 2 not in question_list:
+            elif question_no == 3 and 2 not in question_set:
                 # 业务2为业务3前提
                 random_list.remove(3)
                 continue
-            elif question_no == 13 and 12 not in question_list:
+            elif question_no == 13 and 12 not in question_set:
                 # 业务12为业务13前提
                 random_list.remove(13)
                 continue
-            elif question_no == 18 and 17 not in question_list:
+            elif question_no == 18 and 17 not in question_set:
                 # 业务17为业务18前提
                 random_list.remove(18)
                 continue
-            elif question_no == 20 and 15 not in question_list:
+            elif question_no == 20 and 15 not in question_set:
                 # 业务15为业务20前提
                 random_list.remove(15)
                 continue
-            elif question_no == 23 and 19 not in question_list:
+            elif question_no == 23 and 19 not in question_set:
                 # 业务19为业务23前提
                 random_list.remove(23)
                 continue
-            elif question_no == 27 and 5 not in question_list and 8 not in question_list and 9 not in question_list:
-                # 业务[5,8,8]为业务27前提
+            elif question_no == 27:
+                # 业务[5,8,9]为业务27前提
+                if set1_all_in_set2({5, 8, 9}, question_set):
+                    success_flag = True
+                    break
                 random_list.remove(27)
                 continue
-            elif question_no == 28 and 24 not in question_list and 25 not in question_list and \
-                    26 not in question_list and 27 not in question_list:
+            elif question_no == 28:
+                if set1_all_in_set2({24, 45, 26, 27}, question_set):
+                    success_flag = True
+                    break
                 # 业务[24,45,26,27]为业务28前提
                 random_list.remove(28)
                 continue
-            elif question_no == 30 and 28 not in question_list:
+            elif question_no == 30 and 28 not in question_set:
                 # 业务28为业务30前提
                 random_list.remove(30)
                 continue
-            elif question_no == 31 and 28 not in question_list and 30 not in question_list:
-                # 业务28为业务31前提
+            elif question_no == 31:
+                # 业务[28，30]为业务31前提
+                if set1_all_in_set2({24, 45, 26, 27}, question_set):
+                    success_flag = True
+                    break
                 random_list.remove(31)
                 continue
-            elif question_no == 33 and 25 not in question_list:
-                # 业务25为业务33前提
+            elif question_no == 33 and (business_num != 18 or 25 not in question_set):
+                # 业务25为业务33前提且在业务34前（即结算本月损益）
                 random_list.remove(33)
                 continue
             else:
-                business_content = deal_with_question_1(company=company, question_no=question_no)
+                success_flag = True
                 break
+        if success_flag:
+            business_content = deal_with_question_1(company=company, question_no=question_no)
 
     return business_content, message
 

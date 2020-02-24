@@ -24,7 +24,10 @@
 					<!-- 第一标签 -->
 					<div role="tabpanel" class="tab-pane active in fade"
 						id="CreateCompany">
-						<p class="ats-fontsize-20">1、新增公司</p>
+						<p class="ats-fontsize-20" >1、新增公司
+                            <span id="company_confirmed_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+                                已完成</span>
+                        </p>
 						<form id="company_form">
 							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 							<table class="table table-bordered ">
@@ -193,6 +196,9 @@
 						</div>
 						<hr class="simple" color="#6f5499" />
 						<div align="right" id="submit_company_button_div">
+                            <button type="button" class="btn btn-info" onclick="">
+							    <span class="glyphicon"></span>&nbsp;保存
+						    </button>
 							<button type="button" class="btn btn-success" id="submit_company_button"
                                     onclick="company_submit()">
 								<span class="glyphicon"></span>&nbsp;提交
@@ -202,7 +208,10 @@
 					<!-- 第二标签 -->
 					<div role="tabpanel" class="tab-pane fade" id="NewBusiness">
 
-						<p class="ats-fontsize-20">2、新增业务</p>
+						<p class="ats-fontsize-20">2、新增业务
+                            <span id="business_confirmed_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+                                已完成</span>
+                        </p>
 
 						<div class="btn-group btn-group-sm" role="group" aria-label="..."
 							style="">
@@ -239,6 +248,9 @@
 						</div>
 						<hr style="clear: both;" class="simple" color="#6f5499" />
 						<div align="right" id="submit_business_button_div">
+                            <button type="button" class="btn btn-info" onclick="">
+							    <span class="glyphicon"></span>&nbsp;保存
+						    </button>
 							<button type="button" class="btn btn-success" id="submit_business_button"
                                     onclick="submit_business()">
 								<span class="glyphicon"></span>&nbsp;提交
