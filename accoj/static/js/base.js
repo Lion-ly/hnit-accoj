@@ -109,9 +109,8 @@ function show_message(id, message, message_type, timeout, message_head = false) 
     }, timeout * 2.5);
 }
 
-// 点击提交按钮
 /**
- *
+ * 点击提交按钮
  * @param submit_deal_fun
  */
 function show_submit_confirm(submit_deal_fun) {
@@ -120,7 +119,13 @@ function show_submit_confirm(submit_deal_fun) {
     $("#submit_confirm").modal('show');
 }
 
-// ajax提交完成
+/**
+ * ajax提交完成
+ */
 function submit_confirm_clicked() {
     $("#submit_confirm_button").attr("disabled", true);
+    // 定时自动关闭
+    setTimeout(function () {
+            $("#submit_confirm").modal('hide');
+    }, 3000)
 }

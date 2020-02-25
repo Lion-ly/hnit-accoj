@@ -184,12 +184,11 @@ def deal_with_question_1(company, question_no):
     if question_no == 1:
         content = content.replace("v1", company.get("com_shareholder")[0])
         num_tmp = company.get("com_regist_cap")
-        num_tmp *= 10000
+        num_tmp *= float(10000)
         content = content.replace("v2", str(int(num_tmp)))
         business_type = question.get("business_type")
         affect_type = question.get("affect_type")
-        values_list = [{"value_type": "common", "value": company.get("com_regist_cap")},
-                       {"value_type": "num", "value": num_tmp}]
+        values_list = [num_tmp, num_tmp]
     else:
         values = question.get("values")
         values_len = len(values)

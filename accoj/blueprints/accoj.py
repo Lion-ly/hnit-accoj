@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, redirect, request, jsonify, session, g
+from flask import Blueprint, render_template, redirect, request, jsonify, session, g, url_for
 from accoj.utils import login_required
 from accoj.extensions import mongo
 from accoj.utils import is_number
@@ -103,7 +103,7 @@ def company_form_submit():
             data_dict["com_bank_savings"] = data_dict["com_regist_cap"] * 10000
             data_dict["com_cash"] = 0
             data_dict["business_num"] = 0
-            data_dict["schedule"] = dict(business_confirm=False, key_element_confirm=[], subjects_confirm=[])
+            data_dict["schedule"] = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[])
             data_dict["com_assets"] = []
             data_dict["businesses"] = []
             data_dict_cp = data_dict.copy()
@@ -274,7 +274,7 @@ def courseii():
     """
     :return:
     """
-    # 第一次课程未完成
+    # 若第一次课程未完成
     if not g.get("schedule") or not g.schedule.get("business_confirm"):
         return redirect("/coursei")
     return render_template('course/courseii.html')
@@ -324,9 +324,6 @@ def get_key_element_info():
     :return:
     """
     if request.method == "POST":
-        if not g.get("schedule") or not g.schedule.get("business_confirm"):
-            print("redirect true")
-            return redirect("/coursei")
         company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
         businesses = company.get("businesses")
         schedule = g.schedule
@@ -349,13 +346,72 @@ def get_key_element_info():
 
 
 # 第三次课程----start-------------------------------------------------------------------------------
-# Todo 第三次课程
 @accoj_bp.route('/courseiii', methods=['POST', 'GET'])
 def courseiii():
     """
     :return:
     """
+    # 若第一次课程未完成
+    if not g.get("schedule") or not g.schedule.get("business_confirm"):
+        return redirect("/coursei")
     return render_template('course/courseiii.html')
+
+
+@accoj_bp.route('/submit_subject_info', methods=['POST', 'GET'])
+def submit_subject_info():
+    """
+    提交会计科目信息
+    :return:
+    """
+    if request.method == "POST":
+        form = request.form
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule=1))
+        _id = company.get("_id")
+        schedule = company.get("schedule")
+        business_no = form.get("business_no")
+        subject_infos = form.get("subject_infos")
+        if not is_number(business_no):
+            return jsonify(result=False, message="前端数据错误")
+        else:
+            business_no = int(business_no) - 1
+            if business_no > 19 or business_no < 0:
+                return jsonify(result=False, message="前端数据错误")
+        # 若当前业务信息提交未确认，则确认提交
+        if business_no not in schedule.get("subject_confirm"):
+            mongo.db.company.update({"_id": _id},
+                                    {"$set" : {
+                                        ("businesses." + str(business_no) + ".subject_infos"): subject_infos},
+                                     "$push": {"schedule.subject_confirm": business_no}}
+                                    )
+            return jsonify(result=True)
+        else:
+            return jsonify(result=False, message="此业务已经提交过")
+    return redirect("/courseiii")
+
+
+@accoj_bp.route('/get_subject_info', methods=['POST', 'GET'])
+def get_subject_info():
+    """
+    获取会计科目信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
+        businesses = company.get("businesses")
+        schedule = g.schedule
+        business_list = list()
+        businesses_len = len(businesses)
+        for i in range(0, businesses_len):
+            subject_infos = businesses[i].get("subject_infos")
+            confirmed = True if i in schedule.get("subject_confirm") else False
+            content = businesses[i].get("content")
+            business_type = businesses[i].get("business_type")
+            business_no = i + 1
+            business_list.append(dict(business_no=business_no, content=content, subject_infos=subject_infos,
+                                      confirmed=confirmed, business_type=business_type))
+        return jsonify(result=True, business_list=business_list)
+    return redirect('/courseiii')
 
 
 # 第三次课程----end---------------------------------------------------------------------------------
