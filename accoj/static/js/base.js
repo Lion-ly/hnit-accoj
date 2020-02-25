@@ -84,12 +84,12 @@ function check_email(email) {
  */
 function show_message(id, message, message_type, timeout, message_head = false) {
     if (document.getElementById("show_message")) return;
-    let div_content_base = "<div class='alert alert-" + message_type + "' id='show_message' style='text-align: center;display: none;'> <strong>";
-    let type = "提示!";
+    let div_content_base = "<div class='alert alert-" + message_type + "' id='show_message' style='text-align: center;display: none;margin-top: 20px;'> <strong>";
+    let type = "提示！";
     if (message_type === "danger") {
-        type = "错误!";
+        type = "错误！";
     } else if (message_type === "warning") {
-        type = "警告!";
+        type = "警告！";
     }
     if (message_head) {
         type = message_head;
