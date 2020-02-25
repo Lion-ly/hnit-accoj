@@ -122,13 +122,31 @@ def submit_business_infos():
     """
     if request.method == "POST":
         company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-                                            dict(business_num=1, schedule=1, _id=0))
+                                            dict(businesses=1, business_num=1, schedule=1, _id=0))
         if not company:
             return jsonify(result=False, message="公司未创立")
         business_num = company.get("business_num")
         schedule = company.get("schedule")
+        businesses = company.get("businesses")
         business_confirm = schedule.get("business_confirm")
-        if company and business_num == 20 and not business_confirm:
+        business_types_1 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
+        business_types_2 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
+        businesses_len = len(businesses)
+        for i in range(businesses_len):
+            business_type = businesses[i].get("business_type")
+            business_types = business_types_1 if i < 10 else business_types_2
+            for key in business_types:
+                if key == business_type:
+                    business_types[key] += 1
+        for key in business_types_1:
+            # 判断第一个会计区间的每种业务是否至少有两笔
+            if business_types_2[key] < 2:
+                return jsonify(result=False, message="请检查第一个会计区间的每种业务是否至少有两笔")
+        for key in business_types_2:
+            # 判断第二个会计区间的每种业务是否至少有两笔
+            if business_types_2[key] < 2:
+                return jsonify(result=False, message="请检查第二个会计区间的每种业务是否至少有两笔")
+        if business_num == 20 and not business_confirm:
             mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
                                     {"$set": {"schedule.business_confirm": True}})
             mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
@@ -472,12 +490,12 @@ def coursex():
 
 # 用户个人中心----start-----------------------------------------------------------------------------
 # Todo 用户个人中心
-@accoj_bp.route('/detail', methods=['POST', 'GET'])
-def detail():
+@accoj_bp.route('/profile', methods=['POST', 'GET'])
+def profile():
     """
     :return:
     """
-    return render_template('detail.html')
+    return render_template('profile.html')
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------
