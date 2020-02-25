@@ -75,36 +75,41 @@ def company_form_submit():
         flag = True
         shareholder_num = 0
         for key, value in data_dict.items():
-            if not value:
+            if not value and key != "com_shareholder":
                 if not key.startswith("com_shareholder_"):
+                    print("err pos empty: {}".format(key))
                     flag = False
                     err_pos.append({"err_pos": key})
                 else:
                     shareholder_num += 1
                     if key == "com_shareholder_1":
                         err_pos.append({"err_pos": key})
-            elif key.startswith("com_shareholder_"):
-                data_dict["com_shareholder"].append(value)
-            elif key == "com_operate_period":
-                if not is_number(value):
-                    flag = False
-                    err_pos.append({"err_pos": key})
-                else:
-                    value = float(value)
-                    if value < 5 or value > 500:
+            else:
+                if key.startswith("com_shareholder_"):
+                    data_dict["com_shareholder"].append(value)
+                elif key == "com_operate_period":
+                    if not is_number(value):
+                        print("not com_operate_period")
                         flag = False
                         err_pos.append({"err_pos": key})
-            elif key == "com_regist_cap":
-                if not is_number(value):
-                    flag = False
-                    err_pos.append({"err_pos": key})
-                else:
-                    value = float(value)
-                    if value < 1000000 or value > 10000000:
+                    else:
+                        value = float(value)
+                        if value < 5 or value > 500:
+                            flag = False
+                            err_pos.append({"err_pos": key})
+                elif key == "com_regist_cap":
+                    print("not com_regist_cap")
+                    if not is_number(value):
                         flag = False
                         err_pos.append({"err_pos": key})
+                    else:
+                        value = float(value)
+                        if value < 100 or value > 1000:
+                            flag = False
+                            err_pos.append({"err_pos": key})
 
-        if shareholder_num == 0:
+        if not shareholder_num:
+            print("not shareholder_num")
             flag = False
         if not flag:
             return jsonify(result=False, err_pos=err_pos, message="信息未填写完整或信息填写格式错误")
@@ -394,9 +399,9 @@ def submit_subject_info():
         # 若当前业务信息提交未确认，则确认提交
         if business_no not in schedule.get("subject_confirm"):
             mongo.db.company.update({"_id": _id},
-                                    {"$set" : {
+                                    {"$set"    : {
                                         ("businesses." + str(business_no) + ".subject_infos"): subject_infos},
-                                     "$push": {"schedule.subject_confirm": business_no}}
+                                        "$push": {"schedule.subject_confirm": business_no}}
                                     )
             return jsonify(result=True)
         else:
