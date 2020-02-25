@@ -13,3 +13,8 @@ index_bp = Blueprint('index', __name__)
 @index_bp.route('/', methods=['POST', 'GET'])
 def index():
     return render_template('index.html')
+
+
+@index_bp.route('/about', methods=['POST', 'GET'])
+def about():
+    return render_template('about.html')

@@ -50,8 +50,11 @@ def deal_business_1(company, business_type):
     if business_num == 0:
         # 第一笔业务
         business_content = deal_with_question_1(company, 1)
+    elif business_num == 9:
+        # 第一个会计区间
+        business_content = deal_with_question_1(company, 34)
     elif business_num == 19:
-        # 最多20笔业务
+        # 第一个会计区间,  业务数量最多20
         business_content = deal_with_question_1(company, 34)
     else:
         # 公司已有的业务
@@ -109,10 +112,10 @@ def deal_business_1(company, business_type):
                 random_list.remove(27)
                 continue
             elif question_no == 28:
-                if set1_all_in_set2({24, 45, 26, 27}, question_set):
+                if set1_all_in_set2(set1={24, 25, 26, 27}, set2=question_set):
                     success_flag = True
                     break
-                # 业务[24,45,26,27]为业务28前提
+                # 业务[24,25,26,27]为业务28前提
                 random_list.remove(28)
                 continue
             elif question_no == 30 and 28 not in question_set:
@@ -127,7 +130,7 @@ def deal_business_1(company, business_type):
                 random_list.remove(31)
                 continue
             elif question_no == 33 and (business_num != 18 or 25 not in question_set):
-                # 业务25为业务33前提且在业务34前（即结算本月损益）
+                # 业务25为业务33前提且在业务34前一个单位（即结算第二会计区间本月损益）
                 random_list.remove(33)
                 continue
             else:
@@ -149,11 +152,23 @@ def deal_with_question_1(company, question_no):
     question = mongo.db.question.find_one(dict(questions_no=1,
                                                question_no=question_no))
     businesses = company.get("businesses")
-    com_assets = company["com_assets"]
+    com_assets = company.get("com_assets")
+    business_num = company.get("business_num")
     date = datetime.now()
     year = date.year
     month = date.month
-    day = company.get("business_num") + 1
+    day = business_num + 1
+    if business_num >= 10:
+        # 第二个会计区间的月份为下一个月
+        day = business_num - 9
+        if month + 1 <= 12:
+            month += 1
+        else:
+            year += 1
+            month = 1
+    if day != 1:
+        day *= 2
+        day = random.randint(day - 1, day)
     if question_no == 34 or question_no == 33:
         # 当前月份天数即当月最后一天
         day = (datetime(year, month + 1, 1) - datetime(year, month, 1)).days
@@ -272,7 +287,7 @@ def deal_with_question_1(company, question_no):
                     # 问题28特判
                     content = content.replace("+", "")
                     asset_name = values_list[0].replace("+", "")
-                    com_assets.append(dict(asset_name=asset_name, market_value=value))
+                    com_assets.append(dict(asset_name=asset_name, market_value=value, question_no=question_no))
                     for business in businesses:
                         value = 0
                         if business.get("question_no") in [24, 25, 26, 27]:
