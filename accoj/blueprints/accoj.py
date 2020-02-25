@@ -75,8 +75,8 @@ def company_form_submit():
         flag = True
         shareholder_num = 0
         for key, value in data_dict.items():
-            if value is "":
-                if key.startswith("com_shareholder_") is False:
+            if not value:
+                if not key.startswith("com_shareholder_"):
                     flag = False
                     err_pos.append({"err_pos": key})
                 else:
@@ -85,14 +85,28 @@ def company_form_submit():
                         err_pos.append({"err_pos": key})
             elif key.startswith("com_shareholder_"):
                 data_dict["com_shareholder"].append(value)
-            elif key == "com_regist_cap" or key == "com_operate_period":
-                if is_number(value) is False:
+            elif key == "com_operate_period":
+                if not is_number(value):
                     flag = False
                     err_pos.append({"err_pos": key})
+                else:
+                    value = float(value)
+                    if value < 5 or value > 500:
+                        flag = False
+                        err_pos.append({"err_pos": key})
+            elif key == "com_regist_cap":
+                if not is_number(value):
+                    flag = False
+                    err_pos.append({"err_pos": key})
+                else:
+                    value = float(value)
+                    if value < 1000000 or value > 10000000:
+                        flag = False
+                        err_pos.append({"err_pos": key})
 
         if shareholder_num == 0:
             flag = False
-        if flag is False:
+        if not flag:
             return jsonify(result=False, err_pos=err_pos, message="信息未填写完整或信息填写格式错误")
         else:
             for key in list(data_dict.keys()):

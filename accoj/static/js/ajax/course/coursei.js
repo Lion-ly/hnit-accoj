@@ -16,6 +16,8 @@ function company_submit() {
  */
 function company_form_submit() {
     let data = $('#company_form').serialize();
+    $(":text").css({"border-style": "none"});
+    $("#com_business_scope").css({"border-style": "none"});
     // 提交公司信息
     $.ajax({
         url: "/company_form_submit",
@@ -26,11 +28,10 @@ function company_form_submit() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                $(":text").css({"border-style": "none"});
-                $("#com_business_scope").css({"border-style": "none"});
                 $("#company_confirmed_span").show();
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
             } else if (data.hasOwnProperty("err_pos")) {
+                // 提交失败，标出出错位置
                 let data_err_pos = data["err_pos"];
                 for (let x = 0; x < data_err_pos.length; x++) {
                     let err_pos = data_err_pos[x]["err_pos"];
@@ -231,7 +232,7 @@ function get_business_info() {
             if (data["result"] === true) {
                 let content_list = data["content_list"];
                 let business_confirm = data["business_confirm"];
-                if(business_confirm) {
+                if (business_confirm) {
                     $("#business_confirmed_span").show();
                 }
                 while (rowNumI > 101) {
