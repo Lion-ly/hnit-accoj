@@ -40,10 +40,9 @@ function remove(rm) {
 /*
  * @ # courseiii ? 穿梭框
  */
-let $centerbox = $('#centerbox');
-let $leftbox = $('#leftbox');
-let $rightbox = $('#rightbox');
 function ctol(){
+    let $centerbox = $('#centerbox');
+    let $leftbox = $('#leftbox');
 	let $input = $centerbox.find('input');
 	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
@@ -55,6 +54,8 @@ function ctol(){
 }
 
 function ctol_cancel(){
+    let $centerbox = $('#centerbox');
+    let $leftbox = $('#leftbox');
 	let $input = $leftbox.find('input');
 	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
@@ -66,6 +67,8 @@ function ctol_cancel(){
 }
 
 function ctor(){
+    let $centerbox = $('#centerbox');
+    let $rightbox = $('#rightbox');
 	let $input = $centerbox.find('input');
 	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){
@@ -77,6 +80,8 @@ function ctor(){
 }
 
 function ctor_cancel(){
+    let $centerbox = $('#centerbox');
+    let $rightbox = $('#rightbox');
 	let $input = $rightbox.find('input');
 	for(let k=0;k<$input.length;k++){
 			if($input[k].checked){

@@ -1,4 +1,6 @@
-{% extends 'course/courseBase.html' %} {% block courseBody %}
+{% extends 'course/courseBase.html' %}
+{% block courseBody %}
+<script src="{{ url_for('static', filename='js/ajax/course/courseiii.js') }}" charset="UTF-8"></script>
 <div class="courseBody">
 	<!-- 习题主体 -->
 	<div class="container">
@@ -13,26 +15,26 @@
 							<li><a href="#" aria-label="Previous"> <span
 									aria-hidden="true">&laquo;</span>
 							</a></li>
-							<li class="active"><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li><a href="">3</a></li>
-							<li><a href="">4</a></li>
-							<li><a href="">5</a></li>
-							<li><a href="">6</a></li>
-							<li><a href="">7</a></li>
-							<li><a href="">8</a></li>
-							<li><a href="">9</a></li>
-							<li><a href="">10</a></li>
-							<li><a href="">11</a></li>
-							<li><a href="">12</a></li>
-							<li><a href="">13</a></li>
-							<li><a href="">14</a></li>
-							<li><a href="">15</a></li>
-							<li><a href="">16</a></li>
-							<li><a href="">17</a></li>
-							<li><a href="">18</a></li>
-							<li><a href="">19</a></li>
-							<li><a href="">20</a></li>
+                            <li id="courseiii_split_li_1" class="active"><a onclick="get_subject_info(1)" >1</a></li>
+							<li id="courseiii_split_li_2"><a onclick="get_subject_info(2)">2</a></li>
+							<li id="courseiii_split_li_3"><a onclick="get_subject_info(3)">3</a></li>
+							<li id="courseiii_split_li_4"><a onclick="get_subject_info(4)">4</a></li>
+							<li id="courseiii_split_li_5"><a onclick="get_subject_info(5)">5</a></li>
+							<li id="courseiii_split_li_6"><a onclick="get_subject_info(6)">6</a></li>
+							<li id="courseiii_split_li_7"><a onclick="get_subject_info(7)">7</a></li>
+							<li id="courseiii_split_li_8"><a onclick="get_subject_info(8)">8</a></li>
+							<li id="courseiii_split_li_9"><a onclick="get_subject_info(9)">9</a></li>
+							<li id="courseiii_split_li_10"><a onclick="get_subject_info(10)">10</a></li>
+							<li id="courseiii_split_li_11"><a onclick="get_subject_info(11)">11</a></li>
+							<li id="courseiii_split_li_12"><a onclick="get_subject_info(12)">12</a></li>
+							<li id="courseiii_split_li_13"><a onclick="get_subject_info(13)">13</a></li>
+							<li id="courseiii_split_li_14"><a onclick="get_subject_info(14)">14</a></li>
+							<li id="courseiii_split_li_15"><a onclick="get_subject_info(15)">15</a></li>
+							<li id="courseiii_split_li_16"><a onclick="get_subject_info(16)">16</a></li>
+							<li id="courseiii_split_li_17"><a onclick="get_subject_info(17)">17</a></li>
+							<li id="courseiii_split_li_18"><a onclick="get_subject_info(18)">18</a></li>
+							<li id="courseiii_split_li_19"><a onclick="get_subject_info(19)">19</a></li>
+							<li id="courseiii_split_li_20"><a onclick="get_subject_info(20)">20</a></li>
 							<li><a href="#" aria-label="Next"> <span
 									aria-hidden="true">&raquo;</span>
 							</a></li>
@@ -43,17 +45,14 @@
 				<!-- 业务一 -->
 				<div>
 					<h4>
-						<span class="glyphicon glyphicon-bookmark"></span> <em>01</em>
-                        <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+						<span class="glyphicon glyphicon-bookmark"></span> <em id="em_3"></em>
+                        <span id="subject_confirmed_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
                                 已完成</span>
 					</h4>
 					<div class="ats-subject">
 						<blockquote>
-							<label class="label  label-success">筹资活动</label>
-							<p>
-								<span class="font-red">2020</span>年<span class="font-red">01</span>月<span
-									class="font-red">01</span>日，从中国建设银行取得<span class="font-red">3</span>年期贷款<span
-									class="font-red">12</span>%，按年结算利息。
+							<label id="business_type_3" class="label label-success"></label>
+							<p id="business_content_3">
 							</p>
 						</blockquote>
 					</div>
@@ -274,7 +273,7 @@
                         <button type="button" class="btn btn-info" onclick="">
 							<span class="glyphicon"></span>&nbsp;保存
 						</button>
-						<button type="button" class="btn btn-success" id="">
+						<button type="button" class="btn btn-success" id="submit_subject_button" onclick="submit_subject()">
 							<span class="glyphicon"></span>&nbsp;提交
 						</button>
 					</div>

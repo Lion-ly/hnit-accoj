@@ -3,9 +3,6 @@ $(document).ready(function () {
     get_key_element_info(1);
 });
 //==================================提交会计要素信息==================================//
-/**
- *
- */
 let now_business_no = 1;
 
 /**
@@ -52,11 +49,11 @@ function submit_key_element_info() {
         if ($(check_box[i]).is(':checked')) {
             let key_elem_id = "key_elem" + (i + 1);
             let key_elem = $("#" + key_elem_id);
-            let name = key_elem.attr("name");
-            name = name.replace(/\+$|-$/, "");
-            let value = parseFloat(key_elem.val());
-            let is_up = name[name.length - 1] === "+";
-            key_element_infos.push({"key_element": name, "money": value, "is_up": is_up});
+            let key_element = key_elem.attr("name");
+            key_element = key_element.replace(/\+$|-$/, "");
+            let money = parseFloat(key_elem.val());
+            let is_up = key_element[key_element.length - 1] === "+";
+            key_element_infos.push({"key_element": key_element, "money": money, "is_up": is_up});
         }
     }
     // 需要将数组转换成JSON格式Flask才能正确解析
