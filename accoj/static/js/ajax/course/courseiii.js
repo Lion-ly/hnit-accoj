@@ -61,7 +61,7 @@ function submit_subject_info() {
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
                 get_subject_info(business_no);
             } else {
-                show_message("submit_confirm_message", data["message"], "danger", 1000);
+                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
             }
         },
         error: function (err) {
@@ -139,14 +139,6 @@ function map_subject_info(business_no) {
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
     $("#em_3").text(em_no);
-    // 如果已确认过则添加已提交完成标签
-    let subject_confirmed_span = $("#subject_confirmed_span");
-    if (confirmed) {
-        subject_confirmed_span.show();
-    } else {
-        subject_confirmed_span.hide();
-    }
-
     // 填充活动类型
     let business_type_3 = $("#business_type_3");
     business_type_3.removeClass();
@@ -159,20 +151,30 @@ function map_subject_info(business_no) {
     business_type_3.addClass(business_type_class);
     business_type_3.text(business_type);
 
+    // 如果已确认过则添加已提交完成标签
+    let subject_confirmed_span = $("#subject_confirmed_span");
+    if (confirmed) {
+        subject_confirmed_span.show();
+    } else {
+        subject_confirmed_span.hide();
+    }
     // 填充业务内容
     $("#business_content_3").text(content);
 
     // 填充会计科目信息
-    if (!subject_infos) return; // 没有信息则返回
-
+    if (!subject_infos || !subject_infos.length) {
+        // 科目信息为空则返回
+        return;
+    }
+    subject_infos = JSON.parse(subject_infos); // 因为subject_infos是JSON数组，所以需要解析
     let rightbox_subject_array = Array();
     let leftbox_subject_array = Array();
     for (let i = 0; i < subject_infos.length; i++) {
         let subject = subject_infos[i]["subject"];
         let is_up = subject_infos[i]["is_up"];
-        if(is_up){
+        if (is_up) {
             rightbox_subject_array.push(subject);
-        }else{
+        } else {
             leftbox_subject_array.push(subject);
         }
     }
@@ -189,12 +191,16 @@ function input_moveTo_center(box, subject_array) {
     for (let i = 0; i < subject_array.length; i++) {
         let input_select = ":input[value=" + subject_array[i] + "]";
         let input_tmp = $("#centerbox").children().children(input_select);
-        $(input_tmp).prop("checked", "checked");
+        $(input_tmp).prop("checked", true);
     }
     if (box === "rightbox") {
         ctor();
     } else if (box === "leftbox") {
         ctol();
+    }
+    let input_tmp = $("#leftbox, #rightbox").children().children(":input");
+    for (let i = 0; i < input_tmp.length; i++) {
+        $(input_tmp[i]).prop("checked", false);
     }
 }
 
@@ -204,8 +210,11 @@ function input_moveTo_center(box, subject_array) {
 function clear_box() {
     let input_tmp = $("#leftbox, #rightbox").children().children(":input");
     for (let i = 0; i < input_tmp.length; i++) {
-        $(input_tmp[i]).prop("checked", "checked");
+        $(input_tmp[i]).prop("checked", true);
     }
     ctol_cancel();
     ctor_cancel();
+    for (let i = 0; i < input_tmp.length; i++) {
+        $(input_tmp[i]).prop("checked", false);
+    }
 }

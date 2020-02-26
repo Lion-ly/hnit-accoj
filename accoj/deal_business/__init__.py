@@ -25,16 +25,6 @@ def deal_business(company, business_type, questions_no):
     return business_content, message
 
 
-def set1_all_in_set2(set1, set2):
-    """
-    judge set1 all in set2
-    :param set1:
-    :param set2:
-    :return: Boolean
-    """
-    return True if (set1 and set2) == set2 else False
-
-
 def deal_business_1(company, business_type):
     """
     题库1的处理，返回业务内容，报错信息
@@ -106,13 +96,14 @@ def deal_business_1(company, business_type):
                 continue
             elif question_no == 27:
                 # 业务[5,8,9]为业务27前提
-                if set1_all_in_set2({5, 8, 9}, question_set):
+                # 集合子集判断
+                if {5, 8, 9} < question_set:
                     success_flag = True
                     break
                 random_list.remove(27)
                 continue
             elif question_no == 28:
-                if set1_all_in_set2(set1={24, 25, 26, 27}, set2=question_set):
+                if {24, 25, 26, 27} < question_set:
                     success_flag = True
                     break
                 # 业务[24,25,26,27]为业务28前提
@@ -124,7 +115,7 @@ def deal_business_1(company, business_type):
                 continue
             elif question_no == 31:
                 # 业务[28，30]为业务31前提
-                if set1_all_in_set2({24, 45, 26, 27}, question_set):
+                if {24, 45, 26, 27} < question_set:
                     success_flag = True
                     break
                 random_list.remove(31)
