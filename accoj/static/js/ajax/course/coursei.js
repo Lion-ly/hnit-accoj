@@ -29,7 +29,7 @@ function company_form_submit() {
         success: function (data) {
             if (data["result"] === true) {
                 $("#company_confirmed_span").show();
-                show_message("submit_confirm_message", "提交成功", "info", 1000);
+                show_message("submit_confirm_message", "提交成功！", "info", 1000);
             } else if (data.hasOwnProperty("err_pos")) {
                 // 提交失败，标出出错位置
                 let data_err_pos = data["err_pos"];
@@ -172,7 +172,7 @@ function revoke_add_business() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                show_message("add_business_message", "撤销成功", "info", 500);
+                show_message("add_business_message", "撤销成功！", "info", 500);
                 remove_business_row();
             } else {
                 show_message("add_business_message", data["message"], "warning", 1000, "撤销失败！");

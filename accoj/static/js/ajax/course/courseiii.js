@@ -19,14 +19,38 @@ function courseiii_li_control(business_no) {
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
-function submit_subject() {
-    show_submit_confirm("submit_subject_info()");
+function confirm_subject() {
+    show_submit_confirm("submit_subject_info('confirm')");
+    $("#confirm_subject_button").attr("disabled", true);
+    setTimeout(function () {
+        $("#confirm_subject_button").attr("disabled", false);
+    }, 2000);
+}
+
+/**
+ * 保存科目信息
+ */
+function save_subject() {
+    submit_subject_info("save");
+    $("#save_subject_button").attr("disabled", true);
+    setTimeout(function () {
+        $("#save_subject_button").attr("disabled", false);
+    }, 2000);
 }
 
 /**
  * 提交会计科目信息
+ * @param submit_type confirm or save
  */
-function submit_subject_info() {
+function submit_subject_info(submit_type) {
+    let type_flag = null;
+    if (submit_type === "confirm") {
+        type_flag = true;
+    } else if (submit_type === "save") {
+        type_flag = false;
+    } else {
+        return;
+    }
     let business_no = now_business_no;
     let subject_infos = Array();
     let csrf_token = {"csrf_token": get_csrf_token()};
@@ -48,7 +72,7 @@ function submit_subject_info() {
     // 需要将数组转换成JSON格式Flask才能正确解析
     subject_infos = JSON.stringify(subject_infos);
     subject_infos = {"subject_infos": subject_infos};
-    data += "&" + $.param(subject_infos) + "&" + $.param({"business_no": business_no});
+    data += "&" + $.param(subject_infos) + "&" + $.param({"business_no": business_no}) + "&" + $.param({"submit_type": submit_type});
     $.ajax({
         url: "/submit_subject_info",
         type: "post",
@@ -58,10 +82,18 @@ function submit_subject_info() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                show_message("submit_confirm_message", "提交成功", "info", 1000);
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
+                } else if (type_flag === false) {
+                    show_message("course_iii_message", "保存成功！", "info", 1000);
+                }
                 get_subject_info(business_no);
             } else {
-                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+                } else if (type_flag === false) {
+                    show_message("course_iii_message", data["message"], "danger", 1000, "保存失败！");
+                }
             }
         },
         error: function (err) {
@@ -105,7 +137,7 @@ function get_subject_info(business_no) {
                 business_list = data["business_list"];
                 map_subject_info(business_no);
             } else {
-                show_message("course_ii_message", data["message"], "danger", 1000);
+                show_message("course_iii_message", data["message"], "danger", 1000);
             }
         },
         error: function (err) {
@@ -134,6 +166,7 @@ function map_subject_info(business_no) {
     let content = business_list[business_index]["content"];
     let business_type = business_list[business_index]["business_type"];
     let confirmed = business_list[business_index]["confirmed"];
+    let saved = business_list[business_index]["saved"];
     let subject_infos = business_list[business_index]["subject_infos"];
     let em_no = business_index + 1;
     // 填充业务编号
@@ -151,12 +184,21 @@ function map_subject_info(business_no) {
     business_type_3.addClass(business_type_class);
     business_type_3.text(business_type);
 
-    // 如果已确认过则添加已提交完成标签
-    let subject_confirmed_span = $("#subject_confirmed_span");
-    if (confirmed) {
-        subject_confirmed_span.show();
+    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
+    let subject_submit_span = $("#subject_submit_span");
+    if (confirmed || saved) {
+        // 初始化为saved
+        let span_text = "已保存";
+        let span_color = "#5bc0de";
+        if (confirmed) {
+            span_text = "已完成";
+            span_color = "#5cb85c";
+        }
+        subject_submit_span.css("color", span_color);
+        subject_submit_span.text(span_text);
+        subject_submit_span.show();
     } else {
-        subject_confirmed_span.hide();
+        subject_submit_span.hide();
     }
     // 填充业务内容
     $("#business_content_3").text(content);
