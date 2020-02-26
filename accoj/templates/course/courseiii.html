@@ -46,7 +46,7 @@
 				<div>
 					<h4>
 						<span class="glyphicon glyphicon-bookmark"></span> <em id="em_3"></em>
-                        <span id="subject_confirmed_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
+                        <span id="subject_submit_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
 					</h4>
 					<div class="ats-subject">
 						<blockquote>
@@ -270,13 +270,14 @@
 					</div>
 					<hr class="simple" style="clear: both;" color="#6f5499" />
 					<div align="right">
-                        <button type="button" class="btn btn-info" onclick="">
+                        <button type="button" class="btn btn-info" id="save_subject_button" onclick="save_subject()">
 							<span class="glyphicon"></span>&nbsp;保存
 						</button>
-						<button type="button" class="btn btn-success" id="submit_subject_button" onclick="submit_subject()">
+						<button type="button" class="btn btn-success" id="confirm_subject_button" onclick="confirm_subject()">
 							<span class="glyphicon"></span>&nbsp;提交
 						</button>
 					</div>
+                    <div id="course_iii_message"></div>
 				</div>
 			</div>
 		</div>

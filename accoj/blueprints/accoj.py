@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, redirect, request, jsonify, session, g, url_for
+from flask import Blueprint, render_template, redirect, request, jsonify, session, g
 from accoj.utils import login_required
 from accoj.extensions import mongo
 from accoj.utils import is_number
@@ -122,7 +122,8 @@ def company_form_submit():
             data_dict["com_bank_savings"] = data_dict["com_regist_cap"] * 10000
             data_dict["com_cash"] = 0
             data_dict["business_num"] = 0
-            data_dict["schedule"] = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[])
+            data_dict["schedule_confirm"] = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[])
+            data_dict["schedule_saved"] = dict(key_element_saved=[], subject_saved=[])
             data_dict["com_assets"] = []
             data_dict["businesses"] = []
             data_dict_cp = data_dict.copy()
@@ -141,13 +142,13 @@ def submit_business_infos():
     """
     if request.method == "POST":
         company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-                                            dict(businesses=1, business_num=1, schedule=1, _id=0))
+                                            dict(businesses=1, business_num=1, schedule_confirm=1, _id=0))
         if not company:
             return jsonify(result=False, message="公司未创立")
         business_num = company.get("business_num")
-        schedule = company.get("schedule")
+        schedule_confirm = company.get("schedule_confirm")
         businesses = company.get("businesses")
-        business_confirm = schedule.get("business_confirm")
+        business_confirm = schedule_confirm.get("business_confirm")
         business_types_1 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
         business_types_2 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
         businesses_len = len(businesses)
@@ -167,9 +168,9 @@ def submit_business_infos():
                 return jsonify(result=False, message="请检查第二个会计区间的每种业务是否至少有两笔")
         if business_num == 20 and not business_confirm:
             mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
-                                    {"$set": {"schedule.business_confirm": True}})
+                                    {"$set": {"schedule_confirm.business_confirm": True}})
             mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
-                                    {"$set": {"schedule.business_confirm": True}})
+                                    {"$set": {"schedule_confirm.business_confirm": True}})
             return jsonify(result=True)
         elif business_num == 20 and business_confirm:
             return jsonify(result=False, message="已经提交过")
@@ -186,13 +187,13 @@ def get_business_info():
     """
     if request.method == "POST":
         company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-                                            dict(businesses=1, schedule=1, _id=0))
+                                            dict(businesses=1, schedule_confirm=1, _id=0))
         if company:
             businesses = company.get("businesses")
             if not businesses:
                 return jsonify(result=False, message="暂无业务")
-            schedule = company.get("schedule")
-            business_confirm = schedule.get("business_confirm")
+            schedule_confirm = company.get("schedule_confirm")
+            business_confirm = schedule_confirm.get("business_confirm")
             content_list = list()
             for business in businesses:
                 business_type = business.get("business_type")
@@ -212,11 +213,11 @@ def revoke_add_business():
     """
     if request.method == "POST":
         company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-                                            dict(businesses=1, schedule=1, _id=1))
+                                            dict(businesses=1, schedule_confirm=1, _id=1))
         if company:
             businesses = company.get("businesses")
-            schedule = company.get("schedule")
-            business_confirm = schedule.get("business_confirm")
+            schedule_confirm = company.get("schedule_confirm")
+            business_confirm = schedule_confirm.get("business_confirm")
             _id = company.get("_id")
             if not businesses:
                 return jsonify(result=False, message="暂无业务")
@@ -248,10 +249,10 @@ def add_business():
         form = request.form
         business_type = form.get("business_type")
         company = mongo.db.company.find_one({"student_no": "{}_cp".format(session.get("username"))})
-        if not company or not g.schedule:
+        if not company or not g.schedule_confirm:
             return jsonify(result=False, message="公司未创立！")
-        schedule = g.schedule
-        business_confirm = schedule.get("business_confirm")
+        schedule_confirm = g.schedule_confirm
+        business_confirm = schedule_confirm.get("business_confirm")
         if business_type not in business_types:
             return jsonify(result=False, message="业务类型错误！")
 
@@ -294,7 +295,7 @@ def courseii():
     :return:
     """
     # 若第一次课程未完成
-    if not g.get("schedule") or not g.schedule.get("business_confirm"):
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
         return redirect("/coursei")
     return render_template('course/courseii.html')
 
@@ -306,33 +307,48 @@ def submit_key_element_info():
     :return:
     """
     if request.method == "POST":
-        if not g.get("schedule") or not g.schedule.get("business_confirm"):
+        if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
             return redirect("/coursei")
         form = request.form
         company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            dict(businesses=1, schedule=1))
+                                            dict(businesses=1, schedule_confirm=1))
         _id = company.get("_id")
-        schedule = company.get("schedule")
+        schedule_confirm = company.get("schedule_confirm")
         affect_type = form.get("affect_type")
         business_no = form.get("business_no")
         key_element_infos = form.get("key_element_infos")
-        if not is_number(business_no) or not is_number(affect_type):
+        submit_type = form.get("submit_type")
+        if not is_number(business_no) or not is_number(affect_type) or submit_type not in ["confirm", "save"]:
+            print("submit_type: {}".format(submit_type))
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
                 return jsonify(result=False, message="前端数据错误")
-        # 若当前业务信息提交未确认，则确认提交
-        if business_no not in schedule.get("key_element_confirm"):
+        if submit_type == "confirm":
+            # 提交类型为确认提交
+            # 若当前业务信息提交未确认，则确认提交
+            if business_no not in schedule_confirm.get("key_element_confirm"):
+                update_prefix = "businesses." + str(business_no)
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"     : {(update_prefix + ".key_element_infos"): key_element_infos,
+                                                       (update_prefix + ".affect_type")      : affect_type},
+                                         "$addToSet": {"schedule_confirm.key_element_confirm": business_no,
+                                                       "schedule_saved.key_element_saved"    : business_no}}
+                                        )
+                return jsonify(result=True)
+            else:
+                return jsonify(result=False, message="此业务已经提交过")
+        elif submit_type == "save":
+            # 提交类型为保存
+            update_prefix = "businesses." + str(business_no)
             mongo.db.company.update({"_id": _id},
-                                    {"$set"    : {
-                                        ("businesses." + str(business_no) + ".affect_type")      : affect_type,
-                                        ("businesses." + str(business_no) + ".key_element_infos"): key_element_infos},
-                                        "$push": {"schedule.key_element_confirm": business_no}}
+                                    {"$set"     : {(update_prefix + ".key_element_infos"): key_element_infos},
+                                     "$addToSet": {"schedule_saved.key_element_saved": business_no}}
                                     )
             return jsonify(result=True)
         else:
-            return jsonify(result=False, message="此业务已经提交过")
+            return jsonify(result=False, message="未知错误!")
     return redirect('/courseii')
 
 
@@ -345,18 +361,21 @@ def get_key_element_info():
     if request.method == "POST":
         company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
         businesses = company.get("businesses")
-        schedule = g.schedule
+        schedule_confirm = g.schedule_confirm
+        schedule_saved = g.schedule_saved
         business_list = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
             key_element_infos = businesses[i].get("key_element_infos")
-            confirmed = True if i in schedule.get("key_element_confirm") else False
+            confirmed = True if i in schedule_confirm.get("key_element_confirm") else False
+            saved = True if i in schedule_saved.get("key_element_saved") else False
             content = businesses[i].get("content")
             affect_type = businesses[i].get("affect_type")
             business_type = businesses[i].get("business_type")
             business_no = i + 1
             business_list.append(dict(business_no=business_no, content=content, key_element_infos=key_element_infos,
-                                      affect_type=affect_type, confirmed=confirmed, business_type=business_type))
+                                      affect_type=affect_type, confirmed=confirmed, saved=saved,
+                                      business_type=business_type))
         return jsonify(result=True, business_list=business_list)
     return redirect('/courseii')
 
@@ -371,7 +390,7 @@ def courseiii():
     :return:
     """
     # 若第一次课程未完成
-    if not g.get("schedule") or not g.schedule.get("business_confirm"):
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
         return redirect("/coursei")
     return render_template('course/courseiii.html')
 
@@ -385,27 +404,42 @@ def submit_subject_info():
     if request.method == "POST":
         form = request.form
         company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            dict(businesses=1, schedule=1))
+                                            dict(businesses=1, schedule_confirm=1))
         _id = company.get("_id")
-        schedule = company.get("schedule")
+        schedule_confirm = company.get("schedule_confirm")
         business_no = form.get("business_no")
         subject_infos = form.get("subject_infos")
-        if not is_number(business_no):
+        submit_type = form.get("submit_type")
+        if not is_number(business_no) or submit_type not in ["confirm", "save"]:
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
+                print(str(business_no) + ":  前端数据错误")
                 return jsonify(result=False, message="前端数据错误")
-        # 若当前业务信息提交未确认，则确认提交
-        if business_no not in schedule.get("subject_confirm"):
+        if submit_type == "confirm":
+            # 提交类型为确认提交
+            # 若当前业务信息提交未确认，则确认提交
+            if business_no not in schedule_confirm.get("subject_confirm"):
+                update_prefix = "businesses." + str(business_no)
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"     : {(update_prefix + ".subject_infos"): subject_infos},
+                                         "$addToSet": {"schedule_confirm.subject_confirm": business_no,
+                                                       "schedule_saved.subject_saved"    : business_no}}
+                                        )
+                return jsonify(result=True)
+            else:
+                return jsonify(result=False, message="此业务已经提交过")
+        elif submit_type == "save":
+            # 提交类型为保存
+            update_prefix = "businesses." + str(business_no)
             mongo.db.company.update({"_id": _id},
-                                    {"$set"    : {
-                                        ("businesses." + str(business_no) + ".subject_infos"): subject_infos},
-                                        "$push": {"schedule.subject_confirm": business_no}}
+                                    {"$set"     : {(update_prefix + ".subject_infos"): subject_infos},
+                                     "$addToSet": {"schedule_saved.subject_saved": business_no}}
                                     )
             return jsonify(result=True)
         else:
-            return jsonify(result=False, message="此业务已经提交过")
+            return jsonify(result=False, message="未知错误!")
     return redirect("/courseiii")
 
 
@@ -418,17 +452,19 @@ def get_subject_info():
     if request.method == "POST":
         company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
         businesses = company.get("businesses")
-        schedule = g.schedule
+        schedule_confirm = g.schedule_confirm
+        schedule_saved = g.schedule_saved
         business_list = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
             subject_infos = businesses[i].get("subject_infos")
-            confirmed = True if i in schedule.get("subject_confirm") else False
+            confirmed = True if i in schedule_confirm.get("subject_confirm") else False
+            saved = True if i in schedule_saved.get("subject_saved") else False
             content = businesses[i].get("content")
             business_type = businesses[i].get("business_type")
             business_no = i + 1
             business_list.append(dict(business_no=business_no, content=content, subject_infos=subject_infos,
-                                      confirmed=confirmed, business_type=business_type))
+                                      confirmed=confirmed, saved=saved, business_type=business_type))
         return jsonify(result=True, business_list=business_list)
     return redirect('/courseiii')
 
@@ -584,7 +620,9 @@ def accoj_bp_before_request():
     :return:
     """
     company = mongo.db.company.find_one(dict(student_no=session.get("username")),
-                                        dict(schedule=1))
+                                        dict(schedule_confirm=1, schedule_saved=1))
     if company:
-        schedule = company.get("schedule")
-        g.schedule = schedule
+        schedule_confirm = company.get("schedule_confirm")
+        schedule_saved = company.get("schedule_saved")
+        g.schedule_confirm = schedule_confirm
+        g.schedule_saved = schedule_saved

@@ -19,14 +19,38 @@ function courseii_li_control(business_no) {
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
-function submit_key_element() {
-    show_submit_confirm("submit_key_element_info()");
+function confirm_key_element() {
+    show_submit_confirm("submit_key_element_info('confirm')");
+    $("#confirm_key_element_button").attr("disabled", true);
+    setTimeout(function () {
+        $("#confirm_key_element_button").attr("disabled", false);
+    }, 2000);
+}
+
+/**
+ * 保存会计要素信息
+ */
+function save_key_element() {
+    submit_key_element_info("save");
+    $("#save_key_element_button").attr("disabled", true);
+    setTimeout(function () {
+        $("#save_key_element_button").attr("disabled", false);
+    }, 2000);
 }
 
 /**
  * 提交会计要素信息
+ * @param submit_type confirm or save
  */
-function submit_key_element_info() {
+function submit_key_element_info(submit_type) {
+    let type_flag = null;
+    if (submit_type === "confirm") {
+        type_flag = true;
+    } else if (submit_type === "save") {
+        type_flag = false;
+    } else {
+        return;
+    }
     let business_no = now_business_no;
     let key_element_infos = Array();
     let csrf_token = {"csrf_token": get_csrf_token()};
@@ -59,7 +83,8 @@ function submit_key_element_info() {
     // 需要将数组转换成JSON格式Flask才能正确解析
     key_element_infos = JSON.stringify(key_element_infos);
     key_element_infos = {"key_element_infos": key_element_infos};
-    data += "&" + $.param(affect_type) + "&" + $.param(key_element_infos) + "&" + $.param({"business_no": business_no});
+    data += "&" + $.param(affect_type) + "&" + $.param(key_element_infos) + "&" + $.param({"business_no": business_no})
+        + "&" + $.param({"submit_type": submit_type});
     $.ajax({
         url: "/submit_key_element_info",
         type: "post",
@@ -69,10 +94,18 @@ function submit_key_element_info() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                show_message("submit_confirm_message", "提交成功", "info", 1000);
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
+                } else if (type_flag === false) {
+                    show_message("course_iii_message", "保存成功！", "info", 1000);
+                }
                 get_key_element_info(business_no);
             } else {
-                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+                } else if (type_flag === false) {
+                    show_message("course_iii_message", data["message"], "danger", 1000, "保存失败！");
+                }
             }
         },
         error: function (err) {
@@ -146,18 +179,28 @@ function map_key_element_info(business_no) {
     let content = business_list[business_index]["content"];
     let business_type = business_list[business_index]["business_type"];
     let confirmed = business_list[business_index]["confirmed"];
+    let saved = business_list[business_index]["saved"];
     let key_element_infos = business_list[business_index]["key_element_infos"];
     let affect_type_id = "aer" + affect_type;
     let em_no = business_index + 1;
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
     $("#em_2").text(em_no);
-    // 如果已确认过则添加已提交完成标签
-    let key_element_confirmed_span = $("#key_element_confirmed_span");
-    if (confirmed) {
-        key_element_confirmed_span.show();
+    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
+    let key_element_submit_span = $("#key_element_submit_span");
+    if (confirmed || saved) {
+        // 初始化为saved
+        let span_text = "已保存";
+        let span_color = "#5bc0de";
+        if (confirmed) {
+            span_text = "已完成";
+            span_color = "#5cb85c";
+        }
+        key_element_submit_span.css("color", span_color);
+        key_element_submit_span.text(span_text);
+        key_element_submit_span.show();
     } else {
-        key_element_confirmed_span.hide();
+        key_element_submit_span.hide();
     }
     // 填充类型
     let business_type_2 = $("#business_type_2");
