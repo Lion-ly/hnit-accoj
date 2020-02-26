@@ -50,9 +50,9 @@ function submit_key_element_info() {
             let key_elem_id = "key_elem" + (i + 1);
             let key_elem = $("#" + key_elem_id);
             let key_element = key_elem.attr("name");
-            key_element = key_element.replace(/\+$|-$/, "");
+            let is_up = key_element[0] === "+";
+            key_element = key_element.replace(/^\+|^-/, "");
             let money = parseFloat(key_elem.val());
-            let is_up = key_element[key_element.length - 1] === "+";
             key_element_infos.push({"key_element": key_element, "money": money, "is_up": is_up});
         }
     }
@@ -72,7 +72,7 @@ function submit_key_element_info() {
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
                 get_key_element_info(business_no);
             } else {
-                show_message("submit_confirm_message", data["message"], "danger", 1000);
+                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
             }
         },
         error: function (err) {
@@ -175,7 +175,14 @@ function map_key_element_info(business_no) {
     // 填充影响类型
     $("#" + affect_type_id).prop("checked", true);
     // 填充会计要素信息
-    if (!key_element_infos) return;
+    if (!key_element_infos || !key_element_infos.length) {
+        // 要素信息为空，输入内容恢复初始状态
+        $("[id^=key_elem]").val("");
+        $("[id^=check]").prop("checked", false);
+        $("#aer1").prop("checked", true);
+        return;
+    }
+    key_element_infos = JSON.parse(key_element_infos); // 因为key_element_infos是JSON数组，所以需要解析
     for (let i = 0; i < key_element_infos.length; i++) {
         let key_element = key_element_infos[i]["key_element"];
         let money = key_element_infos[i]["money"];
