@@ -21,9 +21,14 @@ function courseii_li_control(business_no) {
  */
 function confirm_key_element() {
     show_submit_confirm("submit_key_element_info('confirm')");
-    $("#confirm_key_element_button").attr("disabled", true);
+    let confirm_key_element_button = $("#confirm_key_element_button");
+    confirm_key_element_button.attr("disabled", true);
+    confirm_key_element_button.text("提交 2s");
     setTimeout(function () {
-        $("#confirm_key_element_button").attr("disabled", false);
+        confirm_key_element_button.text("提交 1s");
+    }, 1000);
+    setTimeout(function () {
+        confirm_key_element_button.attr("disabled", false);
     }, 2000);
 }
 
@@ -32,11 +37,19 @@ function confirm_key_element() {
  */
 function save_key_element() {
     submit_key_element_info("save");
-    $("#save_key_element_button").attr("disabled", true);
+    let save_key_element_button = $("#save_key_element_button");
+    save_key_element_button.attr("disabled", true);
+    save_key_element_button.text("保存 2s");
     setTimeout(function () {
-        $("#save_key_element_button").attr("disabled", false);
+        save_key_element_button.text("保存 1s");
+    }, 1000);
+    setTimeout(function () {
+        save_key_element_button.attr("disabled", false);
+        save_key_element_button.text("保存");
+        confirm_entry_button.text("提交");
     }, 2000);
 }
+
 
 /**
  * 提交会计要素信息
@@ -97,14 +110,14 @@ function submit_key_element_info(submit_type) {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", "提交成功！", "info", 1000);
                 } else if (type_flag === false) {
-                    show_message("course_iii_message", "保存成功！", "info", 1000);
+                    show_message("course_ii_message", "保存成功！", "info", 1000);
                 }
                 get_key_element_info(business_no);
             } else {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
                 } else if (type_flag === false) {
-                    show_message("course_iii_message", data["message"], "danger", 1000, "保存失败！");
+                    show_message("course_ii_message", data["message"], "danger", 1000, "保存失败！");
                 }
             }
         },
@@ -125,17 +138,16 @@ let business_list; // 保存本次课程全部信息，减少后端数据请求�
  */
 function get_key_element_info(business_no) {
     now_business_no = parseInt(business_no);
+    if (now_business_no < 0 || now_business_no > 20) {
+        return;
+    }
     courseii_li_control(business_no);
     let csrf_token = {"csrf_token": get_csrf_token()};
     let data = $.param(csrf_token);
-    if (business_list) {
-        // 若请求的业务编号已经获取过且确认提交过，则不再发送数据请求
-        for (let i = 0; i < business_list.length; i++) {
-            if (business_no === business_list[i]["business_no"] && business_list[i]["confirmed"] === true) {
-                map_key_element_info(business_no);
-                return;
-            }
-        }
+    // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
+    if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
+        map_key_element_info(business_no);
+        return;
     }
     $.ajax({
         url: "/get_key_element_info",
@@ -165,16 +177,7 @@ function get_key_element_info(business_no) {
 function map_key_element_info(business_no) {
     let key_element_num_dict = {"资产": 1, "负债": 3, "收入": 5, "费用": 7, "利润": 9, "所有者权益": 11};
     business_no = parseInt(business_no);
-    let business_index = -1;
-    for (let i = 0; i < business_list.length; i++) {
-        if (business_no === business_list[i]["business_no"]) {
-            business_index = i;
-            break;
-        }
-    }
-
-    if (business_index === -1) return;
-
+    let business_index = business_no - 1;
     let affect_type = business_list[business_index]["affect_type"];
     let content = business_list[business_index]["content"];
     let business_type = business_list[business_index]["business_type"];

@@ -1,8 +1,9 @@
-{% extends 'course/courseBase.html' %} {% block courseBody %}
+{% extends 'course/courseBase.html' %}
+{% block courseBody %}
 <!-- 单独引入coursei -->
 <link href="{{ url_for('static', filename='css/course/coursei.css') }}"
 	rel="stylesheet">
-	
+<script src="{{ url_for('static', filename='js/ajax/course/courseiv.js') }}" charset="UTF-8"></script>
 <div class="courseBody">
 	<!-- 习题主体 -->
 	<div class="container">
@@ -18,26 +19,26 @@
 							<li><a href="#" aria-label="Previous"> <span
 									aria-hidden="true">&laquo;</span>
 							</a></li>
-							<li class="active"><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li><a href="">3</a></li>
-							<li><a href="">4</a></li>
-							<li><a href="">5</a></li>
-							<li><a href="">6</a></li>
-							<li><a href="">7</a></li>
-							<li><a href="">8</a></li>
-							<li><a href="">9</a></li>
-							<li><a href="">10</a></li>
-							<li><a href="">11</a></li>
-							<li><a href="">12</a></li>
-							<li><a href="">13</a></li>
-							<li><a href="">14</a></li>
-							<li><a href="">15</a></li>
-							<li><a href="">16</a></li>
-							<li><a href="">17</a></li>
-							<li><a href="">18</a></li>
-							<li><a href="">19</a></li>
-							<li><a href="">20</a></li>
+							<li id="courseiv_split_li_1" class="active"><a onclick="get_entry_info(1)" >1</a></li>
+							<li id="courseiv_split_li_2"><a onclick="get_entry_info(2)">2</a></li>
+							<li id="courseiv_split_li_3"><a onclick="get_entry_info(3)">3</a></li>
+							<li id="courseiv_split_li_4"><a onclick="get_entry_info(4)">4</a></li>
+							<li id="courseiv_split_li_5"><a onclick="get_entry_info(5)">5</a></li>
+							<li id="courseiv_split_li_6"><a onclick="get_entry_info(6)">6</a></li>
+							<li id="courseiv_split_li_7"><a onclick="get_entry_info(7)">7</a></li>
+							<li id="courseiv_split_li_8"><a onclick="get_entry_info(8)">8</a></li>
+							<li id="courseiv_split_li_9"><a onclick="get_entry_info(9)">9</a></li>
+							<li id="courseiv_split_li_10"><a onclick="get_entry_info(10)">10</a></li>
+							<li id="courseiv_split_li_11"><a onclick="get_entry_info(11)">11</a></li>
+							<li id="courseiv_split_li_12"><a onclick="get_entry_info(12)">12</a></li>
+							<li id="courseiv_split_li_13"><a onclick="get_entry_info(13)">13</a></li>
+							<li id="courseiv_split_li_14"><a onclick="get_entry_info(14)">14</a></li>
+							<li id="courseiv_split_li_15"><a onclick="get_entry_info(15)">15</a></li>
+							<li id="courseiv_split_li_16"><a onclick="get_entry_info(16)">16</a></li>
+							<li id="courseiv_split_li_17"><a onclick="get_entry_info(17)">17</a></li>
+							<li id="courseiv_split_li_18"><a onclick="get_entry_info(18)">18</a></li>
+							<li id="courseiv_split_li_19"><a onclick="get_entry_info(19)">19</a></li>
+							<li id="courseiv_split_li_20"><a onclick="get_entry_info(20)">20</a></li>
 							<li><a href="#" aria-label="Next"> <span
 									aria-hidden="true">&raquo;</span>
 							</a></li>
@@ -47,32 +48,28 @@
 				<hr class="simple" color="#6f5499" />
 
 				<h4>
-					<span class="glyphicon glyphicon-bookmark"></span> <em>01</em>
-                    <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
-                                已完成</span>
-				</h4>
-				<div class="ats-subject" style="margin-bottom: 30px">
-					<blockquote>
-						<label class="label  label-success">筹资活动</label>
-						<p>
-							<span class="font-red">2020</span>年<span class="font-red">01</span>月<span
-								class="font-red">01</span>日，从中国建设银行取得<span class="font-red">3</span>年期贷款<span
-								class="font-red">12</span>%，按年结算利息。
-						</p>
-					</blockquote>
-				</div>
+                    <span class="glyphicon glyphicon-bookmark"></span> <em id="em_4"></em>
+                    <span id="entry_submit_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
+                </h4>
+                <div class="ats-subject">
+                    <blockquote>
+                        <label id="business_type_4" class="label label-success"></label>
+                        <p id="business_content_4">
+                        </p>
+                    </blockquote>
+                </div>
 
 				<div class="ats-board">
 					<div>
 						<p class="ats-fontsize-20">填写完整分录</p>
-						
+
 						<table class="table table-bordered" style="border: 0px">
 							<tbody>
 								<tr>
 									<th style="width: 8%; border-right:0px" class="ats-tablecolor-f">借：</th>
 									<td style="width: 8%; border-left:0px" class="ats-tablecolor-f"></td>
-									<td style="width: 40%;"><input type="text" name="" id="" placeholder="科目"></td>
-									<td style="width: 40%;"><input type="text" name="" id="" placeholder="金额"></td>
+									<td style="width: 40%;"><input type="text" name="subject" id="subject1" placeholder="科目"></td>
+									<td style="width: 40%;"><input type="text" name="money" id="money1" placeholder="金额" onkeyup="this.value=this.value.replace(/\D/g,'')"></td>
 									<td style="width: 4%;border: 0px;padding: 0px;">
 										<div align="center">
 											<a style="color: green;" type="button" class="btn"
@@ -81,11 +78,11 @@
 										</div>
 									</td>
 								</tr>
-								<tr id="borrowRow">
+								<tr id="borrowRowAfter">
 									<td style="border-right:0px" class="ats-tablecolor-f"></td>
 									<th style="border-left:0px" class="ats-tablecolor-f">贷：</th>
-									<td><input type="text" name="" id="" placeholder="科目"></td>
-									<td><input type="text" name="" id="" placeholder="金额"></td>
+									<td><input type="text" name="subject" id="subject0" placeholder="科目"></td>
+									<td><input type="text" name="money" id="money0" placeholder="金额" onkeyup="this.value=this.value.replace(/\D/g,'')"></td>
 									<td style="padding: 0px; border: 0px">
 										<div align="center">
 											<a style="color: green;" type="button" class="btn"
@@ -94,23 +91,24 @@
 										</div>
 									</td>
 								</tr>
-								<tr id="loanRow"></tr>
+								<tr id="loanRowAfter"></tr>
 							</tbody>
 						</table>
-						
-						
-						
+
+
+
 					</div>
 				</div>
 				<hr class="simple" style="clear: both;" color="#6f5499" />
 				<div align="right">
-                    <button type="button" class="btn btn-info" onclick="">
+                    <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
                         <span class="glyphicon"></span>&nbsp;保存
                     </button>
-					<button type="button" class="btn btn-success" id="">
+					<button type="button" class="btn btn-success" id="confirm_entry_button" onclick="confirm_entry()">
 						<span class="glyphicon"></span>&nbsp;提交
 					</button>
 				</div>
+                <div id="course_iv_message"></div>
 			</div>
 		</div>
 	</div>

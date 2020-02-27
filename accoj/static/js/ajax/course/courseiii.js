@@ -21,9 +21,15 @@ function courseiii_li_control(business_no) {
  */
 function confirm_subject() {
     show_submit_confirm("submit_subject_info('confirm')");
-    $("#confirm_subject_button").attr("disabled", true);
+    let confirm_subject_button = $("#confirm_subject_button");
+    confirm_subject_button.attr("disabled", true);
+    confirm_subject_button.text("提交 2s");
     setTimeout(function () {
-        $("#confirm_subject_button").attr("disabled", false);
+        confirm_subject_button.text("提交 1s");
+    }, 1000);
+    setTimeout(function () {
+        confirm_subject_button.attr("disabled", false);
+        confirm_entry_button.text("提交");
     }, 2000);
 }
 
@@ -32,9 +38,15 @@ function confirm_subject() {
  */
 function save_subject() {
     submit_subject_info("save");
-    $("#save_subject_button").attr("disabled", true);
+    let save_subject_button = $("#save_subject_button");
+    save_subject_button.attr("disabled", true);
+    save_subject_button.text("保存 2s");
     setTimeout(function () {
-        $("#save_subject_button").attr("disabled", false);
+        save_subject_button.text("保存 1s");
+    }, 1000);
+    setTimeout(function () {
+        save_subject_button.attr("disabled", false);
+        save_subject_button.text("保存");
     }, 2000);
 }
 
@@ -59,13 +71,15 @@ function submit_subject_info(submit_type) {
     let left_box = $("#leftbox");
     let right_input = right_box.children().children(":input");
     let left_input = left_box.children().children(":input");
+    let right_inputLen = right_input.length;
+    let left_inputLen = left_input.length;
     let is_up = true;
-    for (let i = 0; i < right_input.length; i++) {
+    for (let i = 0; i < right_inputLen; i++) {
         let subject = $(right_input[i]).val();
         subject_infos.push({"subject": subject, "is_up": is_up});
     }
     is_up = false;
-    for (let i = 0; i < left_input.length; i++) {
+    for (let i = 0; i < left_inputLen; i++) {
         let subject = $(left_input[i]).val();
         subject_infos.push({"subject": subject, "is_up": is_up});
     }
@@ -113,17 +127,16 @@ let business_list; // 保存本次课程全部信息，减少后端数据请求�
  */
 function get_subject_info(business_no) {
     now_business_no = parseInt(business_no);
+    if (now_business_no < 0 || now_business_no > 20) {
+        return;
+    }
     courseiii_li_control(business_no);
     let csrf_token = {"csrf_token": get_csrf_token()};
     let data = $.param(csrf_token);
-    if (business_list) {
-        // 若请求的业务编号已经获取过且确认提交过，则不再发送数据请求
-        for (let i = 0; i < business_list.length; i++) {
-            if (business_no === business_list[i]["business_no"] && business_list[i]["confirmed"] === true) {
-                map_subject_info(business_no);
-                return;
-            }
-        }
+    // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
+    if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
+        map_subject_info(business_no);
+        return;
     }
     $.ajax({
         url: "/get_subject_info",
@@ -152,13 +165,8 @@ function get_subject_info(business_no) {
  */
 function map_subject_info(business_no) {
     business_no = parseInt(business_no);
-    let business_index = -1;
-    for (let i = 0; i < business_list.length; i++) {
-        if (business_no === business_list[i]["business_no"]) {
-            business_index = i;
-            break;
-        }
-    }
+    let business_index = business_no - 1;
+
     // 先清空box
     clear_box();
     if (business_index === -1) return;
@@ -251,12 +259,13 @@ function input_moveTo_center(box, subject_array) {
  */
 function clear_box() {
     let input_tmp = $("#leftbox, #rightbox").children().children(":input");
-    for (let i = 0; i < input_tmp.length; i++) {
+    let input_tmpLen = input_tmp.length;
+    for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", true);
     }
     ctol_cancel();
     ctor_cancel();
-    for (let i = 0; i < input_tmp.length; i++) {
+    for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", false);
     }
 }
