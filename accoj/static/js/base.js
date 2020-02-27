@@ -126,6 +126,6 @@ function submit_confirm_clicked() {
     $("#submit_confirm_button").attr("disabled", true);
     // 定时自动关闭
     setTimeout(function () {
-            $("#submit_confirm").modal('hide');
+        $("#submit_confirm").modal('hide');
     }, 3000)
 }
