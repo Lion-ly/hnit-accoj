@@ -9,9 +9,10 @@ from flask import Blueprint, jsonify, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from accoj.extensions import mongo
 from accoj.utils import login_required
+from accoj.emails import send_mail
 import re
 import random
-from accoj.emails import send_mail
+import datetime
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -43,7 +44,7 @@ def signin():
 
 @auth_bp.route('/login', methods=['POST', 'GET'])
 def login():
-    myreg= re.compile(r'[1-9][0-9]{4,}@qq.com')
+    myreg = re.compile(r'\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}')
     if request.method == "POST":
         form = request.form
         student_no = form.get("studentid")
@@ -52,12 +53,11 @@ def login():
         student_class = form.get("login_class")
         password = form.get("password")
         password_again = form.get("password_again")
-        # vcode=form.get("vcode")
+        vcode = form.get("vcode").lower()
 
-        test_email=re.match(myreg,email)
-        # mail=dict(email="{}".format(email))
-        # right_email=mongo.db.other.find_one(mail,{"_id":0,"VCode":1})
-        # print(right_email)
+        test_email = re.match(myreg, email)
+        mail = dict(email="{}".format(email))
+        right_email = mongo.db.other.find_one(mail)
 
         if student_no is "" or email is "" or student_faculty is "" \
                 or student_class is "" or password is "" or password_again is "":
@@ -81,12 +81,12 @@ def login():
             elif test_email is None:
                 message = "请确保邮箱填写正确"
                 return jsonify(result="false", message="{}".format(message))
-            #elif right_email is None:
-            #    message="请勿修改邮箱"
-            #    return jsonify(result="false", message="{}".format(message))
-            #elif vcode != right_email['VCode']:
-            #    message = "请输入正确的验证码"
-            #    return jsonify(result="false", message="{}".format(message))
+            elif not right_email:
+                message = "该验证码失效或邮箱已更改"
+                return jsonify(result="false", message="{}".format(message))
+            elif vcode != right_email['VCode']:
+                message = "请输入正确的验证码"
+                return jsonify(result="false", message="{}".format(message))
             else:
                 session["username"] = student_no
                 post = dict(student_no="{}".format(student_no),
@@ -100,7 +100,6 @@ def login():
                             email="{}".format(email),
                             company_ids=[])
                 mongo.db.user.insert_one(post)
-                #mongo.db.other.update(mail, {"$set": {"VCode":"xxxxxx"}})
                 return jsonify(result="true")
     return redirect("/")
 
@@ -136,16 +135,16 @@ def update_password():
                     message = "新密码不能与原密码相同"
                     return jsonify(result="false", message="{}".format(message))
                 else:
-                    mongo.db.user.update_one({"student_no": session["username"]}, {"$set": {"password": new_pwd}})
+                    mongo.db.user.update_one({"student_no": session["username"]}, {"$set": {"password": generate_password_hash(new_pwd)}})
+                    session.clear()
                     return jsonify(result="true")
 
     return redirect('/')
 
 
-@auth_bp.route('/VCode', methods=['GET','POST'])
+@auth_bp.route('/VCode', methods=['GET', 'POST'])
 def check_email():
     if request.method == "POST":
-        """
         form = request.form
         email = form.get("email")
         mail_random = ''
@@ -157,20 +156,81 @@ def check_email():
                 mail_random += chr(random.randint(97, 122))
             else:
                 mail_random += chr(random.randint(97, 122))
-        temp = dict(VCode="{}".format(mail_random))
-        mail=dict(email="{}".format(email))
-        if send_mail(email,mail_random):
+        mail = dict(email="{}".format(email))
+        mongo.db.other.create_index("time", expireAfterSeconds=120)
+        try:
+            send_mail(email, mail_random, 0,0)
             if mongo.db.other.find_one(mail):
+                temp = {
+                    "time": datetime.datetime.utcnow(),
+                    "VCode": mail_random
+                }
                 mongo.db.other.update(mail, {"$set": temp})
+                return jsonify(result="true")
             else:
-                mongo.db.other.insert_one(mail)
-                mongo.db.other.update(mail, {"$set": temp})
-            return jsonify(result="true")
-        else:
+                data = {
+                    "email": email,
+                    "time": datetime.datetime.utcnow(),
+                    "VCode": mail_random
+                }
+                mongo.db.other.insert_one(data)
+                return jsonify(result="true")
+        except:
             return jsonify(result="false")
-        """
-        return jsonify(result="false")
     return redirect("/")
+
+
+@auth_bp.route('/findpsw', methods=['GET', 'POST'])
+def find_password():
+    if request.method=="POST":
+        form=request.form
+        student_no=form.get("studentid")
+        email=form.get("email")
+        vcode=form.get("vcode").lower()
+
+        user=mongo.db.user.find_one({"student_no":student_no})
+        stu=dict(student_no="{}".format(student_no))
+        mail=dict(email="{}".format(email))
+        if student_no is "":
+            message="学号不能为空"
+            return jsonify(result="false",message=message)
+        if email is "":
+            message="邮箱不能为空"
+            return jsonify(result="false", message=message)
+        if not user:
+            message="该用户不存在"
+            return jsonify(result="false", message=message)
+        else:
+            find=mongo.db.user.find_one(stu)
+            right=mongo.db.other.find_one(mail,{"VCode":1})
+            if not find["email"]:
+                message="该邮箱没有被注册"
+                return jsonify(result="false", message=message)
+            if find["email"]!=email:
+                message="密保邮箱填写错误"
+                return jsonify(result="false", message=message)
+            if not right:
+                message = "验证码已过期"
+                return jsonify(result="false", message=message)
+            if right["VCode"]!=vcode:
+                message="验证码填写错误"
+                return jsonify(result="false", message=message)
+            else:
+                new_password = ""
+                for i in range(6):
+                    ch = chr(random.randrange(ord('0'), ord('9') + 1))
+                    new_password += ch
+                mongo.db.user.update_one({"student_no": student_no}, {"$set": {"password": generate_password_hash(new_password)}})
+                try:
+                    send_mail(email,0,1,new_password)
+                    return jsonify(result="true")
+                except:
+                    return jsonify(result="false")
+    return redirect("/")
+
+
+
+
 
 
 @auth_bp.app_context_processor

@@ -9,6 +9,8 @@
 	src="{{ url_for('static', filename='jquery-3.1.1/jquery.min.js') }}" charset="UTF-8"></script>
 <script
 	src="{{ url_for('static', filename='jquery-3.1.1/jquery.cookie.js') }}" charset="UTF-8"></script>
+<script
+        src="{{ url_for('static', filename='jquery-3.1.1/jquery.base64.js') }}"></script>
 <!-- bootstrap -->
 <link
 	href="{{ url_for('static', filename='bootstrap-3.3.7/css/bootstrap.min.css') }}"
@@ -248,7 +250,7 @@
 									<input type="email" class="form-control" id="findpwd-VCode"
 										name="vcode" placeholder="VCode" required>
 									<button type="button" id="findpwd-getvcode"
-										class="btn btn-primary" onclick="getVCode(this)">发送验证码</button>
+										class="btn btn-primary" onclick="findgetVCode(this)">发送验证码</button>
 								</div>
 							</div>
 							<div class="modal-footer">

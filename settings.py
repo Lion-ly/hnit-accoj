@@ -22,12 +22,12 @@ class BaseConfig(object):
 
     CKEDITOR_ENABLE_CSRF = True
 
-    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_SERVER = "smtp.exmail.qq.com"
     MAIL_PORT = 465
     MAIL_USE_SSL = True
-    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_USERNAME = "accoj@popforever.club"
 
-    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+    MAIL_PASSWORD = "Accountoj2020"
     MAIL_DEFAULT_SENDER = ('Bluelog Admin', MAIL_USERNAME)
 
     MONGO_URI = 'mongodb://{}:{}@localhost:27017/accoj'.format(username, password)
