@@ -569,7 +569,7 @@ def get_entry_info():
 
 
 # 第五次课程----start-------------------------------------------------------------------------------
-# Todo 第五次课程第一部分
+# 设立账户
 @accoj_bp.route('/coursev', methods=['POST', 'GET'])
 def coursev():
     """
@@ -579,6 +579,7 @@ def coursev():
 
 
 # Todo 第五次课程第二部分
+# 平衡表
 @accoj_bp.route('/coursev_2', methods=['POST', 'GET'])
 def coursev_2():
     """
