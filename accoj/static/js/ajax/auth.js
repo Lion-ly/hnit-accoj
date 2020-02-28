@@ -26,7 +26,7 @@ $(function () {
 
 $(function () {
     $('#login_button').click(function () {
-        var data = $('#login_form').serialize();
+        let data = $('#login_form').serialize();
         $.ajax({
             url: "/login",
             type: "post",
@@ -51,7 +51,7 @@ $(function () {
 
 $(function () {
     $('#update_pwd_button').click(function () {
-        var data = $('#update_pwd_form').serialize();
+        let data = $('#update_pwd_form').serialize();
         $.ajax({
             url: "/update_password",
             type: "post",
@@ -101,7 +101,7 @@ $(function () {
     if (rem) {
         $("#signin-rememberme").prop("checked", true);
         $("#signin-studentid").val($.cookie("studentid"));
-        $("#signin-password").val($.cookie("psw"));
+        $("#signin-password").val($.base64.decode($.cookie("psw")));
     }
 
 });
@@ -113,7 +113,8 @@ $(function () {
 function save_cookies() {
     if ($("#signin-rememberme").prop("checked")) {
         var stu = $("#signin-studentid").val();
-        var psw = $("#signin-password").val();
+        var psw = $.base64.encode($("#signin-password").val());
+
         $.cookie("remember", "true", {expires: 7});
         $.cookie("studentid", stu, {expires: 7});
         $.cookie("psw", psw, {expires: 7});
@@ -140,18 +141,68 @@ $(function () {
                 async: true,
                 success: function (data) {
                     if (data["result"] === "true") {
-                        $('#login_form').append("<div class='alert alert-info' id='login_info' style='text-align: center'> <strong>发送邮件成功，请注意查收</strong></div>")
-                        setTimeout("$('#login_info').remove()", 3000)
+                        show_message("login_form", "邮件已发送，请注意查收哦","info",3000);
                     } else {
-                        $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>发送邮件失败</strong></div>")
-                        setTimeout("$('#login_danger').remove()", 3000)
+                        show_message("login_form","邮件未能发送，请稍后重试","danger",3000)
                     }
                 }
 
             })
         } else {
-            $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>")
-            setTimeout("$('#login_danger').remove()", 1000)
         }
+    })
+});
+
+/*
+找回密码发送验证码
+ */
+$(function () {
+    $("#findpwd-getvcode").click(function () {
+        if (check_email($('#findpwd-email').val())) {
+            var data = $('#findpwd_form').serialize();
+            $.ajax({
+                url: "/VCode",
+                type: "post",
+                dataType: "json",
+                data: data,
+                async: true,
+                success: function (data) {
+                    if (data["result"] === "true") {
+                        show_message("findpwd_form", "邮件已发送，请注意查收哦","info",3000);
+                    } else {
+                        show_message("findpwd_form","邮件未能发送，请稍后重试","danger",3000)
+                    }
+                }
+
+            })
+        } else {
+        }
+    })
+});
+$(function(){
+    $("#findpwd_button").click(function(){
+        let data=$("#findpwd_form").serialize();
+        $.ajax({
+            url:"/findpsw",
+            type:"post",
+            dataType:"json",
+            data:data,
+            async:true,
+            success:function (data) {
+                if (data["result"]==="true")
+                {
+                    show_message("findpwd_form", "密码已重置，即将跳转到首页", "info", 1000);
+                    setTimeout("location.href='localhost:80';location.reload();", 1000);
+                }
+                else
+                {
+                    show_message("findpwd_form", data["message"], "danger", 1000);
+                }
+
+            },
+            error:function () {
+
+            }
+        })
     })
 });

@@ -59,10 +59,34 @@ function getVCode(obj) {
             }
             , 1000);
     } else {
-        $('#login_form').append("<div class='alert alert-danger' id='login_danger' style='text-align: center'> <strong>请输入正确的邮箱</strong></div>");
-        setTimeout("$('#login_danger').remove()", 1000)
+        show_message("login_form","请输入正确的邮箱","warning",2000)
     }
 }
+
+function findgetVCode(obj) {
+    let $obj = $(obj);
+    let second = 60;
+    if (check_email($('#findpwd-email').val())) {
+        let stop = setInterval(
+            function () {
+                if (second > 0) {
+                    $obj.attr("disabled", true);
+                    let message = "重发(" + second + "s)";
+                    $obj.text(message);
+                    second--;
+                } else {
+                    clearTimeout(stop);
+                    $obj.text("发送验证码");
+                    $obj.attr("disabled", false);
+                }
+            }
+            , 1000);
+    } else {
+        show_message("findpwd_form","请输入正确的邮箱","warning",2000)
+    }
+}
+
+
 
 
 /*
@@ -126,6 +150,6 @@ function submit_confirm_clicked() {
     $("#submit_confirm_button").attr("disabled", true);
     // 定时自动关闭
     setTimeout(function () {
-        $("#submit_confirm").modal('hide');
+            $("#submit_confirm").modal('hide');
     }, 3000)
 }
