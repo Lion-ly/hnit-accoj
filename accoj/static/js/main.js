@@ -39,7 +39,7 @@ function remove(rm) {
 /*
  * @ # courseiii ? 穿梭框
  */
-function ctol() {
+/*function ctol() {
     let $centerbox = $('#centerbox');
     let $leftbox = $('#leftbox');
     let $input = $centerbox.find('input');
@@ -89,7 +89,29 @@ function ctor_cancel() {
             );
         }
     }
+}*/
+
+
+/*function all_to(obj){
+    let $objbox = $('#'+obj);
+    let $allboxChecked = $('#allbox input:checked');
+    for(let i=0;i<$allboxChecked.length;i++){
+        $objbox.append(
+            $($allboxChecked[i]).parent()
+        );
+    }
 }
+
+function to_all(obj){
+    let $objboxChecked = $('#' + obj + ' input:checked');
+    for(let i=0;i<$objboxChecked.length;i++){
+        let data_type = $($objboxChecked[i]).attr("data-type");
+        let objbox = $('#' + data_type);
+        objbox.append(
+            $($objboxChecked[i]).parent()
+        );
+    }
+}*/
 
 // ==================================courseiv==================================//
 

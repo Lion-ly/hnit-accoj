@@ -67,8 +67,8 @@ function submit_subject_info(submit_type) {
     let subject_infos = Array();
     let csrf_token = {"csrf_token": get_csrf_token()};
     let data = $.param(csrf_token);
-    let right_box = $("#rightbox");
-    let left_box = $("#leftbox");
+    let right_box = $("#plusbox");
+    let left_box = $("#minusbox");
     let right_input = right_box.children().children(":input");
     let left_input = left_box.children().children(":input");
     let right_inputLen = right_input.length;
@@ -228,27 +228,27 @@ function map_subject_info(business_no) {
             leftbox_subject_array.push(subject);
         }
     }
-    input_moveTo_center("rightbox", rightbox_subject_array);
-    input_moveTo_center("leftbox", leftbox_subject_array);
+    input_moveTo_center("plusbox", rightbox_subject_array);
+    input_moveTo_center("minusbox", leftbox_subject_array);
 }
 
 /**
  * 往box中添加会计科目
- * @param box rightbox or leftbox(string)
+ * @param box plusbox or minusbox(string)
  * @param subject_array (string array)
  */
 function input_moveTo_center(box, subject_array) {
     for (let i = 0; i < subject_array.length; i++) {
         let input_select = ":input[value=" + subject_array[i] + "]";
-        let input_tmp = $("#centerbox").children().children(input_select);
+        let input_tmp = $(input_select);
         $(input_tmp).prop("checked", true);
     }
-    if (box === "rightbox") {
-        ctor();
-    } else if (box === "leftbox") {
-        ctol();
+    if (box === "plusbox") {
+        all_to('plusbox');
+    } else if (box === "minusbox") {
+        all_to('minusbox');
     }
-    let input_tmp = $("#leftbox, #rightbox").children().children(":input");
+    let input_tmp = $("#minusbox, #plusbox").children().children(":input");
     for (let i = 0; i < input_tmp.length; i++) {
         $(input_tmp[i]).prop("checked", false);
     }
@@ -258,14 +258,38 @@ function input_moveTo_center(box, subject_array) {
  * 清空两个box
  */
 function clear_box() {
-    let input_tmp = $("#leftbox, #rightbox").children().children(":input");
+    let input_tmp = $("#minusbox, #plusbox").children().children(":input");
     let input_tmpLen = input_tmp.length;
     for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", true);
     }
-    ctol_cancel();
-    ctor_cancel();
+    to_all('plusbox');
+    to_all('minusbox')
     for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", false);
+    }
+}
+
+/**
+ *  穿梭框
+ */
+function all_to(obj) {
+    let $objbox = $('#' + obj);
+    let $allboxChecked = $('#allbox input:checked');
+    for (let i = 0; i < $allboxChecked.length; i++) {
+        $objbox.append(
+            $($allboxChecked[i]).parent()
+        );
+    }
+}
+
+function to_all(obj) {
+    let $objboxChecked = $('#' + obj + ' input:checked');
+    for (let i = 0; i < $objboxChecked.length; i++) {
+        let data_type = $($objboxChecked[i]).attr("data-type");
+        let objbox = $('#' + data_type);
+        objbox.append(
+            $($objboxChecked[i]).parent()
+        );
     }
 }

@@ -44,7 +44,7 @@
 
 				<h4>
 					<span class="glyphicon glyphicon-bookmark"></span> <em>01</em>
-                    <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+                    <span class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
                                 已完成</span>
 				</h4>
 				<div class="ats-subject" style="margin-bottom: 30px">
@@ -64,27 +64,27 @@
 						<form>
 							<div class="form-group">
 								<label for="uploadfiles"><span
-									class="glyphicon glyphicon-upload"></span> Upload files </label> <input
+										class="glyphicon glyphicon-upload"></span> Upload files </label> <input
 									type="file" id="uploadfiles">
 								<p class="help-block">本功能暂未开放！</p>
 							</div>
 						</form>
 
 						<p class="ats-fontsize-20">2、填制记账凭证：</p>
-						<table class="table table-bordered ats-vouchertable"
-							style="border: 0px">
-							<tbody>
+						<div class="table-responsive">
+							<table class="table table-bordered ats-vouchertable"
+								   style="border: 0px">
+								<tbody>
 								<tr>
 									<th colspan="23" class="ats-tablecolor-f">记账凭证</th>
 								</tr>
 								<tr>
-									<th colspan="1" style="border-right: 0px;">记<input
-										type="number" min="1" class="ats-vouchertable-input">号
-									</th>
-									<th colspan="18" style="border-left: 0px; border-right: 0px;">日期：<input
-										type="date" style="border: 0px"></th>
-									<th colspan="4" style="border-left: 0px;">附单据<input
-										type="number" min="1" class="ats-vouchertable-input">张
+									<th colspan="23">
+										<span style="float: left">记<input class="ats-vouchertable-input" min="1"
+																		  type="number">号</span>
+										<span>日期：<input style="border: 0px" type="date"></span>
+										<span style="float: right">附单据<input class="ats-vouchertable-input" min="1"
+																			 type="number">张</span>
 									</th>
 
 								</tr>
@@ -119,8 +119,8 @@
 									<th style="width: 4%; border: 0px; background: #ffffff">
 										<div align="center">
 											<a style="color: green; padding: 0px 0px" type="button"
-												class="btn" onclick="vi_AddRow()"><span
-												class="glyphicon glyphicon-plus-sign"></span></a>
+											   class="btn" onclick="vi_AddRow()"><span
+													class="glyphicon glyphicon-plus-sign"></span></a>
 										</div>
 									</th>
 								</tr>
@@ -231,8 +231,9 @@
 									<th colspan="23" style="text-align: left;">制表人：Admin</th>
 
 								</tr>
-							</tbody>
-						</table>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 

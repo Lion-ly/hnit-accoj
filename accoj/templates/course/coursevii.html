@@ -45,7 +45,7 @@
 				<div>
 					<h4>
 						<span class="glyphicon glyphicon-bookmark"></span> <em>01</em>
-                        <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+                        <span class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
                                 已完成</span>
 					</h4>
 					<div class="ats-subject">
@@ -72,22 +72,25 @@
 
 								<div>
 									<p class="ats-fontsize-20">1、登记各账户明细账</p>
-                                    <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+									<span class="glyphicon glyphicon-ok"
+										  style="color: #5cb85c;font-size: medium;display:none;">
                                     已完成</span>
 									<div style="margin-bottom: 10px">
 										<button type="button" class="btn btn-success btn-sm"
-											onclick="vii_AddTable()">新增</button>
+												onclick="vii_AddTable()">新增
+										</button>
 									</div>
-									
-									<div id="tablePanel">
-									<table class="table table-bordered ats-vouchertable" style="border: 0px;">
-										<tbody id="detailed">
-											<tr>
-												<td colspan="37" style="border: 0px">
-													<div align="center">
-														<select class="form-control"
-															style="width: 160px; display: inline-block;">
-															<option>银行存款</option>
+									<div class="table-responsive">
+										<div id="tablePanel">
+
+											<table class="table table-bordered ats-vouchertable" style="border: 0px;">
+												<tbody id="detailed">
+												<tr>
+													<td colspan="37" style="border: 0px">
+														<div align="center">
+															<select class="form-control"
+																	style="width: 160px; display: inline-block;">
+																<option>银行存款</option>
 															<option>长期存款</option>
 														</select>
 														<p style="font-size: 24px; display: inline-block;">明&nbsp;细&nbsp;账</p>
@@ -408,17 +411,18 @@
 											<td contentEditable="true"></td>
 											<td contentEditable="true"></td>
 										</tr>
-										</tbody>
-									</table>
+												</tbody>
+											</table>
+										</div>
 									</div>
 									
 								</div>
 								<hr class="simple" style="clear: both;" color="#6f5499" />
 								<div align="right">
-                                    <button type="button" class="btn btn-info" onclick="">
-							            <span class="glyphicon"></span>&nbsp;保存
-						            </button>
-									<button type="button" class="btn btn-success" id="">
+									<button type="button" class="btn btn-info" onclick="">
+										<span class="glyphicon"></span>&nbsp;保存
+									</button>
+									<button class="btn btn-success" type="button">
 										<span class="glyphicon"></span>&nbsp;提交
 									</button>
 								</div>
@@ -427,7 +431,8 @@
 							<div role="tabpanel" class="tab-pane fade" id="second">
 								<div>
 									<p class="ats-fontsize-20">2、登记科目余额表</p>
-                                    <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+									<span class="glyphicon glyphicon-ok"
+										  style="color: #5cb85c;font-size: medium;display:none;">
                                     已完成</span>
 									<div class="container">
 										<table class="table table-bordered ats-vouchertable"
@@ -475,7 +480,7 @@
 											</tr>
 											</tbody>
 										</table>
-										
+
 										<table class="table table-bordered ats-vouchertable"
 											style="border: 0px">
 											<tbody>
