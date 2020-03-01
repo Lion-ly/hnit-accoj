@@ -29,7 +29,7 @@ function confirm_subject() {
     }, 1000);
     setTimeout(function () {
         confirm_subject_button.attr("disabled", false);
-        confirm_entry_button.text("提交");
+        confirm_subject_button.text("提交");
     }, 2000);
 }
 
