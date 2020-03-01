@@ -4,9 +4,10 @@
  */
 let csrf_token;
 $(function () {
-    $(".navbar-nav").find("li").each(function () {
+    $("ul.navbar-nav").find("li").each(function () {
         let a = $(this).find("a:first")[0];
-        if ($(a).attr("href") === location.pathname) {
+        let href = $(a).attr("href");
+        if (href === location.pathname.split("_")[0]) {
             $(this).addClass("active");
         } else {
             $(this).removeClass("active");

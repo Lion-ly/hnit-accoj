@@ -29,19 +29,25 @@
                     <hr class="simple" color="#6f5499"/>
 
                     <p class="ats-fontsize-20">1、设立账户，并登记发生额，结算余额</p>
+                    <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        2.绿色表示当前账户已确认提交。<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        3.淡蓝色表示当前账户已保存。<br/>
+                    </p>
                     <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
                                 已完成</span>
                     <!-- 作业标签 -->
-                    <ul class="nav nav-tabs">
+                    <ul id="coursev_li_tabs" class="nav nav-tabs">
                         <li role="presentation" class="dropdown"><a
                                 class="dropdown-toggle" data-toggle="dropdown" href="#"
                                 role="button" aria-haspopup="true" aria-expanded="false"> 新增<span
                                 class="caret"></span>
                         </a>
                             <ul class="dropdown-menu">
-                                <li role="presentation"><a href="javascript:void(0)"
+                                <li role="presentation"><a id="createNewTableLeft" href="javascript:void(0)"
                                                            onclick="v_createNewPage(this,'left')">新增：左T表</a></li>
-                                <li role="presentation"><a href="javascript:void(0)"
+                                <li role="presentation"><a id="createNewTableRight" href="javascript:void(0)"
                                                            onclick="v_createNewPage(this,'right')">新增：右T表</a></li>
                             </ul>
                         </li>
@@ -50,13 +56,14 @@
                     </div>
                     <hr class="simple" style="clear: both;" color="#6f5499"/>
                     <div align="right">
-                        <button type="button" class="btn btn-info" onclick="">
+                        <button type="button" class="btn btn-info" id="save_ledger_button" onclick="save_ledger()">
                             <span class="glyphicon"></span>&nbsp;保存
                         </button>
-                        <button type="button" class="btn btn-success" id="">
+                        <button type="button" class="btn btn-success" id="confirm_ledger_button" onclick="confirm_ledger()">
                             <span class="glyphicon"></span>&nbsp;提交
                         </button>
                     </div>
+                    <div id="course_v_message"></div>
                 </div>
             </div>
         </div>
