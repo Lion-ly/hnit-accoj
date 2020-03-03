@@ -46,7 +46,6 @@ function save_key_element() {
     setTimeout(function () {
         save_key_element_button.attr("disabled", false);
         save_key_element_button.text("保存");
-        confirm_entry_button.text("提交");
     }, 2000);
 }
 

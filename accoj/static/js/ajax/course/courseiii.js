@@ -264,7 +264,7 @@ function clear_box() {
         $(input_tmp[i]).prop("checked", true);
     }
     to_all('plusbox');
-    to_all('minusbox')
+    to_all('minusbox');
     for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", false);
     }
