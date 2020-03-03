@@ -10,7 +10,7 @@ from accoj.utils import login_required
 from accoj.extensions import mongo
 from accoj.utils import is_number
 from accoj.deal_business import deal_business
-import random
+import random, json
 
 accoj_bp = Blueprint('accoj', __name__)
 
@@ -77,7 +77,6 @@ def company_form_submit():
         for key, value in data_dict.items():
             if not value and key != "com_shareholder":
                 if not key.startswith("com_shareholder_"):
-                    print("err pos empty: {}".format(key))
                     flag = False
                     err_pos.append({"err_pos": key})
                 else:
@@ -89,7 +88,6 @@ def company_form_submit():
                     data_dict["com_shareholder"].append(value)
                 elif key == "com_operate_period":
                     if not is_number(value):
-                        print("not com_operate_period")
                         flag = False
                         err_pos.append({"err_pos": key})
                     else:
@@ -98,7 +96,6 @@ def company_form_submit():
                             flag = False
                             err_pos.append({"err_pos": key})
                 elif key == "com_regist_cap":
-                    print("not com_regist_cap")
                     if not is_number(value):
                         flag = False
                         err_pos.append({"err_pos": key})
@@ -109,7 +106,6 @@ def company_form_submit():
                             err_pos.append({"err_pos": key})
 
         if not shareholder_num:
-            print("not shareholder_num")
             flag = False
         if not flag:
             return jsonify(result=False, err_pos=err_pos, message="信息未填写完整或信息填写格式错误")
@@ -168,10 +164,22 @@ def submit_business_infos():
             if business_types_2[key] < 2:
                 return jsonify(result=False, message="请检查第二个会计区间的每种业务是否至少有两笔")
         if business_num == 20 and not business_confirm:
+            involve_subjects = set()
+            company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
+                                                   dict(businesses=1, _id=0))
+            businesses_cp = company_cp.get("businesses")
+            for business in businesses_cp:
+                subjects_infos = business.get("subjects_infos")
+                for subjects_info in subjects_infos:
+                    involve_subjects.add(subjects_info.get("subject"))
             mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
-                                    {"$set": {"schedule_confirm.business_confirm": True}})
+                                    {"$set": {"schedule_confirm.business_confirm": True,
+                                              "involve_subjects"                 : list(involve_subjects)}}
+                                    )
             mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
-                                    {"$set": {"schedule_confirm.business_confirm": True}})
+                                    {"$set": {"schedule_confirm.business_confirm": True,
+                                              "involve_subjects"                 : list(involve_subjects)}}
+                                    )
             return jsonify(result=True)
         elif business_num == 20 and business_confirm:
             return jsonify(result=False, message="已经提交过")
@@ -320,7 +328,6 @@ def submit_key_element_info():
         key_element_infos = form.get("key_element_infos")
         submit_type = form.get("submit_type")
         if not is_number(business_no) or not is_number(affect_type) or submit_type not in ["confirm", "save"]:
-            print("submit_type: {}".format(submit_type))
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
@@ -418,7 +425,6 @@ def submit_subject_info():
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
-                print(str(business_no) + ":  前端数据错误")
                 return jsonify(result=False, message="前端数据错误")
         if business_no not in schedule_confirm.get("subject_confirm"):
             # 若当前业务信息提交未确认，则确认提交或保存
@@ -509,7 +515,6 @@ def submit_entry_info():
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
-                print(str(business_no) + ":  前端数据错误")
                 return jsonify(result=False, message="前端数据错误")
         if business_no not in schedule_confirm.get("entry_confirm"):
             # 若当前业务信息提交未确认，则确认提交或保存
@@ -536,7 +541,7 @@ def submit_entry_info():
             return jsonify(result=False, message="此业务已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return redirect("/courseiii")
+    return redirect("/courseiv")
 
 
 @accoj_bp.route('/get_entry_info', methods=['POST', 'GET'])
@@ -562,7 +567,7 @@ def get_entry_info():
             business_list.append(dict(business_no=business_no, content=content, entry_infos=entry_infos,
                                       confirmed=confirmed, saved=saved, business_type=business_type))
         return jsonify(result=True, business_list=business_list)
-    return redirect('/courseiii')
+    return redirect('/courseiv')
 
 
 # 第四次课程----end---------------------------------------------------------------------------------
@@ -575,7 +580,109 @@ def coursev():
     """
     :return:
     """
+    # 若第一次课程未完成
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
+        return redirect("/coursei")
     return render_template('course/coursev.html')
+
+
+@accoj_bp.route('/submit_ledger_info', methods=['POST', 'GET'])
+def submit_ledger_info():
+    """
+    提交会计账户信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(schedule_confirm=1, involve_subjects=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
+        involve_subjects = company.get("involve_subjects")
+        json_data = request.get_json()
+        ledger_info = json_data.get("ledger_info")
+        submit_type = json_data.get("submit_type")
+        if ledger_info:
+            subject = ledger_info.get("subject")
+        else:
+            return jsonify(result=False, message="账户信息为空")
+        if submit_type not in ["confirm", "save"]:
+            return jsonify(result=False, message="提交类型错误")
+        elif subject not in involve_subjects:
+            return jsonify(result=False, message="科目错误")
+        if subject not in schedule_confirm.get("ledger_confirm"):
+            # 若当前账户信息提交未确认，则确认提交或保存
+            if submit_type == "confirm":
+                # 提交类型为确认提交
+                update_prefix = "ledger_infos." + str(subject)
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"     : {update_prefix: ledger_info},
+                                         "$addToSet": {"schedule_confirm.ledger_confirm": subject,
+                                                       "schedule_saved.ledger_saved"    : subject}}
+                                        )
+                return jsonify(result=True)
+
+            elif submit_type == "save":
+                # 提交类型为保存
+                update_prefix = "ledger_infos." + str(subject)
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"     : {update_prefix: ledger_info},
+                                         "$addToSet": {"schedule_saved.ledger_saved": subject}}
+                                        )
+                return jsonify(result=True)
+        elif subject in schedule_confirm.get("ledger_confirm"):
+            # 业务已提交确认
+            return jsonify(result=False, message="此账户已经提交过")
+        else:
+            return jsonify(result=False, message="未知错误!")
+    return redirect('/coursev')
+
+
+@accoj_bp.route('/get_ledger_info', methods=['POST', 'GET'])
+def get_ledger_info():
+    """
+    获取会计账户信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            {"ledger_infos"  : 1, "involve_subjects": 1, "schedule_confirm": 1,
+                                             "schedule_saved": 1})
+        ledger_infos = company.get("ledger_infos")
+        involve_subjects = company.get("involve_subjects")
+        schedule_confirm = company.get("schedule_confirm")
+        schedule_saved = company.get("schedule_saved")
+        if not ledger_infos:
+            return jsonify(result=True, ledger_infos=None, involve_subjects=involve_subjects)
+        for key in list(ledger_infos):
+            ledger_infos[key]["confirmed"] = True if key in schedule_confirm.get("ledger_confirm") else False
+            ledger_infos[key]["saved"] = True if key in schedule_saved.get("ledger_saved") else False
+        return jsonify(result=True, ledger_infos=ledger_infos, involve_subjects=involve_subjects)
+    return redirect('/coursev')
+
+
+@accoj_bp.route('/delete_ledger_info', methods=['POST', 'GET'])
+def delete_ledger_info():
+    """
+    删除会计账户信息
+    :return:
+    """
+    if request.method == "POST":
+        form = request.form
+        subject = form.get("subject")
+        if subject:
+            company = mongo.db.company.find_one({"student_no": session.get("username")}, {"involve_subjects": 1})
+            involve_subjects = company.get("involve_subjects")
+            if subject in involve_subjects:
+                mongo.db.company.update({"student_no": session.get("username")},
+                                        {"$unset": {"ledger_infos.{}".format(subject): True},
+                                         "$pull" : {"schedule_confirm.ledger_confirm": subject,
+                                                    "schedule_saved.ledger_saved"    : subject}})
+                return jsonify(result=True)
+            else:
+                return jsonify(result=False, message="科目错误")
+        else:
+            return jsonify(result=False, message="未知错误")
+    return redirect('/coursev')
 
 
 # Todo 第五次课程第二部分
