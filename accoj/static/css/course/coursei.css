@@ -13,3 +13,8 @@ table textarea {
     height: 100%;
     width: 100%;
 }
+
+table label{
+    margin-bottom: 0;
+    font-weight: inherit;
+}

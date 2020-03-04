@@ -12,7 +12,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <div align="center">
+                    <div style="text-align: center">
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
                                 <li><a href="#" aria-label="Previous"> <span
@@ -26,14 +26,14 @@
                             </ul>
                         </nav>
                     </div>
-                    <hr class="simple" color="#6f5499"/>
+                    <hr class="simple" style="color: #6f5499"/>
 
                     <p class="ats-fontsize-20">1、设立账户，并登记发生额，结算余额</p>
                     <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        2.绿色表示当前账户已确认提交。<br/>
+                        2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        3.淡蓝色表示当前账户已保存。<br/>
+                        3.<span style="color: #5bc0de">淡蓝色</span>表示当前账户已保存。<br/>
                     </p>
                     <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
                                 已完成</span>
@@ -54,12 +54,13 @@
                     </ul>
                     <div class="tab-content" id="TTablePage">
                     </div>
-                    <hr class="simple" style="clear: both;" color="#6f5499"/>
-                    <div align="right">
+                    <hr class="simple" style="clear: both;color: #6f5499"/>
+                    <div style="text-align: right">
                         <button type="button" class="btn btn-info" id="save_ledger_button" onclick="save_ledger()">
                             <span class="glyphicon"></span>&nbsp;保存
                         </button>
-                        <button type="button" class="btn btn-success" id="confirm_ledger_button" onclick="confirm_ledger()">
+                        <button type="button" class="btn btn-success" id="confirm_ledger_button"
+                                onclick="confirm_ledger()">
                             <span class="glyphicon"></span>&nbsp;提交
                         </button>
                     </div>
