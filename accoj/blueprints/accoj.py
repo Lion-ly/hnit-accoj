@@ -10,7 +10,7 @@ from accoj.utils import login_required
 from accoj.extensions import mongo
 from accoj.utils import is_number
 from accoj.deal_business import deal_business
-import random, json
+import random
 
 accoj_bp = Blueprint('accoj', __name__)
 
@@ -119,8 +119,9 @@ def company_form_submit():
             data_dict["com_cash"] = 0
             data_dict["business_num"] = 0
             data_dict["schedule_confirm"] = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[],
-                                                 entry_confirm=[])
-            data_dict["schedule_saved"] = dict(key_element_saved=[], subject_saved=[], entry_saved=[])
+                                                 entry_confirm=[], balance_sheet_confirm=False)
+            data_dict["schedule_saved"] = dict(key_element_saved=[], subject_saved=[], entry_saved=[],
+                                               balance_sheet_svaed=False)
             data_dict["com_assets"] = []
             data_dict["businesses"] = []
             data_dict_cp = data_dict.copy()
@@ -685,13 +686,79 @@ def delete_ledger_info():
     return redirect('/coursev')
 
 
-# Todo 第五次课程第二部分
 # 平衡表
 @accoj_bp.route('/coursev_2', methods=['POST', 'GET'])
 def coursev_2():
     """
     :return:
     """
+    # 若第一次课程未完成
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
+        return redirect("/coursei")
+    return render_template('course/coursev_2.html')
+
+
+@accoj_bp.route('/submit_balance_sheet_info', methods=['POST', 'GET'])
+def submit_balance_sheet_info():
+    """
+    提交平衡表信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(schedule_confirm=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
+        json_data = request.get_json()
+        balance_sheet_infos = json_data.get("balance_sheet_infos")
+        submit_type = json_data.get("submit_type")
+        if not balance_sheet_infos:
+            return jsonify(result=False, message="平衡表信息为空")
+        if submit_type not in ["confirm", "save"]:
+            return jsonify(result=False, message="提交类型错误")
+        if not schedule_confirm.get("balance_sheet_confirm"):
+            # 若当前账户信息提交未确认，则确认提交或保存
+            if submit_type == "confirm":
+                # 提交类型为确认提交
+                mongo.db.company.update({"_id": _id},
+                                        {"$set": {"balance_sheet_infos"                   : balance_sheet_infos,
+                                                  "schedule_confirm.balance_sheet_confirm": True,
+                                                  "schedule_saved.balance_sheet_saved"    : True}}
+                                        )
+                return jsonify(result=True)
+
+            elif submit_type == "save":
+                # 提交类型为保存
+                mongo.db.company.update({"_id": _id},
+                                        {"$set": {"balance_sheet_infos"               : balance_sheet_infos,
+                                                  "schedule_saved.balance_sheet_saved": True}}
+                                        )
+                return jsonify(result=True)
+        elif schedule_confirm.get("balance_sheet_confirm"):
+            # 业务已提交确认
+            return jsonify(result=False, message="此账户已经提交过")
+        else:
+            return jsonify(result=False, message="未知错误!")
+    return render_template('course/coursev_2.html')
+
+
+@accoj_bp.route('/get_balance_sheet_info', methods=['POST', 'GET'])
+def get_balance_sheet_info():
+    """
+    获取平衡表信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            {"balance_sheet_infos": 1, "schedule_confirm": 1, "schedule_saved": 1})
+        balance_sheet_infos = company.get("balance_sheet_infos")
+        schedule_confirm = company.get("schedule_confirm")
+        schedule_saved = company.get("schedule_saved")
+        if not balance_sheet_infos:
+            return jsonify(result=True, balance_sheet_infos=None)
+        balance_sheet_infos["confirmed"] = True if schedule_confirm.get("balance_sheet_confirm") else False
+        balance_sheet_infos["saved"] = True if schedule_saved.get("balance_sheet_saved") else False
+        return jsonify(result=True, balance_sheet_infos=balance_sheet_infos)
     return render_template('course/coursev_2.html')
 
 

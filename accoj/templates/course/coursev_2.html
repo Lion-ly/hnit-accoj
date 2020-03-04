@@ -1,141 +1,154 @@
-{% extends 'course/courseBase.html' %} {% block courseBody %}
-
-<div class="courseBody">
-	<!-- 习题主体 -->
-	<div class="container">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span>1、掌握账户及其格式。<br /> 2、掌握本期发生额和期末余额的计算。<br />
+{% extends 'course/courseBase.html' %}
+{% block courseBody %}
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <link href="{{ url_for('static', filename='css/course/coursev_2.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/ajax/course/coursev_2.js') }}" charset="UTF-8"></script>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、掌握账户及其格式。<br/> 2、掌握本期发生额和期末余额的计算。<br/>
 					3、理解试算平衡的过程和应用。
 				</span>
-			</div>
-			<div class="panel-body">
+                </div>
+                <div class="panel-body">
 
-				<div align="center">
-					<nav aria-label="Page navigation">
-						<ul class="pagination">
-							<li><a href="#" aria-label="Previous"> <span
-									aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li><a href="{{ url_for('accoj.coursev') }}">设立账户</a></li>
-							<li class="active"><a href="{{ url_for('accoj.coursev_2') }}">平衡表</a></li>
-							<li><a href="#" aria-label="Next"> <span
-									aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
-				</div>
-				<hr class="simple" color="#6f5499" />
-				<p class="ats-fontsize-20">2、第1个会计期间的试算平衡表：</p>
-                <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li><a href="{{ url_for('accoj.coursev') }}">设立账户</a></li>
+                                <li class="active"><a href="{{ url_for('accoj.coursev_2') }}">平衡表</a></li>
+                                <li><a href="#" aria-label="Next"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <hr class="simple" style="color:#6f5499"/>
+                    <span id="balance_sheet_submit_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
                                 已完成</span>
-				<table class="table table-bordered ats-vouchertable"
-					style="border: 0px">
-					<tbody>
-						<tr>
-							<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-							<th colspan="2" class="ats-tablecolor-f">期初余额</th>
-							<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-							<th colspan="2" class="ats-tablecolor-f">期末余额</th>
-						</tr>
-						<tr>
-							<th class="ats-tablecolor-f">借方</th>
-							<th class="ats-tablecolor-f">贷方</th>
-							<th class="ats-tablecolor-f">借方</th>
-							<th class="ats-tablecolor-f">贷方</th>
-							<th class="ats-tablecolor-f">借方</th>
-							<th class="ats-tablecolor-f">贷方</th>
-							<td style="padding: 0px; border: 0px; width: 5%">
-								<div align="center">
-									<a style="color: green;" type="button" class="btn"
-										onclick="v_AddRow('first')"><span
-										class="glyphicon glyphicon-plus-sign"></span></a>
-								</div>
-							</td>
-						</tr>
+                    <p class="ats-fontsize-20">2、第1个会计期间的试算平衡表：</p>
+                    <table id="table_period_1" class="table table-bordered ats-vouchertable"
+                           style="border: 0 ">
+                        <tbody>
+                        <tr>
+                            <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+                            <th colspan="2" class="ats-tablecolor-f">期初余额</th>
+                            <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+                            <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+                        </tr>
+                        <tr>
+                            <th class="ats-tablecolor-f">借方</th>
+                            <th class="ats-tablecolor-f">贷方</th>
+                            <th class="ats-tablecolor-f">借方</th>
+                            <th class="ats-tablecolor-f">贷方</th>
+                            <th class="ats-tablecolor-f">借方</th>
+                            <th class="ats-tablecolor-f">贷方</th>
+                            <td style="padding: 0; border: 0; width: 5%">
+                                <div style="text-align: center;">
+                                    <a style="color: green;" type="button" class="btn"
+                                       onclick="v_AddRow('period1')"><span
+                                            class="glyphicon glyphicon-plus-sign"></span></a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="period1_row_1">
+                            <td><label><input name="subject" title="科目"></label></td>
+                            <td><label><input name="borrow_1" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="lend_1" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="borrow_2" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="lend_2" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="borrow_3" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="lend_3" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                        </tr>
+                        <tr id="period1_last">
+                            <td class="ats-tablecolor-f">合计</td>
+                            <td><label><input name="borrow_1" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="lend_1" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="borrow_2" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="lend_2" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="borrow_3" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                            <td><label><input name="lend_3" title="金额￥"
+                                              onkeyup="this.value=this.value.replace(/\D/g,'')"></label></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="ats-fontsize-20">3、第2个会计期间的试算平衡表：</p>
+                    <table id="table_period_2" class="table table-bordered ats-vouchertable"
+                           style="border: 0">
+                        <tbody>
+                        <tr>
+                            <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
+                            <th colspan="2" class="ats-tablecolor-f">期初余额</th>
+                            <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
+                            <th colspan="2" class="ats-tablecolor-f">期末余额</th>
 
-						<tr>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-						</tr>
-						<tr id="firstRow">
-							<td class="ats-tablecolor-f">合计</td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-						</tr>
-					</tbody>
-				</table>
-				<p class="ats-fontsize-20">3、第2个会计期间的试算平衡表：</p>
-				<table class="table table-bordered ats-vouchertable"
-					style="border: 0px">
-					<tbody>
-						<tr>
-							<th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-							<th colspan="2" class="ats-tablecolor-f">期初余额</th>
-							<th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-							<th colspan="2" class="ats-tablecolor-f">期末余额</th>
+                        </tr>
+                        <tr>
+                            <th class="ats-tablecolor-f">借方</th>
+                            <th class="ats-tablecolor-f">贷方</th>
+                            <th class="ats-tablecolor-f">借方</th>
+                            <th class="ats-tablecolor-f">贷方</th>
+                            <th class="ats-tablecolor-f">借方</th>
+                            <th class="ats-tablecolor-f">贷方</th>
+                            <td style="padding: 0; border: 0; width: 5%">
+                                <div style="text-align: center">
+                                    <a style="color: green;" type="button" class="btn"
+                                       onclick="v_AddRow('period2')"><span
+                                            class="glyphicon glyphicon-plus-sign"></span></a>
+                                </div>
+                            </td>
 
-						</tr>
-						<tr>
-							<th class="ats-tablecolor-f">借方</th>
-							<th class="ats-tablecolor-f">贷方</th>
-							<th class="ats-tablecolor-f">借方</th>
-							<th class="ats-tablecolor-f">贷方</th>
-							<th class="ats-tablecolor-f">借方</th>
-							<th class="ats-tablecolor-f">贷方</th>
-							<td style="padding: 0px; border: 0px; width: 5%">
-								<div align="center">
-									<a style="color: green;" type="button" class="btn"
-										onclick="v_AddRow('second')"><span
-										class="glyphicon glyphicon-plus-sign"></span></a>
-								</div>
-							</td>
+                        </tr>
+                        <tr id="period2_row_1">
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                        </tr>
+                        <tr id="period2_last">
+                            <td class="ats-tablecolor-f">合计</td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                            <td contentEditable="true"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr class="simple" style="clear: both; color:#6f5499"/>
+                    <div style="text-align: right">
+                        <button type="button" class="btn btn-info" id="save_balance_sheet_button" onclick="save_balance_sheet()">
+                            <span class="glyphicon"></span>&nbsp;保存
+                        </button>
+                        <button type="button" class="btn btn-success" id="confirm_balance_sheet_button" onclick="confirm_balance_sheet()">
+                            <span class="glyphicon"></span>&nbsp;提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-						</tr>
-						<tr>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-						</tr>
-						<tr id="secondRow">
-							<td class="ats-tablecolor-f">合计</td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-							<td contentEditable="true"></td>
-						</tr>
-					</tbody>
-				</table>
-				<hr class="simple" style="clear: both;" color="#6f5499" />
-				<div align="right">
-                    <button type="button" class="btn btn-info" onclick="">
-                        <span class="glyphicon"></span>&nbsp;保存
-                    </button>
-					<button type="button" class="btn btn-success" id="">
-						<span class="glyphicon"></span>&nbsp;提交
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 防尾前移 -->
-<div class="ats-rock"></div>
+    <!-- 防尾前移 -->
+    <div class="ats-rock"></div>
 
 {% endblock courseBody %}

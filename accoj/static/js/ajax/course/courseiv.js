@@ -263,3 +263,38 @@ function clear_entry() {
         $(removeRows[i]).parent().parent().remove();
     }
 }
+
+/*
+ * @ # courseiv ? 表格增加行
+ */
+let rowNumIv = 1;
+
+function iv_AddRow(obj, subject = "", money = "") {
+    let type = "0";
+    if (obj === "borrow") {
+        type = "1";
+    }
+    $("#" + obj + "RowAfter").before(
+        "<tr>"
+        + "<td class='ats-tablecolor-f' style='border-right: 0'></td>"
+        + "<td class='ats-tablecolor-f' style='border-left: 0'></td>"
+        + "<td><input type='text' id='subject" + type + "_" + rowNumIv + "' name='subject' placeholder='科目' value='" + subject + "'></td>"
+        + "<td><input type='text' id='money" + type + "_" + rowNumIv + "' name='money' placeholder='金额' value='" + money + "'></td>"
+        + "<td style='padding:0;border:0'>"
+        + "<div style='text-align: center'>"
+        + "<a style='color: red' type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "</div>"
+        + "</td>"
+        + "</tr>"
+    );
+    rowNumIv += 1;
+}
+
+
+/*
+ * @ # courseiv ? 表格删除行
+ */
+function iv_DeleteRow(obj) {
+    $(obj).parent().parent().parent().remove();
+    rowNumIv -= 1;
+}

@@ -1,399 +1,425 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<script charset="UTF-8" src="{{ url_for('static', filename='js/ajax/course/courseiii.js') }}"></script>
-<div class="courseBody">
-    <!-- 习题主体 -->
-    <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span>1、掌握并识记常用会计科目。 </span>
-            </div>
-            <div class="panel-body">
-                <div align="center">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                            <li><a aria-label="Previous" href="#"> <span
-                                    aria-hidden="true">&laquo;</span>
-                            </a></li>
-                            <li class="active" id="courseiii_split_li_1"><a onclick="get_subject_info(1)">1</a></li>
-                            <li id="courseiii_split_li_2"><a onclick="get_subject_info(2)">2</a></li>
-                            <li id="courseiii_split_li_3"><a onclick="get_subject_info(3)">3</a></li>
-                            <li id="courseiii_split_li_4"><a onclick="get_subject_info(4)">4</a></li>
-                            <li id="courseiii_split_li_5"><a onclick="get_subject_info(5)">5</a></li>
-                            <li id="courseiii_split_li_6"><a onclick="get_subject_info(6)">6</a></li>
-                            <li id="courseiii_split_li_7"><a onclick="get_subject_info(7)">7</a></li>
-                            <li id="courseiii_split_li_8"><a onclick="get_subject_info(8)">8</a></li>
-                            <li id="courseiii_split_li_9"><a onclick="get_subject_info(9)">9</a></li>
-                            <li id="courseiii_split_li_10"><a onclick="get_subject_info(10)">10</a></li>
-                            <li id="courseiii_split_li_11"><a onclick="get_subject_info(11)">11</a></li>
-                            <li id="courseiii_split_li_12"><a onclick="get_subject_info(12)">12</a></li>
-                            <li id="courseiii_split_li_13"><a onclick="get_subject_info(13)">13</a></li>
-                            <li id="courseiii_split_li_14"><a onclick="get_subject_info(14)">14</a></li>
-                            <li id="courseiii_split_li_15"><a onclick="get_subject_info(15)">15</a></li>
-                            <li id="courseiii_split_li_16"><a onclick="get_subject_info(16)">16</a></li>
-                            <li id="courseiii_split_li_17"><a onclick="get_subject_info(17)">17</a></li>
-                            <li id="courseiii_split_li_18"><a onclick="get_subject_info(18)">18</a></li>
-                            <li id="courseiii_split_li_19"><a onclick="get_subject_info(19)">19</a></li>
-                            <li id="courseiii_split_li_20"><a onclick="get_subject_info(20)">20</a></li>
-                            <li><a aria-label="Next" href="#"> <span
-                                    aria-hidden="true">&raquo;</span>
-                            </a></li>
-                        </ul>
-                    </nav>
+    <script charset="UTF-8" src="{{ url_for('static', filename='js/ajax/course/courseiii.js') }}"></script>
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>1、掌握并识记常用会计科目。 </span>
                 </div>
-                <hr class="simple" color="#6f5499"/>
-                <!-- 业务一 -->
-                <div>
-                    <h4>
-                        <span class="glyphicon glyphicon-bookmark"></span> <em id="em_3"></em>
-                        <span class="glyphicon glyphicon-ok" id="subject_submit_span"
-                              style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
-                    </h4>
-                    <div class="ats-subject">
-                        <blockquote>
-                            <label class="label label-success" id="business_type_3"></label>
-                            <p id="business_content_3">
-                            </p>
-                        </blockquote>
+                <div class="panel-body">
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a aria-label="Previous" href="#"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li class="active" id="courseiii_split_li_1"><a onclick="get_subject_info(1)">1</a></li>
+                                <li id="courseiii_split_li_2"><a onclick="get_subject_info(2)">2</a></li>
+                                <li id="courseiii_split_li_3"><a onclick="get_subject_info(3)">3</a></li>
+                                <li id="courseiii_split_li_4"><a onclick="get_subject_info(4)">4</a></li>
+                                <li id="courseiii_split_li_5"><a onclick="get_subject_info(5)">5</a></li>
+                                <li id="courseiii_split_li_6"><a onclick="get_subject_info(6)">6</a></li>
+                                <li id="courseiii_split_li_7"><a onclick="get_subject_info(7)">7</a></li>
+                                <li id="courseiii_split_li_8"><a onclick="get_subject_info(8)">8</a></li>
+                                <li id="courseiii_split_li_9"><a onclick="get_subject_info(9)">9</a></li>
+                                <li id="courseiii_split_li_10"><a onclick="get_subject_info(10)">10</a></li>
+                                <li id="courseiii_split_li_11"><a onclick="get_subject_info(11)">11</a></li>
+                                <li id="courseiii_split_li_12"><a onclick="get_subject_info(12)">12</a></li>
+                                <li id="courseiii_split_li_13"><a onclick="get_subject_info(13)">13</a></li>
+                                <li id="courseiii_split_li_14"><a onclick="get_subject_info(14)">14</a></li>
+                                <li id="courseiii_split_li_15"><a onclick="get_subject_info(15)">15</a></li>
+                                <li id="courseiii_split_li_16"><a onclick="get_subject_info(16)">16</a></li>
+                                <li id="courseiii_split_li_17"><a onclick="get_subject_info(17)">17</a></li>
+                                <li id="courseiii_split_li_18"><a onclick="get_subject_info(18)">18</a></li>
+                                <li id="courseiii_split_li_19"><a onclick="get_subject_info(19)">19</a></li>
+                                <li id="courseiii_split_li_20"><a onclick="get_subject_info(20)">20</a></li>
+                                <li><a aria-label="Next" href="#"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
                     </div>
-                    <div class="ats-board">
-                        <div style="">
-                            <p class="ats-fontsize-20">涉及到的会计科目及增减变化</p>
+                    <hr class="simple" style="color: #6f5499"/>
+                    <!-- 业务一 -->
+                    <div>
+                        <h4>
+                            <span class="glyphicon glyphicon-bookmark"></span> <em id="em_3"></em>
+                            <span class="glyphicon glyphicon-ok" id="subject_submit_span"
+                                  style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
+                        </h4>
+                        <div class="ats-subject">
+                            <blockquote>
+                                <label class="label label-success" id="business_type_3"></label>
+                                <p id="business_content_3">
+                                </p>
+                            </blockquote>
                         </div>
-                        <p class="help-block">温馨提示：可通过 <kbd>Ctrl + f</kbd> 快速搜索所需会计科目。</p>
+                        <div class="ats-board">
+                            <div style="">
+                                <p class="ats-fontsize-20">涉及到的会计科目及增减变化</p>
+                            </div>
+                            <p class="help-block">温馨提示：可通过 <kbd>Ctrl + f</kbd> 快速搜索所需会计科目。</p>
 
-                        <div>
-                            <div class="panel panel-default" style="float: left; width: 45%;">
-                                <div class="panel-heading" style="height: 600px;">
+                            <div>
+                                <div class="panel panel-default" style="float: left; width: 45%;">
+                                    <div class="panel-heading" style="height: 600px;">
 
-                                    <nav class="navbar navbar-default">
-                                        <ul class="nav navbar-nav">
-                                            <li class="active" role="presentation"><a
-                                                    aria-controls="Asset" data-toggle="tab" href="#Asset"
-                                                    role="tab">资产类</a></li>
-                                            <li role="presentation"><a aria-controls="Liabilities"
-                                                                       data-toggle="tab"
-                                                                       href="#Liabilities"
-                                                                       role="tab">负债类</a></li>
-                                            <li role="presentation"><a aria-controls="equity"
-                                                                       data-toggle="tab"
-                                                                       href="#equity"
-                                                                       role="tab">权益类</a></li>
-                                            <li role="presentation"><a aria-controls="cost"
-                                                                       data-toggle="tab"
-                                                                       href="#cost"
-                                                                       role="tab">成本类</a>
-                                            </li>
-                                            <li role="presentation"><a aria-controls="profitLoss"
-                                                                       data-toggle="tab"
-                                                                       href="#profitLoss"
-                                                                       role="tab">损益类</a></li>
-                                        </ul>
-                                    </nav>
+                                        <nav class="navbar navbar-default">
+                                            <ul class="nav navbar-nav">
+                                                <li class="active" role="presentation"><a
+                                                        aria-controls="Asset" data-toggle="tab" href="#Asset"
+                                                        role="tab">资产类</a></li>
+                                                <li role="presentation"><a aria-controls="Liabilities"
+                                                                           data-toggle="tab"
+                                                                           href="#Liabilities"
+                                                                           role="tab">负债类</a></li>
+                                                <li role="presentation"><a aria-controls="equity"
+                                                                           data-toggle="tab"
+                                                                           href="#equity"
+                                                                           role="tab">权益类</a></li>
+                                                <li role="presentation"><a aria-controls="cost"
+                                                                           data-toggle="tab"
+                                                                           href="#cost"
+                                                                           role="tab">成本类</a>
+                                                </li>
+                                                <li role="presentation"><a aria-controls="profitLoss"
+                                                                           data-toggle="tab"
+                                                                           href="#profitLoss"
+                                                                           role="tab">损益类</a></li>
+                                            </ul>
+                                        </nav>
 
 
-                                    <div class="tab-content" id="allbox">
-                                        <!-- 第一标签 -->
-                                        <div class="tab-pane active in fade" id="Asset"
-                                             role="tabpanel">
-                                            <div class="pre-scrollable" id="assetbox" style="height: 100%">
-                                                <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                        value="库存现金">库存现金</label>
-                                                <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                        value="银行存款">银行存款</label>
-                                                <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                        value="其他货币资金">
-                                                    其他货币资金
+                                        <div class="tab-content" id="allbox">
+                                            <!-- 第一标签 -->
+                                            <div class="tab-pane active in fade" id="Asset"
+                                                 role="tabpanel">
+                                                <div class="pre-scrollable" id="assetbox" style="height: 100%">
+                                                    <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                            value="库存现金">库存现金</label>
+                                                    <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                            value="银行存款">银行存款</label>
+                                                    <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                            value="其他货币资金">
+                                                        其他货币资金
+                                                    </label> <label style=""> <input data-type="assetbox"
+                                                                                     type="checkbox"
+                                                                                     value="交易性金融资产"> 交易性金融资产
                                                 </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                                 value="交易性金融资产"> 交易性金融资产
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="应收票据">
-                                                应收票据
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="应收账款">
-                                                应收账款
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="预付账款">
-                                                预付账款
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="应收股利">
-                                                应收股利
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="应收利息">
-                                                应收利息
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="其他应收款">
-                                                其他应收款
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="坏账准备">
-                                                坏账准备
-                                            </label> <label style=""> <input data-type="assetbox" type="checkbox"
-                                                                             value="材料采购">
-                                                材料采购
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="在途物资">
-                                                在途物资
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="原材料">
-                                                原材料
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="材料成本差异">
-                                                材料成本差异
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="库存商品">
-                                                库存商品
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="发出商品">
-                                                发出商品
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="商品进销差价">
-                                                商品进销差价
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="委托加工物资">
-                                                委托加工物资
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="存货跌价准备">
-                                                存货跌价准备
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="持有至到期投资">
-                                                持有至到期投资
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="持有至到期投资减值准备">
-                                                持有至到期投资减值准备
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="可供出售金融资产">
-                                                可供出售金融资产
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="长期股权投资">
-                                                长期股权投资
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="长期股权投资减值准备">
-                                                长期股权投资减值准备
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="投资性房地产">
-                                                投资性房地产
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="长期应收款">
-                                                长期应收款
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="固定资产">
-                                                固定资产
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="累计折旧">
-                                                累计折旧
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="固定资产减值准备">
-                                                固定资产减值准备
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="在建工程">
-                                                在建工程
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="工程物资">
-                                                工程物资
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="固定资产清理">
-                                                固定资产清理
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="无形资产">
-                                                无形资产
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="累计摊销">
-                                                累计摊销
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="无形资产减值准备">
-                                                无形资产减值准备
-                                            </label> <label> <input data-type="assetbox" type="checkbox" value="商誉"> 商誉
-                                            </label> <label> <input data-type="assetbox" type="checkbox"
-                                                                    value="递延所得税资产">
-                                                递延所得税资产
-                                            </label>
-                                                <label> <input data-type="assetbox" type="checkbox" value="待处理财产损溢">
-                                                    待处理财产损溢
+                                                                                 value="应收票据">
+                                                    应收票据
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="应收账款">
+                                                    应收账款
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="预付账款">
+                                                    预付账款
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="应收股利">
+                                                    应收股利
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="应收利息">
+                                                    应收利息
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="其他应收款">
+                                                    其他应收款
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="坏账准备">
+                                                    坏账准备
+                                                </label> <label style=""> <input data-type="assetbox" type="checkbox"
+                                                                                 value="材料采购">
+                                                    材料采购
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="在途物资">
+                                                    在途物资
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="原材料">
+                                                    原材料
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="材料成本差异">
+                                                    材料成本差异
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="库存商品">
+                                                    库存商品
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="发出商品">
+                                                    发出商品
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="商品进销差价">
+                                                    商品进销差价
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="委托加工物资">
+                                                    委托加工物资
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="存货跌价准备">
+                                                    存货跌价准备
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="持有至到期投资">
+                                                    持有至到期投资
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="持有至到期投资减值准备">
+                                                    持有至到期投资减值准备
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="可供出售金融资产">
+                                                    可供出售金融资产
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="长期股权投资">
+                                                    长期股权投资
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="长期股权投资减值准备">
+                                                    长期股权投资减值准备
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="投资性房地产">
+                                                    投资性房地产
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="长期应收款">
+                                                    长期应收款
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="固定资产">
+                                                    固定资产
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="累计折旧">
+                                                    累计折旧
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="固定资产减值准备">
+                                                    固定资产减值准备
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="在建工程">
+                                                    在建工程
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="工程物资">
+                                                    工程物资
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="固定资产清理">
+                                                    固定资产清理
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="无形资产">
+                                                    无形资产
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="累计摊销">
+                                                    累计摊销
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="无形资产减值准备">
+                                                    无形资产减值准备
+                                                </label> <label> <input data-type="assetbox" type="checkbox" value="商誉">
+                                                    商誉
+                                                </label> <label> <input data-type="assetbox" type="checkbox"
+                                                                        value="递延所得税资产">
+                                                    递延所得税资产
                                                 </label>
+                                                    <label> <input data-type="assetbox" type="checkbox" value="待处理财产损溢">
+                                                        待处理财产损溢
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- 第二标签 -->
-                                        <div class="tab-pane fade" id="Liabilities" role="tabpanel">
-                                            <div class="pre-scrollable" id="liabilitiesbox" style="height: 100%">
-                                                <label> <input data-type="liabilitiesbox" type="checkbox" value="短期借款">
-                                                    短期借款
+                                            <!-- 第二标签 -->
+                                            <div class="tab-pane fade" id="Liabilities" role="tabpanel">
+                                                <div class="pre-scrollable" id="liabilitiesbox" style="height: 100%">
+                                                    <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                   value="短期借款">
+                                                        短期借款
+                                                    </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                            value="应付票据">
+                                                    应付票据
                                                 </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                        value="应付票据">
-                                                应付票据
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="应付账款">
-                                                应付账款
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="预收账款">
-                                                预收账款
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="应付职工薪酬">
-                                                应付职工薪酬
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="应交税费">
-                                                应交税费
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="应付利息">
-                                                应付利息
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="应付股利">
-                                                应付股利
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="其他应付款">
-                                                其他应付款
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="长期借款">
-                                                长期借款
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="应付债券">
-                                                应付债券
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="长期应付款">
-                                                长期应付款
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="专项应付款">
-                                                专项应付款
-                                            </label> <label> <input data-type="liabilitiesbox" type="checkbox"
-                                                                    value="预计负债">
-                                                预计负债
-                                            </label>
+                                                                        value="应付账款">
+                                                    应付账款
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="预收账款">
+                                                    预收账款
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="应付职工薪酬">
+                                                    应付职工薪酬
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="应交税费">
+                                                    应交税费
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="应付利息">
+                                                    应付利息
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="应付股利">
+                                                    应付股利
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="其他应付款">
+                                                    其他应付款
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="长期借款">
+                                                    长期借款
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="应付债券">
+                                                    应付债券
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="长期应付款">
+                                                    长期应付款
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="专项应付款">
+                                                    专项应付款
+                                                </label> <label> <input data-type="liabilitiesbox" type="checkbox"
+                                                                        value="预计负债">
+                                                    预计负债
+                                                </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- 第三标签 -->
-                                        <div class="tab-pane fade" id="equity" role="tabpanel">
-                                            <div class="pre-scrollable" id="equitybox" style="height: 100%">
-                                                <label> <input data-type="equitybox" type="checkbox" value="递延所得税负债">
-                                                    递延所得税负债
+                                            <!-- 第三标签 -->
+                                            <div class="tab-pane fade" id="equity" role="tabpanel">
+                                                <div class="pre-scrollable" id="equitybox" style="height: 100%">
+                                                    <label> <input data-type="equitybox" type="checkbox"
+                                                                   value="递延所得税负债">
+                                                        递延所得税负债
+                                                    </label> <label> <input data-type="equitybox" type="checkbox"
+                                                                            value="实收资本">
+                                                    实收资本
                                                 </label> <label> <input data-type="equitybox" type="checkbox"
-                                                                        value="实收资本">
-                                                实收资本
-                                            </label> <label> <input data-type="equitybox" type="checkbox" value="资本公积">
-                                                资本公积
-                                            </label> <label> <input data-type="equitybox" type="checkbox" value="盈余公积">
-                                                盈余公积
-                                            </label> <label> <input data-type="equitybox" type="checkbox" value="本年利润">
-                                                本年利润
-                                            </label> <label> <input data-type="equitybox" type="checkbox" value="利润分配">
-                                                利润分配
-                                            </label>
+                                                                        value="资本公积">
+                                                    资本公积
+                                                </label> <label> <input data-type="equitybox" type="checkbox"
+                                                                        value="盈余公积">
+                                                    盈余公积
+                                                </label> <label> <input data-type="equitybox" type="checkbox"
+                                                                        value="本年利润">
+                                                    本年利润
+                                                </label> <label> <input data-type="equitybox" type="checkbox"
+                                                                        value="利润分配">
+                                                    利润分配
+                                                </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- 第四标签 -->
-                                        <div class="tab-pane fade" id="cost" role="tabpanel">
-                                            <div class="pre-scrollable" id="costbox" style="height: 100%">
-                                                <label> <input data-type="costbox" type="checkbox" value="生产成本">
-                                                    生产成本
+                                            <!-- 第四标签 -->
+                                            <div class="tab-pane fade" id="cost" role="tabpanel">
+                                                <div class="pre-scrollable" id="costbox" style="height: 100%">
+                                                    <label> <input data-type="costbox" type="checkbox" value="生产成本">
+                                                        生产成本
+                                                    </label> <label> <input data-type="costbox" type="checkbox"
+                                                                            value="制造费用">
+                                                    制造费用
                                                 </label> <label> <input data-type="costbox" type="checkbox"
-                                                                        value="制造费用">
-                                                制造费用
-                                            </label> <label> <input data-type="costbox" type="checkbox" value="劳务成本">
-                                                劳务成本
-                                            </label> <label> <input data-type="costbox" type="checkbox" value="研发支出">
-                                                研发支出
-                                            </label>
+                                                                        value="劳务成本">
+                                                    劳务成本
+                                                </label> <label> <input data-type="costbox" type="checkbox"
+                                                                        value="研发支出">
+                                                    研发支出
+                                                </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- 第五标签 -->
-                                        <div class="tab-pane fade" id="profitLoss" role="tabpanel">
-                                            <div class="pre-scrollable" id="profitlossbox" style="height: 100%">
-                                                <label> <input data-type="profitlossbox" type="checkbox" value="主营业务收入">
-                                                    主营业务收入
+                                            <!-- 第五标签 -->
+                                            <div class="tab-pane fade" id="profitLoss" role="tabpanel">
+                                                <div class="pre-scrollable" id="profitlossbox" style="height: 100%">
+                                                    <label> <input data-type="profitlossbox" type="checkbox"
+                                                                   value="主营业务收入">
+                                                        主营业务收入
+                                                    </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                            value="其他业务收入">
+                                                    其他业务收入
                                                 </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                        value="其他业务收入">
-                                                其他业务收入
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="公允价值变动损益">
-                                                公允价值变动损益
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="投资收益">
-                                                投资收益
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="营业外收入">
-                                                营业外收入
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="主营业务成本">
-                                                主营业务成本
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="其他业务成本">
-                                                其他业务成本
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="税金及附加">
-                                                税金及附加
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="销售费用">
-                                                销售费用
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="财务费用">
-                                                财务费用
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="资产减值损失">
-                                                资产减值损失
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="营业外支出">
-                                                营业外支出
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="所得税费用">
-                                                所得税费用
-                                            </label> <label> <input data-type="profitlossbox" type="checkbox"
-                                                                    value="以前年度损益调整">
-                                                以前年度损益调整
-                                            </label>
+                                                                        value="公允价值变动损益">
+                                                    公允价值变动损益
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="投资收益">
+                                                    投资收益
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="营业外收入">
+                                                    营业外收入
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="主营业务成本">
+                                                    主营业务成本
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="其他业务成本">
+                                                    其他业务成本
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="税金及附加">
+                                                    税金及附加
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="销售费用">
+                                                    销售费用
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="财务费用">
+                                                    财务费用
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="资产减值损失">
+                                                    资产减值损失
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="营业外支出">
+                                                    营业外支出
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="所得税费用">
+                                                    所得税费用
+                                                </label> <label> <input data-type="profitlossbox" type="checkbox"
+                                                                        value="以前年度损益调整">
+                                                    以前年度损益调整
+                                                </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div style="float: left; width: 10%; height: 500px;">
+                                <div style="text-align: center;margin-top: 100px; margin-bottom: 230px">
+                                    <div>
+                                        <button class="btn btn-success" onclick="all_to('plusbox')"
+                                                type="button">
+                                            <span class="glyphicon"></span>&nbsp;增加
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-info" onclick="to_all('plusbox')"
+                                                style="margin-top: 10px" type="button">
+                                            <span class="glyphicon"></span>&nbsp;撤销
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="text-align: center">
+                                    <div>
+                                        <button class="btn btn-danger" onclick="all_to('minusbox')"
+                                                type="button">
+                                            <span class="glyphicon"></span>&nbsp;减少
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-info" onclick="to_all('minusbox')"
+                                                style="margin-top: 10px;" type="button">
+                                            <span class="glyphicon"></span>&nbsp;撤销
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-success" style="float: left; width: 45%;">
+                                <div class="panel-heading" style="height: 288px;">
+                                    <div class="pre-scrollable" id="plusbox" style="height: 100%">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-danger" style="float: left; width: 45%;">
+                                <div class="panel-heading" style="height: 288px;">
+                                    <div class="pre-scrollable" id="minusbox" style="height: 100%">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div style="float: left; width: 10%; height: 500px;">
-                            <div align="center"
-                                 style="margin-top: 100px; margin-bottom: 230px">
-                                <div>
-                                    <button class="btn btn-success" onclick="all_to('plusbox')"
-                                            type="button">
-                                        <span class="glyphicon"></span>&nbsp;增加
-                                    </button>
-                                </div>
-                                <div>
-                                    <button class="btn btn-info" onclick="to_all('plusbox')"
-                                            style="margin-top: 10px" type="button">
-                                        <span class="glyphicon"></span>&nbsp;撤销
-                                    </button>
-                                </div>
-                            </div>
-                            <div align="center">
-                                <div>
-                                    <button class="btn btn-danger" onclick="all_to('minusbox')"
-                                            type="button">
-                                        <span class="glyphicon"></span>&nbsp;减少
-                                    </button>
-                                </div>
-                                <div>
-                                    <button class="btn btn-info" onclick="to_all('minusbox')"
-                                            style="margin-top: 10px;" type="button">
-                                        <span class="glyphicon"></span>&nbsp;撤销
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="panel panel-success" style="float: left; width: 45%;">
-                            <div class="panel-heading" style="height: 288px;">
-                                <div class="pre-scrollable" id="plusbox" style="height: 100%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-danger" style="float: left; width: 45%;">
-                            <div class="panel-heading" style="height: 288px;">
-                                <div class="pre-scrollable" id="minusbox" style="height: 100%">
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-
+                    <hr class="simple" style="clear: both;color: #6f5499"/>
+                    <div style="text-align: right">
+                        <button class="btn btn-info" id="save_subject_button" onclick="save_subject()" type="button">
+                            <span class="glyphicon"></span>&nbsp;保存
+                        </button>
+                        <button class="btn btn-success" id="confirm_subject_button" onclick="confirm_subject()"
+                                type="button">
+                            <span class="glyphicon"></span>&nbsp;提交
+                        </button>
+                    </div>
+                    <div id="course_iii_message"></div>
                 </div>
-                <hr class="simple" color="#6f5499" style="clear: both;"/>
-                <div align="right">
-                    <button class="btn btn-info" id="save_subject_button" onclick="save_subject()" type="button">
-                        <span class="glyphicon"></span>&nbsp;保存
-                    </button>
-                    <button class="btn btn-success" id="confirm_subject_button" onclick="confirm_subject()"
-                            type="button">
-                        <span class="glyphicon"></span>&nbsp;提交
-                    </button>
-                </div>
-                <div id="course_iii_message"></div>
             </div>
         </div>
     </div>
-</div>
 
-</div>
-
-<!-- 防尾前移 -->
-<div class="ats-rock"></div>
+    <!-- 防尾前移 -->
+    <div class="ats-rock"></div>
 
 {% endblock courseBody %}

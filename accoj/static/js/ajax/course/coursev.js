@@ -378,8 +378,6 @@ function submit_ledger_info(submit_type) {
     let data = {"ledger_info": ledger_info};
     data["submit_type"] = submit_type;
     data = JSON.stringify(data);
-    console.log(data);
-    //data += "&" + $.param(ledger_info) + "&" + $.param({"submit_type": submit_type});
     $.ajax({
         url: "/submit_ledger_info",
         type: "post",
