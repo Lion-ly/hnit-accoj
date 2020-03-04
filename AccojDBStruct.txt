@@ -54,10 +54,22 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 						 "com_cash": 0.0,				# 公司现金存量
 						 "com_assets: [{"asset_name": "", "market_value": 1, "question_no", 1}],	# 公司资产列表
 						 "business_num": 0,				# 公司业务数
-						 "schedule": { 					# 课程进度
+						 "involve_subjects": [],		# 所有业务涉及的科目列表
+						 "schedule_confirm": { 			# 课程确认进度
 							"business_confirm": false,	# 增加业务部分是否完成
 							"key_element_confirm": [],	# 会计要素部分进度
 							"subjects_confirm": [],		# 会计科目部分进度
+							"entry_confirm": [],		# 会计分录部分进度
+							"ledger_confirm": [],		# 会计账户部分进度
+							"balance_sheet_confirm": [],# 会计平衡表部分进度
+						 },
+						 "schedule_saved": { 			# 课程保存进度
+							"business_saved": false,	# 增加业务部分是否完成
+							"key_element_saved": [],	# 会计要素部分进度
+							"subjects_saved": [],		# 会计科目部分进度
+							"entry_saved": [],			# 会计分录部分进度
+							"ledger_saved": [],			# 会计账户部分进度
+							"balance_sheet_saved": [],	# 会计平衡表部分进度
 						 },
 						 # 公司业务
 						 "businesses": [{"questions_no": 1， 			# 题库号
@@ -73,36 +85,48 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 															}],
 									   "subjects_infos": [						# 科目列表
 														 {"subject": "",		# 科目
-														 "money": 1,			# 金额
-														 "is_up": boolean		# 增减判定
+														  "money": 1,			# 金额
+														  "is_up": boolean		# 增减判定
 														 }]
-						}]
-						 # 会计分录
-						 "entry_infos": [{
-										  "entry_name": " ",# 分录名称
-										  "borrow": [],		# 借
-										  "lend": []		# 贷
-										 }]
+									   "entry_infos": [{				# 会计分录
+													   "subject": " ",	# 科目
+													   "money": 1,		# 金额
+													   "is_dr": boolean,# 是否借记
+													  }]
+						 }]
 						 # 会计账户
-						 "ledger_infos": [{
-										   "subject": subject,					# 会计科目
-										   "opening_balance": 1, 				# 期初余额
-										   "increase_in_this_period": [], 		# 本期增加额
-										   "current_amount": 1,				 	# 本期发生额
-										   "ending_balance": 1,				 	# 期末余额
-										   "decrease_in_this_period": []		# 本期减少额
-										   "is_borrow: boolean					# 借贷标志位
-										   }]
+						 "ledger_infos": {"subject_name":		# 科目名即账户名作为键
+														{
+													   "opening_balance": 1, 					# 期初余额
+													   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
+													   "current_amount_dr": 1,					# 本期借方发生额
+													   "current_amount_cr": 1,					# 本期贷方发生额
+													   "ending_balance": 1,						# 期末余额
+													   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
+													   "is_left": boolean						# 是否左T表
+													   }
+										 }
 						 # 试算平衡集合
-						 "trial_balance": [
-										   "subject": subject,			 		# 会计科目
-										   "borrow_1": 1,				 		# 借方期初余额
-										   "lend_1": 1,					 		# 贷方期初余额
-										   "borrow_2": 1,				 		# 借方本期发生额
-										   "lend_2": 1,					 		# 贷方本期发生额
-										   "borrow_3": 1,				 		# 借方期末余额
-										   "lend_3": 1					 		# 贷方期末余额
-										   ]
+						 "balance_sheet_infos":
+												{"accounting_period_1": {[									# 第一个会计期间
+																	   "subject": subject,			 		# 会计科目
+																	   "borrow_1": 1,				 		# 借方期初余额
+																	   "lend_1": 1,					 		# 贷方期初余额
+																	   "borrow_2": 1,				 		# 借方本期发生额
+																	   "lend_2": 1,					 		# 贷方本期发生额
+																	   "borrow_3": 1,				 		# 借方期末余额
+																	   "lend_3": 1					 		# 贷方期末余额
+																	   ]}
+											   "accounting_period_2": {[									# 第二个会计期间
+																	   "subject": subject,			 		# 会计科目
+																	   "borrow_1": 1,				 		# 借方期初余额
+																	   "lend_1": 1,					 		# 贷方期初余额
+																	   "borrow_2": 1,				 		# 借方本期发生额
+																	   "lend_2": 1,					 		# 贷方本期发生额
+																	   "borrow_3": 1,				 		# 借方期末余额
+																	   "lend_3": 1					 		# 贷方期末余额
+																	   ]}
+										   }
 						 # 会计凭证
 						 "acc_documents": [{
 										   "source_document": path,		 		# 原始凭证存储路径
