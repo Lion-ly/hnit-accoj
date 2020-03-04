@@ -178,7 +178,6 @@ function get_balance_sheet_info() {
  */
 function map_balance_sheet_info() {
     if (!balance_sheet_infos) return;
-    balance_sheet_infos = JSON.parse(balance_sheet_infos);
     // 先清空数据
     $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period1_row_2]").remove();
     $(":input").val("");
@@ -220,7 +219,9 @@ function map_balance_sheet_info() {
         let lend_2 = accounting_period_1[index]["lend_2"];
         let borrow_3 = accounting_period_1[index]["borrow_3"];
         let lend_3 = accounting_period_1[index]["lend_3"];
-        subject === "sum" ? $(tds[0]).children().children().val(subject) : false;
+        if (subject !== "sum") {
+            $(tds[0]).children().children().val(subject);
+        }
         $(tds[1]).children().children().val(borrow_1);
         $(tds[2]).children().children().val(lend_1);
         $(tds[3]).children().children().val(borrow_2);
@@ -239,7 +240,9 @@ function map_balance_sheet_info() {
         let lend_2 = accounting_period_2[index]["lend_2"];
         let borrow_3 = accounting_period_2[index]["borrow_3"];
         let lend_3 = accounting_period_2[index]["lend_3"];
-        subject === "sum" ? $(tds[0]).children().children().val(subject) : false;
+        if (subject !== "sum") {
+            $(tds[0]).children().children().val(subject);
+        }
         $(tds[1]).children().children().val(borrow_1);
         $(tds[2]).children().children().val(lend_1);
         $(tds[3]).children().children().val(borrow_2);
