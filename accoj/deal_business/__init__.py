@@ -69,7 +69,6 @@ def deal_business_1(company, business_type):
             if not random_list:
                 # 随机数序列为空
                 message = "请选择其他活动"
-                print(message)
                 return business_content, message
             question_no = random.choice(random_list)
             if question_no in question_set:

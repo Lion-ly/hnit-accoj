@@ -37,59 +37,59 @@
                                 <table class="table table-bordered ">
                                     <tr>
                                         <th class="ats-tablecolor-f">公司名称</th>
-                                        <td id="1-1-1-2" colspan="5"><input type="text"
+                                        <td id="1-1-1-2" colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                             name="com_name" id="com_name"></td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f">住所</th>
-                                        <td colspan="5"><input type="text" name="com_address"
+                                        <td colspan="5"><input type="text" name="com_address" onkeyup="illegalCharFilter(this)"
                                                                id="com_address"></td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f">生产经营地</th>
-                                        <td colspan="5"><input type="text"
+                                        <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_business_addr" id="com_business_addr"></td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f" style="width: 14%">法定代表人</th>
-                                        <td style="width: 20%"><input type="text"
+                                        <td style="width: 20%"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                       name="com_legal_rep" id="com_legal_rep"></td>
                                         <th class="ats-tablecolor-f" style="width: 8%">资本注册(万)</th>
                                         <td style="width: 20%"><input type="text" placeholder="100 ~ 1000"
-                                                                      onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                                      onkeyup="limit_number(this)"
                                                                       name="com_regist_cap" id="com_regist_cap"></td>
                                         <th class="ats-tablecolor-f" style="width: 8%">经营期限(年)</th>
                                         <td style="width: 20%"><input type="text" placeholder="5 ~ 500"
-                                                                      onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                                      onkeyup="limit_number(this)"
                                                                       name="com_operate_period" id="com_operate_period">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f" style="height: 100px">经营范围</th>
-                                        <td colspan="5"><textarea rows="4"
+                                        <td colspan="5"><textarea rows="4" onkeyup="illegalCharFilter(this)"
                                                                   name="com_business_scope"
                                                                   id="com_business_scope"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f" rowspan="5">股东(发起人)名称或姓名</th>
-                                        <td colspan="5"><input type="text"
+                                        <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_shareholder_1" id="com_shareholder_1"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"><input type="text"
+                                        <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_shareholder_2" id="com_shareholder_2"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"><input type="text"
+                                        <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_shareholder_3" id="com_shareholder_3"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"><input type="text"
+                                        <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_shareholder_4" id="com_shareholder_4"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"><input type="text"
+                                        <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_shareholder_5" id="com_shareholder_5"></td>
                                     </tr>
                                 </table>

@@ -69,8 +69,8 @@
 								<tr>
 									<th style="width: 8%; border-right:0px" class="ats-tablecolor-f">借：</th>
 									<td style="width: 8%; border-left:0px" class="ats-tablecolor-f"></td>
-									<td style="width: 40%;"><input type="text" name="subject" id="subject1" placeholder="科目"></td>
-									<td style="width: 40%;"><input type="text" name="money" id="money1" placeholder="金额" onkeyup="this.value=this.value.replace(/\D/g,'')"></td>
+									<td style="width: 40%;"><input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject1" placeholder="科目"></td>
+									<td style="width: 40%;"><input type="text" name="money" id="money1" placeholder="金额" onkeyup="limit_number(this)"></td>
 									<td style="width: 4%;border: 0px;padding: 0px;">
 										<div align="center">
 											<a style="color: green;" type="button" class="btn"
@@ -82,8 +82,8 @@
 								<tr id="borrowRowAfter">
 									<td style="border-right:0px" class="ats-tablecolor-f"></td>
 									<th style="border-left:0px" class="ats-tablecolor-f">贷：</th>
-									<td><input type="text" name="subject" id="subject0" placeholder="科目"></td>
-									<td><input type="text" name="money" id="money0" placeholder="金额" onkeyup="this.value=this.value.replace(/\D/g,'')"></td>
+									<td><input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject0" placeholder="科目"></td>
+									<td><input type="text" name="money" id="money0" placeholder="金额" onkeyup="limit_number(this)"></td>
 									<td style="padding: 0px; border: 0px">
 										<div align="center">
 											<a style="color: green;" type="button" class="btn"
