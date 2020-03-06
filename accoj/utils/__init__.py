@@ -6,11 +6,17 @@
 # @File    : __init__.py.py
 # @Software: PyCharm
 from functools import wraps
-from flask import session, redirect, url_for
+from flask import session, redirect, url_for, request, abort
+
+ALLOWED_EXTENSIONS = {'zip', 'rar'}
 
 
 def login_required(func):
-    """需要登陆装饰器函数"""
+    """
+    需要登陆装饰器
+    :param func:
+    :return:
+    """
 
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -20,6 +26,26 @@ def login_required(func):
             return redirect(url_for('index.index'))
 
     return wrapper
+
+
+def limit_content_length(max_length):
+    """
+    上传数据最大限制
+    :param max_length: Byte
+    :return:
+    """
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            cl = request.content_length
+            if cl is not None and cl > max_length:
+                abort(413)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
 
 
 def is_number(s):
@@ -42,3 +68,7 @@ def is_number(s):
         pass
 
     return False
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

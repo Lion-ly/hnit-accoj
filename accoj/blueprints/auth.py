@@ -135,7 +135,8 @@ def update_password():
                     message = "新密码不能与原密码相同"
                     return jsonify(result="false", message="{}".format(message))
                 else:
-                    mongo.db.user.update_one({"student_no": session["username"]}, {"$set": {"password": generate_password_hash(new_pwd)}})
+                    mongo.db.user.update_one({"student_no": session["username"]},
+                                             {"$set": {"password": generate_password_hash(new_pwd)}})
                     session.clear()
                     return jsonify(result="true")
 
@@ -159,10 +160,10 @@ def check_email():
         mail = dict(email="{}".format(email))
         mongo.db.other.create_index("time", expireAfterSeconds=120)
         try:
-            send_mail(email, mail_random, 0,0)
+            send_mail(email, mail_random, 0, 0)
             if mongo.db.other.find_one(mail):
                 temp = {
-                    "time": datetime.datetime.utcnow(),
+                    "time" : datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.update(mail, {"$set": temp})
@@ -170,7 +171,7 @@ def check_email():
             else:
                 data = {
                     "email": email,
-                    "time": datetime.datetime.utcnow(),
+                    "time" : datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.insert_one(data)
@@ -182,55 +183,52 @@ def check_email():
 
 @auth_bp.route('/findpsw', methods=['GET', 'POST'])
 def find_password():
-    if request.method=="POST":
-        form=request.form
-        student_no=form.get("studentid")
-        email=form.get("email")
-        vcode=form.get("vcode").lower()
+    if request.method == "POST":
+        form = request.form
+        student_no = form.get("studentid")
+        email = form.get("email")
+        vcode = form.get("vcode").lower()
 
-        user=mongo.db.user.find_one({"student_no":student_no})
-        stu=dict(student_no="{}".format(student_no))
-        mail=dict(email="{}".format(email))
+        user = mongo.db.user.find_one({"student_no": student_no})
+        stu = dict(student_no="{}".format(student_no))
+        mail = dict(email="{}".format(email))
         if student_no is "":
-            message="学号不能为空"
-            return jsonify(result="false",message=message)
+            message = "学号不能为空"
+            return jsonify(result="false", message=message)
         if email is "":
-            message="邮箱不能为空"
+            message = "邮箱不能为空"
             return jsonify(result="false", message=message)
         if not user:
-            message="该用户不存在"
+            message = "该用户不存在"
             return jsonify(result="false", message=message)
         else:
-            find=mongo.db.user.find_one(stu)
-            right=mongo.db.other.find_one(mail,{"VCode":1})
+            find = mongo.db.user.find_one(stu)
+            right = mongo.db.other.find_one(mail, {"VCode": 1})
             if not find["email"]:
-                message="该邮箱没有被注册"
+                message = "该邮箱没有被注册"
                 return jsonify(result="false", message=message)
-            if find["email"]!=email:
-                message="密保邮箱填写错误"
+            if find["email"] != email:
+                message = "密保邮箱填写错误"
                 return jsonify(result="false", message=message)
             if not right:
                 message = "验证码已过期"
                 return jsonify(result="false", message=message)
-            if right["VCode"]!=vcode:
-                message="验证码填写错误"
+            if right["VCode"] != vcode:
+                message = "验证码填写错误"
                 return jsonify(result="false", message=message)
             else:
                 new_password = ""
                 for i in range(6):
                     ch = chr(random.randrange(ord('0'), ord('9') + 1))
                     new_password += ch
-                mongo.db.user.update_one({"student_no": student_no}, {"$set": {"password": generate_password_hash(new_password)}})
+                mongo.db.user.update_one({"student_no": student_no},
+                                         {"$set": {"password": generate_password_hash(new_password)}})
                 try:
-                    send_mail(email,0,1,new_password)
+                    send_mail(email, 0, 1, new_password)
                     return jsonify(result="true")
                 except:
                     return jsonify(result="false")
     return redirect("/")
-
-
-
-
 
 
 @auth_bp.app_context_processor

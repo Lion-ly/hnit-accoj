@@ -106,7 +106,7 @@ function check_email(email) {
  * @param message_head
  */
 function show_message(id, message, message_type, timeout, message_head = false) {
-    if (document.getElementById("show_message")) return;
+    if (document.getElementById("show_message")) $("#show_message").remove();
     let div_content_base = "<div class='alert alert-" + message_type + "' id='show_message' style='text-align: center;display: none;margin-top: 20px;'> <strong>";
     let type = "提示！";
     if (message_type === "danger") {
@@ -164,5 +164,22 @@ function limit_number(obj) {
 
 function illegalCharFilter(obj) {
     let reg = /[${}().]/g;
-    $(obj).val($(obj.val().replace(reg, "")))
+    $(obj).val($(obj).val().replace(reg, ""))
+}
+
+/**
+ * 将arrayBuffer转为Blob并下载
+ * @param arrayBuffer
+ * @param type  "zip" or "rar"
+ * @param filename
+ */
+function downloadFile(arrayBuffer, type, filename) {
+    type = type === "zip" ? type : "x-rar-compressed";
+    let data = new Blob([arrayBuffer], {type: "application/" + type + ";charset=UTF-8"});
+    let downloadUrl = window.URL.createObjectURL(data);
+    let anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    anchor.download = filename;
+    anchor.click();
+    window.URL.revokeObjectURL(data);
 }

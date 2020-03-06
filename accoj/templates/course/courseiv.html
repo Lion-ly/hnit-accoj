@@ -13,7 +13,7 @@
 				</span>
 			</div>
 			<div class="panel-body">
-				<div align="center">
+				<div style="text-align: center">
 					<nav aria-label="Page navigation">
 						<ul class="pagination">
 							<li><a href="#" aria-label="Previous"> <span
@@ -45,7 +45,7 @@
 						</ul>
 					</nav>
 				</div>
-				<hr class="simple" color="#6f5499" />
+				<hr class="simple" style="color: #6f5499"/>
 
 				<h4>
                     <span class="glyphicon glyphicon-bookmark"></span> <em id="em_4"></em>
@@ -64,14 +64,14 @@
 						<p class="ats-fontsize-20">填写完整分录</p>
                         <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
 
-						<table class="table table-bordered" style="border: 0px">
+						<table class="table table-bordered" style="border: 0">
 							<tbody>
 								<tr>
-									<th style="width: 8%; border-right:0px" class="ats-tablecolor-f">借：</th>
-									<td style="width: 8%; border-left:0px" class="ats-tablecolor-f"></td>
+									<th style="width: 8%; border-right:0" class="ats-tablecolor-f">借：</th>
+									<td style="width: 8%; border-left:0" class="ats-tablecolor-f"></td>
 									<td style="width: 40%;"><input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject1" placeholder="科目"></td>
 									<td style="width: 40%;"><input type="text" name="money" id="money1" placeholder="金额" onkeyup="limit_number(this)"></td>
-									<td style="width: 4%;border: 0px;padding: 0px;">
+									<td style="width: 4%;border: 0;padding: 0;">
 										<div align="center">
 											<a style="color: green;" type="button" class="btn"
 												onclick="iv_AddRow('borrow')"><span
@@ -80,12 +80,12 @@
 									</td>
 								</tr>
 								<tr id="borrowRowAfter">
-									<td style="border-right:0px" class="ats-tablecolor-f"></td>
-									<th style="border-left:0px" class="ats-tablecolor-f">贷：</th>
+									<td style="border-right:0" class="ats-tablecolor-f"></td>
+									<th style="border-left:0" class="ats-tablecolor-f">贷：</th>
 									<td><input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject0" placeholder="科目"></td>
 									<td><input type="text" name="money" id="money0" placeholder="金额" onkeyup="limit_number(this)"></td>
-									<td style="padding: 0px; border: 0px">
-										<div align="center">
+									<td style="padding: 0; border: 0">
+										<div style="text-align: center">
 											<a style="color: green;" type="button" class="btn"
 												onclick="iv_AddRow('loan')"><span
 												class="glyphicon glyphicon-plus-sign"></span></a>
@@ -100,8 +100,8 @@
 
 					</div>
 				</div>
-				<hr class="simple" style="clear: both;" color="#6f5499" />
-				<div align="right">
+				<hr class="simple" style="clear: both;color: #6f5499" />
+				<div style="text-align: right">
                     <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
                         <span class="glyphicon"></span>&nbsp;保存
                     </button>

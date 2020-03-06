@@ -20,6 +20,13 @@ db.accoj.subject.insert({"subject_no": 1,				# 科目编号
 						 "subject_type": " "			# 科目类别（资产类，权益类，成本类，费用类，收入类，利润类）
 						})
 
+# 上传的文件集合
+db.accoj.file.insert({"document_no": 					# 学号名+业务索引号(在company集合中businesses的下标)
+									{"filename": "",	# 文件名
+									 "content": " ",	# 内容
+									}
+						})
+
 # 题库集合(已确定)
 db.accoj.question.insert({"questions_no": 1， 			# 题库号
 						 "question_no": 1,				# 题目编号
@@ -62,6 +69,7 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 							"entry_confirm": [],		# 会计分录部分进度
 							"ledger_confirm": [],		# 会计账户部分进度
 							"balance_sheet_confirm": [],# 会计平衡表部分进度
+							"acc_document_confirm": [],# 会计凭证部分进度
 						 },
 						 "schedule_saved": { 			# 课程保存进度
 							"business_saved": false,	# 增加业务部分是否完成
@@ -70,6 +78,7 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 							"entry_saved": [],			# 会计分录部分进度
 							"ledger_saved": [],			# 会计账户部分进度
 							"balance_sheet_saved": [],	# 会计平衡表部分进度
+							"acc_document_saved": [],	# 会计凭证部分进度
 						 },
 						 # 公司业务
 						 "businesses": [{"questions_no": 1， 			# 题库号
@@ -78,24 +87,42 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 									   "date": new Date(),  			# 日期
 									   "business_type": "",				# 业务类型（筹资活动、投资活动、经营活动）
 									   "affect_type": 1,				# 对会计等式影响类型
-									   "key_element_infos": [					# 会计要素信息
+									   # 会计要素信息
+									   "key_element_infos": [
 															{"key_element": "",	# 会计要素
 															 "money": 1, 		# 金额
 															 "is_up": boolean	# 正负判定
 															}],
-									   "subjects_infos": [						# 科目列表
+										# 科目列表
+									   "subjects_infos": [
 														 {"subject": "",		# 科目
 														  "money": 1,			# 金额
 														  "is_up": boolean		# 增减判定
-														 }]
-									   "entry_infos": [{				# 会计分录
-													   "subject": " ",	# 科目
-													   "money": 1,		# 金额
-													   "is_dr": boolean,# 是否借记
-													  }]
+														 }],
+										# 会计分录
+									   "entry_infos": [{
+													   "subject": " ",			# 科目
+													   "money": 1,				# 金额
+													   "is_dr": boolean,		# 是否借记
+													  }],
+										# 会计凭证
+									    "acc_document_infos": [{
+															   "document_no": "",					# 学号名+业务索引号(在company集合中businesses的下标)
+															   "filename": "",						# 文件名
+															   "doc_no": 1,					 		# 会计凭证记号
+															   "date": "1998-05-05",		 		# 日期
+															   "doc_nums": 1,				 		# 单据数量
+															   "contents":[{
+																		   "summary": " ",				 		# 摘要
+																		   "general_account": subject,			# 总账科目
+																		   "detail_account": " ",		 		# 明细科目
+																		   "dr_money": 1,			 			# 借方金额
+																		   "cr_money": 1				 		# 贷方金额
+																		 }]
+															   }]
 						 }]
 						 # 会计账户
-						 "ledger_infos": {"subject_name":		# 科目名即账户名作为键
+						 "ledger_infos": {"subject_name":										# 科目名即账户名作为键
 														{
 													   "opening_balance": 1, 					# 期初余额
 													   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
@@ -127,18 +154,6 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 																	   "lend_3": 1					 		# 贷方期末余额
 																	   ]}
 										   }
-						 # 会计凭证
-						 "acc_documents": [{
-										   "source_document": path,		 		# 原始凭证存储路径
-										   "doc_no": 1,					 		# 会计凭证编号
-									       "date": "1998-05-05",		 		# 日期
-										   "doc_nums": 1,				 		# 单据数量
-										   "abstract": " ",				 		# 摘要
-									       "subject": subject,			 		# 总账科目
-										   "detail_subject": " ",		 		# 明细科目
-										   "borrow_money": 1,			 		# 借方金额
-										   "lend_money": 1				 		# 贷方金额
-										   }]
 						})
 
 # 判断会计要素和增减金额以及对会计等式的影响类型
