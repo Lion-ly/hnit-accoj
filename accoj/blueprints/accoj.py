@@ -6,10 +6,11 @@
 # @File    : accoj.py
 # @Software: PyCharm
 from flask import Blueprint, render_template, redirect, request, jsonify, session, g
-from accoj.utils import login_required
+from accoj.utils import login_required, allowed_file, limit_content_length
 from accoj.extensions import mongo
 from accoj.utils import is_number
 from accoj.deal_business import deal_business
+from _datetime import datetime
 import random
 
 accoj_bp = Blueprint('accoj', __name__)
@@ -119,9 +120,10 @@ def company_form_submit():
             data_dict["com_cash"] = 0
             data_dict["business_num"] = 0
             data_dict["schedule_confirm"] = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[],
-                                                 entry_confirm=[], balance_sheet_confirm=False)
+                                                 entry_confirm=[], balance_sheet_confirm=False,
+                                                 acc_document_confirm=[])
             data_dict["schedule_saved"] = dict(key_element_saved=[], subject_saved=[], entry_saved=[],
-                                               balance_sheet_svaed=False)
+                                               balance_sheet_svaed=False, acc_document_saved=[])
             data_dict["com_assets"] = []
             data_dict["businesses"] = []
             data_dict_cp = data_dict.copy()
@@ -766,13 +768,130 @@ def get_balance_sheet_info():
 
 
 # 第六次课程----start-------------------------------------------------------------------------------
-# Todo 第六次课程
 @accoj_bp.route('/coursevi', methods=['POST', 'GET'])
 def coursevi():
     """
     :return:
     """
+    # 若第一次课程未完成
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
+        return redirect("/coursei")
     return render_template('course/coursevi.html')
+
+
+@accoj_bp.route('/submit_acc_document_info', methods=['POST', 'GET'])
+def submit_acc_document_info():
+    """
+    提交会计凭证信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule_confirm=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
+        json_data = request.get_json()
+        acc_document_infos = json_data.get("acc_document_infos")
+        submit_type = json_data.get("submit_type")
+        business_no = json_data.get("business_no")
+        date = acc_document_infos.get("date")
+        file = acc_document_infos.get("file")
+        try:
+            acc_document_infos["date"] = datetime.strptime(date, "%Y-%m-%d")
+        except ValueError:
+            return jsonify(result=False, message="日期格式错误")
+
+        if not is_number(business_no) or submit_type not in ["confirm", "save"]:
+            return jsonify(result=False, message="提交类型错误")
+        else:
+            business_no = int(business_no) - 1
+            if business_no > 19 or business_no < 0:
+                return jsonify(result=False, message="题号不存在")
+        if business_no not in schedule_confirm.get("acc_document_confirm"):
+            # 若当前业务信息提交未确认，则确认提交或保存
+            # 保存文件
+            acc_document_infos["document_no"] = ""
+            filename = file.get("filename")
+            if filename and not allowed_file(filename):
+                return jsonify(result=False, message="提交文件类型错误")
+            if file:
+                document_no = session["username"] + str(business_no)
+                acc_document_infos["document_no"] = document_no
+                mongo.db.file.update("{}".format(document_no), {"$set": file}, True)  # upsert
+            acc_document_infos.pop("file")
+
+            if submit_type == "confirm":
+                # 提交类型为确认提交
+                update_prefix = "businesses." + str(business_no)
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"     : {(update_prefix + ".acc_document_infos"): acc_document_infos},
+                                         "$addToSet": {"schedule_confirm.acc_document_confirm": business_no,
+                                                       "schedule_saved.acc_document_saved"    : business_no}}
+                                        )
+                return jsonify(result=True)
+
+            elif submit_type == "save":
+                # 提交类型为保存
+                update_prefix = "businesses." + str(business_no)
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"     : {(update_prefix + ".acc_document_infos"): acc_document_infos},
+                                         "$addToSet": {"schedule_saved.acc_document_saved": business_no}}
+                                        )
+                return jsonify(result=True)
+        elif business_no in schedule_confirm.get("acc_document_confirm"):
+            # 业务已提交确认
+            return jsonify(result=False, message="此业务已经提交过")
+        else:
+            return jsonify(result=False, message="未知错误!")
+    return redirect("/courseiv")
+
+
+@accoj_bp.route('/get_acc_document_info', methods=['POST', 'GET'])
+@limit_content_length(5 * 1024 * 1024)
+def get_acc_document_info():
+    """
+    获取会计凭证信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
+        businesses = company.get("businesses")
+        schedule_confirm = g.schedule_confirm
+        schedule_saved = g.schedule_saved
+        business_list = list()
+        businesses_len = len(businesses)
+        for i in range(0, businesses_len):
+            acc_document_infos = businesses[i].get("acc_document_infos")
+            confirmed = True if i in schedule_confirm.get("acc_document_confirm") else False
+            saved = True if i in schedule_saved.get("acc_document_saved") else False
+            content = businesses[i].get("content")
+            business_type = businesses[i].get("business_type")
+            business_no = i + 1
+            business_list.append(dict(business_no=business_no, content=content, acc_document_infos=acc_document_infos,
+                                      confirmed=confirmed, saved=saved, business_type=business_type))
+        return jsonify(result=True, business_list=business_list)
+    return redirect('/courseiv')
+
+
+@accoj_bp.route('/download_acc_document_info', methods=['POST', 'GET'])
+def download_acc_document_info():
+    """
+    下载会计凭证信息
+    :return:
+    """
+    if request.method == "POST":
+        form = request.form
+        business_no = form.get("business_no")
+        business_no_tmp = int(business_no) - 1
+        if business_no_tmp > 19 or business_no_tmp < 0:
+            return jsonify(result=False, message="题号不存在")
+        document_no = session["username"] + business_no
+        file = mongo.db.find("{}".format(document_no), dict(_id=0))
+        if file:
+            return jsonify(result=True, file=file)
+        else:
+            return jsonify(result=False, message="文件不存在")
+    return redirect('/courseiv')
 
 
 # 第六次课程----end---------------------------------------------------------------------------------

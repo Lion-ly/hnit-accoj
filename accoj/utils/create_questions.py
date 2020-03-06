@@ -34,7 +34,7 @@ def add_question(filename="accoj/utils/questions.xlsx"):
     for row in range(1, sheet_rows):
         question_no, content, business_type, affect_type, values, key_element_infos, subjects_infos \
             = sheet_row_parsing(sheet1.row(row))
-        print("question_no:{}  检查成功".format(question_no))
+        print("question_no:{}/{} 检查成功".format(question_no, sheet_rows - 1), end='\r')
         question_exit = mongo.db.question.find_one({"question_no": question_no})
         if question_exit:
             question_exit_list.append(question_no)

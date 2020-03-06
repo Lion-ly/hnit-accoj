@@ -270,19 +270,19 @@ function v_AddRow(period) {
     }
     $("#" + period + "_last").before(
         "<tr id='" + period_row_id + "'>"
-        + "<td><label><input name=\"subject\" title=\"科目\"></label></td>" +
+        + "<td><label><input name=\"subject\" title=\"科目\" onkeyup=\"illegalCharFilter(this)\"></label></td>" +
         "<td><label><input name=\"borrow_1\" title=\"金额￥\"" +
-        "                                              onkeyup=\"this.value=this.value.replace(/\\D/g,'')\"></label></td>" +
+        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input name=\"lend_1\" title=\"金额￥\"" +
-        "                                              onkeyup=\"this.value=this.value.replace(/\\D/g,'')\"></label></td>" +
+        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input name=\"borrow_2\" title=\"金额￥\"" +
-        "                                              onkeyup=\"this.value=this.value.replace(/\\D/g,'')\"></label></td>" +
+        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input name=\"lend_2\" title=\"金额￥\"" +
-        "                                              onkeyup=\"this.value=this.value.replace(/\\D/g,'')\"></label></td>" +
+        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input name=\"borrow_3\" title=\"金额￥\"" +
-        "                                              onkeyup=\"this.value=this.value.replace(/\\D/g,'')\"></label></td>" +
+        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input name=\"lend_3\" title=\"金额￥\"" +
-        "                                              onkeyup=\"this.value=this.value.replace(/\\D/g,'')\"></label></td>"
+        "                                              onkeyup=\"limit_number(this)\"></label></td>"
         + "<td style='padding: 0; border: 0'>"
         + "<div style='text-align: center'> "
         + "<a style='color: red' type='button' class='btn' onclick='v_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"

@@ -60,7 +60,7 @@ function getVCode(obj) {
             }
             , 1000);
     } else {
-        show_message("login_form","请输入正确的邮箱","warning",2000)
+        show_message("login_form", "请输入正确的邮箱", "warning", 2000)
     }
 }
 
@@ -83,11 +83,9 @@ function findgetVCode(obj) {
             }
             , 1000);
     } else {
-        show_message("findpwd_form","请输入正确的邮箱","warning",2000)
+        show_message("findpwd_form", "请输入正确的邮箱", "warning", 2000)
     }
 }
-
-
 
 
 /*
@@ -108,7 +106,7 @@ function check_email(email) {
  * @param message_head
  */
 function show_message(id, message, message_type, timeout, message_head = false) {
-    if (document.getElementById("show_message")) return;
+    if (document.getElementById("show_message")) $("#show_message").remove();
     let div_content_base = "<div class='alert alert-" + message_type + "' id='show_message' style='text-align: center;display: none;margin-top: 20px;'> <strong>";
     let type = "提示！";
     if (message_type === "danger") {
@@ -151,6 +149,37 @@ function submit_confirm_clicked() {
     $("#submit_confirm_button").attr("disabled", true);
     // 定时自动关闭
     setTimeout(function () {
-            $("#submit_confirm").modal('hide');
+        $("#submit_confirm").modal('hide');
     }, 3000)
+}
+
+/**
+ * 限制输入只能为数字
+ * @param obj
+ */
+function limit_number(obj) {
+    let reg = /\D/g;
+    $(obj).val($(obj).val().replace(reg, ""));
+}
+
+function illegalCharFilter(obj) {
+    let reg = /[${}().]/g;
+    $(obj).val($(obj).val().replace(reg, ""))
+}
+
+/**
+ * 将arrayBuffer转为Blob并下载
+ * @param arrayBuffer
+ * @param type  "zip" or "rar"
+ * @param filename
+ */
+function downloadFile(arrayBuffer, type, filename) {
+    type = type === "zip" ? type : "x-rar-compressed";
+    let data = new Blob([arrayBuffer], {type: "application/" + type + ";charset=UTF-8"});
+    let downloadUrl = window.URL.createObjectURL(data);
+    let anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    anchor.download = filename;
+    anchor.click();
+    window.URL.revokeObjectURL(data);
 }
