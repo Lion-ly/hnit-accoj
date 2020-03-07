@@ -675,6 +675,9 @@ def delete_ledger_info():
         if subject:
             company = mongo.db.company.find_one({"student_no": session.get("username")}, {"involve_subjects": 1})
             involve_subjects = company.get("involve_subjects")
+            schedule_confirm = g.schedule_confirm
+            if subject in schedule_confirm.get("ledger_confirm"):
+                return jsonify(result=False, message="已经提交过, 删除失败")
             if subject in involve_subjects:
                 mongo.db.company.update({"student_no": session.get("username")},
                                         {"$unset": {"ledger_infos.{}".format(subject): True},
