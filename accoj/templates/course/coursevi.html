@@ -66,8 +66,12 @@
                                 <div class="form-group">
                                     <label for="uploadFiles"><span
                                             class="glyphicon glyphicon-upload"></span> Upload files </label> <input
-                                        type="file" id="uploadFiles" accept=".zip,.rar">
-                                    <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖</p>
+                                        type="file" id="uploadFiles" accept=".zip,.rar" onchange="getfileContents()">
+                                    <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖。</p>
+                                    <button type="button" id="vi_downloadFile_button" onclick="vi_downloadFile()"
+                                            style="display: none">下载附件
+                                    </button>&nbsp;&nbsp;
+                                    <span id="vi_downloadSpan"></span>
                                 </div>
                             </form>
 
@@ -192,6 +196,7 @@
                     </div>
 
                     <hr class="simple" style="clear: both;color: #6f5499"/>
+                    <div id="course_vi_message"></div>
                     <div style="text-align: right">
                         <button type="button" class="btn btn-info" id="save_acc_document_button"
                                 onclick="save_acc_document()">

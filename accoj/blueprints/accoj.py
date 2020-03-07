@@ -812,12 +812,16 @@ def submit_acc_document_info():
             # 保存文件
             acc_document_infos["document_no"] = ""
             filename = file.get("filename")
+            content = file.get("content")
+            print("filename: {}".format(filename))
             if filename and not allowed_file(filename):
                 return jsonify(result=False, message="提交文件类型错误")
-            if file:
+            if filename and content:
+                print("pass end")
                 document_no = session["username"] + str(business_no)
                 acc_document_infos["document_no"] = document_no
-                mongo.db.file.update("{}".format(document_no), {"$set": file}, True)  # upsert
+                file["document_no"] = document_no
+                mongo.db.file.update({"document_no": "{}".format(document_no)}, {"$set": file}, True)  # upsert
             acc_document_infos.pop("file")
 
             if submit_type == "confirm":
@@ -885,9 +889,11 @@ def download_acc_document_info():
         business_no_tmp = int(business_no) - 1
         if business_no_tmp > 19 or business_no_tmp < 0:
             return jsonify(result=False, message="题号不存在")
-        document_no = session["username"] + business_no
-        file = mongo.db.find("{}".format(document_no), dict(_id=0))
-        if file:
+        document_no = session["username"] + str(business_no_tmp)
+        print(document_no)
+        file_cp = mongo.db.file.find_one({"document_no": "{}".format(document_no)}, dict(_id=0))
+        if file_cp:
+            file = dict(filename=file_cp.get("filename"), content=file_cp.get("content"))
             return jsonify(result=True, file=file)
         else:
             return jsonify(result=False, message="文件不存在")

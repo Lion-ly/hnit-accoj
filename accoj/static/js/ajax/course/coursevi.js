@@ -2,6 +2,7 @@
 $(document).ready(function () {
     get_acc_document_info(1);
 });
+let fileContent = "";
 //==================================提交会计凭证信息==================================//
 let now_business_no = 1;
 
@@ -63,7 +64,7 @@ function submit_acc_document_info(submit_type) {
     } else {
         return;
     }
-    let csrf_token = {"csrf_token": get_csrf_token()};
+    let csrf_token = get_csrf_token();
     let business_no = now_business_no;
     let data, acc_document_infos;
     let doc_no;                     // 会计凭证编号
@@ -100,6 +101,8 @@ function submit_acc_document_info(submit_type) {
                     cr_money += i < 13 ? "" : money;
                 }
             }
+            dr_money = dr_money ? dr_money / 100 : dr_money;
+            cr_money = cr_money ? cr_money / 100 : cr_money;
             contents.push({
                 "summary": summary,
                 "general_account": general_account,
@@ -109,15 +112,16 @@ function submit_acc_document_info(submit_type) {
             })
         }
     );
-    let fileData = getfileContents();
-    let filename = fileData.filename;
+    fileContent = fileContent ? fileContent : {"filename": "", "content": ""};
+    let filename = fileContent["filename"] ? fileContent["filename"] : $("#vi_downloadSpan").text();
+    fileContent["content"] = JSON.stringify(Array.from(new Uint8Array(fileContent["content"])));
 
     acc_document_infos = {
         "doc_no": doc_no,
         "date": date,
         "doc_nums": doc_nums,
         "contents": contents,
-        "file": fileData,
+        "file": fileContent,
         "filename": filename
     };
     data = {
@@ -145,14 +149,14 @@ function submit_acc_document_info(submit_type) {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", "提交成功！", "info", 1000);
                 } else if (type_flag === false) {
-                    show_message("course_iv_message", "保存成功！", "info", 1000);
+                    show_message("course_vi_message", "保存成功！", "info", 1000);
                 }
                 get_acc_document_info(business_no);
             } else {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
                 } else if (type_flag === false) {
-                    show_message("course_iv_message", data["message"], "danger", 1000, "保存失败！");
+                    show_message("course_vi_message", data["message"], "danger", 1000, "保存失败！");
                 }
             }
         },
@@ -196,7 +200,7 @@ function get_acc_document_info(business_no) {
                 business_list = data["business_list"];
                 map_acc_document_info(business_no);
             } else {
-                show_message("course_iv_message", data["message"], "danger", 1000);
+                show_message("course_vi_message", data["message"], "danger", 1000);
             }
         },
         error: function (err) {
@@ -213,12 +217,24 @@ function map_acc_document_info(business_no) {
     business_no = parseInt(business_no);
     let business_index = business_no - 1;
     // 先重置凭证信息
+    $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
+    $(":input").val("");
 
     let content = business_list[business_index]["content"];
     let business_type = business_list[business_index]["business_type"];
     let confirmed = business_list[business_index]["confirmed"];
     let saved = business_list[business_index]["saved"];
     let acc_document_infos = business_list[business_index]["acc_document_infos"];
+    if (acc_document_infos) {
+        let filename = acc_document_infos["filename"];
+        if (filename) {
+            $("#vi_downloadFile_button").show();
+            $("#vi_downloadSpan").text(filename);
+        }
+    } else {
+        $("#vi_downloadFile_button").hide();
+        $("#vi_downloadSpan").text("")
+    }
     let em_no = business_index + 1;
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
@@ -255,7 +271,7 @@ function map_acc_document_info(business_no) {
     $("#business_content_6").text(content);
 
     // 填充会计凭证信息
-    if (!acc_document_infos || !acc_document_infos.length) {
+    if (!acc_document_infos) {
         // 凭证信息为空则返回
         return;
     }
@@ -263,6 +279,7 @@ function map_acc_document_info(business_no) {
     let date = acc_document_infos["date"];
     let doc_nums = acc_document_infos["doc_nums"];
     let contents = acc_document_infos["contents"];
+    date = formatDate(date);
     $("input[name=doc_no]").val(doc_no);
     $("input[name=date]").val(date);
     $("input[name=doc_nums]").val(doc_nums);
@@ -282,26 +299,73 @@ function map_acc_document_info(business_no) {
             let thisId = $(this).attr("id");
             let thisInput = $(this).find("input");
             let prefix = "0000000000";
-            dr_money = dr_money.toString();
-            cr_money = cr_money.toString();
-            dr_money = (prefix + dr_money).substring(10 - dr_money.length, dr_money.length - 1);
-            cr_money = (prefix + cr_money).substring(10 - cr_money.length, cr_money.length - 1);
-            let money = dr_money + cr_money;
+            dr_money = dr_money ? dr_money * 100 : dr_money;
+            cr_money = cr_money ? cr_money * 100 : cr_money;
+            dr_money = dr_money ? dr_money.toString() : dr_money;
+            cr_money = cr_money ? cr_money.toString() : cr_money;
+            dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
+            cr_money = cr_money ? prefix.substring(0, 10 - cr_money.length) + cr_money : cr_money;
+            let money = dr_money ? dr_money : "";
+            money += cr_money ? cr_money : "";
+            let firstNum = true;
             if (thisId === "vi_rowLast") {
                 for (let i = 0; i < 20; i++) {
-                    $(thisInput[i]).val(money[i]);
+                    if (money) {
+                        if (firstNum && money[i] !== "0") {
+                            $(thisInput[i]).val(money[i]);
+                            firstNum = false;
+                        }
+                        if (!firstNum && i < money.length)
+                            $(thisInput[i]).val(money[i]);
+                    }
                 }
             } else {
                 $(thisInput[0]).val(summary);
                 $(thisInput[1]).val(general_account);
                 $(thisInput[2]).val(detail_account);
                 for (let i = 3; i < 23; i++) {
-                    $(thisInput[i]).val(money[i]);
+                    if (money) {
+                        if (firstNum && money[i - 3] !== "0") {
+                            $(thisInput[i]).val(money[i - 3]);
+                            firstNum = false;
+                        }
+                        if (!firstNum && i < money.length + 3)
+                            $(thisInput[i]).val(money[i - 3]);
+                    }
                 }
             }
             contents_index++;
         }
     );
+}
+
+
+function vi_downloadFile() {
+    let business_no = now_business_no;
+    let csrf_token = {"csrf_token": get_csrf_token()};
+    let data = $.param(csrf_token) + "&" + $.param({"business_no": business_no});
+    $.ajax({
+        url: "/download_acc_document_info",
+        type: "post",
+        data: data,
+        dataType: "json",
+        cache: false,
+        async: true,
+        success: function (data) {
+            if (data["result"] === true) {
+                let file = data["file"];
+                let filename = file["filename"];
+                let content = file["content"];
+                let arrayBuffer = new Uint8Array(JSON.parse(content)).buffer;
+                downloadFile(arrayBuffer, filename);
+            } else {
+                show_message("course_vi_message", data["message"], "danger", 1000);
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText);
+        }
+    })
 }
 
 // ==================================事件控制==================================//
@@ -357,26 +421,23 @@ function vi_DeleteRow(obj) {
 }
 
 /**
- * 返回包含文件名和文件内容的Object
- * @returns {{filename: string, content: ArrayBuffer}}
+ * 返回包含文件名和文件内容的Array
  */
 function getfileContents() {
     let files = $("#uploadFiles").prop("files");
-    if (!files.length) return null;
-
-    let filename = "";
-    let content = null;
 
     function setupReader(file) {
         let reader = new FileReader();
-        filename = file.name;
+        let name = file.name;
         reader.readAsArrayBuffer(file);
         reader.onload = function (e) {
-            // 获取文件内容
-            content = e.target.result;
-        };
+            // get file content
+            let content = e.target.result;
+            fileContent = {"filename": name, "content": content};
+        }
     }
 
-    setupReader(files[0]);
-    return {"filename": filename, "content": content};
+    for (let i = 0; i < files.length; i++) {
+        setupReader(files[i]);
+    }
 }
