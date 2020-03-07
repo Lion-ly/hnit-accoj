@@ -643,7 +643,8 @@ function coursevLiChange(obj, role = false) {
 function deleteTableV(obj) {
     let subject = $("li[id^=coursevli][class=active]").children().text();
     if (ledger_infos && ledger_infos.hasOwnProperty(subject) && ledger_infos[subject]["confirmed"]) {
-        show_message("course_v_message", "已经提交过, 不可删除", "danger", 1000, "删除失败");
+        show_message("course_v_message", "已经提交过, 不可删除", "danger", 1000, "删除失败！");
+        return;
     }
     if (involve_subjects.indexOf(subject) !== -1) {
         delete_ledger_info(subject);
