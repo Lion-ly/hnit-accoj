@@ -118,14 +118,14 @@ function submit_balance_sheet_info(submit_type) {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", "提交成功！", "info", 1000);
                 } else if (type_flag === false) {
-                    show_message("course_ii_message", "保存成功！", "info", 1000);
+                    show_message("course_v_2_message", "保存成功！", "info", 1000);
                 }
                 get_balance_sheet_info();
             } else {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
                 } else if (type_flag === false) {
-                    show_message("course_ii_message", data["message"], "danger", 1000, "保存失败！");
+                    show_message("course_v_2_message", data["message"], "danger", 1000, "保存失败！");
                 }
             }
         },
@@ -139,7 +139,7 @@ function submit_balance_sheet_info(submit_type) {
 }
 
 //==================================获取会计平衡表信息==================================//
-let balance_sheet_infos; // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+let balance_sheet_infos; // 保存本次课程全部信息，减少后端数据请求次数
 /**
  * 从后端获取会计平衡表信息
  */
@@ -164,7 +164,7 @@ function get_balance_sheet_info() {
                 balance_sheet_infos = data["balance_sheet_infos"];
                 map_balance_sheet_info();
             } else {
-                show_message("course_ii_message", data["message"], "danger", 1000);
+                show_message("course_v_2_message", data["message"], "danger", 1000);
             }
         },
         error: function (err) {

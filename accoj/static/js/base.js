@@ -170,10 +170,11 @@ function illegalCharFilter(obj) {
 /**
  * 将arrayBuffer转为Blob并下载
  * @param arrayBuffer
- * @param type  "zip" or "rar"
  * @param filename
  */
-function downloadFile(arrayBuffer, type, filename) {
+function downloadFile(arrayBuffer, filename) {
+    let tmp = filename.split(",");
+    let type = tmp[tmp.length - 1];
     type = type === "zip" ? type : "x-rar-compressed";
     let data = new Blob([arrayBuffer], {type: "application/" + type + ";charset=UTF-8"});
     let downloadUrl = window.URL.createObjectURL(data);
@@ -182,4 +183,23 @@ function downloadFile(arrayBuffer, type, filename) {
     anchor.download = filename;
     anchor.click();
     window.URL.revokeObjectURL(data);
+}
+
+/**
+ * UTC dat to yyyy-mm-dd
+ * @param date
+ * @returns {string}
+ */
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
