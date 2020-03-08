@@ -203,10 +203,10 @@ function map_balance_sheet_info() {
     }
     // 创建行
     for (let i = 0; i < accounting_period_1.length - 2; i++) {
-        v_AddRow("period1");
+        v2_AddRow("period1");
     }
     for (let i = 0; i < accounting_period_2.length - 2; i++) {
-        v_AddRow("period2");
+        v2_AddRow("period2");
     }
     // 填充数据
     let index = 0;
@@ -260,7 +260,7 @@ let period2_row = 2;
 /*
  * @ # coursev_2 -> 平衡表 ? 表格增加行
  */
-function v_AddRow(period) {
+function v2_AddRow(period) {
     let period_row_id = "period1_row_" + period1_row;
     if (period === "period2") {
         period_row_id = "period2_row_" + period1_row;
@@ -285,7 +285,7 @@ function v_AddRow(period) {
         "                                              onkeyup=\"limit_number(this)\"></label></td>"
         + "<td style='padding: 0; border: 0'>"
         + "<div style='text-align: center'> "
-        + "<a style='color: red' type='button' class='btn' onclick='v_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "<a style='color: red' type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div> "
         + "</td> "
         + "</tr>"
@@ -296,6 +296,6 @@ function v_AddRow(period) {
 /*
  * @ # coursev_2 -> 平衡表 ? 表格删除行
  */
-function v_DeleteRow(obj) {
+function v2_DeleteRow(obj) {
     $(obj).parent().parent().parent().remove();
 }

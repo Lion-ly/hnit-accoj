@@ -1,5 +1,5 @@
 #project-title{
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	background-color: #ffffff;
 	border-color:#ffffff
 }
@@ -27,7 +27,7 @@ footer a:visited{
 
 .footlogo .footlogotext {
     visibility: hidden;
-    width: 120p
+    width: 120px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -47,6 +47,6 @@ footer a:visited{
 
 .ats-hnitinfo p{
 	font-size: 14px;
-	font-family: 楷体;
+    font-family: 楷体, serif;
 	text-indent:2em; 
 }

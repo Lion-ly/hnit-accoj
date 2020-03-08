@@ -10,290 +10,12 @@ let ledger_infos; // 嵌套字典，保存本次课程全部信息，减少后�
 // 当前所选科目
 let now_subject = "";
 let first = true;
+let involve_subjects_len = 0;
+
 // 页面加载完成填充数据
 $(document).ready(function () {
     get_ledger_info(now_subject);
 });
-
-/*
- * @ # coursev ? 表格增加行
- */
-function v_AddLeftRow(obj, pm, business_no = "", money = "") {
-    let is_dr = "dr";
-    if (!pm) {
-        is_dr = "cr";
-    }
-    $(obj).parent().parent().parent().after(
-        "<tr><td><div style='text-align: left'>"
-        + "<a style='color: red; padding: 0 0' type='button' "
-        + "class='btn' onclick='v_DeleteRowT(this)'><span "
-        + "class='glyphicon glyphicon-minus-sign'></span></a>"
-        + "</div>" + "</td>"
-        + "<td><input title='业务编号' type='number' name='business_no' value='" + business_no
-        + "' placeholder='0'></td>"
-        + "<td><input title='金额 ' type='number' name='" + is_dr + "' value='" + money + "'"
-        + " placeholder='0'></td></tr>");
-}
-
-function v_AddRightRow(obj, pm, business_no = "", money = "") {
-    let is_dr = "cr";
-    if (!pm) {
-        is_dr = "dr";
-    }
-    $(obj).parent().parent().parent().after(
-        "<tr>"
-        + "<td><input title='业务编号' type='number' name='business_no' value='" + business_no
-        + "' placeholder='0'></td>"
-        + "<td><input title='金额 ' type='number' name='" + is_dr + "' value='" + money + "'"
-        + " name='" + is_dr + "' id='' placeholder='0'></td>"
-        + "<td style='width: 40%;'>" + "<div style='text-align: right'>"
-        + "<a style='color: red; padding: 0 0' "
-        + "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
-        + "class='glyphicon glyphicon-minus-sign'></span></a>"
-        + "</div>" + "</td>" + "</tr>");
-}
-
-function v_DeleteRowT(obj) {
-    $(obj).parent().parent().parent().remove();
-}
-
-
-/**
- * 增加左T表
- */
-function tTableAppendLeft() {
-    let content = '' +
-        '<div role="form" class="" id="ttableLeft">' +
-        '        <div style="text-align:right;">' +
-        '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
-        '               class="btn" title="删除当前账户信息"  onclick="deleteTableV(this)"><span class="glyphicon glyphicon-remove"></span></button>' +
-        '        </div>' +
-        '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
-        '                <tbody>' +
-        '                <tr>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
-        '                    <th style="border: 0; width: 33%">' +
-        '                    <select id="coursev_select" class="form-control pull-right" onchange="subject_change(this)">' +
-        '                    </select></th>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
-        '                </tr>' +
-        '                </tbody>' +
-        '            </table>' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%;">' +
-        '                <tbody>' +
-        '                <tr>' +
-        '                    <td style="width: 50%; border-left: 0">' +
-        '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
-        '                                                             class="btn"' +
-        '                                                             onclick="v_AddLeftRow(this, true)"><span' +
-        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
-        '                                    </td>' +
-        '                                    <th style="width: 30%;">期初余额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="opening_balance" placeholder="0"></td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                    <td style="width: 50%; border-right: 0">' +
-        '                        <div style="text-align: left">' +
-        '                            <table id="ttable-01" class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;"></th>' +
-        '                                    <td style="width: 30%;"></td>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
-        '                                                              class="btn"' +
-        '                                                              onclick="v_AddRightRow(this,false)"><span' +
-        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
-        '                                    </td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                </tr>' +
-        '                <tr>' +
-        '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
-        '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="current_amount_dr" id="" placeholder="0"></td>' +
-        '                                </tr>' +
-        '                                <tr>' +
-        '                                    <td></td>' +
-        '                                    <th>期末余额</th>' +
-        '                                    <td><input type="number" name="ending_balance" id="" placeholder="0"></td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
-        '                        <div style="text-align: left">' +
-        '                            <table class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="current_amount_cr" id="" placeholder="0"></td>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                </tr>' +
-        '                </tbody>' +
-        '            </table>' +
-        '        </div>' +
-        '    </div>';
-    $('#TTablePage').append(content);
-}
-
-/**
- * 增加右T表
- */
-function tTableAppendRight() {
-    let content = '' +
-        '    <div role="tabpanel" class="" id="ttableRight">' +
-        '        <div style="text-align:right;">' +
-        '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
-        '               class="btn" title="删除当前账户信息" onclick="deleteTableV(this)"><span class="glyphicon glyphicon-remove"></span></button>' +
-        '        </div>' +
-        '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
-        '                <tbody>' +
-        '                <tr>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
-        '                    <th style="border: 0; width: 33%"><select id="coursev_select" class="form-control pull-right"' +
-        '                                                              onchange="subject_change(this)">' +
-        '                    </select></th>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
-        '                </tr>' +
-        '                </tbody>' +
-        '            </table>' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%">' +
-        '                <tbody>' +
-        '                <tr>' +
-        '                    <td style="width: 50%; border-left: 0">' +
-        '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
-        '                                                             class="btn" onclick="v_AddLeftRow(this,false)"><span' +
-        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
-        '                                    </td>' +
-        '                                    <th style="width: 30%;"></th>' +
-        '                                    <td style="width: 30%;"></td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                    <td style="width: 50%; border-right: 0">' +
-        '                        <div style="text-align: left">' +
-        '                            <table id="ttable-01" class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;">期初余额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
-        '                                                              class="btn"' +
-        '                                                              onclick="v_AddRightRow(this,true)"><span' +
-        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
-        '                                    </td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                </tr>' +
-        '                <tr>' +
-        '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
-        '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
-        '                        <div style="text-align: left">' +
-        '                            <table class="ats-v-Ttable">' +
-        '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                </tr>' +
-        '                                <tr>' +
-        '                                    <th>期末余额</th>' +
-        '                                    <td><input type="number" name="" id="" placeholder="0"></td>' +
-        '                                    <td></td>' +
-        '                                </tr>' +
-        '                                </tbody>' +
-        '                            </table>' +
-        '                        </div>' +
-        '                    </td>' +
-        '                </tr>' +
-        '                </tbody>' +
-        '            </table>' +
-        '        </div>' +
-        '    </div>';
-    $('#TTablePage').append(content);
-}
-
-let involve_subjects_len = 0;
-
-function v_createNewPage(obj, lcr) {
-    let ledgerNum = $("li[id^=coursevli]").length;
-    if (involve_subjects_len && ledgerNum >= involve_subjects_len) {
-        show_message("course_v_message", "账户设置达到上限", "danger", 1000, "新增失败");
-        return;
-    }
-    // 移除旧表
-    $("[id^=ttable]").remove();
-    // 移除激活的li的.active
-    $("li[id^=coursevli]").removeClass("active");
-    switch (lcr) {
-        case "left":
-            tTableAppendLeft();
-            break;
-        case "center":
-            $('#TTablePage').append(
-
-            );
-            break;
-        case "right":
-            tTableAppendRight();
-            break;
-    }
-    let coursevli_id = "coursevli_" + lcr + pageNum;
-    $(obj).parent().parent().parent().before(
-        "<li role='presentation' class='active' onclick='coursevLiChange(this)' id='" + coursevli_id + "'>" +
-        "<a></a></li>"
-    );
-    coursevLiChange($("#" + coursevli_id));
-    pageNum++;
-}
 
 //==================================提交会计账户信息==================================//
 /**
@@ -660,4 +382,282 @@ function deleteTableV(obj) {
         let last_li = $(coursevli_list[coursevli_list_len - 1]);
         coursevLiChange(last_li);
     }
+}
+
+/*
+ * @ # coursev ? 表格增加行
+ */
+function v_AddLeftRow(obj, pm, business_no = "", money = "") {
+    let is_dr = "dr";
+    if (!pm) {
+        is_dr = "cr";
+    }
+    $(obj).parent().parent().parent().after(
+        "<tr><td><div style='text-align: left'>"
+        + "<a style='color: red; padding: 0 0' type='button' "
+        + "class='btn' onclick='v_DeleteRowT(this)'><span "
+        + "class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "</div>" + "</td>"
+        + "<td><input title='业务编号' type='number' name='business_no' value='" + business_no
+        + "' placeholder='0'></td>"
+        + "<td><input title='金额 ' type='number' name='" + is_dr + "' value='" + money + "'"
+        + " placeholder='0'></td></tr>");
+}
+
+function v_AddRightRow(obj, pm, business_no = "", money = "") {
+    let is_dr = "cr";
+    if (!pm) {
+        is_dr = "dr";
+    }
+    $(obj).parent().parent().parent().after(
+        "<tr>"
+        + "<td><input title='业务编号' type='number' name='business_no' value='" + business_no
+        + "' placeholder='0'></td>"
+        + "<td><input title='金额 ' type='number' name='" + is_dr + "' value='" + money + "'"
+        + " name='" + is_dr + "' id='' placeholder='0'></td>"
+        + "<td style='width: 40%;'>" + "<div style='text-align: right'>"
+        + "<a style='color: red; padding: 0 0' "
+        + "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
+        + "class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "</div>" + "</td>" + "</tr>");
+}
+
+function v_DeleteRowT(obj) {
+    $(obj).parent().parent().parent().remove();
+}
+
+
+/**
+ * 增加左T表
+ */
+function tTableAppendLeft() {
+    let content = '' +
+        '<div role="form" class="" id="ttableLeft">' +
+        '        <div style="text-align:right;">' +
+        '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
+        '               class="btn" title="删除当前账户信息"  onclick="deleteTableV(this)"><span class="glyphicon glyphicon-remove"></span></button>' +
+        '        </div>' +
+        '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
+        '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
+        '                <tbody>' +
+        '                <tr>' +
+        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
+        '                    <th style="border: 0; width: 33%">' +
+        '                    <select style="width: auto" id="coursev_select" class="form-control pull-right" onchange="subject_change(this)">' +
+        '                    </select></th>' +
+        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
+        '                </tr>' +
+        '                </tbody>' +
+        '            </table>' +
+        '            <table class="table table-bordered" style="border: 0; width: 50%;">' +
+        '                <tbody>' +
+        '                <tr>' +
+        '                    <td style="width: 50%; border-left: 0">' +
+        '                        <div style="text-align: right">' +
+        '                            <table class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <td style="width: 40%;">' +
+        '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
+        '                                                             class="btn"' +
+        '                                                             onclick="v_AddLeftRow(this, true)"><span' +
+        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
+        '                                    </td>' +
+        '                                    <th style="width: 30%;">期初余额</th>' +
+        '                                    <td style="width: 30%;"><input type="number" name="opening_balance" placeholder="0"></td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                    <td style="width: 50%; border-right: 0">' +
+        '                        <div style="text-align: left">' +
+        '                            <table id="ttable-01" class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <th style="width: 30%;"></th>' +
+        '                                    <td style="width: 30%;"></td>' +
+        '                                    <td style="width: 40%;">' +
+        '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
+        '                                                              class="btn"' +
+        '                                                              onclick="v_AddRightRow(this,false)"><span' +
+        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
+        '                                    </td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                </tr>' +
+        '                <tr>' +
+        '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
+        '                        <div style="text-align: right">' +
+        '                            <table class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <td style="width: 40%;"></td>' +
+        '                                    <th style="width: 30%;">本期发生额</th>' +
+        '                                    <td style="width: 30%;"><input type="number" name="current_amount_dr" id="" placeholder="0"></td>' +
+        '                                </tr>' +
+        '                                <tr>' +
+        '                                    <td></td>' +
+        '                                    <th>期末余额</th>' +
+        '                                    <td><input type="number" name="ending_balance" id="" placeholder="0"></td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
+        '                        <div style="text-align: left">' +
+        '                            <table class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <th style="width: 30%;">本期发生额</th>' +
+        '                                    <td style="width: 30%;"><input type="number" name="current_amount_cr" id="" placeholder="0"></td>' +
+        '                                    <td style="width: 40%;"></td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                </tr>' +
+        '                </tbody>' +
+        '            </table>' +
+        '        </div>' +
+        '    </div>';
+    $('#TTablePage').append(content);
+}
+
+/**
+ * 增加右T表
+ */
+function tTableAppendRight() {
+    let content = '' +
+        '    <div role="tabpanel" class="" id="ttableRight">' +
+        '        <div style="text-align:right;">' +
+        '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
+        '               class="btn" title="删除当前账户信息" onclick="deleteTableV(this)"><span class="glyphicon glyphicon-remove"></span></button>' +
+        '        </div>' +
+        '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
+        '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
+        '                <tbody>' +
+        '                <tr>' +
+        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
+        '                    <th style="border: 0; width: 33%"><select style="width: auto" id="coursev_select" class="form-control pull-right"' +
+        '                                                              onchange="subject_change(this)">' +
+        '                    </select></th>' +
+        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
+        '                </tr>' +
+        '                </tbody>' +
+        '            </table>' +
+        '            <table class="table table-bordered" style="border: 0; width: 50%">' +
+        '                <tbody>' +
+        '                <tr>' +
+        '                    <td style="width: 50%; border-left: 0">' +
+        '                        <div style="text-align: right">' +
+        '                            <table class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <td style="width: 40%;">' +
+        '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
+        '                                                             class="btn" onclick="v_AddLeftRow(this,false)"><span' +
+        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
+        '                                    </td>' +
+        '                                    <th style="width: 30%;"></th>' +
+        '                                    <td style="width: 30%;"></td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                    <td style="width: 50%; border-right: 0">' +
+        '                        <div style="text-align: left">' +
+        '                            <table id="ttable-01" class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <th style="width: 30%;">期初余额</th>' +
+        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <td style="width: 40%;">' +
+        '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
+        '                                                              class="btn"' +
+        '                                                              onclick="v_AddRightRow(this,true)"><span' +
+        '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
+        '                                    </td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                </tr>' +
+        '                <tr>' +
+        '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
+        '                        <div style="text-align: right">' +
+        '                            <table class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <td style="width: 40%;"></td>' +
+        '                                    <th style="width: 30%;">本期发生额</th>' +
+        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
+        '                        <div style="text-align: left">' +
+        '                            <table class="ats-v-Ttable">' +
+        '                                <tbody>' +
+        '                                <tr>' +
+        '                                    <th style="width: 30%;">本期发生额</th>' +
+        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <td style="width: 40%;"></td>' +
+        '                                </tr>' +
+        '                                <tr>' +
+        '                                    <th>期末余额</th>' +
+        '                                    <td><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <td></td>' +
+        '                                </tr>' +
+        '                                </tbody>' +
+        '                            </table>' +
+        '                        </div>' +
+        '                    </td>' +
+        '                </tr>' +
+        '                </tbody>' +
+        '            </table>' +
+        '        </div>' +
+        '    </div>';
+    $('#TTablePage').append(content);
+}
+
+function v_createNewPage(obj, lcr) {
+    let ledgerNum = $("li[id^=coursevli]").length;
+    if (involve_subjects_len && ledgerNum >= involve_subjects_len) {
+        show_message("course_v_message", "账户设置达到上限", "danger", 1000, "新增失败");
+        return;
+    }
+    // 移除旧表
+    $("[id^=ttable]").remove();
+    // 移除激活的li的.active
+    $("li[id^=coursevli]").removeClass("active");
+    switch (lcr) {
+        case "left":
+            tTableAppendLeft();
+            break;
+        case "center":
+            $('#TTablePage').append(
+
+            );
+            break;
+        case "right":
+            tTableAppendRight();
+            break;
+    }
+    let coursevli_id = "coursevli_" + lcr + pageNum;
+    $(obj).parent().parent().parent().before(
+        "<li role='presentation' class='active' onclick='coursevLiChange(this)' id='" + coursevli_id + "'>" +
+        "<a></a></li>"
+    );
+    coursevLiChange($("#" + coursevli_id));
+    pageNum++;
 }

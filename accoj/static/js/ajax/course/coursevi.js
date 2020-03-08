@@ -400,7 +400,7 @@ function vi_AddRow() {
         "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
         "<td><label><input onkeyup=\"limit_number(this)\"></label></td>"
-        + "<th style='width: 4%; border: 0; background: #ffffff'>"
+        + "<th style='width: 4%; border: 0; background: #ffffff;padding: 4px'>"
         + "<div style='text-align: center'>"
         + "<a style='color: red; padding: 0 0' type='button' "
         + "class='btn' onclick='vi_DeleteRow(this)'><span "
