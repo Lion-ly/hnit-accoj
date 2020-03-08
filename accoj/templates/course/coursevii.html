@@ -2,6 +2,8 @@
 {% block courseBody %}
     <div class="courseBody">
         <!-- 习题主体 -->
+        <link href="{{ url_for('static', filename='css/course/coursevii.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/ajax/course/coursevii.js') }}" charset="UTF-8"></script>
         <div class="container-fluid">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -72,17 +74,21 @@
                             <div class="tab-content">
                                 <!-- 第一标签 -->
                                 <div role="tabpanel" class="tab-pane active in fade" id="first">
-
                                     <div>
                                         <p class="ats-fontsize-20">1、登记各账户明细账</p>
                                         <span class="glyphicon glyphicon-ok"
                                               style="color: #5cb85c;font-size: medium;display:none;">
                                     已完成</span>
-                                        <div style="margin-bottom: 10px">
-                                            <button type="button" class="btn btn-success btn-sm"
-                                                    onclick="vii_AddTable()">新增
-                                            </button>
-                                        </div>
+                                        <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            3.<span style="color: #5bc0de">淡蓝色</span>表示当前账户已保存。<br/>
+                                        </p>
+                                        <p class="help-block" style="margin: 0;font-size: small">进度提示：</p>
+                                        <ul class="nav nav-tabs">
+                                            <li id="coursev_li_new"></li>
+                                        </ul>
                                         <div class="table-responsive">
                                             <div id="tablePanel">
 
@@ -92,25 +98,20 @@
                                                         <td colspan="37" style="border: 0">
                                                             <div style="text-align: center">
                                                                 <label>
-                                                                    <select class="form-control"
-                                                                            style="width: 160px; display: inline-block;">
-                                                                        <option>银行存款</option>
-                                                                        <option>长期存款</option>
+                                                                    <select id="subjectSelect" class="form-control"
+                                                                            style="width: auto; display: inline-block;">
+                                                                        <option id="anchorOption"
+                                                                                style="display: none"></option>
                                                                     </select>
                                                                 </label>
                                                                 <p style="font-size: 24px; display: inline-block;">明&nbsp;细&nbsp;账</p>
-                                                                <div style="text-align:center;float: right; margin-top: 5px">
-                                                                    <a
-                                                                            style="color: red; font-size: 18px; padding-right: 0;padding-left: 0"
-                                                                            type="button" class="btn"
-                                                                            onclick="vii_DeleteTable(this)"><span
-                                                                            class="glyphicon glyphicon-remove"></span></a>
-                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="border-right: 0;" contentEditable="true">2020</td>
+                                                        <td style="border-right: 0;padding: 4px;width: auto;height: auto">
+                                                            <label><input style="width: 40px;height: 100%"
+                                                                          name="year" value="2020"></label></td>
                                                         <th style="border-left: 0;">年</th>
                                                         <th class="ats-tablecolor-f" colspan="2">记账凭证</th>
                                                         <th class="ats-tablecolor-f" rowspan="2">摘要</th>
@@ -157,265 +158,369 @@
                                                         <th>元</th>
                                                         <th>角</th>
                                                         <th>分</th>
-                                                        <th style="width: 1%; border: 0; background: #ffffff">
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td style="background-color: #f5f5f5; height:auto;padding: 4px;width: 200px">
+                                                            <label><input
+                                                                    style="background-color: #f5f5f5;"
+                                                                    disabled="disabled" name="summary"
+                                                                    value="期初余额"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <th style="width: 1%;height: auto; border: 0; background: #ffffff;padding: 4px">
                                                             <div style="text-align: center">
                                                                 <a style="color: green; padding: 0 0" type="button"
-                                                                   class="btn" onclick="vii_AddRow(this)"><span
+                                                                   class="btn" onclick="vii1_AddRow(true)"><span
                                                                         class="glyphicon glyphicon-plus-sign"></span></a>
                                                             </div>
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true">期初余额</td>
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="summary"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        </td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                    </tr>
+                                                    <tr id="firstPeriod">
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td style="background-color: #f5f5f5; padding: 4px">
+                                                            <label><input
+                                                                    style="background-color: #f5f5f5;"
+                                                                    disabled="disabled" name="summary"
+                                                                    value="本期合计"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
                                                     </tr>
                                                     <tr>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true">...</td>
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td style="background-color: #f5f5f5;height: auto"><label><input
+                                                                style="background-color: #f5f5f5;" disabled="disabled"
+                                                                name="summary"
+                                                                value="期初余额"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <th style="width: 1%;height: auto;border: 0;background: #ffffff;padding: 4px">
+                                                            <div style="text-align: center">
+                                                                <a style="color: green; padding: 0 0" type="button"
+                                                                   class="btn" onclick="vii1_AddRow(false)"><span
+                                                                        class="glyphicon glyphicon-plus-sign"></span></a>
+                                                            </div>
+                                                        </th>
                                                     </tr>
                                                     <tr>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true">本期合计</td>
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="summary"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        </td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                    </tr>
+                                                    <tr id="secondPeriod">
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td style="background-color: #f5f5f5;"><label><input
+                                                                name="summary"
+                                                                style="background-color: #f5f5f5;" disabled="disabled"
+                                                                value="本期合计"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
+
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
                                                     </tr>
                                                     <tr>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true">...</td>
+                                                        <td><label><input name="month" title="月"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="day" title="日"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td><label><input name="word" title="字"
+                                                                          onkeyup="illegalCharFilter(this)"></label>
+                                                        <td><label><input name="no" title="号"
+                                                                          onkeyup="limit_number(this)"></label>
+                                                        <td style="background-color: #f5f5f5;"><label><input
+                                                                style="background-color: #f5f5f5;" disabled="disabled"
+                                                                value="本年累计" name="summary"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input name='orientation'
+                                                                          onkeyup="limitJieDai(this)"></label></td>
 
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true">本期合计</td>
-
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-
-                                                        <td contentEditable="true"></td>
-
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true">本年累计</td>
-
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-
-                                                        <td contentEditable="true"></td>
-
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
-                                                        <td contentEditable="true"></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -457,32 +562,45 @@
                                                     <th class="ats-tablecolor-f">贷方</th>
                                                     <th class="ats-tablecolor-f">借方</th>
                                                     <th class="ats-tablecolor-f">贷方</th>
-                                                    <td style="padding: 0; border: 0; width: 5%">
+                                                    <td style="padding: 4px; border: 0; width: 5%">
                                                         <div style="text-align: center">
                                                             <a style="color: green;" type="button" class="btn"
-                                                               onclick="v_AddRow('first')"><span
+                                                               onclick="vii2_AddRow()"><span
                                                                     class="glyphicon glyphicon-plus-sign"></span></a>
                                                         </div>
                                                     </td>
                                                 </tr>
 
                                                 <tr>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
+                                                    <td><label><input name="subject" title="科目"
+                                                                      onkeyup="illegalCharFilter(this)"></label></td>
+                                                    <td><label><input name="borrow_1" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="lend_1" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="borrow_2" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="lend_2" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="borrow_3" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="lend_3" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
                                                 </tr>
-                                                <tr id="firstRow">
+                                                <tr id="sumRow">
                                                     <td class="ats-tablecolor-f">合计</td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
-                                                    <td contentEditable="true"></td>
+                                                    <td><label><input name="borrow_1" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="lend_1" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="borrow_2" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="lend_2" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="borrow_3" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
+                                                    <td><label><input name="lend_3" title="金额￥"
+                                                                      onkeyup="limit_number(this)"></label></td>
                                                 </tr>
                                                 </tbody>
                                             </table>

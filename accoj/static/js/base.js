@@ -168,6 +168,17 @@ function illegalCharFilter(obj) {
 }
 
 /**
+ * 限制只能输入`借`和`贷`
+ * @param obj
+ */
+function limitJieDai(obj) {
+    let reg = /[借贷平]/g;
+    let thisValue = $(obj).val();
+    if (thisValue && !thisValue.match(reg))
+        $(obj).val("");
+}
+
+/**
  * 将arrayBuffer转为Blob并下载
  * @param arrayBuffer
  * @param filename

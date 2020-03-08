@@ -27,10 +27,7 @@
 }
 
 .ats-board {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 4%;
-    margin-right: 4%;
+    margin: 20px 4%;
 }
 
 .ats-unmargin-tb {
@@ -70,18 +67,10 @@
 
 .ats-vouchertable-input {
     width: 40px;
-    border-left: 0px;
-    border-top: 0px;
-    border-right: 0px;  
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
 }
-
-/*
-给表单必填项添上*号
-.control-label:after {
-    content: "*";
-    color: red;
-}
-*/
 
 .ats-i-NewBusiness th{
 	color:#ffffff;
@@ -99,9 +88,9 @@
 	border-width: thin;
 	width: 100%;
     height: 100%;
-    border-left: 0px;
-    border-top: 0px;
-    border-right: 0px;  
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
 }
 
 .ats-iconChangeColor{

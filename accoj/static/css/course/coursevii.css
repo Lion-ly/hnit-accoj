@@ -1,4 +1,4 @@
-table input {
+td input {
     text-align: center;
     border-style: none;
     border-width: thin;
@@ -7,11 +7,11 @@ table input {
     height: 25px;
 }
 
-table label{
+td label {
     margin-bottom: 0;
     font-weight: inherit;
 }
 
-tr td{
+tr td {
     padding: 4px !important;
 }
