@@ -180,7 +180,7 @@ function map_balance_sheet_info() {
     if (!balance_sheet_infos) return;
     // 先清空数据
     $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period1_row_2]").remove();
-    $(":input").val("");
+    $("input").val("");
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
     let confirmed = balance_sheet_infos["confirmed"];
     let saved = balance_sheet_infos["saved"];

@@ -26,7 +26,7 @@ def coursei():
     return render_template('course/coursei.html')
 
 
-@accoj_bp.route('/get_company_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_company_info', methods=['POST'])
 def get_company_info():
     """
     获取公司信息
@@ -48,10 +48,9 @@ def get_company_info():
         # 公司已经创立过，填充表单
         if company:
             return jsonify(company_info=company)
-    return redirect('/coursei')
 
 
-@accoj_bp.route('/company_form_submit', methods=['POST', 'GET'])
+@accoj_bp.route('/company_form_submit', methods=['POST'])
 def company_form_submit():
     """
     提交公司创立信息表单
@@ -131,10 +130,9 @@ def company_form_submit():
             data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
             mongo.db.company.insert_many([data_dict, data_dict_cp])
             return jsonify(result=True)
-    return redirect('/coursei')
 
 
-@accoj_bp.route('/submit_business_infos', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_business_infos', methods=['POST'])
 def submit_business_infos():
     """
     提交业务内容信息，提交成功后不可修改
@@ -188,10 +186,9 @@ def submit_business_infos():
             return jsonify(result=False, message="已经提交过")
         else:
             return jsonify(result=False, message="公司业务数量过少")
-    return redirect('/coursei')
 
 
-@accoj_bp.route('/get_business_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_business_info', methods=['POST'])
 def get_business_info():
     """
     获取业务内容信息
@@ -214,10 +211,9 @@ def get_business_info():
             return jsonify(result=True, content_list=content_list, business_confirm=business_confirm)
         else:
             return jsonify(result=False, message="公司未创立")
-    return redirect('/coursei')
 
 
-@accoj_bp.route('/revoke_add_business', methods=['POST', 'GET'])
+@accoj_bp.route('/revoke_add_business', methods=['POST'])
 def revoke_add_business():
     """
     撤销增加业务
@@ -247,10 +243,9 @@ def revoke_add_business():
             return jsonify(result=True)
         else:
             return jsonify(result=False, message="公司未创立")
-    return redirect('/coursei')
 
 
-@accoj_bp.route('/add_business', methods=['POST', 'GET'])
+@accoj_bp.route('/add_business', methods=['POST'])
 def add_business():
     """
     增加业务
@@ -294,8 +289,6 @@ def add_business():
             else:
                 return jsonify(result=True, content=business_content)
 
-    return redirect('/coursei')
-
 
 # 第一次课程----end---------------------------------------------------------------------------------
 
@@ -312,7 +305,7 @@ def courseii():
     return render_template('course/courseii.html')
 
 
-@accoj_bp.route('/submit_key_element_info', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_key_element_info', methods=['POST'])
 def submit_key_element_info():
     """
     提交会计要素信息
@@ -362,17 +355,16 @@ def submit_key_element_info():
             return jsonify(result=False, message="此业务已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return redirect('/courseii')
 
 
-@accoj_bp.route('/get_key_element_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_key_element_info', methods=['POST'])
 def get_key_element_info():
     """
     # 获取会计要素信息
     :return:
     """
     if request.method == "POST":
-        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1, "_id": 0})
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
@@ -390,7 +382,6 @@ def get_key_element_info():
                                       affect_type=affect_type, confirmed=confirmed, saved=saved,
                                       business_type=business_type))
         return jsonify(result=True, business_list=business_list)
-    return redirect('/courseii')
 
 
 # 第二次课程----end---------------------------------------------------------------------------------
@@ -408,7 +399,7 @@ def courseiii():
     return render_template('course/courseiii.html')
 
 
-@accoj_bp.route('/submit_subject_info', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_subject_info', methods=['POST'])
 def submit_subject_info():
     """
     提交会计科目信息
@@ -454,17 +445,16 @@ def submit_subject_info():
             return jsonify(result=False, message="此业务已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return redirect("/courseiii")
 
 
-@accoj_bp.route('/get_subject_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_subject_info', methods=['POST'])
 def get_subject_info():
     """
     获取会计科目信息
     :return:
     """
     if request.method == "POST":
-        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1, "_id": 0})
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
@@ -480,7 +470,6 @@ def get_subject_info():
             business_list.append(dict(business_no=business_no, content=content, subject_infos=subject_infos,
                                       confirmed=confirmed, saved=saved, business_type=business_type))
         return jsonify(result=True, business_list=business_list)
-    return redirect('/courseiii')
 
 
 # 第三次课程----end---------------------------------------------------------------------------------
@@ -498,7 +487,7 @@ def courseiv():
     return render_template('course/courseiv.html')
 
 
-@accoj_bp.route('/submit_entry_info', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_entry_info', methods=['POST'])
 def submit_entry_info():
     """
     提交会计分录信息
@@ -544,17 +533,16 @@ def submit_entry_info():
             return jsonify(result=False, message="此业务已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return redirect("/courseiv")
 
 
-@accoj_bp.route('/get_entry_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_entry_info', methods=['POST'])
 def get_entry_info():
     """
     获取会计分录信息
     :return:
     """
     if request.method == "POST":
-        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1, "_id": 0})
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
@@ -570,7 +558,6 @@ def get_entry_info():
             business_list.append(dict(business_no=business_no, content=content, entry_infos=entry_infos,
                                       confirmed=confirmed, saved=saved, business_type=business_type))
         return jsonify(result=True, business_list=business_list)
-    return redirect('/courseiv')
 
 
 # 第四次课程----end---------------------------------------------------------------------------------
@@ -589,7 +576,7 @@ def coursev():
     return render_template('course/coursev.html')
 
 
-@accoj_bp.route('/submit_ledger_info', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_ledger_info', methods=['POST'])
 def submit_ledger_info():
     """
     提交会计账户信息
@@ -637,10 +624,9 @@ def submit_ledger_info():
             return jsonify(result=False, message="此账户已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return redirect('/coursev')
 
 
-@accoj_bp.route('/get_ledger_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_ledger_info', methods=['POST'])
 def get_ledger_info():
     """
     获取会计账户信息
@@ -649,7 +635,7 @@ def get_ledger_info():
     if request.method == "POST":
         company = mongo.db.company.find_one({"student_no": session.get("username")},
                                             {"ledger_infos"  : 1, "involve_subjects": 1, "schedule_confirm": 1,
-                                             "schedule_saved": 1})
+                                             "schedule_saved": 1, "_id": 0})
         ledger_infos = company.get("ledger_infos")
         involve_subjects = company.get("involve_subjects")
         schedule_confirm = company.get("schedule_confirm")
@@ -660,10 +646,9 @@ def get_ledger_info():
             ledger_infos[key]["confirmed"] = True if key in schedule_confirm.get("ledger_confirm") else False
             ledger_infos[key]["saved"] = True if key in schedule_saved.get("ledger_saved") else False
         return jsonify(result=True, ledger_infos=ledger_infos, involve_subjects=involve_subjects)
-    return redirect('/coursev')
 
 
-@accoj_bp.route('/delete_ledger_info', methods=['POST', 'GET'])
+@accoj_bp.route('/delete_ledger_info', methods=['POST'])
 def delete_ledger_info():
     """
     删除会计账户信息
@@ -673,7 +658,8 @@ def delete_ledger_info():
         form = request.form
         subject = form.get("subject")
         if subject:
-            company = mongo.db.company.find_one({"student_no": session.get("username")}, {"involve_subjects": 1})
+            company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                                {"involve_subjects": 1, "_id": 0})
             involve_subjects = company.get("involve_subjects")
             schedule_confirm = g.schedule_confirm
             if subject in schedule_confirm.get("ledger_confirm"):
@@ -688,7 +674,6 @@ def delete_ledger_info():
                 return jsonify(result=False, message="科目错误")
         else:
             return jsonify(result=False, message="未知错误")
-    return redirect('/coursev')
 
 
 # 平衡表
@@ -703,7 +688,7 @@ def coursev_2():
     return render_template('course/coursev_2.html')
 
 
-@accoj_bp.route('/submit_balance_sheet_info', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_balance_sheet_info', methods=['POST'])
 def submit_balance_sheet_info():
     """
     提交平衡表信息
@@ -744,10 +729,9 @@ def submit_balance_sheet_info():
             return jsonify(result=False, message="此账户已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return render_template('course/coursev_2.html')
 
 
-@accoj_bp.route('/get_balance_sheet_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_balance_sheet_info', methods=['POST'])
 def get_balance_sheet_info():
     """
     获取平衡表信息
@@ -755,7 +739,7 @@ def get_balance_sheet_info():
     """
     if request.method == "POST":
         company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            {"balance_sheet_infos": 1, "schedule_confirm": 1, "schedule_saved": 1})
+                                            dict(balance_sheet_infos=1, schedule_confirm=1, schedule_saved=1, _id=0))
         balance_sheet_infos = company.get("balance_sheet_infos")
         schedule_confirm = company.get("schedule_confirm")
         schedule_saved = company.get("schedule_saved")
@@ -764,7 +748,6 @@ def get_balance_sheet_info():
         balance_sheet_infos["confirmed"] = True if schedule_confirm.get("balance_sheet_confirm") else False
         balance_sheet_infos["saved"] = True if schedule_saved.get("balance_sheet_saved") else False
         return jsonify(result=True, balance_sheet_infos=balance_sheet_infos)
-    return render_template('course/coursev_2.html')
 
 
 # 第五次课程----end---------------------------------------------------------------------------------
@@ -782,7 +765,7 @@ def coursevi():
     return render_template('course/coursevi.html')
 
 
-@accoj_bp.route('/submit_acc_document_info', methods=['POST', 'GET'])
+@accoj_bp.route('/submit_acc_document_info', methods=['POST'])
 def submit_acc_document_info():
     """
     提交会计凭证信息
@@ -850,10 +833,9 @@ def submit_acc_document_info():
             return jsonify(result=False, message="此业务已经提交过")
         else:
             return jsonify(result=False, message="未知错误!")
-    return redirect("/courseiv")
 
 
-@accoj_bp.route('/get_acc_document_info', methods=['POST', 'GET'])
+@accoj_bp.route('/get_acc_document_info', methods=['POST'])
 @limit_content_length(5 * 1024 * 1024)
 def get_acc_document_info():
     """
@@ -861,7 +843,7 @@ def get_acc_document_info():
     :return:
     """
     if request.method == "POST":
-        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1})
+        company = mongo.db.company.find_one({"student_no": session.get("username")}, {"businesses": 1, "_id": 0})
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
@@ -877,10 +859,9 @@ def get_acc_document_info():
             business_list.append(dict(business_no=business_no, content=content, acc_document_infos=acc_document_infos,
                                       confirmed=confirmed, saved=saved, business_type=business_type))
         return jsonify(result=True, business_list=business_list)
-    return redirect('/courseiv')
 
 
-@accoj_bp.route('/download_acc_document_info', methods=['POST', 'GET'])
+@accoj_bp.route('/download_acc_document_info', methods=['POST'])
 def download_acc_document_info():
     """
     下载会计凭证信息
@@ -900,20 +881,97 @@ def download_acc_document_info():
             return jsonify(result=True, file=file)
         else:
             return jsonify(result=False, message="文件不存在")
-    return redirect('/courseiv')
 
 
 # 第六次课程----end---------------------------------------------------------------------------------
 
 
 # 第七次课程----start-------------------------------------------------------------------------------
-# Todo 第七次课程
 @accoj_bp.route('/coursevii', methods=['POST', 'GET'])
 def coursevii():
     """
     :return:
     """
+    # 若第一次课程未完成
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
+        return redirect("/coursei")
     return render_template('course/coursevii.html')
+
+
+# 账户明细账
+@accoj_bp.route('/submit_subsidiary_account_info', methods=['POST'])
+def submit_subsidiary_account_info():
+    """
+    提交会计明细账信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule_confirm=1, involve_subjects=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
+        involve_subjects = company.get("involve_subjects")
+        json_data = request.get_json()
+        subsidiary_account_info = json_data.get("subsidiary_account_info")
+        submit_type = json_data.get("submit_type")
+        subject = json_data.get("subject")
+
+        if submit_type not in ["confirm", "save"]:
+            print("提交类型错误")
+            return jsonify(result=False, message="提交类型错误")
+        else:
+            if subject not in involve_subjects:
+                print("科目错误")
+                return jsonify(result=False, message="科目错误")
+
+        if subject not in schedule_confirm.get("subsidiary_account_confirm"):
+            # 若当前业务信息提交未确认，则确认提交或保存
+            if submit_type == "confirm":
+                # 提交类型为确认提交
+                update_prefix = "subsidiary_account_infos."
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"        : {
+                                            (update_prefix + subject): subsidiary_account_info},
+                                            "$addToSet": {"schedule_confirm.subsidiary_account_confirm": subject,
+                                                          "schedule_saved.subsidiary_account_saved"    : subject}}
+                                        )
+                return jsonify(result=True)
+            elif submit_type == "save":
+                # 提交类型为保存
+                update_prefix = "subsidiary_account_infos."
+                mongo.db.company.update({"_id": _id},
+                                        {"$set"        : {
+                                            (update_prefix + subject): subsidiary_account_info},
+                                            "$addToSet": {"schedule_saved.subsidiary_account_saved": subject}}
+                                        )
+                return jsonify(result=True)
+        elif subject in schedule_confirm.get("subsidiary_account_confirm"):
+            # 明细账已提交确认
+            return jsonify(result=False, message="此明细账已经提交过")
+        else:
+            return jsonify(result=False, message="未知错误!")
+
+
+@accoj_bp.route('/get_subsidiary_account_info', methods=['POST'])
+def get_subsidiary_account_info():
+    """
+    获取会计明细账信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            {"subsidiary_account_infos": 1, "_id": 0})
+        subsidiary_account_infos = company.get("subsidiary_account_infos")
+        schedule_confirm = g.schedule_confirm
+        schedule_saved = g.schedule_saved
+        subsidiary_account_confirm = schedule_confirm.get("subsidiary_account_confirm")
+        subsidiary_account_saved = schedule_saved.get("subsidiary_account_saved")
+        return jsonify(result=True, subsidiary_account_infos=subsidiary_account_infos,
+                       subsidiary_account_confirmed=subsidiary_account_confirm,
+                       subsidiary_account_saved=subsidiary_account_saved)
+
+
+# 科目余额表
 
 
 # 第七次课程----end---------------------------------------------------------------------------------
@@ -951,7 +1009,6 @@ def courseix_2():
     return render_template('course/courseix_2.html')
 
 
-# Todo 第九次课程第三部分
 @accoj_bp.route('/courseix_3', methods=['POST', 'GET'])
 def courseix_3():
     """
@@ -997,6 +1054,33 @@ def profile():
 
 # 用户个人中心----end-------------------------------------------------------------------------------
 
+# 通用视图----start---------------------------------------------------------------------------------
+@accoj_bp.route('/get_business_list', methods=['POST', 'GET'])
+def get_business_list():
+    """
+    获取业务信息列表
+    :return:
+    """
+    # 若第一次课程未完成
+    if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
+        print("error")
+        return redirect("/coursei")
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            {"businesses": 1, "involve_subjects": 1, "_id": 0})
+        businesses = company.get("businesses")
+        involve_subjects = company.get("involve_subjects")
+        business_list = list()
+        businesses_len = len(businesses)
+        for i in range(0, businesses_len):
+            content = businesses[i].get("content")
+            business_type = businesses[i].get("business_type")
+            business_no = i + 1
+            business_list.append(dict(business_no=business_no, content=content, business_type=business_type))
+        return jsonify(result=True, business_list=business_list, involve_subjects=involve_subjects)
+
+
+# 通用视图----end-----------------------------------------------------------------------------------
 
 @accoj_bp.before_request
 @login_required  # 需要登陆
