@@ -252,6 +252,7 @@ function get_subsidiary_account_info() {
     })
 }
 
+//==================================将会计明细账信息映射到前端==================================//
 let period1Vii1Row = 3;
 let period2Vii1Row = 3;
 
@@ -388,6 +389,219 @@ function map_subsidiary_account_info() {
     });
 }
 
+//==================================提交科目余额表信息==================================//
+
+/**
+ * 将处理函数绑定到模态框的确认提交按钮
+ */
+function confirm_acc_balance_sheet() {
+    show_submit_confirm("submit_acc_balance_sheet_info('confirm')");
+    let confirm_acc_balance_sheet_button = $("#confirm_acc_balance_sheet_button");
+    confirm_acc_balance_sheet_button.attr("disabled", true);
+    confirm_acc_balance_sheet_button.text("提交 2s");
+    setTimeout(function () {
+        confirm_acc_balance_sheet_button.text("提交 1s");
+    }, 1000);
+    setTimeout(function () {
+        confirm_acc_balance_sheet_button.attr("disabled", false);
+    }, 2000);
+}
+
+/**
+ * 保存科目余额表信息
+ */
+function save_acc_balance_sheet() {
+    submit_acc_balance_sheet_info("save");
+    let save_acc_balance_sheet_button = $("#save_acc_balance_sheet_button");
+    save_acc_balance_sheet_button.attr("disabled", true);
+    save_acc_balance_sheet_button.text("保存 2s");
+    setTimeout(function () {
+        save_acc_balance_sheet_button.text("保存 1s");
+    }, 1000);
+    setTimeout(function () {
+        save_acc_balance_sheet_button.attr("disabled", false);
+        save_acc_balance_sheet_button.text("保存");
+    }, 2000);
+}
+
+
+/**
+ * 提交科目余额表信息
+ * @param submit_type confirm or save
+ */
+function submit_acc_balance_sheet_info(submit_type) {
+    let type_flag = null;
+    if (submit_type === "confirm") {
+        type_flag = true;
+    } else if (submit_type === "save") {
+        type_flag = false;
+    } else {
+        return;
+    }
+    let csrf_token = get_csrf_token();
+    let acc_balance_sheet_infos = Array();
+
+    $("[id^=vii2Row]").each(function () {
+        let thisInputs = $(this).find("input");
+        let inputIndex = 0;
+        let subject = $(this).attr("id") === "vii2RowLast" ? "sum" : $(thisInputs[0]).val();
+        if (subject !== "sum") inputIndex = 1;
+        let borrow_1 = $(thisInputs[inputIndex]).val();
+        let lend_1 = $(thisInputs[inputIndex + 1]).val();
+        let borrow_2 = $(thisInputs[inputIndex + 2]).val();
+        let lend_2 = $(thisInputs[inputIndex + 3]).val();
+        let borrow_3 = $(thisInputs[inputIndex + 4]).val();
+        let lend_3 = $(thisInputs[inputIndex + 5]).val();
+        acc_balance_sheet_infos.push({
+            "subject": subject,
+            "borrow_1": borrow_1,
+            "lend_1": lend_1,
+            "borrow_2": borrow_2,
+            "lend_2": lend_2,
+            "borrow_3": borrow_3,
+            "lend_3": lend_3,
+        })
+    });
+
+    let data = {
+        "acc_balance_sheet_infos": acc_balance_sheet_infos,
+        "submit_type": submit_type
+    };
+    data = JSON.stringify(data);
+    $.ajax({
+        url: "/submit_acc_balance_sheet_info",
+        type: "post",
+        data: data,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        cache: false,
+        async: true,
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },
+        success: function (data) {
+            if (data["result"] === true) {
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
+                } else if (type_flag === false) {
+                    show_message("course_vii2_message", "保存成功！", "info", 1000);
+                }
+                get_acc_balance_sheet_info();
+            } else {
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+                } else if (type_flag === false) {
+                    show_message("course_vii2_message", data["message"], "danger", 1000, "保存失败！");
+                }
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText);
+        },
+        complete: function () {
+            submit_confirm_clicked();
+        }
+    });
+}
+
+//==================================获取科目余额表信息==================================//
+let acc_balance_sheet_infos; // 保存本次课程全部信息，减少后端数据请求次数
+let acc_balance_sheet_confirmed;
+let acc_balance_sheet_saved;
+
+/**
+ * 从后端获取科目余额表信息
+ */
+function get_acc_balance_sheet_info() {
+
+    let csrf_token = {"csrf_token": get_csrf_token()};
+    let data = $.param(csrf_token);
+    // 若acc_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
+    if (acc_balance_sheet_infos && acc_balance_sheet_confirmed) {
+        map_acc_balance_sheet_info();
+        return;
+    }
+    $.ajax({
+        url: "/get_acc_balance_sheet_info",
+        type: "post",
+        data: data,
+        dataType: "json",
+        cache: false,
+        async: true,
+        success: function (data) {
+            if (data["result"] === true) {
+                acc_balance_sheet_infos = data["acc_balance_sheet_infos"];
+                map_acc_balance_sheet_info();
+            } else {
+                show_message("course_vii2_message", data["message"], "danger", 1000);
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText);
+        }
+    })
+}
+
+//==================================将科目余额表信息映射到前端==================================//
+/**
+ * 将数据映射到前端
+ */
+function map_acc_balance_sheet_info() {
+    // 先重置科目余额表信息
+    $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
+    $("input").val("");
+    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
+    let confirmed = acc_balance_sheet_confirmed;
+    let saved = acc_balance_sheet_saved;
+    let acc_balance_sheet_submit_span = $("#acc_balance_sheet_submit_span");
+    if (confirmed || saved) {
+        // 初始化为saved
+        let span_text = "已保存";
+        let span_color = "#5bc0de";
+        if (confirmed) {
+            span_text = "已完成";
+            span_color = "#5cb85c";
+        }
+        acc_balance_sheet_submit_span.css("color", span_color);
+        acc_balance_sheet_submit_span.text(span_text);
+        acc_balance_sheet_submit_span.show();
+    } else {
+        acc_balance_sheet_submit_span.hide();
+    }
+
+    if (!acc_balance_sheet_infos) return;
+    // 创建行
+    for (let i = 0; i < acc_balance_sheet_infos.length - 2; i++) {
+        vii2_AddRow();
+    }
+    // 填充数据
+    let index = 0;
+    $("[id^=vii2Row]").each(function () {
+        let thisInputs = $(this).find("input");
+        let subject = acc_balance_sheet_infos[index]["subject"];
+        let borrow_1 = acc_balance_sheet_infos[index]["borrow_1"];
+        let lend_1 = acc_balance_sheet_infos[index]["lend_1"];
+        let borrow_2 = acc_balance_sheet_infos[index]["borrow_2"];
+        let lend_2 = acc_balance_sheet_infos[index]["lend_2"];
+        let borrow_3 = acc_balance_sheet_infos[index]["borrow_3"];
+        let lend_3 = acc_balance_sheet_infos[index]["lend_3"];
+        let inputIndex = 0;
+        if (subject !== "sum") {
+            $(thisInputs[inputIndex]).val(subject);
+            inputIndex = 1;
+        }
+        $(thisInputs[inputIndex]).val(borrow_1);
+        $(thisInputs[inputIndex + 1]).val(lend_1);
+        $(thisInputs[inputIndex + 2]).val(borrow_2);
+        $(thisInputs[inputIndex + 3]).val(lend_2);
+        $(thisInputs[inputIndex + 4]).val(borrow_3);
+        $(thisInputs[inputIndex + 5]).val(lend_3);
+        index++;
+    });
+}
+
 // ==================================事件控制==================================//
 /*
  * @ # coursevii1 -> 登记各账户明细表 ? 表格增加行
@@ -460,7 +674,7 @@ function vii1_AddRow(flag) {
 
 
 /*
- * @ # coursevii1 ? 表格删除行
+ * @ # coursevii1 ->账户明细表 ? 表格删除行
  */
 function vii1_DeleteRow(obj) {
     $(obj).parent().parent().parent().remove();
@@ -472,8 +686,8 @@ let vii2Row = 2;
  * @ # coursevii2 -> 科目余额表 ? 表格增加行
  */
 function vii2_AddRow() {
-    let now_id = "vii2Row_" + vii2Row;
-    $("#sumRow").before(
+    let now_id = "vii2Row" + vii2Row;
+    $("#vii2RowLast").before(
         "<tr id='" + now_id + "'>"
         + "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='borrow_1' title='金额￥'" +

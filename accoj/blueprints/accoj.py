@@ -707,7 +707,7 @@ def submit_balance_sheet_info():
         if submit_type not in ["confirm", "save"]:
             return jsonify(result=False, message="提交类型错误")
         if not schedule_confirm.get("balance_sheet_confirm"):
-            # 若当前账户信息提交未确认，则确认提交或保存
+            # 若当前信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
                 # 提交类型为确认提交
                 mongo.db.company.update({"_id": _id},
@@ -726,7 +726,7 @@ def submit_balance_sheet_info():
                 return jsonify(result=True)
         elif schedule_confirm.get("balance_sheet_confirm"):
             # 业务已提交确认
-            return jsonify(result=False, message="此账户已经提交过")
+            return jsonify(result=False, message="已经确认提交过")
         else:
             return jsonify(result=False, message="未知错误!")
 
@@ -925,7 +925,7 @@ def submit_subsidiary_account_info():
                 return jsonify(result=False, message="科目错误")
 
         if subject not in schedule_confirm.get("subsidiary_account_confirm"):
-            # 若当前业务信息提交未确认，则确认提交或保存
+            # 若当前账户信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
                 # 提交类型为确认提交
                 update_prefix = "subsidiary_account_infos."
@@ -972,6 +972,69 @@ def get_subsidiary_account_info():
 
 
 # 科目余额表
+@accoj_bp.route('/submit_acc_balance_sheet_info', methods=['POST'])
+def submit_acc_balance_sheet_info():
+    """
+    提交科目余额表信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(schedule_confirm=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
+        json_data = request.get_json()
+        acc_balance_sheet_infos = json_data.get("acc_balance_sheet_infos")
+        submit_type = json_data.get("submit_type")
+        if not acc_balance_sheet_infos:
+            return jsonify(result=False, message="科目余额表信息为空")
+        if submit_type not in ["confirm", "save"]:
+            return jsonify(result=False, message="提交类型错误")
+        if not schedule_confirm.get("acc_balance_sheet_confirm"):
+            # 若当前账户信息提交未确认，则确认提交或保存
+            if submit_type == "confirm":
+                # 提交类型为确认提交
+                mongo.db.company.update({"_id": _id},
+                                        {"$set": {"acc_balance_sheet_infos"                   : acc_balance_sheet_infos,
+                                                  "schedule_confirm.acc_balance_sheet_confirm": True,
+                                                  "schedule_saved.acc_balance_sheet_saved"    : True}}
+                                        )
+                return jsonify(result=True)
+
+            elif submit_type == "save":
+                # 提交类型为保存
+                mongo.db.company.update({"_id": _id},
+                                        {"$set": {"acc_balance_sheet_infos"               : acc_balance_sheet_infos,
+                                                  "schedule_saved.acc_balance_sheet_saved": True}}
+                                        )
+                return jsonify(result=True)
+        elif schedule_confirm.get("acc_balance_sheet_confirm"):
+            # 信息已提交确认
+            return jsonify(result=False, message="已经确认提交过")
+        else:
+            return jsonify(result=False, message="未知错误!")
+
+
+@accoj_bp.route('/get_acc_balance_sheet_info', methods=['POST'])
+def get_acc_balance_sheet_info():
+    """
+    获取科目余额表信息
+    :return:
+    """
+    if request.method == "POST":
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(acc_balance_sheet_infos=1, schedule_confirm=1, schedule_saved=1,
+                                                 _id=0))
+        acc_balance_sheet_infos = company.get("acc_balance_sheet_infos")
+        schedule_confirm = company.get("schedule_confirm")
+        schedule_saved = company.get("schedule_saved")
+        if not acc_balance_sheet_infos:
+            return jsonify(result=True, acc_balance_sheet_infos=None)
+        acc_balance_sheet_confirmed = schedule_confirm.get("acc_balance_sheet_confirm")
+        acc_balance_sheet_saved = schedule_saved.get("acc_balance_sheet_saved")
+        return jsonify(result=True, acc_balance_sheet_infos=acc_balance_sheet_infos,
+                       acc_balance_sheet_confirmed=acc_balance_sheet_confirmed,
+                       acc_balance_sheet_saved=acc_balance_sheet_saved)
 
 
 # 第七次课程----end---------------------------------------------------------------------------------
