@@ -56,16 +56,18 @@ function submit_balance_sheet_info(submit_type) {
     let accounting_period_1 = Array();
     let accounting_period_2 = Array();
 
-    $("[id^=period1_row], [id=period1_last]").each(function () {
-        let tds = $(this).children();
-        let subject = $(this).attr("id") === "period1_last" ? "sum" : $(tds[0]).children().children().val();
-        let borrow_1 = $(tds[1]).children().children().val();
-        let lend_1 = $(tds[2]).children().children().val();
-        let borrow_2 = $(tds[3]).children().children().val();
-        let lend_2 = $(tds[4]).children().children().val();
-        let borrow_3 = $(tds[5]).children().children().val();
-        let lend_3 = $(tds[6]).children().children().val();
-        accounting_period_1.push({
+    $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
+        let thisInputs = $(this).find("input");
+        let inputIndex = 0;
+        let subject = $(this).attr("id").endsWith("last") ? "sum" : $(thisInputs[0]).val();
+        if (subject !== "sum") inputIndex = 1;
+        let borrow_1 = $(thisInputs[inputIndex]).val();
+        let lend_1 = $(thisInputs[inputIndex + 1]).val();
+        let borrow_2 = $(thisInputs[inputIndex + 2]).val();
+        let lend_2 = $(thisInputs[inputIndex + 3]).val();
+        let borrow_3 = $(thisInputs[inputIndex + 4]).val();
+        let lend_3 = $(thisInputs[inputIndex + 5]).val();
+        let content = {
             "subject": subject,
             "borrow_1": borrow_1,
             "lend_1": lend_1,
@@ -73,26 +75,10 @@ function submit_balance_sheet_info(submit_type) {
             "lend_2": lend_2,
             "borrow_3": borrow_3,
             "lend_3": lend_3,
-        })
-    });
-    $("[id^=period2_row], [id=period2_last]").each(function () {
-        let tds = $(this).children();
-        let subject = $(this).attr("id") === "period2_last" ? "sum" : $(tds[0]).children().children().val();
-        let borrow_1 = $(tds[1]).children().children().val();
-        let lend_1 = $(tds[2]).children().children().val();
-        let borrow_2 = $(tds[3]).children().children().val();
-        let lend_2 = $(tds[4]).children().children().val();
-        let borrow_3 = $(tds[5]).children().children().val();
-        let lend_3 = $(tds[6]).children().children().val();
-        accounting_period_2.push({
-            "subject": subject,
-            "borrow_1": borrow_1,
-            "lend_1": lend_1,
-            "borrow_2": borrow_2,
-            "lend_2": lend_2,
-            "borrow_3": borrow_3,
-            "lend_3": lend_3,
-        })
+        };
+        if ($(this).attr("id").startsWith("period1"))
+            accounting_period_1.push(content);
+        else accounting_period_2.push(content);
     });
 
     let data = {
@@ -147,7 +133,7 @@ function get_balance_sheet_info() {
 
     let csrf_token = {"csrf_token": get_csrf_token()};
     let data = $.param(csrf_token);
-    // 若balance_sheet_info不为空且请求的业务编号已经确认提交过，则不再发送数据请求
+    // 若balance_sheet_info不为空且已经确认提交过，则不再发送数据请求
     if (balance_sheet_infos && balance_sheet_infos["confirmed"] === true) {
         map_balance_sheet_info();
         return;
@@ -179,7 +165,7 @@ function get_balance_sheet_info() {
 function map_balance_sheet_info() {
     if (!balance_sheet_infos) return;
     // 先清空数据
-    $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period1_row_2]").remove();
+    $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period2_row_1]").remove();
     $("input").val("");
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
     let confirmed = balance_sheet_infos["confirmed"];
@@ -209,46 +195,32 @@ function map_balance_sheet_info() {
         v2_AddRow("period2");
     }
     // 填充数据
+    let accounting_period = accounting_period_1;
     let index = 0;
-    $("[id^=period1_row], [id=period1_last]").each(function () {
-        let tds = $(this).children();
-        let subject = accounting_period_1[index]["subject"];
-        let borrow_1 = accounting_period_1[index]["borrow_1"];
-        let lend_1 = accounting_period_1[index]["lend_1"];
-        let borrow_2 = accounting_period_1[index]["borrow_2"];
-        let lend_2 = accounting_period_1[index]["lend_2"];
-        let borrow_3 = accounting_period_1[index]["borrow_3"];
-        let lend_3 = accounting_period_1[index]["lend_3"];
-        if (subject !== "sum") {
-            $(tds[0]).children().children().val(subject);
+    $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
+        let thisInputs = $(this).find("input");
+        if($(this).attr("id") === "period2_row_1"){
+            accounting_period = accounting_period_2;
+            index = 0;
         }
-        $(tds[1]).children().children().val(borrow_1);
-        $(tds[2]).children().children().val(lend_1);
-        $(tds[3]).children().children().val(borrow_2);
-        $(tds[4]).children().children().val(lend_2);
-        $(tds[5]).children().children().val(borrow_3);
-        $(tds[6]).children().children().val(lend_3);
-        index++;
-    });
-    index = 0;
-    $("[id^=period2_row], [id=period2_last]").each(function () {
-        let tds = $(this).children();
-        let subject = accounting_period_2[index]["subject"];
-        let borrow_1 = accounting_period_2[index]["borrow_1"];
-        let lend_1 = accounting_period_2[index]["lend_1"];
-        let borrow_2 = accounting_period_2[index]["borrow_2"];
-        let lend_2 = accounting_period_2[index]["lend_2"];
-        let borrow_3 = accounting_period_2[index]["borrow_3"];
-        let lend_3 = accounting_period_2[index]["lend_3"];
+        let subject = accounting_period[index]["subject"];
+        let borrow_1 = accounting_period[index]["borrow_1"];
+        let lend_1 = accounting_period[index]["lend_1"];
+        let borrow_2 = accounting_period[index]["borrow_2"];
+        let lend_2 = accounting_period[index]["lend_2"];
+        let borrow_3 = accounting_period[index]["borrow_3"];
+        let lend_3 = accounting_period[index]["lend_3"];
+        let inputIndex = 0;
         if (subject !== "sum") {
-            $(tds[0]).children().children().val(subject);
+            $(thisInputs[inputIndex]).val(subject);
+            inputIndex = 1;
         }
-        $(tds[1]).children().children().val(borrow_1);
-        $(tds[2]).children().children().val(lend_1);
-        $(tds[3]).children().children().val(borrow_2);
-        $(tds[4]).children().children().val(lend_2);
-        $(tds[5]).children().children().val(borrow_3);
-        $(tds[6]).children().children().val(lend_3);
+        $(thisInputs[inputIndex]).val(borrow_1);
+        $(thisInputs[inputIndex + 1]).val(lend_1);
+        $(thisInputs[inputIndex + 2]).val(borrow_2);
+        $(thisInputs[inputIndex + 3]).val(lend_2);
+        $(thisInputs[inputIndex + 4]).val(borrow_3);
+        $(thisInputs[inputIndex + 5]).val(lend_3);
         index++;
     });
 }
