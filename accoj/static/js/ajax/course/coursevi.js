@@ -101,14 +101,14 @@ function submit_acc_document_info(submit_type) {
                     cr_money += i < 13 ? "" : money;
                 }
             }
-            dr_money = dr_money ? dr_money / 100 : dr_money;
-            cr_money = cr_money ? cr_money / 100 : cr_money;
+            dr_money = dr_money ? parseFloat(dr_money) / 100 : dr_money;
+            cr_money = cr_money ? parseFloat(cr_money) / 100 : cr_money;
             contents.push({
                 "summary": summary,
                 "general_account": general_account,
                 "detail_account": detail_account,
-                "dr_money": parseInt(dr_money),
-                "cr_money": parseInt(cr_money)
+                "dr_money": dr_money,
+                "cr_money": cr_money
             })
         }
     );
@@ -218,7 +218,7 @@ function map_acc_document_info(business_no) {
     let business_index = business_no - 1;
     // 先重置凭证信息
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
-    $(":input").val("");
+    $("input").val("");
 
     let content = business_list[business_index]["content"];
     let business_type = business_list[business_index]["business_type"];
@@ -311,6 +311,9 @@ function map_acc_document_info(business_no) {
             if (thisId === "vi_rowLast") {
                 for (let i = 0; i < 20; i++) {
                     if (money) {
+                        if(i === 10){
+                            firstNum = true;
+                        }
                         if (firstNum && money[i] !== "0") {
                             $(thisInput[i]).val(money[i]);
                             firstNum = false;
@@ -325,6 +328,9 @@ function map_acc_document_info(business_no) {
                 $(thisInput[2]).val(detail_account);
                 for (let i = 3; i < 23; i++) {
                     if (money) {
+                         if(i === 13){
+                            firstNum = true;
+                        }
                         if (firstNum && money[i - 3] !== "0") {
                             $(thisInput[i]).val(money[i - 3]);
                             firstNum = false;
@@ -377,29 +383,29 @@ let row_num = 2;
 function vi_AddRow() {
     $("#vi_rowLast").before(
         "<tr id='vi_row" + row_num + "'>"
-        + "<td><label><input name=\"summary\" onkeyup=\"illegalCharFilter(this)\"></label></td>" +
-        "<td><label><input name=\"general_account\" onkeyup=\"illegalCharFilter(this)\"></label></td>" +
-        "<td><label><input name=\"detail_account\" onkeyup=\"illegalCharFilter(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input onkeyup=\"limit_number(this)\"></label></td>"
+        + "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<td><label><input name='general_account' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<td><label><input name='detail_account' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<th style='width: 4%; border: 0; background: #ffffff;padding: 4px'>"
         + "<div style='text-align: center'>"
         + "<a style='color: red; padding: 0 0' type='button' "
