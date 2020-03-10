@@ -143,6 +143,44 @@ function show_submit_confirm(submit_deal_fun) {
 }
 
 /**
+ * 将处理函数绑定到模态框的确认提交按钮
+ * @param buttonID
+ * @param submit_infoName String
+ */
+function confirm_info(buttonID, submit_infoName) {
+    show_submit_confirm(submit_infoName + "('confirm')");
+    let confirm_button = $("#" + buttonID);
+    confirm_button.attr("disabled", true);
+    confirm_button.text("提交 2s");
+    setTimeout(function () {
+        confirm_button.text("提交 1s");
+    }, 1000);
+    setTimeout(function () {
+        confirm_button.attr("disabled", false);
+        confirm_button.text("提交");
+    }, 2000);
+}
+
+/**
+ * 保存信息
+ * @param buttonID
+ * @param submit_info function
+ */
+function save_info(buttonID, submit_info) {
+    submit_info("save");
+    let save_button = $("#" + buttonID);
+    save_button.attr("disabled", true);
+    save_button.text("保存 2s");
+    setTimeout(function () {
+        save_button.text("保存 1s");
+    }, 1000);
+    setTimeout(function () {
+        save_button.attr("disabled", false);
+        save_button.text("保存");
+    }, 2000);
+}
+
+/**
  * ajax提交完成
  */
 function submit_confirm_clicked() {
@@ -202,7 +240,7 @@ function downloadFile(arrayBuffer, filename) {
  * @returns {string}
  */
 function formatDate(date) {
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();

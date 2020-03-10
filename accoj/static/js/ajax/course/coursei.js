@@ -7,14 +7,14 @@ $(document).ready(function () {
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
-function company_submit() {
-    show_submit_confirm("company_form_submit()");
+function confirm_company() {
+    confirm_info("submit_company_button", "submit_company_info");
 }
 
 /**
  * 提交公司信息
  */
-function company_form_submit() {
+function submit_company_info() {
     let data = $('#company_form').serialize();
     $(":text").css({"border-style": "none"});
     $("#com_business_scope").css({"border-style": "none"});
@@ -91,9 +91,9 @@ function get_company_info() {
 let rowNumI = 101;
 
 function body_text_append(labelType, content) {
-    let rowName = "row-" + rowNumI;
-    let bg;
-    let business_no = rowNumI >= 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
+    let rowName = "row-" + rowNumI,
+        bg,
+        business_no = rowNumI >= 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
     switch (labelType) {
         case "筹资活动":
             bg = "#5cb85c";
@@ -187,11 +187,11 @@ function revoke_add_business() {
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
-function submit_business() {
-    show_submit_confirm("submit_business_infos()");
+function confirm_business() {
+    confirm_info("submit_company_button", "submit_business_info");
 }
 
-function submit_business_infos() {
+function submit_business_info() {
     // 提交业务信息，提交成功后不可更改
     let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
@@ -246,7 +246,7 @@ function get_business_info() {
                 }
             } else {
                 if (data["message"] !== "暂无业务")
-                    show_message("submit_business_button_div", data["message"], "warning", 1000);
+                    show_message("course_i2_message", data["message"], "warning", 1000);
             }
         },
         error: function (err) {

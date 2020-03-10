@@ -21,34 +21,14 @@ function courseiv_li_control(business_no) {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_acc_document() {
-    show_submit_confirm("submit_acc_document_info('confirm')");
-    let confirm_acc_document_button = $("#confirm_acc_document_button");
-    confirm_acc_document_button.attr("disabled", true);
-    confirm_acc_document_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_acc_document_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_acc_document_button.attr("disabled", false);
-        confirm_acc_document_button.text("提交");
-    }, 2000);
+    confirm_info("confirm_acc_document_button", "submit_acc_document_info");
 }
 
 /**
  * 保存凭证信息
  */
 function save_acc_document() {
-    submit_acc_document_info("save");
-    let save_acc_document_button = $("#save_acc_document_button");
-    save_acc_document_button.attr("disabled", true);
-    save_acc_document_button.text("保存 2s");
-    setTimeout(function () {
-        save_acc_document_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_acc_document_button.attr("disabled", false);
-        save_acc_document_button.text("保存");
-    }, 2000);
+    save_info("save_acc_document_button", submit_acc_document_info);
 }
 
 /**
@@ -64,26 +44,26 @@ function submit_acc_document_info(submit_type) {
     } else {
         return;
     }
-    let csrf_token = get_csrf_token();
-    let business_no = now_business_no;
-    let data, acc_document_infos;
-    let doc_no;                     // 会计凭证编号
-    let date;                       // 日期
-    let doc_nums;                   // 单据数量
-    let contents = Array();
+    let csrf_token = get_csrf_token(),
+        business_no = now_business_no,
+        data, acc_document_infos,
+        doc_no,                     // 会计凭证编号
+        date,                       // 日期
+        doc_nums,                   // 单据数量
+        contents = Array();
 
     doc_no = $("input[name=doc_no]").val();
     date = $("input[name=date]").val();
     doc_nums = $("input[name=doc_nums]").val();
 
     $("tr[id^=vi_row]").each(function () {
-            let summary;            //摘要
-            let general_account;    //总账科目
-            let detail_account;     //明细科目
-            let dr_money = "";       //借方金额
-            let cr_money = "";       //贷方金额
-            let thisId = $(this).attr("id");
-            let thisInput = $(this).find("input");
+            let summary,            //摘要
+                general_account,    //总账科目
+                detail_account,     //明细科目
+                dr_money = "",       //借方金额
+                cr_money = "",       //贷方金额
+                thisId = $(this).attr("id"),
+                thisInput = $(this).find("input");
             if (thisId === "vi_rowLast") {
                 summary = general_account = detail_account = "sum";
                 for (let i = 0; i < 20; i++) {
@@ -181,8 +161,8 @@ function get_acc_document_info(business_no) {
         return;
     }
     courseiv_li_control(business_no);
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
+    let csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token);
     // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
     if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
         map_acc_document_info(business_no);
@@ -220,11 +200,11 @@ function map_acc_document_info(business_no) {
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
     $("input").val("");
 
-    let content = business_list[business_index]["content"];
-    let business_type = business_list[business_index]["business_type"];
-    let confirmed = business_list[business_index]["confirmed"];
-    let saved = business_list[business_index]["saved"];
-    let acc_document_infos = business_list[business_index]["acc_document_infos"];
+    let content = business_list[business_index]["content"],
+        business_type = business_list[business_index]["business_type"],
+        confirmed = business_list[business_index]["confirmed"],
+        saved = business_list[business_index]["saved"],
+        acc_document_infos = business_list[business_index]["acc_document_infos"];
     if (acc_document_infos) {
         let filename = acc_document_infos["filename"];
         if (filename) {
@@ -275,10 +255,10 @@ function map_acc_document_info(business_no) {
         // 凭证信息为空则返回
         return;
     }
-    let doc_no = acc_document_infos["doc_no"];
-    let date = acc_document_infos["date"];
-    let doc_nums = acc_document_infos["doc_nums"];
-    let contents = acc_document_infos["contents"];
+    let doc_no = acc_document_infos["doc_no"],
+        date = acc_document_infos["date"],
+        doc_nums = acc_document_infos["doc_nums"],
+        contents = acc_document_infos["contents"];
     date = formatDate(date);
     $("input[name=doc_no]").val(doc_no);
     $("input[name=date]").val(date);
@@ -291,14 +271,14 @@ function map_acc_document_info(business_no) {
 
     let contents_index = 0;
     $("tr[id^=vi_row]").each(function () {
-            let summary = contents[contents_index]["summary"];                      //摘要
-            let general_account = contents[contents_index]["general_account"];      //总账科目
-            let detail_account = contents[contents_index]["detail_account"];        //明细科目
-            let dr_money = contents[contents_index]["dr_money"];                    //借方金额
-            let cr_money = contents[contents_index]["cr_money"];                    //贷方金额
-            let thisId = $(this).attr("id");
-            let thisInput = $(this).find("input");
-            let prefix = "0000000000";
+            let summary = contents[contents_index]["summary"],                      //摘要
+                general_account = contents[contents_index]["general_account"],      //总账科目
+                detail_account = contents[contents_index]["detail_account"],        //明细科目
+                dr_money = contents[contents_index]["dr_money"],                    //借方金额
+                cr_money = contents[contents_index]["cr_money"],                    //贷方金额
+                thisId = $(this).attr("id"),
+                thisInput = $(this).find("input"),
+                prefix = "0000000000";
             dr_money = dr_money ? dr_money * 100 : dr_money;
             cr_money = cr_money ? cr_money * 100 : cr_money;
             dr_money = dr_money ? dr_money.toString() : dr_money;
@@ -311,7 +291,7 @@ function map_acc_document_info(business_no) {
             if (thisId === "vi_rowLast") {
                 for (let i = 0; i < 20; i++) {
                     if (money) {
-                        if(i === 10){
+                        if (i === 10) {
                             firstNum = true;
                         }
                         if (firstNum && money[i] !== "0") {
@@ -328,7 +308,7 @@ function map_acc_document_info(business_no) {
                 $(thisInput[2]).val(detail_account);
                 for (let i = 3; i < 23; i++) {
                     if (money) {
-                         if(i === 13){
+                        if (i === 13) {
                             firstNum = true;
                         }
                         if (firstNum && money[i - 3] !== "0") {
@@ -347,9 +327,9 @@ function map_acc_document_info(business_no) {
 
 
 function vi_downloadFile() {
-    let business_no = now_business_no;
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token) + "&" + $.param({"business_no": business_no});
+    let business_no = now_business_no,
+        csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token) + "&" + $.param({"business_no": business_no});
     $.ajax({
         url: "/download_acc_document_info",
         type: "post",
@@ -359,10 +339,10 @@ function vi_downloadFile() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                let file = data["file"];
-                let filename = file["filename"];
-                let content = file["content"];
-                let arrayBuffer = new Uint8Array(JSON.parse(content)).buffer;
+                let file = data["file"],
+                    filename = file["filename"],
+                    content = file["content"],
+                    arrayBuffer = new Uint8Array(JSON.parse(content)).buffer;
                 downloadFile(arrayBuffer, filename);
             } else {
                 show_message("course_vi_message", data["message"], "danger", 1000);
@@ -433,8 +413,8 @@ function getfileContents() {
     let files = $("#uploadFiles").prop("files");
 
     function setupReader(file) {
-        let reader = new FileReader();
-        let name = file.name;
+        let reader = new FileReader(),
+            name = file.name;
         reader.readAsArrayBuffer(file);
         reader.onload = function (e) {
             // get file content

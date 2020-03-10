@@ -20,34 +20,14 @@ function courseiii_li_control(business_no) {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_subject() {
-    show_submit_confirm("submit_subject_info('confirm')");
-    let confirm_subject_button = $("#confirm_subject_button");
-    confirm_subject_button.attr("disabled", true);
-    confirm_subject_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_subject_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_subject_button.attr("disabled", false);
-        confirm_subject_button.text("提交");
-    }, 2000);
+    confirm_info("confirm_subject_button", "submit_subject_info");
 }
 
 /**
  * 保存科目信息
  */
 function save_subject() {
-    submit_subject_info("save");
-    let save_subject_button = $("#save_subject_button");
-    save_subject_button.attr("disabled", true);
-    save_subject_button.text("保存 2s");
-    setTimeout(function () {
-        save_subject_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_subject_button.attr("disabled", false);
-        save_subject_button.text("保存");
-    }, 2000);
+    save_info("save_subject_button", submit_subject_info);
 }
 
 /**
@@ -63,17 +43,17 @@ function submit_subject_info(submit_type) {
     } else {
         return;
     }
-    let business_no = now_business_no;
-    let subject_infos = Array();
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
-    let right_box = $("#plusbox");
-    let left_box = $("#minusbox");
-    let right_input = right_box.children().children(":input");
-    let left_input = left_box.children().children(":input");
-    let right_inputLen = right_input.length;
-    let left_inputLen = left_input.length;
-    let is_up = true;
+    let business_no = now_business_no,
+        subject_infos = Array(),
+        csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token),
+        right_box = $("#plusbox"),
+        left_box = $("#minusbox"),
+        right_input = right_box.children().children(":input"),
+        left_input = left_box.children().children(":input"),
+        right_inputLen = right_input.length,
+        left_inputLen = left_input.length,
+        is_up = true;
     for (let i = 0; i < right_inputLen; i++) {
         let subject = $(right_input[i]).val();
         subject_infos.push({"subject": subject, "is_up": is_up});
@@ -131,8 +111,8 @@ function get_subject_info(business_no) {
         return;
     }
     courseiii_li_control(business_no);
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
+    let csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token);
     // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
     if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
         map_subject_info(business_no);
@@ -171,12 +151,12 @@ function map_subject_info(business_no) {
     clear_box();
     if (business_index === -1) return;
 
-    let content = business_list[business_index]["content"];
-    let business_type = business_list[business_index]["business_type"];
-    let confirmed = business_list[business_index]["confirmed"];
-    let saved = business_list[business_index]["saved"];
-    let subject_infos = business_list[business_index]["subject_infos"];
-    let em_no = business_index + 1;
+    let content = business_list[business_index]["content"],
+        business_type = business_list[business_index]["business_type"],
+        confirmed = business_list[business_index]["confirmed"],
+        saved = business_list[business_index]["saved"],
+        subject_infos = business_list[business_index]["subject_infos"],
+        em_no = business_index + 1;
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
     $("#em_3").text(em_no);
@@ -196,8 +176,8 @@ function map_subject_info(business_no) {
     let subject_submit_span = $("#subject_submit_span");
     if (confirmed || saved) {
         // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
+        let span_text = "已保存",
+            span_color = "#5bc0de";
         if (confirmed) {
             span_text = "已完成";
             span_color = "#5cb85c";
@@ -220,8 +200,8 @@ function map_subject_info(business_no) {
     let rightbox_subject_array = Array();
     let leftbox_subject_array = Array();
     for (let i = 0; i < subject_infos.length; i++) {
-        let subject = subject_infos[i]["subject"];
-        let is_up = subject_infos[i]["is_up"];
+        let subject = subject_infos[i]["subject"],
+            is_up = subject_infos[i]["is_up"];
         if (is_up) {
             rightbox_subject_array.push(subject);
         } else {
@@ -239,8 +219,8 @@ function map_subject_info(business_no) {
  */
 function input_moveTo_center(box, subject_array) {
     for (let i = 0; i < subject_array.length; i++) {
-        let input_select = ":input[value=" + subject_array[i] + "]";
-        let input_tmp = $(input_select);
+        let input_select = ":input[value=" + subject_array[i] + "]",
+            input_tmp = $(input_select);
         $(input_tmp).prop("checked", true);
     }
     if (box === "plusbox") {
@@ -258,8 +238,8 @@ function input_moveTo_center(box, subject_array) {
  * 清空两个box
  */
 function clear_box() {
-    let input_tmp = $("#minusbox, #plusbox").children().children(":input");
-    let input_tmpLen = input_tmp.length;
+    let input_tmp = $("#minusbox, #plusbox").children().children(":input"),
+        input_tmpLen = input_tmp.length;
     for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", true);
     }
@@ -274,8 +254,8 @@ function clear_box() {
  *  穿梭框
  */
 function all_to(obj) {
-    let $objbox = $('#' + obj);
-    let $allboxChecked = $('#allbox input:checked');
+    let $objbox = $('#' + obj),
+        $allboxChecked = $('#allbox input:checked');
     for (let i = 0; i < $allboxChecked.length; i++) {
         $objbox.append(
             $($allboxChecked[i]).parent()
@@ -286,8 +266,8 @@ function all_to(obj) {
 function to_all(obj) {
     let $objboxChecked = $('#' + obj + ' input:checked');
     for (let i = 0; i < $objboxChecked.length; i++) {
-        let data_type = $($objboxChecked[i]).attr("data-type");
-        let objbox = $('#' + data_type);
+        let data_type = $($objboxChecked[i]).attr("data-type"),
+            objbox = $('#' + data_type);
         objbox.append(
             $($objboxChecked[i]).parent()
         );

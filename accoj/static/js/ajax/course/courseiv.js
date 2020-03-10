@@ -20,34 +20,14 @@ function courseiv_li_control(business_no) {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_entry() {
-    show_submit_confirm("submit_entry_info('confirm')");
-    let confirm_entry_button = $("#confirm_entry_button");
-    confirm_entry_button.attr("disabled", true);
-    confirm_entry_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_entry_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_entry_button.attr("disabled", false);
-        confirm_entry_button.text("提交");
-    }, 2000);
+    confirm_info("confirm_entry_button", "submit_entry_info");
 }
 
 /**
  * 保存分录信息
  */
 function save_entry() {
-    submit_entry_info("save");
-    let save_entry_button = $("#save_entry_button");
-    save_entry_button.attr("disabled", true);
-    save_entry_button.text("保存 2s");
-    setTimeout(function () {
-        save_entry_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_entry_button.attr("disabled", false);
-        save_entry_button.text("保存");
-    }, 2000);
+    save_info("save_entry_button", submit_entry_info);
 }
 
 /**
@@ -63,17 +43,17 @@ function submit_entry_info(submit_type) {
     } else {
         return;
     }
-    let business_no = now_business_no;
-    let entry_infos = Array();
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
-    let crSubjects = $("[id^=subject1]");    // 借记科目input列表
-    let drSubjects = $("[id^=subject0]");    // 贷记科目input列表
-    let crMoneys = $("[id^=money1]");        // 借记金额input列表
-    let drMoneys = $("[id^=money0]");        // 贷记金额input列表
-    let crSubjectsLen = crSubjects.length;
-    let drSubjectsLen = drSubjects.length;
-    let is_dr = true;   // 是否借记
+    let business_no = now_business_no,
+        entry_infos = Array(),
+        csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token),
+        crSubjects = $("[id^=subject1]"),    // 借记科目input列表
+        drSubjects = $("[id^=subject0]"),    // 贷记科目input列表
+        crMoneys = $("[id^=money1]"),        // 借记金额input列表
+        drMoneys = $("[id^=money0]"),        // 贷记金额input列表
+        crSubjectsLen = crSubjects.length,
+        drSubjectsLen = drSubjects.length,
+        is_dr = true;   // 是否借记
     for (let i = 0; i < crSubjectsLen; i++) {
         let subject = $(crSubjects[i]).val();
         let money = $(crMoneys[i]).val();
@@ -171,12 +151,12 @@ function map_entry_info(business_no) {
     // 先重置分录信息
     clear_entry();
 
-    let content = business_list[business_index]["content"];
-    let business_type = business_list[business_index]["business_type"];
-    let confirmed = business_list[business_index]["confirmed"];
-    let saved = business_list[business_index]["saved"];
-    let entry_infos = business_list[business_index]["entry_infos"];
-    let em_no = business_index + 1;
+    let content = business_list[business_index]["content"],
+        business_type = business_list[business_index]["business_type"],
+        confirmed = business_list[business_index]["confirmed"],
+        saved = business_list[business_index]["saved"],
+        entry_infos = business_list[business_index]["entry_infos"],
+        em_no = business_index + 1;
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
     $("#em_4").text(em_no);
@@ -196,8 +176,8 @@ function map_entry_info(business_no) {
     let entry_submit_span = $("#entry_submit_span");
     if (confirmed || saved) {
         // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
+        let span_text = "已保存",
+            span_color = "#5bc0de";
         if (confirmed) {
             span_text = "已完成";
             span_color = "#5cb85c";
@@ -220,9 +200,9 @@ function map_entry_info(business_no) {
     let borrow_first = true;    // 借记第一行标记
     let loan_first = true;     // 贷记第一行标记
     for (let i = 0; i < entry_infos.length; i++) {
-        let subject = entry_infos[i]["subject"];
-        let money = entry_infos[i]["money"];
-        let is_dr = entry_infos[i]["is_dr"];
+        let subject = entry_infos[i]["subject"],
+            money = entry_infos[i]["money"],
+            is_dr = entry_infos[i]["is_dr"];
         if (is_dr) {
             // 若果是借记
             if (borrow_first) {
@@ -257,8 +237,8 @@ function clear_entry() {
     $("#money1").val("");
     $("#money0").val("");
     // 移除其他行
-    let removeRows = $("[id^=subject1_], [id^=subject0_]");
-    let removeRowsLen = removeRows.length;
+    let removeRows = $("[id^=subject1_], [id^=subject0_]"),
+        removeRowsLen = removeRows.length;
     if (!removeRowsLen) return;
     for (let i = 0; i < removeRowsLen; i++) {
         $(removeRows[i]).parent().parent().remove();

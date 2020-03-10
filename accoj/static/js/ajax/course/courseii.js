@@ -20,33 +20,14 @@ function courseii_li_control(business_no) {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_key_element() {
-    show_submit_confirm("submit_key_element_info('confirm')");
-    let confirm_key_element_button = $("#confirm_key_element_button");
-    confirm_key_element_button.attr("disabled", true);
-    confirm_key_element_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_key_element_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_key_element_button.attr("disabled", false);
-    }, 2000);
+    confirm_info("confirm_key_element_button", "submit_key_element_info");
 }
 
 /**
  * 保存会计要素信息
  */
 function save_key_element() {
-    submit_key_element_info("save");
-    let save_key_element_button = $("#save_key_element_button");
-    save_key_element_button.attr("disabled", true);
-    save_key_element_button.text("保存 2s");
-    setTimeout(function () {
-        save_key_element_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_key_element_button.attr("disabled", false);
-        save_key_element_button.text("保存");
-    }, 2000);
+    save_info("save_key_element_button", submit_key_element_info);
 }
 
 
@@ -63,15 +44,15 @@ function submit_key_element_info(submit_type) {
     } else {
         return;
     }
-    let business_no = now_business_no;
-    let key_element_infos = Array();
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
-    let aers = $("input[id^=aer]");
-    let aers_len = aers.length;
-    let check_box = $("input[id^=check]");
-    let check_box_len = check_box.length;
-    let affect_type;
+    let business_no = now_business_no,
+        key_element_infos = Array(),
+        csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token),
+        aers = $("input[id^=aer]"),
+        aers_len = aers.length,
+        check_box = $("input[id^=check]"),
+        check_box_len = check_box.length,
+        affect_type;
     // 获取对会计等式影响类型的选项
     for (let i = 0; i < aers_len; i++) {
         if ($(aers[i]).is(":checked")) {
@@ -83,12 +64,12 @@ function submit_key_element_info(submit_type) {
     // 获取已勾选的要素选项
     for (let i = 0; i < check_box_len; i++) {
         if ($(check_box[i]).is(':checked')) {
-            let key_elem_id = "key_elem" + (i + 1);
-            let key_elem = $("#" + key_elem_id);
-            let key_element = key_elem.attr("name");
-            let is_up = key_element[0] === "+";
+            let key_elem_id = "key_elem" + (i + 1),
+                key_elem = $("#" + key_elem_id),
+                key_element = key_elem.attr("name"),
+                is_up = key_element[0] === "+",
+                money = parseFloat(key_elem.val());
             key_element = key_element.replace(/^\+|^-/, "");
-            let money = parseFloat(key_elem.val());
             key_element_infos.push({"key_element": key_element, "money": money, "is_up": is_up});
         }
     }
@@ -176,15 +157,15 @@ function get_key_element_info(business_no) {
 function map_key_element_info(business_no) {
     let key_element_num_dict = {"资产": 1, "负债": 3, "收入": 5, "费用": 7, "利润": 9, "所有者权益": 11};
     business_no = parseInt(business_no);
-    let business_index = business_no - 1;
-    let affect_type = business_list[business_index]["affect_type"];
-    let content = business_list[business_index]["content"];
-    let business_type = business_list[business_index]["business_type"];
-    let confirmed = business_list[business_index]["confirmed"];
-    let saved = business_list[business_index]["saved"];
-    let key_element_infos = business_list[business_index]["key_element_infos"];
-    let affect_type_id = "aer" + affect_type;
-    let em_no = business_index + 1;
+    let business_index = business_no - 1,
+        affect_type = business_list[business_index]["affect_type"],
+        content = business_list[business_index]["content"],
+        business_type = business_list[business_index]["business_type"],
+        confirmed = business_list[business_index]["confirmed"],
+        saved = business_list[business_index]["saved"],
+        key_element_infos = business_list[business_index]["key_element_infos"],
+        affect_type_id = "aer" + affect_type,
+        em_no = business_index + 1;
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
     $("#em_2").text(em_no);
@@ -192,8 +173,8 @@ function map_key_element_info(business_no) {
     let key_element_submit_span = $("#key_element_submit_span");
     if (confirmed || saved) {
         // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
+        let span_text = "已保存",
+            span_color = "#5bc0de";
         if (confirmed) {
             span_text = "已完成";
             span_color = "#5cb85c";
@@ -230,13 +211,13 @@ function map_key_element_info(business_no) {
     // 填充会计要素信息
     key_element_infos = JSON.parse(key_element_infos); // 因为key_element_infos是JSON数组，所以需要解析
     for (let i = 0; i < key_element_infos.length; i++) {
-        let key_element = key_element_infos[i]["key_element"];
-        let money = key_element_infos[i]["money"];
-        let is_up = key_element_infos[i]["is_up"];
-        let key_element_num = key_element_num_dict[key_element];
+        let key_element = key_element_infos[i]["key_element"],
+            money = key_element_infos[i]["money"],
+            is_up = key_element_infos[i]["is_up"],
+            key_element_num = key_element_num_dict[key_element];
         if (!is_up) key_element_num = key_element_num_dict[key_element] + 1;
-        let key_element_id = "key_elem" + key_element_num;
-        let check_id = "check" + key_element_num;
+        let key_element_id = "key_elem" + key_element_num,
+            check_id = "check" + key_element_num;
         $("#" + check_id).prop("checked", true);
         $("#" + key_element_id).val(money);
     }

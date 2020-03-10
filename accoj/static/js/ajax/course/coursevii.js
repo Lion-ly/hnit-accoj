@@ -1,6 +1,6 @@
 // 正确答案中包含的所有科目列表
-let involve_subjects = Array();
-let business_list = Array();
+let involve_subjects = Array(),
+    business_list = Array();
 // 页面加载完成填充数据
 $(document).ready(function () {
     get_business_list();
@@ -18,10 +18,9 @@ function coursevii_li_control(business_no) {
     $("#" + add_li_id).addClass("active");
     // 填充业务信息
     business_no = parseInt(business_no);
-    let business_index = business_no - 1;
-
-    let content = business_list[business_index]["content"];
-    let business_type = business_list[business_index]["business_type"];
+    let business_index = business_no - 1,
+        content = business_list[business_index]["content"],
+        business_type = business_list[business_index]["business_type"];
     let em_no = business_index + 1;
     // 填充业务编号
     em_no = em_no < 10 ? "0" + em_no : em_no;
@@ -58,8 +57,8 @@ function get_business_list() {
             if (data["result"]) {
                 business_list = data["business_list"];
                 involve_subjects = data["involve_subjects"];
-                let firstOption = true;
-                let dateNow = new Date();
+                let firstOption = true,
+                    dateNow = new Date();
                 $("#yearNow").val(dateNow.getFullYear());
                 $.each(involve_subjects, function (index, item) {
                     $("#anchorOption").before("<option>" + item + "</option>");
@@ -81,34 +80,14 @@ function get_business_list() {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_subsidiary_account() {
-    show_submit_confirm("submit_subsidiary_account_info('confirm')");
-    let confirm_subsidiary_account_button = $("#confirm_subsidiary_account_button");
-    confirm_subsidiary_account_button.attr("disabled", true);
-    confirm_subsidiary_account_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_subsidiary_account_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_subsidiary_account_button.attr("disabled", false);
-        confirm_subsidiary_account_button.text("提交");
-    }, 2000);
+    confirm_info("confirm_subsidiary_account_button", "submit_subsidiary_account_info");
 }
 
 /**
  * 保存明细账信息
  */
 function save_subsidiary_account() {
-    submit_subsidiary_account_info("save");
-    let save_subsidiary_account_button = $("#save_subsidiary_account_button");
-    save_subsidiary_account_button.attr("disabled", true);
-    save_subsidiary_account_button.text("保存 2s");
-    setTimeout(function () {
-        save_subsidiary_account_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_subsidiary_account_button.attr("disabled", false);
-        save_subsidiary_account_button.text("保存");
-    }, 2000);
+    save_info("save_subsidiary_account_button", submit_subsidiary_account_info);
 }
 
 //==================================提交会计明细账信息==================================//
@@ -125,29 +104,29 @@ function submit_subsidiary_account_info(submit_type) {
     } else {
         return;
     }
-    let csrf_token = get_csrf_token();
-    let subject = $("#subjectSelect").val();
+    let csrf_token = get_csrf_token(),
+        subject = $("#subjectSelect").val();
 
     // 获取明细账数据
-    let subsidiary_account_info = Array();
-    let year = $("#yearNow").val();
+    let subsidiary_account_info = Array(),
+        year = $("#yearNow").val();
     $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
-        let thisInput = $(this).find("input");
-        let index = 0;
-        let month = $(thisInput[index++]).val();
-        let day = $(thisInput[index++]).val();
-        let word = $(thisInput[index++]).val();
-        let no = $(thisInput[index++]).val();
-        let summary = $(thisInput[index++]).val();
-        let dr_money = "";
-        let cr_money = "";
+        let thisInput = $(this).find("input"),
+            index = 0,
+            month = $(thisInput[index++]).val(),
+            day = $(thisInput[index++]).val(),
+            word = $(thisInput[index++]).val(),
+            no = $(thisInput[index++]).val(),
+            summary = $(thisInput[index++]).val(),
+            dr_money = "",
+            cr_money = "";
         for (; index < 25; index++) {
             let money = $(thisInput[index]).val();
             dr_money += index < 15 ? money : "";
             cr_money += index < 15 ? "" : money;
         }
-        let orientation = $(thisInput[index++]).val();
-        let balance_money = "";
+        let orientation = $(thisInput[index++]).val(),
+            balance_money = "";
         for (; index < 36; index++) {
             balance_money += $(thisInput[index]);
         }
@@ -213,17 +192,17 @@ function submit_subsidiary_account_info(submit_type) {
 }
 
 //==================================获取会计明细账信息==================================//
-let subsidiary_account_infos = ""; // 保存本次课程全部信息，减少后端数据请求次数
-let subsidiary_account_confirmed = "";
-let subsidiary_account_saved = "";
+let subsidiary_account_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
+    subsidiary_account_confirmed = "",
+    subsidiary_account_saved = "";
 
 /**
  * 从后端获取会计明细账信息
  */
 function get_subsidiary_account_info() {
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
-    let subject = $("#subjectSelect").val();
+    let csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token),
+        subject = $("#subjectSelect").val();
     // 若subsidiary_account_infos不为空且请求的科目已经确认提交过，则不再发送数据请求
     if (subsidiary_account_infos && subsidiary_account_confirmed.indexOf(subject) !== -1) {
         map_subsidiary_account_info();
@@ -253,8 +232,8 @@ function get_subsidiary_account_info() {
 }
 
 //==================================将会计明细账信息映射到前端==================================//
-let period1Vii1Row = 3;
-let period2Vii1Row = 3;
+let period1Vii1Row = 3,
+    period2Vii1Row = 3;
 
 /**
  * 将数据映射到前端
@@ -273,14 +252,14 @@ function map_subsidiary_account_info() {
             $(this).val("");
         }
     });
-    let confirmed = subsidiary_account_confirmed.indexOf(subject) !== -1;
-    let saved = subsidiary_account_saved.indexOf(subject) !== -1;
+    let confirmed = subsidiary_account_confirmed.indexOf(subject) !== -1,
+        saved = subsidiary_account_saved.indexOf(subject) !== -1;
     // 将option染色
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
         let $options = $("#subjectSelect").children();
         $.each($options, function (index, item) {
-            let optionValue = $(item).val();
-            let color = "#555";
+            let optionValue = $(item).val(),
+                color = "#555";
             if (subsidiary_account_saved && subsidiary_account_saved.indexOf(optionValue) !== -1) {
                 color = "#5bc0de";
             } else if (subsidiary_account_confirmed && subsidiary_account_confirmed.indexOf(optionValue) !== -1) {
@@ -294,8 +273,8 @@ function map_subsidiary_account_info() {
     let subsidiary_account_submit_span = $("#subsidiary_account_submit_span");
     if (confirmed || saved) {
         // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
+        let span_text = "已保存",
+            span_color = "#5bc0de";
         if (confirmed) {
             span_text = "已完成";
             span_color = "#5cb85c";
@@ -333,26 +312,26 @@ function map_subsidiary_account_info() {
         }
     }
     // 填充信息
-    let infoIndex = 0;
-    let firstRow = true;
+    let infoIndex = 0,
+        firstRow = true;
     $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
-        let thisInputs = $(this).find("input");
-        let date = subsidiary_account_info[infoIndex]["date"].split("-");
-        let word = subsidiary_account_info[infoIndex]["word"];
-        let no = subsidiary_account_info[infoIndex]["no"];
-        let summary = subsidiary_account_info[infoIndex]["summary"];
-        let dr_money = subsidiary_account_info[infoIndex]["dr_money"];
-        let orientation = subsidiary_account_info[infoIndex]["orientation"];
-        let cr_money = subsidiary_account_info[infoIndex]["cr_money"];
-        let balance_money = subsidiary_account_info[infoIndex]["balance_money"];
-        let year = date[0];
+        let thisInputs = $(this).find("input"),
+            date = subsidiary_account_info[infoIndex]["date"].split("-"),
+            word = subsidiary_account_info[infoIndex]["word"],
+            no = subsidiary_account_info[infoIndex]["no"],
+            summary = subsidiary_account_info[infoIndex]["summary"],
+            dr_money = subsidiary_account_info[infoIndex]["dr_money"],
+            orientation = subsidiary_account_info[infoIndex]["orientation"],
+            cr_money = subsidiary_account_info[infoIndex]["cr_money"],
+            balance_money = subsidiary_account_info[infoIndex]["balance_money"],
+            year = date[0];
         if (firstRow) {
             $("#yearNow").val(year);
             firstRow = false;
         }
-        let month = date[1];
-        let day = date[2];
-        let prefix = "0000000000";
+        let month = date[1],
+            day = date[2],
+            prefix = "0000000000";
         dr_money = dr_money ? dr_money * 100 : dr_money;
         cr_money = cr_money ? cr_money * 100 : cr_money;
         balance_money = balance_money ? balance_money * 100 : balance_money;
@@ -395,33 +374,14 @@ function map_subsidiary_account_info() {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_acc_balance_sheet() {
-    show_submit_confirm("submit_acc_balance_sheet_info('confirm')");
-    let confirm_acc_balance_sheet_button = $("#confirm_acc_balance_sheet_button");
-    confirm_acc_balance_sheet_button.attr("disabled", true);
-    confirm_acc_balance_sheet_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_acc_balance_sheet_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_acc_balance_sheet_button.attr("disabled", false);
-    }, 2000);
+    confirm_info("confirm_acc_balance_sheet_button", "submit_acc_balance_sheet_info");
 }
 
 /**
  * 保存科目余额表信息
  */
 function save_acc_balance_sheet() {
-    submit_acc_balance_sheet_info("save");
-    let save_acc_balance_sheet_button = $("#save_acc_balance_sheet_button");
-    save_acc_balance_sheet_button.attr("disabled", true);
-    save_acc_balance_sheet_button.text("保存 2s");
-    setTimeout(function () {
-        save_acc_balance_sheet_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_acc_balance_sheet_button.attr("disabled", false);
-        save_acc_balance_sheet_button.text("保存");
-    }, 2000);
+    save_info("save_acc_balance_sheet_button", submit_acc_balance_sheet_info);
 }
 
 
@@ -438,20 +398,20 @@ function submit_acc_balance_sheet_info(submit_type) {
     } else {
         return;
     }
-    let csrf_token = get_csrf_token();
-    let acc_balance_sheet_infos = Array();
+    let csrf_token = get_csrf_token(),
+        acc_balance_sheet_infos = Array();
 
     $("[id^=vii2Row]").each(function () {
-        let thisInputs = $(this).find("input");
-        let inputIndex = 0;
-        let subject = $(this).attr("id") === "vii2RowLast" ? "sum" : $(thisInputs[0]).val();
+        let thisInputs = $(this).find("input"),
+            inputIndex = 0,
+            subject = $(this).attr("id") === "vii2RowLast" ? "sum" : $(thisInputs[0]).val();
         if (subject !== "sum") inputIndex = 1;
-        let borrow_1 = $(thisInputs[inputIndex]).val();
-        let lend_1 = $(thisInputs[inputIndex + 1]).val();
-        let borrow_2 = $(thisInputs[inputIndex + 2]).val();
-        let lend_2 = $(thisInputs[inputIndex + 3]).val();
-        let borrow_3 = $(thisInputs[inputIndex + 4]).val();
-        let lend_3 = $(thisInputs[inputIndex + 5]).val();
+        let borrow_1 = $(thisInputs[inputIndex]).val(),
+            lend_1 = $(thisInputs[inputIndex + 1]).val(),
+            borrow_2 = $(thisInputs[inputIndex + 2]).val(),
+            lend_2 = $(thisInputs[inputIndex + 3]).val(),
+            borrow_3 = $(thisInputs[inputIndex + 4]).val(),
+            lend_3 = $(thisInputs[inputIndex + 5]).val();
         acc_balance_sheet_infos.push({
             "subject": subject,
             "borrow_1": borrow_1,
@@ -507,17 +467,17 @@ function submit_acc_balance_sheet_info(submit_type) {
 }
 
 //==================================获取科目余额表信息==================================//
-let acc_balance_sheet_infos; // 保存本次课程全部信息，减少后端数据请求次数
-let acc_balance_sheet_confirmed;
-let acc_balance_sheet_saved;
+let acc_balance_sheet_infos, // 保存本次课程全部信息，减少后端数据请求次数
+    acc_balance_sheet_confirmed,
+    acc_balance_sheet_saved;
 
 /**
  * 从后端获取科目余额表信息
  */
 function get_acc_balance_sheet_info() {
 
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
+    let csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token);
     // 若acc_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
     if (acc_balance_sheet_infos && acc_balance_sheet_confirmed) {
         map_acc_balance_sheet_info();
@@ -553,10 +513,9 @@ function map_acc_balance_sheet_info() {
     $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
     $("input").val("");
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let confirmed = acc_balance_sheet_confirmed;
-    let saved = acc_balance_sheet_saved;
-    let acc_balance_sheet_submit_span = $("#acc_balance_sheet_submit_span");
-    if (confirmed || saved) {
+    let confirmed = acc_balance_sheet_confirmed,
+        acc_balance_sheet_submit_span = $("#acc_balance_sheet_submit_span");
+    if (confirmed || acc_balance_sheet_saved) {
         // 初始化为saved
         let span_text = "已保存";
         let span_color = "#5bc0de";
@@ -579,15 +538,15 @@ function map_acc_balance_sheet_info() {
     // 填充数据
     let index = 0;
     $("[id^=vii2Row]").each(function () {
-        let thisInputs = $(this).find("input");
-        let subject = acc_balance_sheet_infos[index]["subject"];
-        let borrow_1 = acc_balance_sheet_infos[index]["borrow_1"];
-        let lend_1 = acc_balance_sheet_infos[index]["lend_1"];
-        let borrow_2 = acc_balance_sheet_infos[index]["borrow_2"];
-        let lend_2 = acc_balance_sheet_infos[index]["lend_2"];
-        let borrow_3 = acc_balance_sheet_infos[index]["borrow_3"];
-        let lend_3 = acc_balance_sheet_infos[index]["lend_3"];
-        let inputIndex = 0;
+        let thisInputs = $(this).find("input"),
+            subject = acc_balance_sheet_infos[index]["subject"],
+            borrow_1 = acc_balance_sheet_infos[index]["borrow_1"],
+            lend_1 = acc_balance_sheet_infos[index]["lend_1"],
+            borrow_2 = acc_balance_sheet_infos[index]["borrow_2"],
+            lend_2 = acc_balance_sheet_infos[index]["lend_2"],
+            borrow_3 = acc_balance_sheet_infos[index]["borrow_3"],
+            lend_3 = acc_balance_sheet_infos[index]["lend_3"],
+            inputIndex = 0;
         if (subject !== "sum") {
             $(thisInputs[inputIndex]).val(subject);
             inputIndex = 1;
@@ -607,9 +566,9 @@ function map_acc_balance_sheet_info() {
  * @ # coursevii1 -> 登记各账户明细表 ? 表格增加行
  */
 function vii1_AddRow(flag) {
-    let obj = "period1Vii1RowLast";
-    let idPrefix = "period1Vii1Row";
-    let vii1Row = period1Vii1Row;
+    let obj = "period1Vii1RowLast",
+        idPrefix = "period1Vii1Row",
+        vii1Row = period1Vii1Row;
     if (!flag) {
         obj = "period2Vii1RowLast";
         idPrefix = "period2Vii1Row";

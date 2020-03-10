@@ -1,11 +1,9 @@
-// 正确答案中包含的所有科目列表
-let involve_subjects = Array();
-let pageNum = 0;
-let ledger_infos; // 嵌套字典，保存本次课程全部信息，减少后端数据请求次数
-// 当前所选科目
-let now_subject = "";
-let first = true;
-let involve_subjects_len = 0;
+let involve_subjects = Array(), // 正确答案中包含的所有科目列表
+    pageNum = 0,
+    ledger_infos,       // 嵌套字典，保存本次课程全部信息，减少后端数据请求次数
+    now_subject = "",   // 当前所选科目
+    first = true,
+    involve_subjects_len = 0;
 
 // 页面加载完成填充数据
 $(document).ready(function () {
@@ -17,34 +15,14 @@ $(document).ready(function () {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_ledger() {
-    show_submit_confirm("submit_ledger_info('confirm')");
-    let confirm_ledger_button = $("#confirm_ledger_button");
-    confirm_ledger_button.attr("disabled", true);
-    confirm_ledger_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_ledger_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_ledger_button.attr("disabled", false);
-        confirm_ledger_button.text("提交");
-    }, 2000);
+    confirm_info("confirm_ledger_button", "submit_ledger_info");
 }
 
 /**
  * 保存账户信息
  */
 function save_ledger() {
-    submit_ledger_info("save");
-    let save_ledger_button = $("#save_ledger_button");
-    save_ledger_button.attr("disabled", true);
-    save_ledger_button.text("保存 2s");
-    setTimeout(function () {
-        save_ledger_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_ledger_button.attr("disabled", false);
-        save_ledger_button.text("保存");
-    }, 2000);
+    save_info("save_ledger_button", submit_ledger_info);
 }
 
 /**
@@ -63,12 +41,12 @@ function submit_ledger_info(submit_type) {
     let ledger_info = {};
     let csrf_token = get_csrf_token();
     // let data = $.param(csrf_token);
-    let subject = $("#coursev_select").val();                           //  科目
-    let is_left = $("li.active[id^=coursevli]").attr("id").startsWith("coursevli_left");  //  是否为左T表
-    let opening_balance = $("input[name=opening_balance]").val();       //  期初余额
-    let current_amount_dr = $("input[name=current_amount_dr]").val();   //  本期发生额借记方
-    let current_amount_cr = $("input[name=current_amount_cr]").val();   //  本期发生额贷记方
-    let ending_balance = $("input[name=ending_balance]").val();         //  期末余额
+    let subject = $("#coursev_select").val(),                           //  科目
+        is_left = $("li.active[id^=coursevli]").attr("id").startsWith("coursevli_left"),  //  是否为左T表
+        opening_balance = $("input[name=opening_balance]").val(),       //  期初余额
+        current_amount_dr = $("input[name=current_amount_dr]").val(),   //  本期发生额借记方
+        current_amount_cr = $("input[name=current_amount_cr]").val(),   //  本期发生额贷记方
+        ending_balance = $("input[name=ending_balance]").val();         //  期末余额
 
     ledger_info["subject"] = subject;
     ledger_info["is_left"] = is_left;
@@ -77,16 +55,16 @@ function submit_ledger_info(submit_type) {
     ledger_info["current_amount_cr"] = current_amount_cr;
     ledger_info["ending_balance"] = ending_balance;
 
-    let dr_array = Array();     //  借方信息列表
-    let cr_array = Array();     //  贷方信息列表
+    let dr_array = Array(),     //  借方信息列表
+        cr_array = Array();     //  贷方信息列表
     $("input[name=dr]").each(function () {
-        let business_no = $(this).parent().prev().children().val();
-        let money = $(this).val();
+        let business_no = $(this).parent().prev().children().val(),
+            money = $(this).val();
         dr_array.push({"business_no": business_no, "money": money});
     });
     $("input[name=cr]").each(function () {
-        let business_no = $(this).parent().prev().children().val();
-        let money = $(this).val();
+        let business_no = $(this).parent().prev().children().val(),
+            money = $(this).val();
         cr_array.push({"business_no": business_no, "money": money});
     });
     ledger_info["dr"] = dr_array;
@@ -207,15 +185,15 @@ function map_ledger_info(subject) {
         // 账户信息为空则返回
         return;
     }
-    let confirmed = ledger_info["confirmed"];
-    let saved = ledger_info["saved"];
-    let is_left = ledger_info["is_left"];
-    let opening_balance = ledger_info["opening_balance"];
-    let current_amount_dr = ledger_info["current_amount_dr"];
-    let current_amount_cr = ledger_info["current_amount_cr"];
-    let ending_balance = ledger_info["ending_balance"];
-    let dr_array = ledger_info["dr"];
-    let cr_array = ledger_info["cr"];
+    let confirmed = ledger_info["confirmed"],
+        saved = ledger_info["saved"],
+        is_left = ledger_info["is_left"],
+        opening_balance = ledger_info["opening_balance"],
+        current_amount_dr = ledger_info["current_amount_dr"],
+        current_amount_cr = ledger_info["current_amount_cr"],
+        ending_balance = ledger_info["ending_balance"],
+        dr_array = ledger_info["dr"],
+        cr_array = ledger_info["cr"];
 
     //  移除旧表
     $("[id=ttableLeft], [id=ttableRight]").remove();
@@ -239,8 +217,8 @@ function map_ledger_info(subject) {
     $("input[name=current_amount_dr]").val(current_amount_dr);
     $("input[name=current_amount_cr]").val(current_amount_cr);
     $("input[name=ending_balance]").val(ending_balance);
-    let dr_index = 0;
-    let cr_index = 0;
+    let dr_index = 0,
+        cr_index = 0;
     //  填充借记
     $("input[name=dr]").each(function () {
         $(this).parent().prev().children().val(dr_array[dr_index]["business_no"]);
@@ -270,8 +248,8 @@ function map_ledger_info(subject) {
 
 //================================删除账户信息================================//
 function delete_ledger_info(subject) {
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token) + "&" + $.param({"subject": subject});
+    let csrf_token = {"csrf_token": get_csrf_token()},
+        data = $.param(csrf_token) + "&" + $.param({"subject": subject});
     $.ajax({
         url: "delete_ledger_info",
         type: "post",
@@ -371,8 +349,8 @@ function deleteTableV(obj) {
     // 删除Table
     $(obj).parent().parent().remove();
     // 点击li最后一个标签，防止当前页空白
-    let coursevli_list = $("li[id^=coursevli]");
-    let coursevli_list_len = $(coursevli_list).length;
+    let coursevli_list = $("li[id^=coursevli]"),
+        coursevli_list_len = $(coursevli_list).length;
     if (coursevli_list_len) {
         let last_li = $(coursevli_list[coursevli_list_len - 1]);
         coursevLiChange(last_li);
