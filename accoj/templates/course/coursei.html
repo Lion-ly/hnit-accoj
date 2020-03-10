@@ -37,12 +37,14 @@
                                 <table class="table table-bordered ">
                                     <tr>
                                         <th class="ats-tablecolor-f">公司名称</th>
-                                        <td id="1-1-1-2" colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
+                                        <td id="1-1-1-2" colspan="5"><input type="text"
+                                                                            onkeyup="illegalCharFilter(this)"
                                                                             name="com_name" id="com_name"></td>
                                     </tr>
                                     <tr>
                                         <th class="ats-tablecolor-f">住所</th>
-                                        <td colspan="5"><input type="text" name="com_address" onkeyup="illegalCharFilter(this)"
+                                        <td colspan="5"><input type="text" name="com_address"
+                                                               onkeyup="illegalCharFilter(this)"
                                                                id="com_address"></td>
                                     </tr>
                                     <tr>
@@ -206,9 +208,10 @@
                                 </div>
                             </div>
                             <hr class="simple" style="color: #6f5499"/>
-                            <div style="text-align: right" id="submit_company_button_div">
+                            <div id="course_i1_message"></div>
+                            <div style="text-align: right">
                                 <button type="button" class="btn btn-success" id="submit_company_button"
-                                        onclick="company_submit()">
+                                        onclick="confirm_company()">
                                     <span class="glyphicon"></span>&nbsp;提交
                                 </button>
                             </div>
@@ -256,9 +259,10 @@
                                 </table>
                             </div>
                             <hr style="clear: both;color: #6f5499" class="simple"/>
-                            <div style="text-align: right" id="submit_business_button_div">
+                            <div id="course_i2_message"></div>
+                            <div style="text-align: right">
                                 <button type="button" class="btn btn-success" id="submit_business_button"
-                                        onclick="submit_business()">
+                                        onclick="confirm_business()">
                                     <span class="glyphicon"></span>&nbsp;提交
                                 </button>
                             </div>

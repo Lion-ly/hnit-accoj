@@ -9,33 +9,14 @@ $(document).ready(function () {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_balance_sheet() {
-    show_submit_confirm("submit_balance_sheet_info('confirm')");
-    let confirm_balance_sheet_button = $("#confirm_balance_sheet_button");
-    confirm_balance_sheet_button.attr("disabled", true);
-    confirm_balance_sheet_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_balance_sheet_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_balance_sheet_button.attr("disabled", false);
-    }, 2000);
+    bind_confirm_info("confirm_balance_sheet_button", "submit_balance_sheet_info");
 }
 
 /**
  * 保存会计平衡表信息
  */
 function save_balance_sheet() {
-    submit_balance_sheet_info("save");
-    let save_balance_sheet_button = $("#save_balance_sheet_button");
-    save_balance_sheet_button.attr("disabled", true);
-    save_balance_sheet_button.text("保存 2s");
-    setTimeout(function () {
-        save_balance_sheet_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_balance_sheet_button.attr("disabled", false);
-        save_balance_sheet_button.text("保存");
-    }, 2000);
+    bind_save_info("save_balance_sheet_button", submit_balance_sheet_info);
 }
 
 
@@ -44,29 +25,20 @@ function save_balance_sheet() {
  * @param submit_type confirm or save
  */
 function submit_balance_sheet_info(submit_type) {
-    let type_flag = null;
-    if (submit_type === "confirm") {
-        type_flag = true;
-    } else if (submit_type === "save") {
-        type_flag = false;
-    } else {
-        return;
-    }
-    let csrf_token = get_csrf_token();
-    let accounting_period_1 = Array();
-    let accounting_period_2 = Array();
+    let accounting_period_1 = Array(),
+        accounting_period_2 = Array();
 
     $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
-        let thisInputs = $(this).find("input");
-        let inputIndex = 0;
-        let subject = $(this).attr("id").endsWith("last") ? "sum" : $(thisInputs[0]).val();
+        let thisInputs = $(this).find("input"),
+            inputIndex = 0,
+            subject = $(this).attr("id").endsWith("last") ? "sum" : $(thisInputs[0]).val();
         if (subject !== "sum") inputIndex = 1;
-        let borrow_1 = $(thisInputs[inputIndex]).val();
-        let lend_1 = $(thisInputs[inputIndex + 1]).val();
-        let borrow_2 = $(thisInputs[inputIndex + 2]).val();
-        let lend_2 = $(thisInputs[inputIndex + 3]).val();
-        let borrow_3 = $(thisInputs[inputIndex + 4]).val();
-        let lend_3 = $(thisInputs[inputIndex + 5]).val();
+        let borrow_1 = $(thisInputs[inputIndex]).val(),
+            lend_1 = $(thisInputs[inputIndex + 1]).val(),
+            borrow_2 = $(thisInputs[inputIndex + 2]).val(),
+            lend_2 = $(thisInputs[inputIndex + 3]).val(),
+            borrow_3 = $(thisInputs[inputIndex + 4]).val(),
+            lend_3 = $(thisInputs[inputIndex + 5]).val();
         let content = {
             "subject": subject,
             "borrow_1": borrow_1,
@@ -86,42 +58,13 @@ function submit_balance_sheet_info(submit_type) {
         "submit_type": submit_type
     };
     data = JSON.stringify(data);
-    $.ajax({
-        url: "/submit_balance_sheet_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        contentType: "application/json;charset=utf-8",
-        cache: false,
-        async: true,
-        beforeSend: function (xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-            }
-        },
-        success: function (data) {
-            if (data["result"] === true) {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
-                } else if (type_flag === false) {
-                    show_message("course_v_2_message", "保存成功！", "info", 1000);
-                }
-                get_balance_sheet_info();
-            } else {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-                } else if (type_flag === false) {
-                    show_message("course_v_2_message", data["message"], "danger", 1000, "保存失败！");
-                }
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        },
-        complete: function () {
-            submit_confirm_clicked();
-        }
-    });
+
+    // 提交数据
+    let url = "/submit_balance_sheet_info",
+        messageDivID = "course_v_2_message",
+        successFunc = get_balance_sheet_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+
 }
 
 //==================================获取会计平衡表信息==================================//
@@ -131,52 +74,42 @@ let balance_sheet_infos; // 保存本次课程全部信息，减少后端数据�
  */
 function get_balance_sheet_info() {
 
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
     // 若balance_sheet_info不为空且已经确认提交过，则不再发送数据请求
     if (balance_sheet_infos && balance_sheet_infos["confirmed"] === true) {
         map_balance_sheet_info();
         return;
     }
-    $.ajax({
-        url: "/get_balance_sheet_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                balance_sheet_infos = data["balance_sheet_infos"];
-                map_balance_sheet_info();
-            } else {
-                show_message("course_v_2_message", data["message"], "danger", 1000);
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        }
-    })
+
+    // 获取数据
+    let data = {},
+        url = "/get_balance_sheet_info",
+        successFunc = map_balance_sheet_info,
+        messageDivID = "course_v_2_message";
+    get_info(data, url, successFunc, messageDivID);
+
 }
 
 /**
  * 将数据映射到前端
  */
-function map_balance_sheet_info() {
+function map_balance_sheet_info(data) {
+    data = data ? data : "";
+    balance_sheet_infos = data ? data["balance_sheet_infos"] : balance_sheet_infos;
+
     if (!balance_sheet_infos) return;
     // 先清空数据
     $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period2_row_1]").remove();
     $("input").val("");
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let confirmed = balance_sheet_infos["confirmed"];
-    let saved = balance_sheet_infos["saved"];
-    let accounting_period_1 = balance_sheet_infos["accounting_period_1"];
-    let accounting_period_2 = balance_sheet_infos["accounting_period_2"];
-    let balance_sheet_submit_span = $("#balance_sheet_submit_span");
+    let confirmed = balance_sheet_infos["confirmed"],
+        saved = balance_sheet_infos["saved"],
+        accounting_period_1 = balance_sheet_infos["accounting_period_1"],
+        accounting_period_2 = balance_sheet_infos["accounting_period_2"],
+        balance_sheet_submit_span = $("#balance_sheet_submit_span");
     if (confirmed || saved) {
         // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
+        let span_text = "已保存",
+            span_color = "#5bc0de";
         if (confirmed) {
             span_text = "已完成";
             span_color = "#5cb85c";
@@ -199,18 +132,18 @@ function map_balance_sheet_info() {
     let index = 0;
     $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
         let thisInputs = $(this).find("input");
-        if($(this).attr("id") === "period2_row_1"){
+        if ($(this).attr("id") === "period2_row_1") {
             accounting_period = accounting_period_2;
             index = 0;
         }
-        let subject = accounting_period[index]["subject"];
-        let borrow_1 = accounting_period[index]["borrow_1"];
-        let lend_1 = accounting_period[index]["lend_1"];
-        let borrow_2 = accounting_period[index]["borrow_2"];
-        let lend_2 = accounting_period[index]["lend_2"];
-        let borrow_3 = accounting_period[index]["borrow_3"];
-        let lend_3 = accounting_period[index]["lend_3"];
-        let inputIndex = 0;
+        let subject = accounting_period[index]["subject"],
+            borrow_1 = accounting_period[index]["borrow_1"],
+            lend_1 = accounting_period[index]["lend_1"],
+            borrow_2 = accounting_period[index]["borrow_2"],
+            lend_2 = accounting_period[index]["lend_2"],
+            borrow_3 = accounting_period[index]["borrow_3"],
+            lend_3 = accounting_period[index]["lend_3"],
+            inputIndex = 0;
         if (subject !== "sum") {
             $(thisInputs[inputIndex]).val(subject);
             inputIndex = 1;
@@ -226,8 +159,8 @@ function map_balance_sheet_info() {
 }
 
 // ==================================事件控制==================================//
-let period1_row = 2;
-let period2_row = 2;
+let period1_row = 2,
+    period2_row = 2;
 
 /*
  * @ # coursev_2 -> 平衡表 ? 表格增加行
@@ -242,19 +175,19 @@ function v2_AddRow(period) {
     }
     $("#" + period + "_last").before(
         "<tr id='" + period_row_id + "'>"
-        + "<td><label><input name=\"subject\" title=\"科目\" onkeyup=\"illegalCharFilter(this)\"></label></td>" +
-        "<td><label><input name=\"borrow_1\" title=\"金额￥\"" +
-        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input name=\"lend_1\" title=\"金额￥\"" +
-        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input name=\"borrow_2\" title=\"金额￥\"" +
-        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input name=\"lend_2\" title=\"金额￥\"" +
-        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input name=\"borrow_3\" title=\"金额￥\"" +
-        "                                              onkeyup=\"limit_number(this)\"></label></td>" +
-        "<td><label><input name=\"lend_3\" title=\"金额￥\"" +
-        "                                              onkeyup=\"limit_number(this)\"></label></td>"
+        + "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<td><label><input name='borrow_1' title='金额￥'" +
+        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='lend_1' title='金额￥'" +
+        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='borrow_2' title='金额￥'" +
+        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='lend_2' title='金额￥'" +
+        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='borrow_3' title='金额￥'" +
+        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='lend_3' title='金额￥'" +
+        "                                              onkeyup='limit_number(this)'></label></td>"
         + "<td style='padding: 0; border: 0'>"
         + "<div style='text-align: center'> "
         + "<a style='color: red' type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
