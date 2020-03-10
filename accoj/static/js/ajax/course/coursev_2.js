@@ -9,14 +9,14 @@ $(document).ready(function () {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_balance_sheet() {
-    confirm_info("confirm_balance_sheet_button", "submit_balance_sheet_info");
+    bind_confirm_info("confirm_balance_sheet_button", "submit_balance_sheet_info");
 }
 
 /**
  * 保存会计平衡表信息
  */
 function save_balance_sheet() {
-    save_info("save_balance_sheet_button", submit_balance_sheet_info);
+    bind_save_info("save_balance_sheet_button", submit_balance_sheet_info);
 }
 
 
@@ -25,16 +25,7 @@ function save_balance_sheet() {
  * @param submit_type confirm or save
  */
 function submit_balance_sheet_info(submit_type) {
-    let type_flag = null;
-    if (submit_type === "confirm") {
-        type_flag = true;
-    } else if (submit_type === "save") {
-        type_flag = false;
-    } else {
-        return;
-    }
-    let csrf_token = get_csrf_token(),
-        accounting_period_1 = Array(),
+    let accounting_period_1 = Array(),
         accounting_period_2 = Array();
 
     $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
@@ -67,42 +58,13 @@ function submit_balance_sheet_info(submit_type) {
         "submit_type": submit_type
     };
     data = JSON.stringify(data);
-    $.ajax({
-        url: "/submit_balance_sheet_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        contentType: "application/json;charset=utf-8",
-        cache: false,
-        async: true,
-        beforeSend: function (xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-            }
-        },
-        success: function (data) {
-            if (data["result"] === true) {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
-                } else if (type_flag === false) {
-                    show_message("course_v_2_message", "保存成功！", "info", 1000);
-                }
-                get_balance_sheet_info();
-            } else {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-                } else if (type_flag === false) {
-                    show_message("course_v_2_message", data["message"], "danger", 1000, "保存失败！");
-                }
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        },
-        complete: function () {
-            submit_confirm_clicked();
-        }
-    });
+
+    // 提交数据
+    let url = "/submit_balance_sheet_info",
+        messageDivID = "course_v_2_message",
+        successFunc = get_balance_sheet_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+
 }
 
 //==================================获取会计平衡表信息==================================//
@@ -112,38 +74,28 @@ let balance_sheet_infos; // 保存本次课程全部信息，减少后端数据�
  */
 function get_balance_sheet_info() {
 
-    let csrf_token = {"csrf_token": get_csrf_token()},
-        data = $.param(csrf_token);
     // 若balance_sheet_info不为空且已经确认提交过，则不再发送数据请求
     if (balance_sheet_infos && balance_sheet_infos["confirmed"] === true) {
         map_balance_sheet_info();
         return;
     }
-    $.ajax({
-        url: "/get_balance_sheet_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                balance_sheet_infos = data["balance_sheet_infos"];
-                map_balance_sheet_info();
-            } else {
-                show_message("course_v_2_message", data["message"], "danger", 1000);
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        }
-    })
+
+    // 获取数据
+    let data = {},
+        url = "/get_balance_sheet_info",
+        successFunc = map_balance_sheet_info,
+        messageDivID = "course_v_2_message";
+    get_info(data, url, successFunc, messageDivID);
+
 }
 
 /**
  * 将数据映射到前端
  */
-function map_balance_sheet_info() {
+function map_balance_sheet_info(data) {
+    data = data ? data : "";
+    balance_sheet_infos = data ? data["balance_sheet_infos"] : balance_sheet_infos;
+
     if (!balance_sheet_infos) return;
     // 先清空数据
     $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period2_row_1]").remove();

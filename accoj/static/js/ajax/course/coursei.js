@@ -8,7 +8,7 @@ $(document).ready(function () {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_company() {
-    confirm_info("submit_company_button", "submit_company_info");
+    bind_confirm_info("submit_company_button", "submit_company_info");
 }
 
 /**
@@ -52,8 +52,10 @@ function submit_company_info() {
     });
 }
 
+/**
+ * 获取公司信息
+ */
 function get_company_info() {
-    // 获取公司信息
     let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/get_company_info",
@@ -88,40 +90,11 @@ function get_company_info() {
 }
 
 //==================================新增业务==================================//
-let rowNumI = 101;
-
-function body_text_append(labelType, content) {
-    let rowName = "row-" + rowNumI,
-        bg,
-        business_no = rowNumI >= 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
-    switch (labelType) {
-        case "筹资活动":
-            bg = "#5cb85c";
-            break;
-        case "投资活动":
-            bg = "#5bc0de";
-            break;
-        case "经营活动":
-            bg = "#f0ad4e";
-            break;
-    }
-    $("#body-text").append(
-        "<tr id='" + rowName + "'>"
-        + "<th style='background-color: " + bg + ";width: 5%'>"
-        + labelType
-        + "</th>"
-        + "<td style='text-align: left'>"
-        + "<strong style='color: " + bg + "'>" + business_no + ".&nbsp;&nbsp;</strong>"
-        + content
-        + "</td>"
-        +
-        +"</tr>"
-    );
-    rowNumI++;
-}
-
+/**
+ * 新增业务
+ * @param labelType
+ */
 function add_business(labelType) {
-    // 新增业务
     let data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/add_business",
@@ -150,18 +123,10 @@ function add_business(labelType) {
     });
 }
 
-function remove_business_row() {
-    if (rowNumI - 1 < 101) {
-        rowNumI = 101;
-    } else {
-        rowNumI = rowNumI - 1;
-    }
-    let rowName = "row-" + rowNumI;
-    $("#" + rowName).remove();
-}
-
+/**
+ * 撤销新增业务
+ */
 function revoke_add_business() {
-    // 撤销新增业务
     let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/revoke_add_business",
@@ -188,11 +153,13 @@ function revoke_add_business() {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_business() {
-    confirm_info("submit_company_button", "submit_business_info");
+    bind_confirm_info("submit_company_button", "submit_business_info");
 }
 
+/**
+ * 提交业务信息，提交成功后不可更改
+ */
 function submit_business_info() {
-    // 提交业务信息，提交成功后不可更改
     let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/submit_business_infos",
@@ -218,8 +185,10 @@ function submit_business_info() {
     });
 }
 
+/**
+ * 获取业务内容信息
+ */
 function get_business_info() {
-    // 获取业务内容信息
     let data = $.param({"csrf_token": get_csrf_token()});
     $.ajax({
         url: "/get_business_info",
@@ -253,4 +222,56 @@ function get_business_info() {
             console.log(err.statusText + "异常")
         }
     });
+}
+
+// ==================================事件控制==================================//
+
+let rowNumI = 101;
+
+/**
+ * 增加业务行
+ * @param labelType
+ * @param content
+ */
+function body_text_append(labelType, content) {
+    let rowName = "row-" + rowNumI,
+        bg,
+        business_no = rowNumI >= 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
+    switch (labelType) {
+        case "筹资活动":
+            bg = "#5cb85c";
+            break;
+        case "投资活动":
+            bg = "#5bc0de";
+            break;
+        case "经营活动":
+            bg = "#f0ad4e";
+            break;
+    }
+    $("#body-text").append(
+        "<tr id='" + rowName + "'>"
+        + "<th style='background-color: " + bg + ";width: 5%'>"
+        + labelType
+        + "</th>"
+        + "<td style='text-align: left'>"
+        + "<strong style='color: " + bg + "'>" + business_no + ".&nbsp;&nbsp;</strong>"
+        + content
+        + "</td>"
+        +
+        +"</tr>"
+    );
+    rowNumI++;
+}
+
+/**
+ * 删除业务行
+ */
+function remove_business_row() {
+    if (rowNumI - 1 < 101) {
+        rowNumI = 101;
+    } else {
+        rowNumI = rowNumI - 1;
+    }
+    let rowName = "row-" + rowNumI;
+    $("#" + rowName).remove();
 }

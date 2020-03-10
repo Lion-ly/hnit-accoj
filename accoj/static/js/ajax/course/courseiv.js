@@ -6,28 +6,17 @@ $(document).ready(function () {
 let now_business_no = 1;
 
 /**
- * 分页标签li的激活状态控制
- */
-function courseiv_li_control(business_no) {
-    // 移除激活的li的.active
-    $("li[id^=courseiv_split_li][class=active]").removeClass("active");
-    let add_li_id = "courseiv_split_li_" + business_no;
-    // 给当前li添加.active
-    $("#" + add_li_id).addClass("active");
-}
-
-/**
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_entry() {
-    confirm_info("confirm_entry_button", "submit_entry_info");
+    bind_confirm_info("confirm_entry_button", "submit_entry_info");
 }
 
 /**
  * 保存分录信息
  */
 function save_entry() {
-    save_info("save_entry_button", submit_entry_info);
+    bind_save_info("save_entry_button", submit_entry_info);
 }
 
 /**
@@ -35,18 +24,9 @@ function save_entry() {
  * @param submit_type confirm or save
  */
 function submit_entry_info(submit_type) {
-    let type_flag = null;
-    if (submit_type === "confirm") {
-        type_flag = true;
-    } else if (submit_type === "save") {
-        type_flag = false;
-    } else {
-        return;
-    }
+
     let business_no = now_business_no,
         entry_infos = Array(),
-        csrf_token = {"csrf_token": get_csrf_token()},
-        data = $.param(csrf_token),
         crSubjects = $("[id^=subject1]"),    // 借记科目input列表
         drSubjects = $("[id^=subject0]"),    // 贷记科目input列表
         crMoneys = $("[id^=money1]"),        // 借记金额input列表
@@ -65,89 +45,50 @@ function submit_entry_info(submit_type) {
         let money = $(drMoneys[i]).val();
         entry_infos.push({"subject": subject, "money": money, "is_dr": is_dr});
     }
-    // 需要将数组转换成JSON格式Flask才能正确解析
-    entry_infos = JSON.stringify(entry_infos);
-    entry_infos = {"entry_infos": entry_infos};
-    data += "&" + $.param(entry_infos) + "&" + $.param({"business_no": business_no}) + "&" + $.param({"submit_type": submit_type});
-    $.ajax({
-        url: "/submit_entry_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
-                } else if (type_flag === false) {
-                    show_message("course_iv_message", "保存成功！", "info", 1000);
-                }
-                get_entry_info(business_no);
-            } else {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-                } else if (type_flag === false) {
-                    show_message("course_iv_message", data["message"], "danger", 1000, "保存失败！");
-                }
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        },
-        complete: function () {
-            submit_confirm_clicked();
-        }
-    });
+    let data = {"entry_infos":entry_infos, "business_no": business_no, "submit_type": submit_type};
+    data = JSON.stringify(data);
+
+    // 提交数据
+    let url = "/submit_entry_info",
+        messageDivID = "course_iv_message",
+        successFunc = get_entry_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+
 }
 
 //==================================获取会计分录信息==================================//
 let business_list; // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
 /**
  * 从后端获取会计分录信息
- * @param business_no
  */
-function get_entry_info(business_no) {
-    now_business_no = parseInt(business_no);
+function get_entry_info() {
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-    courseiv_li_control(business_no);
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
     // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
     if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
-        map_entry_info(business_no);
+        map_entry_info();
         return;
     }
-    $.ajax({
-        url: "/get_entry_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                business_list = data["business_list"];
-                map_entry_info(business_no);
-            } else {
-                show_message("course_iv_message", data["message"], "danger", 1000);
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        }
-    })
+
+    // 获取数据
+    let data = {},
+        url = "/get_entry_info",
+        successFunc = map_entry_info,
+        messageDivID = "course_iv_message";
+    get_info(data, url, successFunc, messageDivID);
+
 }
 
 /**
  * 将数据映射到前端
- * @param business_no
+ * @param data
  */
-function map_entry_info(business_no) {
-    business_no = parseInt(business_no);
-    let business_index = business_no - 1;
+function map_entry_info(data) {
+    data = data ? data : "";
+    business_list = data ? data["business_list"] : business_list;
+
+    let business_index = now_business_no - 1;
     // 先重置分录信息
     clear_entry();
 
@@ -196,7 +137,6 @@ function map_entry_info(business_no) {
         // 分录信息为空则返回
         return;
     }
-    entry_infos = JSON.parse(entry_infos);  // 因为entry_infos是JSON数组，所以需要解析
     let borrow_first = true;    // 借记第一行标记
     let loan_first = true;     // 贷记第一行标记
     for (let i = 0; i < entry_infos.length; i++) {
@@ -227,6 +167,19 @@ function map_entry_info(business_no) {
 }
 
 // ==================================事件控制==================================//
+/**
+ * 分页标签li的激活状态控制
+ */
+function courseiv_li_control(business_no) {
+    // 移除激活的li的.active
+    $("li[id^=courseiv_split_li][class=active]").removeClass("active");
+    let add_li_id = "courseiv_split_li_" + business_no;
+    // 给当前li添加.active
+    $("#" + add_li_id).addClass("active");
+    now_business_no = business_no;
+    get_entry_info();
+}
+
 /**
  * 重置分录信息
  */

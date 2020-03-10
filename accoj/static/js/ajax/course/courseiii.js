@@ -6,28 +6,17 @@ $(document).ready(function () {
 let now_business_no = 1;
 
 /**
- * 分页标签li的激活状态控制
- */
-function courseiii_li_control(business_no) {
-    // 移除激活的li的.active
-    $("li[id^=courseiii_split_li][class=active]").removeClass("active");
-    let add_li_id = "courseiii_split_li_" + business_no;
-    // 给当前li添加.active
-    $("#" + add_li_id).addClass("active");
-}
-
-/**
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_subject() {
-    confirm_info("confirm_subject_button", "submit_subject_info");
+    bind_confirm_info("confirm_subject_button", "submit_subject_info");
 }
 
 /**
  * 保存科目信息
  */
 function save_subject() {
-    save_info("save_subject_button", submit_subject_info);
+    bind_save_info("save_subject_button", submit_subject_info);
 }
 
 /**
@@ -35,18 +24,9 @@ function save_subject() {
  * @param submit_type confirm or save
  */
 function submit_subject_info(submit_type) {
-    let type_flag = null;
-    if (submit_type === "confirm") {
-        type_flag = true;
-    } else if (submit_type === "save") {
-        type_flag = false;
-    } else {
-        return;
-    }
+
     let business_no = now_business_no,
         subject_infos = Array(),
-        csrf_token = {"csrf_token": get_csrf_token()},
-        data = $.param(csrf_token),
         right_box = $("#plusbox"),
         left_box = $("#minusbox"),
         right_input = right_box.children().children(":input"),
@@ -63,89 +43,51 @@ function submit_subject_info(submit_type) {
         let subject = $(left_input[i]).val();
         subject_infos.push({"subject": subject, "is_up": is_up});
     }
-    // 需要将数组转换成JSON格式Flask才能正确解析
-    subject_infos = JSON.stringify(subject_infos);
-    subject_infos = {"subject_infos": subject_infos};
-    data += "&" + $.param(subject_infos) + "&" + $.param({"business_no": business_no}) + "&" + $.param({"submit_type": submit_type});
-    $.ajax({
-        url: "/submit_subject_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
-                } else if (type_flag === false) {
-                    show_message("course_iii_message", "保存成功！", "info", 1000);
-                }
-                get_subject_info(business_no);
-            } else {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-                } else if (type_flag === false) {
-                    show_message("course_iii_message", data["message"], "danger", 1000, "保存失败！");
-                }
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        },
-        complete: function () {
-            submit_confirm_clicked();
-        }
-    });
+    let data = {"subject_infos": subject_infos, "business_no": business_no, "submit_type": submit_type};
+    data = JSON.stringify(data);
+
+    // 提交数据
+    let url = "/submit_subject_info",
+        messageDivID = "course_iii_message",
+        successFunc = get_subject_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+
 }
 
 //==================================获取会计要素信息==================================//
 let business_list; // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
 /**
  * 从后端获取会计要素信息
- * @param business_no
  */
-function get_subject_info(business_no) {
-    now_business_no = parseInt(business_no);
+function get_subject_info() {
+
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-    courseiii_li_control(business_no);
-    let csrf_token = {"csrf_token": get_csrf_token()},
-        data = $.param(csrf_token);
     // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
     if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
-        map_subject_info(business_no);
+        map_subject_info();
         return;
     }
-    $.ajax({
-        url: "/get_subject_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                business_list = data["business_list"];
-                map_subject_info(business_no);
-            } else {
-                show_message("course_iii_message", data["message"], "danger", 1000);
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        }
-    })
+
+    // 获取数据
+    let data = {},
+        url = "/get_subject_info",
+        successFunc = map_subject_info,
+        messageDivID = "course_iii_message";
+    get_info(data, url, successFunc, messageDivID);
+
 }
 
 /**
  * 将数据映射到前端
- * @param business_no
+ * @param data
  */
-function map_subject_info(business_no) {
-    business_no = parseInt(business_no);
-    let business_index = business_no - 1;
+function map_subject_info(data) {
+    data = data ? data : "";
+    business_list = data ? data["business_list"] : business_list;
+
+    let business_index = now_business_no - 1;
 
     // 先清空box
     clear_box();
@@ -196,7 +138,6 @@ function map_subject_info(business_no) {
         // 科目信息为空则返回
         return;
     }
-    subject_infos = JSON.parse(subject_infos); // 因为subject_infos是JSON数组，所以需要解析
     let rightbox_subject_array = Array();
     let leftbox_subject_array = Array();
     for (let i = 0; i < subject_infos.length; i++) {
@@ -210,6 +151,21 @@ function map_subject_info(business_no) {
     }
     input_moveTo_center("plusbox", rightbox_subject_array);
     input_moveTo_center("minusbox", leftbox_subject_array);
+}
+
+// ==================================事件控制==================================//
+
+/**
+ * 分页标签li的激活状态控制
+ */
+function courseiii_li_control(business_no) {
+    // 移除激活的li的.active
+    $("li[id^=courseiii_split_li][class=active]").removeClass("active");
+    let add_li_id = "courseiii_split_li_" + business_no;
+    // 给当前li添加.active
+    $("#" + add_li_id).addClass("active");
+    now_business_no = business_no;
+    get_subject_info();
 }
 
 /**

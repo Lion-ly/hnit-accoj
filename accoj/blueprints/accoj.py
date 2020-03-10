@@ -312,23 +312,22 @@ def submit_key_element_info():
     :return:
     """
     if request.method == "POST":
-        if not g.get("schedule_confirm") or not g.schedule_confirm.get("business_confirm"):
-            return redirect("/coursei")
-        form = request.form
-        company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            dict(businesses=1, schedule_confirm=1))
-        _id = company.get("_id")
-        schedule_confirm = company.get("schedule_confirm")
-        affect_type = form.get("affect_type")
-        business_no = form.get("business_no")
-        key_element_infos = form.get("key_element_infos")
-        submit_type = form.get("submit_type")
+        json_data = request.get_json()
+        affect_type = json_data.get("affect_type")
+        business_no = json_data.get("business_no")
+        key_element_infos = json_data.get("key_element_infos")
+        submit_type = json_data.get("submit_type")
+
         if not is_number(business_no) or not is_number(affect_type) or submit_type not in ["confirm", "save"]:
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
                 return jsonify(result=False, message="前端数据错误")
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule_confirm=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
         if business_no not in schedule_confirm.get("key_element_confirm"):
             # 若当前业务信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
@@ -406,20 +405,22 @@ def submit_subject_info():
     :return:
     """
     if request.method == "POST":
-        form = request.form
-        company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            dict(businesses=1, schedule_confirm=1))
-        _id = company.get("_id")
-        schedule_confirm = company.get("schedule_confirm")
-        business_no = form.get("business_no")
-        subject_infos = form.get("subject_infos")
-        submit_type = form.get("submit_type")
+        json_data = request.get_json()
+        business_no = json_data.get("business_no")
+        subject_infos = json_data.get("subject_infos")
+        submit_type = json_data.get("submit_type")
+
         if not is_number(business_no) or submit_type not in ["confirm", "save"]:
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
                 return jsonify(result=False, message="前端数据错误")
+
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule_confirm=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
         if business_no not in schedule_confirm.get("subject_confirm"):
             # 若当前业务信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
@@ -494,20 +495,22 @@ def submit_entry_info():
     :return:
     """
     if request.method == "POST":
-        form = request.form
-        company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            dict(businesses=1, schedule_confirm=1))
-        _id = company.get("_id")
-        schedule_confirm = company.get("schedule_confirm")
-        business_no = form.get("business_no")
-        entry_infos = form.get("entry_infos")
-        submit_type = form.get("submit_type")
+        json_data = request.get_json()
+        business_no = json_data.get("business_no")
+        entry_infos = json_data.get("entry_infos")
+        submit_type = json_data.get("submit_type")
+
         if not is_number(business_no) or submit_type not in ["confirm", "save"]:
             return jsonify(result=False, message="前端数据错误")
         else:
             business_no = int(business_no) - 1
             if business_no > 19 or business_no < 0:
                 return jsonify(result=False, message="前端数据错误")
+
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
+                                            dict(businesses=1, schedule_confirm=1))
+        _id = company.get("_id")
+        schedule_confirm = company.get("schedule_confirm")
         if business_no not in schedule_confirm.get("entry_confirm"):
             # 若当前业务信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
@@ -655,8 +658,8 @@ def delete_ledger_info():
     :return:
     """
     if request.method == "POST":
-        form = request.form
-        subject = form.get("subject")
+        json_data = request.get_json()
+        subject = json_data.get("subject")
         if subject:
             company = mongo.db.company.find_one({"student_no": session.get("username")},
                                                 {"involve_subjects": 1, "_id": 0})
@@ -868,8 +871,8 @@ def download_acc_document_info():
     :return:
     """
     if request.method == "POST":
-        form = request.form
-        business_no = form.get("business_no")
+        json_data = request.get_json()
+        business_no = json_data.get("business_no")
         business_no_tmp = int(business_no) - 1
         if business_no_tmp > 19 or business_no_tmp < 0:
             return jsonify(result=False, message="题号不存在")

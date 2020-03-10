@@ -1,7 +1,7 @@
 let involve_subjects = Array(), // 正确答案中包含的所有科目列表
     pageNum = 0,
-    ledger_infos,       // 嵌套字典，保存本次课程全部信息，减少后端数据请求次数
-    now_subject = "",   // 当前所选科目
+    ledger_infos,               // 嵌套字典，保存本次课程全部信息，减少后端数据请求次数
+    now_subject = "",           // 当前所选科目
     first = true,
     involve_subjects_len = 0;
 
@@ -15,14 +15,14 @@ $(document).ready(function () {
  * 将处理函数绑定到模态框的确认提交按钮
  */
 function confirm_ledger() {
-    confirm_info("confirm_ledger_button", "submit_ledger_info");
+    bind_confirm_info("confirm_ledger_button", "submit_ledger_info");
 }
 
 /**
  * 保存账户信息
  */
 function save_ledger() {
-    save_info("save_ledger_button", submit_ledger_info);
+    bind_save_info("save_ledger_button", submit_ledger_info);
 }
 
 /**
@@ -30,30 +30,11 @@ function save_ledger() {
  * @param submit_type confirm or save
  */
 function submit_ledger_info(submit_type) {
-    let type_flag = null;
-    if (submit_type === "confirm") {
-        type_flag = true;
-    } else if (submit_type === "save") {
-        type_flag = false;
-    } else {
-        return;
-    }
-    let ledger_info = {};
-    let csrf_token = get_csrf_token();
-    // let data = $.param(csrf_token);
-    let subject = $("#coursev_select").val(),                           //  科目
-        is_left = $("li.active[id^=coursevli]").attr("id").startsWith("coursevli_left"),  //  是否为左T表
+    let is_left = $("li.active[id^=coursevli]").attr("id").startsWith("coursevli_left"),  //  是否为左T表
         opening_balance = $("input[name=opening_balance]").val(),       //  期初余额
         current_amount_dr = $("input[name=current_amount_dr]").val(),   //  本期发生额借记方
         current_amount_cr = $("input[name=current_amount_cr]").val(),   //  本期发生额贷记方
         ending_balance = $("input[name=ending_balance]").val();         //  期末余额
-
-    ledger_info["subject"] = subject;
-    ledger_info["is_left"] = is_left;
-    ledger_info["opening_balance"] = opening_balance;
-    ledger_info["current_amount_dr"] = current_amount_dr;
-    ledger_info["current_amount_cr"] = current_amount_cr;
-    ledger_info["ending_balance"] = ending_balance;
 
     let dr_array = Array(),     //  借方信息列表
         cr_array = Array();     //  贷方信息列表
@@ -67,48 +48,26 @@ function submit_ledger_info(submit_type) {
             money = $(this).val();
         cr_array.push({"business_no": business_no, "money": money});
     });
-    ledger_info["dr"] = dr_array;
-    ledger_info["cr"] = cr_array;
 
-    let data = {"ledger_info": ledger_info};
-    data["submit_type"] = submit_type;
+    let ledger_info = {
+        "subject": $("#coursev_select").val(),      //  科目
+        "is_left": is_left,
+        "opening_balance": opening_balance,
+        "current_amount_dr": current_amount_dr,
+        "current_amount_cr": current_amount_cr,
+        "ending_balance": ending_balance,
+        "dr": dr_array,
+        "cr": cr_array
+    };
+    let data = {"ledger_info": ledger_info, "submit_type": submit_type};
     data = JSON.stringify(data);
-    $.ajax({
-        url: "/submit_ledger_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        contentType: "application/json;charset=utf-8",
-        cache: false,
-        async: true,
-        beforeSend: function (xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-            }
-        },
-        success: function (data) {
-            if (data["result"] === true) {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
-                } else if (type_flag === false) {
-                    show_message("course_v_message", "保存成功！", "info", 1000);
-                }
-                get_ledger_info(subject);
-            } else {
-                if (type_flag === true) {
-                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-                } else if (type_flag === false) {
-                    show_message("course_v_message", data["message"], "danger", 1000, "保存失败！");
-                }
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        },
-        complete: function () {
-            submit_confirm_clicked();
-        }
-    });
+
+    // 提交数据
+    let url = "/submit_ledger_info",
+        messageDivID = "course_v_message",
+        successFunc = get_ledger_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+
 }
 
 //==================================获取会计账户信息==================================//
@@ -118,69 +77,60 @@ function submit_ledger_info(submit_type) {
  */
 function get_ledger_info(subject) {
     now_subject = subject;
-    let csrf_token = {"csrf_token": get_csrf_token()};
-    let data = $.param(csrf_token);
     // 若ledger_infos不为空且请求的账户已经确认提交过，则不再发送数据请求
-    if (ledger_infos && ledger_infos.hasOwnProperty(now_subject) && ledger_infos[now_subject]["confirmed"] === true) {
-        map_ledger_info(subject);
+    if (ledger_infos && ledger_infos.hasOwnProperty(now_subject) && ledger_infos[now_subject]["confirmed"]) {
+        map_ledger_info();
         return;
     }
-    $.ajax({
-        url: "/get_ledger_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                ledger_infos = data["ledger_infos"];
-                involve_subjects = data["involve_subjects"];
-                if (first) {
-                    // 创建已保存或已提交的标签
-                    for (let key in ledger_infos) {
-                        if (!ledger_infos.hasOwnProperty(key)) continue;
-                        let lcr = "left";
-                        let subject = key;
-                        if (!ledger_infos[key]["is_left"]) {
-                            lcr = "right";
-                        }
-                        let coursevli_id = "coursevli_" + lcr + pageNum;
-                        $("#coursev_li_new").before(
-                            "<li role='presentation' class='active' onclick='coursevLiChange(this, true)' id='" + coursevli_id + "'>" +
-                            "<a>" + subject + "</a></li>"
-                        );
-                        pageNum++;
-                    }
-                    // 点击第一个标签
-                    let coursevli_list = $("li[id^=coursevli]");
-                    let coursevli_list_len = $(coursevli_list).length;
-                    if (coursevli_list_len) {
-                        let last_li = $(coursevli_list[0]);
-                        coursevLiChange(last_li);
-                    }
-                    first = false;
+
+    function successFunc(data) {
+        let ledger_infos = data["ledger_infos"];
+        if (first) {
+            // 创建已保存或已提交的标签
+            for (let key in ledger_infos) {
+                if (!ledger_infos.hasOwnProperty(key)) continue;
+                let lcr = "left";
+                let subject = key;
+                if (!ledger_infos[key]["is_left"]) {
+                    lcr = "right";
                 }
-                map_ledger_info(subject);
-            } else {
-                show_message("course_v_message", data["message"], "danger", 1000);
+                let coursevli_id = "coursevli_" + lcr + pageNum;
+                $("#coursev_li_new").before(
+                    "<li role='presentation' class='active' onclick='coursevLiChange(this, true)' id='" + coursevli_id + "'>" +
+                    "<a>" + subject + "</a></li>"
+                );
+                pageNum++;
             }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        },
-        complete: function () {
+            // 点击第一个标签
+            let coursevli_list = $("li[id^=coursevli]");
+            let coursevli_list_len = $(coursevli_list).length;
+            if (coursevli_list_len) {
+                let last_li = $(coursevli_list[0]);
+                coursevLiChange(last_li);
+            }
+            first = false;
         }
-    })
+        map_ledger_info(data);
+    }
+
+    // 获取数据
+    let data = {},
+        url = "/get_ledger_info",
+        messageDivID = "course_v_message";
+    get_info(data, url, successFunc, messageDivID);
 }
 
 /**
  * 将数据映射到前端
- * @param subject
+ * @param data
  */
-function map_ledger_info(subject) {
+function map_ledger_info(data) {
+    data = data ? data : "";
+    ledger_infos = data ? data["ledger_infos"] : ledger_infos;
+    involve_subjects = data ? data["involve_subjects"] : involve_subjects;
+
     if (!ledger_infos) return;
-    let ledger_info = ledger_infos.hasOwnProperty(subject) ? ledger_infos[subject] : "";
+    let ledger_info = ledger_infos.hasOwnProperty(now_subject) ? ledger_infos[now_subject] : "";
     if (!ledger_info) {
         // 账户信息为空则返回
         return;
@@ -248,26 +198,14 @@ function map_ledger_info(subject) {
 
 //================================删除账户信息================================//
 function delete_ledger_info(subject) {
-    let csrf_token = {"csrf_token": get_csrf_token()},
-        data = $.param(csrf_token) + "&" + $.param({"subject": subject});
-    $.ajax({
-        url: "delete_ledger_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                show_message("course_v_message", "删除成功！", "info", 1000);
-            } else {
-                show_message("course_v_message", data["message"], "danger", 1000);
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText);
-        }
-    })
+    // 获取数据
+    let data = {"subject": subject};
+    data = JSON.stringify(data);
+    let url = "/delete_ledger_info",
+        successFunc = function(){},
+        messageDivID = "course_v_message";
+    get_info(data, url, successFunc, messageDivID);
+
 }
 
 //==================================事件控制==================================//

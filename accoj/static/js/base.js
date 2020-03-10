@@ -147,7 +147,7 @@ function show_submit_confirm(submit_deal_fun) {
  * @param buttonID
  * @param submit_infoName String
  */
-function confirm_info(buttonID, submit_infoName) {
+function bind_confirm_info(buttonID, submit_infoName) {
     show_submit_confirm(submit_infoName + "('confirm')");
     let confirm_button = $("#" + buttonID);
     confirm_button.attr("disabled", true);
@@ -166,7 +166,7 @@ function confirm_info(buttonID, submit_infoName) {
  * @param buttonID
  * @param submit_info function
  */
-function save_info(buttonID, submit_info) {
+function bind_save_info(buttonID, submit_info) {
     submit_info("save");
     let save_button = $("#" + buttonID);
     save_button.attr("disabled", true);
@@ -214,6 +214,104 @@ function limitJieDai(obj) {
     let thisValue = $(obj).val();
     if (thisValue && !thisValue.match(reg))
         $(obj).val("");
+}
+
+//==================================提交信息==================================//
+/**
+ * 提交信息
+ * @param submit_type   "confirm" or "save"
+ * @param url   like "/submit_info"
+ * @param data  post data (JSON)
+ * @param messageDivID  show message's divID
+ * @param successFunc   success function if post successfully
+ */
+function submit_info(submit_type, url, data, messageDivID, successFunc) {
+    let type_flag = null;
+    if (submit_type === "confirm") {
+        type_flag = true;
+    } else if (submit_type === "save") {
+        type_flag = false;
+    } else {
+        return;
+    }
+    let csrf_token = get_csrf_token();
+
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        cache: false,
+        async: true,
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },
+        success: function (data) {
+            if (data["result"] === true) {
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", "提交成功！", "info", 1000);
+                } else if (type_flag === false) {
+                    show_message(messageDivID, "保存成功！", "info", 1000);
+                }
+                successFunc();
+            } else {
+                if (type_flag === true) {
+                    show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+                } else if (type_flag === false) {
+                    show_message(messageDivID, data["message"], "danger", 1000, "保存失败！");
+                }
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText);
+        },
+        complete: function () {
+            if (type_flag)
+                submit_confirm_clicked();
+        }
+    });
+}
+
+//==================================获取信息==================================//
+/**
+ * 从后端获取信息
+ * @param data  post data (JSON)
+ * @param url   like "/submit_info"
+ * @param successFunc   success function if post successfully
+ * @param messageDivID  show message's divID
+ */
+function get_info(data, url, successFunc, messageDivID) {
+    data = data ? data : {};
+    let csrf_token = get_csrf_token();
+
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        cache: false,
+        async: true,
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },
+        success: function (data) {
+            if (data["result"] === true) {
+                successFunc(data);
+            } else {
+                if (messageDivID)
+                    show_message(messageDivID, data["message"], "danger", 1000);
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText);
+        }
+    })
 }
 
 /**
