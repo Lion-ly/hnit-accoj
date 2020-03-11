@@ -188,9 +188,9 @@ function v2_AddRow(period) {
         "                                              onkeyup='limit_number(this)'></label></td>" +
         "<td><label><input name='lend_3' title='金额￥'" +
         "                                              onkeyup='limit_number(this)'></label></td>"
-        + "<td style='padding: 0; border: 0'>"
+        + "<td style='padding: 4px; border: 0'>"
         + "<div style='text-align: center'> "
-        + "<a style='color: red' type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "<a style='color: red;padding: 0' type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div> "
         + "</td> "
         + "</tr>"
