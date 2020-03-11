@@ -1,121 +1,131 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<!-- 单独引入coursei -->
-<link href="{{ url_for('static', filename='css/course/coursei.css') }}"
-	rel="stylesheet">
-<script src="{{ url_for('static', filename='js/ajax/course/courseiv.js') }}" charset="UTF-8"></script>
-<div class="courseBody">
-	<!-- 习题主体 -->
-	<div class="container">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span>1、掌握借贷记账法的原理：包括账户结构、记账规则、会计分录编写规范。<br /> 2、理解并运用常用会计科目。
+    <!-- courseiv css -->
+    <link href="{{ url_for('static', filename='css/course/courseiv.css') }}"
+          rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/ajax/course/courseiv.js') }}" charset="UTF-8"></script>
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、掌握借贷记账法的原理：包括账户结构、记账规则、会计分录编写规范。<br/> 2、理解并运用常用会计科目。
 				</span>
-			</div>
-			<div class="panel-body">
-				<div style="text-align: center">
-					<nav aria-label="Page navigation">
-						<ul class="pagination">
-							<li><a href="#" aria-label="Previous"> <span
-									aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li id="courseiv_split_li_1" class="active"><a onclick="courseiv_li_control(1)" >1</a></li>
-							<li id="courseiv_split_li_2"><a onclick="courseiv_li_control(2)">2</a></li>
-							<li id="courseiv_split_li_3"><a onclick="courseiv_li_control(3)">3</a></li>
-							<li id="courseiv_split_li_4"><a onclick="courseiv_li_control(4)">4</a></li>
-							<li id="courseiv_split_li_5"><a onclick="courseiv_li_control(5)">5</a></li>
-							<li id="courseiv_split_li_6"><a onclick="courseiv_li_control(6)">6</a></li>
-							<li id="courseiv_split_li_7"><a onclick="courseiv_li_control(7)">7</a></li>
-							<li id="courseiv_split_li_8"><a onclick="courseiv_li_control(8)">8</a></li>
-							<li id="courseiv_split_li_9"><a onclick="courseiv_li_control(9)">9</a></li>
-							<li id="courseiv_split_li_10"><a onclick="courseiv_li_control(10)">10</a></li>
-							<li id="courseiv_split_li_11"><a onclick="courseiv_li_control(11)">11</a></li>
-							<li id="courseiv_split_li_12"><a onclick="courseiv_li_control(12)">12</a></li>
-							<li id="courseiv_split_li_13"><a onclick="courseiv_li_control(13)">13</a></li>
-							<li id="courseiv_split_li_14"><a onclick="courseiv_li_control(14)">14</a></li>
-							<li id="courseiv_split_li_15"><a onclick="courseiv_li_control(15)">15</a></li>
-							<li id="courseiv_split_li_16"><a onclick="courseiv_li_control(16)">16</a></li>
-							<li id="courseiv_split_li_17"><a onclick="courseiv_li_control(17)">17</a></li>
-							<li id="courseiv_split_li_18"><a onclick="courseiv_li_control(18)">18</a></li>
-							<li id="courseiv_split_li_19"><a onclick="courseiv_li_control(19)">19</a></li>
-							<li id="courseiv_split_li_20"><a onclick="courseiv_li_control(20)">20</a></li>
-							<li><a href="#" aria-label="Next"> <span
-									aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
-				</div>
-				<hr class="simple" style="color: #6f5499"/>
-
-				<h4>
-                    <span class="glyphicon glyphicon-bookmark"></span> <em id="em_4"></em>
-                    <span id="entry_submit_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
-                </h4>
-                <div class="ats-subject">
-                    <blockquote>
-                        <label id="business_type_4" class="label label-success"></label>
-                        <p id="business_content_4">
-                        </p>
-                    </blockquote>
                 </div>
+                <div class="panel-body">
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li id="courseiv_split_li_1" class="active"><a onclick="courseiv_li_control(1)">1</a>
+                                </li>
+                                <li id="courseiv_split_li_2"><a onclick="courseiv_li_control(2)">2</a></li>
+                                <li id="courseiv_split_li_3"><a onclick="courseiv_li_control(3)">3</a></li>
+                                <li id="courseiv_split_li_4"><a onclick="courseiv_li_control(4)">4</a></li>
+                                <li id="courseiv_split_li_5"><a onclick="courseiv_li_control(5)">5</a></li>
+                                <li id="courseiv_split_li_6"><a onclick="courseiv_li_control(6)">6</a></li>
+                                <li id="courseiv_split_li_7"><a onclick="courseiv_li_control(7)">7</a></li>
+                                <li id="courseiv_split_li_8"><a onclick="courseiv_li_control(8)">8</a></li>
+                                <li id="courseiv_split_li_9"><a onclick="courseiv_li_control(9)">9</a></li>
+                                <li id="courseiv_split_li_10"><a onclick="courseiv_li_control(10)">10</a></li>
+                                <li id="courseiv_split_li_11"><a onclick="courseiv_li_control(11)">11</a></li>
+                                <li id="courseiv_split_li_12"><a onclick="courseiv_li_control(12)">12</a></li>
+                                <li id="courseiv_split_li_13"><a onclick="courseiv_li_control(13)">13</a></li>
+                                <li id="courseiv_split_li_14"><a onclick="courseiv_li_control(14)">14</a></li>
+                                <li id="courseiv_split_li_15"><a onclick="courseiv_li_control(15)">15</a></li>
+                                <li id="courseiv_split_li_16"><a onclick="courseiv_li_control(16)">16</a></li>
+                                <li id="courseiv_split_li_17"><a onclick="courseiv_li_control(17)">17</a></li>
+                                <li id="courseiv_split_li_18"><a onclick="courseiv_li_control(18)">18</a></li>
+                                <li id="courseiv_split_li_19"><a onclick="courseiv_li_control(19)">19</a></li>
+                                <li id="courseiv_split_li_20"><a onclick="courseiv_li_control(20)">20</a></li>
+                                <li><a href="#" aria-label="Next"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <hr class="simple" style="color: #6f5499"/>
 
-				<div class="ats-board">
-					<div>
-						<p class="ats-fontsize-20">填写完整分录</p>
-                        <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
+                    <h4>
+                        <span class="glyphicon glyphicon-bookmark"></span> <em id="em_4"></em>
+                        <span id="entry_submit_span" class="glyphicon glyphicon-ok"
+                              style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
+                    </h4>
+                    <div class="ats-subject">
+                        <blockquote>
+                            <label id="business_type_4" class="label label-success"></label>
+                            <p id="business_content_4">
+                            </p>
+                        </blockquote>
+                    </div>
 
-						<table class="table table-bordered" style="border: 0">
-							<tbody>
-								<tr>
-									<th style="width: 8%; border-right:0" class="ats-tablecolor-f">借：</th>
-									<td style="width: 8%; border-left:0" class="ats-tablecolor-f"></td>
-									<td style="width: 40%;"><input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject1" placeholder="科目"></td>
-									<td style="width: 40%;"><input type="text" name="money" id="money1" placeholder="金额" onkeyup="limit_number(this)"></td>
-									<td style="width: 4%;border: 0;padding: 0;">
-										<div align="center">
-											<a style="color: green;" type="button" class="btn"
-												onclick="iv_AddRow('borrow')"><span
-												class="glyphicon glyphicon-plus-sign"></span></a>
-										</div>
-									</td>
-								</tr>
-								<tr id="borrowRowAfter">
-									<td style="border-right:0" class="ats-tablecolor-f"></td>
-									<th style="border-left:0" class="ats-tablecolor-f">贷：</th>
-									<td><input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject0" placeholder="科目"></td>
-									<td><input type="text" name="money" id="money0" placeholder="金额" onkeyup="limit_number(this)"></td>
-									<td style="padding: 0; border: 0">
-										<div style="text-align: center">
-											<a style="color: green;" type="button" class="btn"
-												onclick="iv_AddRow('loan')"><span
-												class="glyphicon glyphicon-plus-sign"></span></a>
-										</div>
-									</td>
-								</tr>
-								<tr id="loanRowAfter"></tr>
-							</tbody>
-						</table>
+                    <div class="ats-board">
+                        <div>
+                            <p class="ats-fontsize-20">填写完整分录</p>
+                            <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
+
+                            <table class="table table-bordered" style="border: 0">
+                                <tbody>
+                                <tr>
+                                    <th style="width: 8%; border-right:0;padding: 4px" class="ats-tablecolor-f">借：</th>
+                                    <td style="width: 8%; border-left:0;padding: 4px" class="ats-tablecolor-f"></td>
+                                    <td style="width: 40%;padding: 4px"><label><input type="text" name="subject"
+                                                                                      onkeyup="illegalCharFilter(this)"
+                                                                                      id="subject1"
+                                                                                      placeholder="科目"></label></td>
+                                    <td style="width: 40%;padding: 4px"><label><input type="text" name="money"
+                                                                                      id="money1" placeholder="金额"
+                                                                                      onkeyup="limit_number(this)"></label>
+                                    </td>
+                                    <td style="width: 4%;border: 0;padding: 4px">
+                                        <div style="text-align: center">
+                                            <a style="color: green;padding: 0" type="button" class="btn"
+                                               onclick="iv_AddRow('borrow')"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="borrowRowAfter">
+                                    <td style="border-right:0;padding: 4px" class="ats-tablecolor-f"></td>
+                                    <th style="border-left:0;padding: 4px" class="ats-tablecolor-f">贷：</th>
+                                    <td><label><input type="text" name="subject" onkeyup="illegalCharFilter(this)"
+                                                      id="subject0" placeholder="科目"></label></td>
+                                    <td><label><input type="text" name="money" id="money0" placeholder="金额"
+                                                      onkeyup="limit_number(this)"></label></td>
+                                    <td style="border: 0;padding: 4px">
+                                        <div style="text-align: center;">
+                                            <a style="color: green;padding: 0" type="button" class="btn"
+                                               onclick="iv_AddRow('loan')"><span
+                                                    class="glyphicon glyphicon-plus-sign"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="loanRowAfter"></tr>
+                                </tbody>
+                            </table>
 
 
+                        </div>
+                    </div>
+                    <hr class="simple" style="clear: both;color: #6f5499"/>
+                    <div id="course_iv_message"></div>
+                    <div style="text-align: right">
+                        <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
+                            <span class="glyphicon"></span>&nbsp;保存
+                        </button>
+                        <button type="button" class="btn btn-success" id="confirm_entry_button"
+                                onclick="confirm_entry()">
+                            <span class="glyphicon"></span>&nbsp;提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-					</div>
-				</div>
-				<hr class="simple" style="clear: both;color: #6f5499" />
-                <div id="course_iv_message"></div>
-				<div style="text-align: right">
-                    <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
-                        <span class="glyphicon"></span>&nbsp;保存
-                    </button>
-					<button type="button" class="btn btn-success" id="confirm_entry_button" onclick="confirm_entry()">
-						<span class="glyphicon"></span>&nbsp;提交
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 防尾前移 -->
-<div class="ats-rock"></div>
+    <!-- 防尾前移 -->
+    <div class="ats-rock"></div>
 
 {% endblock courseBody %}

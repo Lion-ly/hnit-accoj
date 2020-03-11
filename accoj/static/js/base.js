@@ -192,7 +192,7 @@ function submit_confirm_clicked() {
 }
 
 /**
- * 限制输入只能为数字
+ * 限制输入只能为正整数
  * @param obj
  */
 function limit_number(obj) {
@@ -200,19 +200,34 @@ function limit_number(obj) {
     $(obj).val($(obj).val().replace(reg, ""));
 }
 
+/**
+ * 限制输入只能为实数
+ * @param obj
+ */
+function RealNumber(obj) {
+    let reg = /^([-+])?\d+(\.\d+)?$/;
+    let thisValue = $(obj).val();
+    if (thisValue && !thisValue.match(reg))
+        $(obj).val("");
+}
+
+/**
+ * 非法字符过滤
+ * @param obj
+ */
 function illegalCharFilter(obj) {
     let reg = /[${}().]/g;
     $(obj).val($(obj).val().replace(reg, ""))
 }
 
 /**
- * 限制只能输入`借`和`贷`
+ * 限制只能输入`借`,`贷`,`平`
  * @param obj
  */
 function limitJieDai(obj) {
     let reg = /[借贷平]/g;
     let thisValue = $(obj).val();
-    if (thisValue && !thisValue.match(reg))
+    if ((thisValue && !thisValue.match(reg)) || thisValue.length > 1)
         $(obj).val("");
 }
 
@@ -312,6 +327,27 @@ function get_info(data, url, successFunc, messageDivID) {
             console.log(err.statusText);
         }
     })
+}
+
+//==================================获取信息==================================//
+function spanStatusCtr(confirmed, saved, spanID) {
+    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
+
+    let $span = $("#" + spanID);
+    if (confirmed || saved) {
+        // 初始化为saved
+        let span_text = "已保存";
+        let span_color = "#5bc0de";
+        if (confirmed) {
+            span_text = "已完成";
+            span_color = "#5cb85c";
+        }
+        $span.css("color", span_color);
+        $span.text(span_text);
+        $span.show();
+    } else {
+        $span.hide();
+    }
 }
 
 /**
