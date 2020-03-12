@@ -365,7 +365,7 @@ function tTableAppendLeft() {
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0">' +
         '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
+        '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <td style="width: 40%;">' +
@@ -383,7 +383,7 @@ function tTableAppendLeft() {
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0">' +
         '                        <div style="text-align: left">' +
-        '                            <table id="ttable-01" class="ats-v-Ttable">' +
+        '                            <table id="ttable-01" class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;"></th>' +
@@ -403,7 +403,7 @@ function tTableAppendLeft() {
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
         '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
+        '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <td style="width: 40%;"></td>' +
@@ -421,7 +421,7 @@ function tTableAppendLeft() {
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
         '                        <div style="text-align: left">' +
-        '                            <table class="ats-v-Ttable">' +
+        '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;">本期发生额</th>' +
@@ -467,7 +467,7 @@ function tTableAppendRight() {
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0">' +
         '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
+        '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <td style="width: 40%;">' +
@@ -484,7 +484,7 @@ function tTableAppendRight() {
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0">' +
         '                        <div style="text-align: left">' +
-        '                            <table id="ttable-01" class="ats-v-Ttable">' +
+        '                            <table id="ttable-01" class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;">期初余额</th>' +
@@ -504,7 +504,7 @@ function tTableAppendRight() {
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
         '                        <div style="text-align: right">' +
-        '                            <table class="ats-v-Ttable">' +
+        '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <td style="width: 40%;"></td>' +
@@ -517,7 +517,7 @@ function tTableAppendRight() {
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
         '                        <div style="text-align: left">' +
-        '                            <table class="ats-v-Ttable">' +
+        '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;">本期发生额</th>' +

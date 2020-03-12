@@ -1,31 +1,30 @@
+/*页面顶部*/
 #project-title{
 	margin-bottom: 0;
 	background-color: #ffffff;
 	border-color:#ffffff
 }
-
 footer a {
     color: white;
 }
-
 footer a:visited{
 	color: #ffffff;
 }
-
-.ats-friendshipLinks li{
+/*友情链接*/
+.acc-friendlink li{
 	width: 19%;
 	overflow: hidden;
 	text-overflow:ellipsis;
 	white-space: nowrap;
 }
-
-.footlogo {
+/*底部图标*/
+.acc-footer-icon {
     position: relative;
     display: inline-block;
     border-bottom: 1px dotted black;
 }
-
-.footlogo .footlogotext {
+/*隐藏图标内容*/
+.acc-footer-icon .acc-footer-icontext {
     visibility: hidden;
     width: 120px;
     background-color: black;
@@ -40,12 +39,12 @@ footer a:visited{
     top:-120px;
     right:-34px;
 }
-
-.footlogo:hover .footlogotext {
+/*显示图标内容*/
+.acc-footer-icon:hover .acc-footer-icontext {
     visibility: visible;
 }
-
-.ats-hnitinfo p{
+/*湖南工学院简介*/
+.acc-intro-hnit p{
 	font-size: 14px;
     font-family: 楷体, serif;
 	text-indent:2em; 
