@@ -5,6 +5,10 @@
 #CompanyLawText dd {
     padding-left: 20px;
 }
+/*table标题垂直居中*/
+.table tbody tr th{
+    vertical-align: middle;
+}
 /*主体和页尾之间的空白容器*/
 .acc-container-separate {
     height: 500px;
@@ -28,7 +32,6 @@
 /*v-x表单格式*/
 .acc-container-tableformat th, td {
     text-align: center;
-    vertical-align: middle;
 }
 /*vi表单内的input*/
 .acc-input-vi {
@@ -41,7 +44,6 @@
 .acc-container-newbusiness {
 	font-size: 16px;
 	text-align: left;
-	vertical-align: middle;
 }
 /*新建业务容器 头字体*/
 .acc-container-newbusiness th{

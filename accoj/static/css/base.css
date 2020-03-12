@@ -43,6 +43,12 @@ footer a:visited{
 .acc-footer-icon:hover .acc-footer-icontext {
     visibility: visible;
 }
+.acc-qq a:hover{
+	color: gold;
+}
+.acc-weixin a:hover{
+	color: #8ee154;
+}
 /*湖南工学院简介*/
 .acc-intro-hnit p{
 	font-size: 14px;

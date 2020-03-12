@@ -253,7 +253,7 @@ function body_text_append(labelType, content) {
         + "<th style='background-color: " + bg + ";width: 4%'>"
         + labelType
         + "</th>"
-        + "<td style='text-align: left'>"
+        + "<td style='text-align: left;vertical-align: middle;'>"
         + "<strong style='color: " + bg + "'>" + business_no + ".&nbsp;&nbsp;</strong>"
         + content
         + "</td>"
