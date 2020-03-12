@@ -1,144 +1,151 @@
-{% extends 'course/courseBase.html' %} {% block courseBody %}
-<div class="courseBody">
-	<!-- 习题主体 -->
-	<div class="container">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span>1、熟悉杜邦分析体系及其运用。 </span>
-			</div>
-			<div class="panel-body">
-				<p class="ats-fontsize-20">1、杜邦分析</p>
-                <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
-                                已完成</span>
-				<table style="border: 0px;"
-					class="table table-bordered ats-vouchertable">
-					<tr>
-						<td colspan="11" style="border: 0px;"></td>
-						<th colspan="3" class="ats-tablecolor-f">净资产收益率</th>
-						<td style="border: 0px;"></td>
-					</tr>
-					<tr>
-						<td colspan="11" style="border: 0px;"></td>
-						<td colspan="3" contentEditable="true"></td>
-						<td style="border: 0px;"></td>
-					</tr>
+{% extends 'course/courseBase.html' %}
+{% block courseBody %}
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <link href="{{ url_for('static', filename='css/course/coursex.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/ajax/course/coursex.js') }}" charset="UTF-8"></script>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>1、熟悉杜邦分析体系及其运用。 </span>
+                </div>
+                <div id="coursexData" class="panel-body">
+                    <p class="ats-fontsize-20">1、杜邦分析
+                        <span id="coursex_span" class="glyphicon glyphicon-ok"
+                              style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
+                    </p>
+                    <table style="border: 0;"
+                           class="table table-bordered ats-vouchertable">
+                        <tr>
+                            <td colspan="11" style="border: 0;"></td>
+                            <th colspan="3" class="ats-tablecolor-f">净资产收益率</th>
+                            <td style="border: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="11" style="border: 0;"></td>
+                            <td colspan="3"><label><input name="净资产收益率"></label></td>
+                            <td style="border: 0;"></td>
+                        </tr>
 
-					<tr>
-						<td colspan="8" style="border: 0px;"></td>
-						<th colspan="3" class="ats-tablecolor-f">总资产净利率</th>
-						<td colspan="3" style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">权益乘数</th>
-					</tr>
-					<tr>
-						<td colspan="8" style="border: 0px;"></td>
-						<td colspan="3" contentEditable="true"></td>
-						<td colspan="3" style="border: 0px;">x</td>
-						<td contentEditable="true"></td>
-					</tr>
+                        <tr>
+                            <td colspan="8" style="border: 0;"></td>
+                            <th colspan="3" class="ats-tablecolor-f">总资产净利率</th>
+                            <td colspan="3" style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">权益乘数</th>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="border: 0;"></td>
+                            <td colspan="3"><label><input name="总资产净利率"></label></td>
+                            <td colspan="3" style="border: 0;">x</td>
+                            <td><label><input name="权益乘数"></label></td>
+                        </tr>
 
-					<tr>
-						<td colspan="4" style="border: 0px;"></td>
-						<th colspan="4" class="ats-tablecolor-f">销售净利率</th>
-						<td colspan="3" style="border: 0px;"></td>
-						<th colspan="2" class="ats-tablecolor-f">总资产周转率</th>
-						<td colspan="2" style="border: 0px;"></td>
-					</tr>
-					<tr>
-						<td colspan="4" style="border: 0px;"></td>
-						<td colspan="4" contentEditable="true"></td>
-						<td colspan="3" style="border: 0px;">x</td>
-						<td colspan="2" contentEditable="true"></td>
-						<td colspan="2" style="border: 0px;"></td>
-					</tr>
+                        <tr>
+                            <td colspan="4" style="border: 0;"></td>
+                            <th colspan="4" class="ats-tablecolor-f">销售净利率</th>
+                            <td colspan="3" style="border: 0;"></td>
+                            <th colspan="2" class="ats-tablecolor-f">总资产周转率</th>
+                            <td colspan="2" style="border: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="border: 0;"></td>
+                            <td colspan="4"><label><input name="销售净利率"></label></td>
+                            <td colspan="3" style="border: 0;">x</td>
+                            <td colspan="2"><label><input name="总资产周转率"></label></td>
+                            <td colspan="2" style="border: 0;"></td>
+                        </tr>
 
-					<tr>
-						<td colspan="3" style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">净利润</th>
-						<td colspan="4" style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">营业收入</th>
-						<td style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">营业收入</th>
-						<td colspan="2" style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">资产总额</th>
-						<td style="border: 0px;"></td>
-					</tr>
-					<tr>
-						<td colspan="3" style="border: 0px;"></td>
-						<td contentEditable="true"></td>
-						<td colspan="4" style="border: 0px;"></td>
-						<td contentEditable="true"></td>
-						<td style="border: 0px;" style="border: 0px;"></td>
-						<td contentEditable="true"></td>
-						<td colspan="2" style="border: 0px;"></td>
-						<td contentEditable="true"></td>
-						<td style="border: 0px;"></td>
-					</tr>
+                        <tr>
+                            <td colspan="3" style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">净利润</th>
+                            <td colspan="4" style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">营业收入</th>
+                            <td style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">营业收入</th>
+                            <td colspan="2" style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">资产总额</th>
+                            <td style="border: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border: 0;"></td>
+                            <td><label><input name="净利润"></label></td>
+                            <td colspan="4" style="border: 0;font-size: large">÷</td>
+                            <td><label><input name="营业收入"></label></td>
+                            <td style="border: 0;"></td>
+                            <td><label><input name="营业收入"></label></td>
+                            <td colspan="2" style="border: 0;font-size: large">÷</td>
+                            <td><label><input name="资产总额"></label></td>
+                            <td style="border: 0;"></td>
+                        </tr>
 
-					<tr>
-						<th class="ats-tablecolor-f">营业收入</th>
-						<td style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">全部成本</th>
-						<td style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">其他利润</th>
-						<td style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">所得税</th>
-						<td colspan="5" style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">流动资产</th>
-						<td style="border: 0px;"></td>
-						<th class="ats-tablecolor-f">长期资产</th>
-					</tr>
-					<tr>
-						<th contentEditable="true"></th>
-						<td style="border: 0px;">-</td>
-						<th contentEditable="true"></th>
-						<td style="border: 0px;">+</td>
-						<th contentEditable="true"></th>
-						<td style="border: 0px;">-</td>
-						<th contentEditable="true"></th>
-						<td colspan="5" style="border: 0px;"></td>
-						<th contentEditable="true"></th>
-						<td style="border: 0px;">+</td>
-						<th contentEditable="true"></th>
-					</tr>
-					<tr>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-						<td style="border: 0px;"></td>
-					</tr>
-				</table>
+                        <tr>
+                            <th class="ats-tablecolor-f">营业收入</th>
+                            <td style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">全部成本</th>
+                            <td style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">其他利润</th>
+                            <td style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">所得税</th>
+                            <td colspan="5" style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">流动资产</th>
+                            <td style="border: 0;"></td>
+                            <th class="ats-tablecolor-f">长期资产</th>
+                        </tr>
+                        <tr>
+                            <td><label><input name=""></label></td>
+                            <td style="border: 0;">-</td>
+                            <td><label><input name=""></label></td>
+                            <td style="border: 0;">+</td>
+                            <td><label><input name=""></label></td>
+                            <td style="border: 0;">-</td>
+                            <td><label><input name=""></label></td>
+                            <td colspan="5" style="border: 0;"></td>
+                            <td><label><input name=""></label></td>
+                            <td style="border: 0;">+</td>
+                            <td><label><input name=""></label></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                            <td style="border: 0;"></td>
+                        </tr>
+                    </table>
 
-				<p class="ats-fontsize-20">2、分析报告</p>
-                <span id="" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">
-                                已完成</span>
-				<p>结合杜邦分析与前述分析结论，对企业财务状况和经营状况进行分析和评价，并为企业未来的发展提出建议，形成报告，800字左右。</p>
-				<textarea class="form-control" rows="10"></textarea>
-				<hr class="simple" style="clear: both;" color="#6f5499" />
-				<div align="right">
-                    <button type="button" class="btn btn-info" onclick="">
-                        <span class="glyphicon"></span>&nbsp;保存
-                    </button>
-					<button type="button" class="btn btn-success" id="">
-						<span class="glyphicon"></span>&nbsp;提交
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                    <p class="ats-fontsize-20">2、分析报告</p>
+                    <p>结合杜邦分析与前述分析结论，对企业财务状况和经营状况进行分析和评价，并为企业未来的发展提出建议，形成报告，800字左右。</p>
+                    <label style="display: inherit">
+                        <textarea id="coursexDataConclusion" class="form-control" rows="10"></textarea>
+                    </label>
+                    <hr class="simple" style="clear: both;color: #6f5499"/>
+                    <div style="text-align: right">
+                        <div id="course_coursex_message"></div>
+                        <button type="button" class="btn btn-info" id="save_coursex_button"
+                                onclick="save_coursex()">
+                            <span class="glyphicon"></span>&nbsp;保存
+                        </button>
+                        <button type="button" class="btn btn-success" id="confirm_coursex_button"
+                                onclick="confirm_coursex()">
+                            <span class="glyphicon"></span>&nbsp;提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- 防尾前移 -->
-<div class="ats-rock"></div>
+    <!-- 防尾前移 -->
+    <div class="ats-rock"></div>
 
 {% endblock courseBody %}

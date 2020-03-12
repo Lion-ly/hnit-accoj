@@ -10,6 +10,7 @@ td input {
 td label {
     margin-bottom: 0;
     font-weight: inherit;
+    display: block;
 }
 
 tr td {
