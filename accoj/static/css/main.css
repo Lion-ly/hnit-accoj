@@ -26,16 +26,6 @@
     padding: 4px !important;
 }
 
-.ats-inputEditable {
-    width: 100%;
-    height: 36px;
-    border: 0;
-}
-
-.ats-tdEditable {
-    padding: 0
-}
-
 .ats-vouchertable th, td {
     text-align: center;
     vertical-align: middle;
