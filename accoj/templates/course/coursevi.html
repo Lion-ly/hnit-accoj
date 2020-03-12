@@ -51,17 +51,17 @@
                         <span id="acc_document_submit_span" class="glyphicon glyphicon-ok"
                               style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
                     </h4>
-                    <div class="ats-subject">
+                    <div class="acc-container-answer">
                         <blockquote>
                             <label id="business_type_6" class="label label-success"></label>
                             <p id="business_content_6">
                             </p>
                         </blockquote>
                     </div>
-                    <div class="ats-board">
+                    <div class="acc-container-answer">
                         <div>
 
-                            <p class="ats-fontsize-20">1、上传原始凭证（上传图片或文档）</p>
+                            <p class="acc-title">1、上传原始凭证（上传图片或文档）</p>
                             <form>
                                 <div class="form-group">
                                     <label for="uploadFiles"><span
@@ -75,57 +75,56 @@
                                 </div>
                             </form>
 
-                            <p class="ats-fontsize-20">2、填制记账凭证：</p>
+                            <p class="acc-title">2、填制记账凭证：</p>
                             <div class="table-responsive">
-                                <table class="table table-bordered ats-vouchertable"
+                                <table class="table table-bordered acc-container-tableformat"
                                        style="border: 0">
                                     <tbody>
                                     <tr>
-                                        <th colspan="23" class="ats-tablecolor-f">记账凭证</th>
+                                        <th colspan="23" class="acc-unedit" >记账凭证</th>
                                     </tr>
                                     <tr>
-                                        <th colspan="23">
-										<span style="float: left">记<label><input class="ats-vouchertable-input" min="1"
+                                        <th colspan="23"  >
+										<span style="float: left">记<label><input class="acc-input-vi" min="1"
                                                                                  style="border-bottom-style: solid;border-bottom-color: #0f0f0f"
                                                                                  name="doc_no"
                                                                                  type="number"></label>号</span>
                                             <span>日期：<label><input style="border: 0;" type="date"
                                                                    name="date"></label></span>
-                                            <span style="float: right;">附单据<label><input class="ats-vouchertable-input"
+                                            <span style="float: right;">附单据<label><input class="acc-input-vi"
                                                                                          min="1" name="doc_nums"
                                                                                          style="border-bottom-style: solid;border-bottom-color: #0f0f0f"
                                                                                          type="number"></label>张</span>
                                         </th>
-
                                     </tr>
                                     <tr>
-                                        <th rowspan="2" style="width: 10%" class="ats-tablecolor-f">摘要</th>
-                                        <th rowspan="2" style="width: 10%" class="ats-tablecolor-f">总账科目</th>
-                                        <th rowspan="2" style="width: 10%" class="ats-tablecolor-f">明细科目</th>
-                                        <th colspan="10" style="width: 28%" class="ats-tablecolor-f">借方金额</th>
-                                        <th colspan="10" style="width: 28%" class="ats-tablecolor-f">贷方金额</th>
+                                        <th rowspan="2" style="width: 10%;" class="acc-unedit">摘要</th>
+                                        <th rowspan="2" style="width: 10%;" class="acc-unedit">总账科目</th>
+                                        <th rowspan="2" style="width: 10%;" class="acc-unedit">明细科目</th>
+                                        <th colspan="10" style="width: 28%;" class="acc-unedit">借方金额</th>
+                                        <th colspan="10" style="width: 28%;" class="acc-unedit">贷方金额</th>
                                     </tr>
-                                    <tr class="ats-tablecolor-f">
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>万</th>
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>元</th>
-                                        <th>角</th>
-                                        <th>分</th>
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>万</th>
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>元</th>
-                                        <th>角</th>
-                                        <th>分</th>
+                                    <tr class="acc-unedit">
+                                        <th >千</th>
+                                        <th >百</th>
+                                        <th >十</th>
+                                        <th >万</th>
+                                        <th >千</th>
+                                        <th >百</th>
+                                        <th >十</th>
+                                        <th >元</th>
+                                        <th >角</th>
+                                        <th >分</th>
+                                        <th >千</th>
+                                        <th >百</th>
+                                        <th >十</th>
+                                        <th >万</th>
+                                        <th >千</th>
+                                        <th >百</th>
+                                        <th >十</th>
+                                        <th >元</th>
+                                        <th >角</th>
+                                        <th >分</th>
                                         <th style="width: 4%; border: 0; background: #ffffff">
                                             <div style="text-align: center">
                                                 <a style="color: green; padding: 0 0" type="button"
@@ -162,8 +161,8 @@
                                         <td><label><input onkeyup="limit_number(this)"></label></td>
                                     </tr>
                                     <!-- 合计 -->
-                                    <tr id="vi_rowLast">
-                                        <th colspan="3" class="ats-tablecolor-f" style="padding: 4px">合计</th>
+                                    <tr id="vi_rowLast" >
+                                        <th colspan="3" class="acc-unedit" style="padding: 4px;">合计</th>
                                         <td><label><input onkeyup="limit_number(this)"></label></td>
                                         <td><label><input onkeyup="limit_number(this)"></label></td>
                                         <td><label><input onkeyup="limit_number(this)"></label></td>
@@ -185,7 +184,7 @@
                                         <td><label><input onkeyup="limit_number(this)"></label></td>
                                         <td><label><input onkeyup="limit_number(this)"></label></td>
                                     </tr>
-                                    <tr class="ats-tablecolor-f">
+                                    <tr class="acc-unedit">
                                         <th colspan="23" style="text-align: left;">制表人：{{ username }}</th>
 
                                     </tr>
@@ -213,6 +212,6 @@
     </div>
 
     <!-- 防尾前移 -->
-    <div class="ats-rock"></div>
+    <div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

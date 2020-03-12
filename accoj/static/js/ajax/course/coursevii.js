@@ -510,7 +510,7 @@ function vii1_AddRow(flag) {
 
         + "<td style='width: 1%; border: 0; background: #ffffff'>"
         + "<div style='text-align: center'>"
-        + "<a style='color: red; padding: 0 0' type='button' "
+        + "<a style='color: red; padding:0' type='button' "
         + "class='btn' onclick='vii1_DeleteRow(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
@@ -551,7 +551,7 @@ function vii2_AddRow() {
         "                                              onkeyup='limit_number(this)'></label></td>"
         + "<td style='padding: 0; border: 0'>"
         + "<div style='text-align: center'> "
-        + "<a style='color: red' type='button' class='btn' onclick='vii2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "<a style='color: red;padding: 0;' type='button' class='btn' onclick='vii2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div> "
         + "</td> "
         + "</tr>"

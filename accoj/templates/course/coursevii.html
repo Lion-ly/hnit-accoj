@@ -47,14 +47,14 @@
                     <hr class="simple" style="color: #6f5499"/>
                     <!-- 业务一 -->
                     <div>
-                        <div class="ats-subject">
+                        <div class="acc-container-answer">
                             <blockquote>
                                 <label id="business_type_7" class="label label-success"></label>
                                 <p id="business_content_7">
                                 </p>
                             </blockquote>
                         </div>
-                        <div class="ats-board">
+                        <div class="acc-container-answer">
                             <!-- 作业标签 -->
                             <ul class="nav nav-tabs">
                                 <li role="presentation" class="active" onclick="get_subsidiary_account_info()"><a
@@ -71,7 +71,7 @@
                                 <!-- 第一标签 -->
                                 <div role="tabpanel" class="tab-pane active in fade" id="first">
                                     <div>
-                                        <p class="ats-fontsize-20">1、登记各账户明细账</p>
+                                        <p class="acc-title">1、登记各账户明细账</p>
                                         <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
@@ -81,7 +81,7 @@
                                         <div class="table-responsive">
                                             <div id="tablePanel">
 
-                                                <table class="table table-bordered ats-vouchertable" style="border: 0;">
+                                                <table class="table table-bordered acc-container-tableformat" style="border: 0;">
                                                     <tbody id="detailed">
                                                     <tr>
                                                         <td colspan="37" style="border: 0">
@@ -106,52 +106,52 @@
                                                             <label><input id="yearNow"
                                                                           style="width: 40px;height: 100%;border-bottom-style: solid;border-bottom-color: #0f0f0f"
                                                                           name="year"></label></td>
-                                                        <th style="border-left: 0;">年</th>
-                                                        <th class="ats-tablecolor-f" colspan="2">记账凭证</th>
-                                                        <th class="ats-tablecolor-f" rowspan="2">摘要</th>
-                                                        <th class="ats-tablecolor-f" colspan="10">借方</th>
-                                                        <th class="ats-tablecolor-f" colspan="10">贷方</th>
-                                                        <th class="ats-tablecolor-f" rowspan="2">方向</th>
-                                                        <th class="ats-tablecolor-f" colspan="10">余额</th>
+                                                        <th style="border-left: 0; ">年</th>
+                                                        <th class="acc-unedit" colspan="2" >记账凭证</th>
+                                                        <th class="acc-unedit" rowspan="2" >摘要</th>
+                                                        <th class="acc-unedit" colspan="10" >借方</th>
+                                                        <th class="acc-unedit" colspan="10" >贷方</th>
+                                                        <th class="acc-unedit" rowspan="2" >方向</th>
+                                                        <th class="acc-unedit" colspan="10" >余额</th>
                                                     </tr>
-                                                    <tr class="ats-tablecolor-f">
-                                                        <th>月</th>
-                                                        <th>日</th>
-                                                        <th>字</th>
-                                                        <th>号</th>
+                                                    <tr class="acc-unedit">
+                                                        <th >月</th>
+                                                        <th >日</th>
+                                                        <th >字</th>
+                                                        <th >号</th>
 
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>万</th>
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>元</th>
-                                                        <th>角</th>
-                                                        <th>分</th>
+                                                        <th >千</th>
+                                                        <th >百</th>
+                                                        <th >十</th>
+                                                        <th >万</th>
+                                                        <th >千</th>
+                                                        <th >百</th>
+                                                        <th >十</th>
+                                                        <th >元</th>
+                                                        <th >角</th>
+                                                        <th >分</th>
 
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>万</th>
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>元</th>
-                                                        <th>角</th>
-                                                        <th>分</th>
+                                                        <th >千</th>
+                                                        <th >百</th>
+                                                        <th >十</th>
+                                                        <th >万</th>
+                                                        <th >千</th>
+                                                        <th >百</th>
+                                                        <th >十</th>
+                                                        <th >元</th>
+                                                        <th >角</th>
+                                                        <th >分</th>
 
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>万</th>
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>元</th>
-                                                        <th>角</th>
-                                                        <th>分</th>
+                                                        <th >千</th>
+                                                        <th >百</th>
+                                                        <th >十</th>
+                                                        <th >万</th>
+                                                        <th >千</th>
+                                                        <th >百</th>
+                                                        <th >十</th>
+                                                        <th >元</th>
+                                                        <th >角</th>
+                                                        <th >分</th>
                                                     </tr>
                                                     <tr id="period1Vii1Row1">
                                                         <td><label><input name="month" title="月"
@@ -205,7 +205,7 @@
                                                         <td><label><input onkeyup="limit_number(this)"></label></td>
                                                         <th style="width: 1%;height: auto; border: 0; background: #ffffff;padding: 4px">
                                                             <div style="text-align: center">
-                                                                <a style="color: green; padding: 0 0" type="button"
+                                                                <a style="color: green;padding: 0;" type="button"
                                                                    class="btn" onclick="vii1_AddRow(true)"><span
                                                                         class="glyphicon glyphicon-plus-sign"></span></a>
                                                             </div>
@@ -539,31 +539,31 @@
                                 <!-- 第二标签 -->
                                 <div role="tabpanel" class="tab-pane fade" id="second">
                                     <div>
-                                        <p class="ats-fontsize-20">2、登记科目余额表<span class="glyphicon glyphicon-ok"
+                                        <p class="acc-title">2、登记科目余额表<span class="glyphicon glyphicon-ok"
                                                                                   id="acc_balance_sheet_submit_span"
                                                                                   style="color: #5cb85c;font-size: medium;display:none;">
                                     已完成</span></p>
 
                                         <div class="container">
-                                            <table class="table table-bordered ats-vouchertable"
+                                            <table class="table table-bordered acc-container-tableformat"
                                                    style="border: 0">
                                                 <tbody>
                                                 <tr>
-                                                    <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期初余额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+                                                    <th rowspan="2" class="acc-unedit" >会计科目</th>
+                                                    <th colspan="2" class="acc-unedit" >期初余额</th>
+                                                    <th colspan="2" class="acc-unedit" >本期发生额</th>
+                                                    <th colspan="2" class="acc-unedit" >期末余额</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
+                                                    <th class="acc-unedit" >借方</th>
+                                                    <th class="acc-unedit" >贷方</th>
+                                                    <th class="acc-unedit" >借方</th>
+                                                    <th class="acc-unedit" >贷方</th>
+                                                    <th class="acc-unedit" >借方</th>
+                                                    <th class="acc-unedit" >贷方</th>
                                                     <td style="padding: 4px; border: 0; width: 5%">
                                                         <div style="text-align: center">
-                                                            <a style="color: green;" type="button" class="btn"
+                                                            <a style="color: green;padding: 0;" type="button" class="btn"
                                                                onclick="vii2_AddRow()"><span
                                                                     class="glyphicon glyphicon-plus-sign"></span></a>
                                                         </div>
@@ -587,7 +587,7 @@
                                                                       onkeyup="limit_number(this)"></label></td>
                                                 </tr>
                                                 <tr id="vii2RowLast">
-                                                    <td class="ats-tablecolor-f">合计</td>
+                                                    <th class="acc-unedit" >合计</th>
                                                     <td><label><input name="borrow_1" title="金额￥"
                                                                       onkeyup="limit_number(this)"></label></td>
                                                     <td><label><input name="lend_1" title="金额￥"
@@ -628,6 +628,6 @@
     </div>
 
     <!-- 防尾前移 -->
-    <div class="ats-rock"></div>
+    <div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

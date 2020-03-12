@@ -1,105 +1,70 @@
+/*公司法补充信息*/
 #CompanyLawText dt {
     padding-left: 10px;
 }
-
 #CompanyLawText dd {
     padding-left: 20px;
 }
-
-.ats-rock {
+/*table标题垂直居中*/
+.table tbody tr th{
+    vertical-align: middle;
+}
+/*主体和页尾之间的空白容器*/
+.acc-container-separate {
     height: 500px;
 }
-
-.ats-subject {
+/*练习题主体容器*/
+.acc-container-answer {
     margin-left: 4%;
     margin-right: 4%;
-    font-size: 16px;
 }
-
-.ats-subject input {
-    margin-top: 20px;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    width: 40px;
-    height: 16px;
-    text-align: center;
-}
-
-.ats-board {
-    margin: 20px 4%;
-}
-
-.ats-unmargin-tb {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.ats-unpadding-lr {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.ats-fontsize-20 {
+/*大标题*/
+.acc-title {
 	margin-top:20px;
     font-size: 18px;
     font-weight: 800;
 }
 
-.ats-fontsize-15 {
-	margin-top:20px;
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.ats-tablecolor-f {
+/*不可编辑背景,灰色*/
+.acc-unedit {
     background-color: #f5f5f5;
     padding: 4px !important;
 }
-
-.ats-inputEditable {
-    width: 100%;
-    height: 36px;
-    border: 0;
+.ats-fontsize-15 {
+	  margin-top:20px;
+    font-size: 15px;
+    font-weight: 700;
 }
-
-.ats-tdEditable {
-    padding: 0
-}
-
-.ats-vouchertable th, td {
+/*v-x表单格式*/
+.acc-container-tableformat th, td {
     text-align: center;
-    vertical-align: middle;
 }
-
-.ats-vouchertable-input {
+/*vi表单内的input*/
+.acc-input-vi {
     width: 40px;
     border-left: 0;
     border-top: 0;
     border-right: 0;
 }
-
-.ats-i-NewBusiness th{
-	color:#ffffff;
-}
-
-.ats-i-NewBusiness td{
+/*新建业务容器*/
+.acc-container-newbusiness {
+	font-size: 16px;
 	text-align: left;
 }
-
-.ats-v-Ttable {
+/*新建业务容器 头字体*/
+.acc-container-newbusiness th{
+	color:#ffffff;
+}
+/*T表*/
+.acc-ttable {
 	width: 100%;
 }
-
-.ats-v-Ttable input{
+/*T表input*/
+.acc-ttable input{
 	border-width: thin;
 	width: 100%;
     height: 100%;
     border-left: 0;
     border-top: 0;
     border-right: 0;
-}
-
-.ats-iconChangeColor{
-	background-color: #ffffff;
 }

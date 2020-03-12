@@ -53,7 +53,7 @@
                         <span id="entry_submit_span" class="glyphicon glyphicon-ok"
                               style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
                     </h4>
-                    <div class="ats-subject">
+                    <div class="acc-container-answer">
                         <blockquote>
                             <label id="business_type_4" class="label label-success"></label>
                             <p id="business_content_4">
@@ -61,16 +61,16 @@
                         </blockquote>
                     </div>
 
-                    <div class="ats-board">
+                    <div class="acc-container-answer">
                         <div>
-                            <p class="ats-fontsize-20">填写完整分录</p>
+                            <p class="acc-title">填写完整分录</p>
                             <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
 
                             <table class="table table-bordered" style="border: 0">
                                 <tbody>
                                 <tr>
-                                    <th style="width: 8%; border-right:0;padding: 4px" class="ats-tablecolor-f">借：</th>
-                                    <td style="width: 8%; border-left:0;padding: 4px" class="ats-tablecolor-f"></td>
+                                    <th style="width: 8%; border-right:0;padding: 4px;" class="acc-unedit">借：</th>
+                                    <td style="width: 8%; border-left:0;padding: 4px" class="acc-unedit"></td>
                                     <td style="width: 40%;padding: 4px"><label><input type="text" name="subject"
                                                                                       onkeyup="illegalCharFilter(this)"
                                                                                       id="subject1"
@@ -88,8 +88,8 @@
                                     </td>
                                 </tr>
                                 <tr id="borrowRowAfter">
-                                    <td style="border-right:0;padding: 4px" class="ats-tablecolor-f"></td>
-                                    <th style="border-left:0;padding: 4px" class="ats-tablecolor-f">贷：</th>
+                                    <td style="border-right:0;padding: 4px" class="acc-unedit"></td>
+                                    <th style="border-left:0;padding: 4px;" class="acc-unedit">贷：</th>
                                     <td><label><input type="text" name="subject" onkeyup="illegalCharFilter(this)"
                                                       id="subject0" placeholder="科目"></label></td>
                                     <td><label><input type="text" name="money" id="money0" placeholder="金额"
@@ -126,6 +126,6 @@
     </div>
 
     <!-- 防尾前移 -->
-    <div class="ats-rock"></div>
+    <div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

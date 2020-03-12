@@ -210,8 +210,8 @@ function iv_AddRow(obj, subject = "", money = "") {
     }
     $("#" + obj + "RowAfter").before(
         "<tr>"
-        + "<td class='ats-tablecolor-f' style='border-right: 0;padding: 4px'></td>"
-        + "<td class='ats-tablecolor-f' style='border-left: 0;4px'></td>"
+        + "<td class='acc-unedit' style='border-right: 0;padding: 4px'></td>"
+        + "<td class='acc-unedit' style='border-left: 0;4px'></td>"
         + "<td><input type='text' id='subject" + type + "_" + rowNumIv + "' name='subject' placeholder='科目' value='" + subject + "' onkeyup='illegalCharFilter(this)'></td>"
         + "<td><input type='text' id='money" + type + "_" + rowNumIv + "' name='money' placeholder='金额' value='" + money + "' onkeyup='illegalCharFilter(this)'></td>"
         + "<td style='padding:4px;border:0'>"

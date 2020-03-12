@@ -250,10 +250,10 @@ function body_text_append(labelType, content) {
     }
     $("#body-text").append(
         "<tr id='" + rowName + "'>"
-        + "<th style='background-color: " + bg + ";width: 5%'>"
+        + "<th style='background-color: " + bg + ";width: 4%'>"
         + labelType
         + "</th>"
-        + "<td style='text-align: left'>"
+        + "<td style='text-align: left;vertical-align: middle;'>"
         + "<strong style='color: " + bg + "'>" + business_no + ".&nbsp;&nbsp;</strong>"
         + content
         + "</td>"
