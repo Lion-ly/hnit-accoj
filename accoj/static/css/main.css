@@ -14,25 +14,14 @@
     margin-left: 4%;
     margin-right: 4%;
 }
-
-
-.ats-unmargin-tb {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.ats-unpadding-lr {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.ats-fontsize-20 {
+/*大标题*/
+.acc-title {
 	margin-top:20px;
     font-size: 18px;
     font-weight: 800;
 }
-
-.ats-tablecolor-f {
+/*不可编辑背景,灰色*/
+.acc-unedit {
     background-color: #f5f5f5;
     padding: 4px !important;
 }

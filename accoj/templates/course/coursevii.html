@@ -71,7 +71,7 @@
                                 <!-- 第一标签 -->
                                 <div role="tabpanel" class="tab-pane active in fade" id="first">
                                     <div>
-                                        <p class="ats-fontsize-20">1、登记各账户明细账</p>
+                                        <p class="acc-title">1、登记各账户明细账</p>
                                         <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
@@ -107,14 +107,14 @@
                                                                           style="width: 40px;height: 100%;border-bottom-style: solid;border-bottom-color: #0f0f0f"
                                                                           name="year"></label></td>
                                                         <th style="border-left: 0;">年</th>
-                                                        <th class="ats-tablecolor-f" colspan="2">记账凭证</th>
-                                                        <th class="ats-tablecolor-f" rowspan="2">摘要</th>
-                                                        <th class="ats-tablecolor-f" colspan="10">借方</th>
-                                                        <th class="ats-tablecolor-f" colspan="10">贷方</th>
-                                                        <th class="ats-tablecolor-f" rowspan="2">方向</th>
-                                                        <th class="ats-tablecolor-f" colspan="10">余额</th>
+                                                        <th class="acc-unedit" colspan="2">记账凭证</th>
+                                                        <th class="acc-unedit" rowspan="2">摘要</th>
+                                                        <th class="acc-unedit" colspan="10">借方</th>
+                                                        <th class="acc-unedit" colspan="10">贷方</th>
+                                                        <th class="acc-unedit" rowspan="2">方向</th>
+                                                        <th class="acc-unedit" colspan="10">余额</th>
                                                     </tr>
-                                                    <tr class="ats-tablecolor-f">
+                                                    <tr class="acc-unedit">
                                                         <th>月</th>
                                                         <th>日</th>
                                                         <th>字</th>
@@ -539,7 +539,7 @@
                                 <!-- 第二标签 -->
                                 <div role="tabpanel" class="tab-pane fade" id="second">
                                     <div>
-                                        <p class="ats-fontsize-20">2、登记科目余额表<span class="glyphicon glyphicon-ok"
+                                        <p class="acc-title">2、登记科目余额表<span class="glyphicon glyphicon-ok"
                                                                                   id="acc_balance_sheet_submit_span"
                                                                                   style="color: #5cb85c;font-size: medium;display:none;">
                                     已完成</span></p>
@@ -549,18 +549,18 @@
                                                    style="border: 0">
                                                 <tbody>
                                                 <tr>
-                                                    <th rowspan="2" class="ats-tablecolor-f">会计科目</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期初余额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">本期发生额</th>
-                                                    <th colspan="2" class="ats-tablecolor-f">期末余额</th>
+                                                    <th rowspan="2" class="acc-unedit">会计科目</th>
+                                                    <th colspan="2" class="acc-unedit">期初余额</th>
+                                                    <th colspan="2" class="acc-unedit">本期发生额</th>
+                                                    <th colspan="2" class="acc-unedit">期末余额</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
-                                                    <th class="ats-tablecolor-f">借方</th>
-                                                    <th class="ats-tablecolor-f">贷方</th>
+                                                    <th class="acc-unedit">借方</th>
+                                                    <th class="acc-unedit">贷方</th>
+                                                    <th class="acc-unedit">借方</th>
+                                                    <th class="acc-unedit">贷方</th>
+                                                    <th class="acc-unedit">借方</th>
+                                                    <th class="acc-unedit">贷方</th>
                                                     <td style="padding: 4px; border: 0; width: 5%">
                                                         <div style="text-align: center">
                                                             <a style="color: green;" type="button" class="btn"
@@ -587,7 +587,7 @@
                                                                       onkeyup="limit_number(this)"></label></td>
                                                 </tr>
                                                 <tr id="vii2RowLast">
-                                                    <td class="ats-tablecolor-f">合计</td>
+                                                    <td class="acc-unedit">合计</td>
                                                     <td><label><input name="borrow_1" title="金额￥"
                                                                       onkeyup="limit_number(this)"></label></td>
                                                     <td><label><input name="lend_1" title="金额￥"

@@ -27,7 +27,7 @@
                         <!-- 第一标签 -->
                         <div role="tabpanel" class="tab-pane active in fade"
                              id="CreateCompany">
-                            <p class="ats-fontsize-20">1、新增公司
+                            <p class="acc-title">1、新增公司
                                 <span id="company_confirmed_span" class="glyphicon glyphicon-ok"
                                       style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
 
@@ -36,45 +36,45 @@
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <table class="table table-bordered ">
                                     <tr>
-                                        <th class="ats-tablecolor-f">公司名称</th>
+                                        <th class="acc-unedit">公司名称</th>
                                         <td id="1-1-1-2" colspan="5"><input type="text"
                                                                             onkeyup="illegalCharFilter(this)"
                                                                             name="com_name" id="com_name"></td>
                                     </tr>
                                     <tr>
-                                        <th class="ats-tablecolor-f">住所</th>
+                                        <th class="acc-unedit">住所</th>
                                         <td colspan="5"><input type="text" name="com_address"
                                                                onkeyup="illegalCharFilter(this)"
                                                                id="com_address"></td>
                                     </tr>
                                     <tr>
-                                        <th class="ats-tablecolor-f">生产经营地</th>
+                                        <th class="acc-unedit">生产经营地</th>
                                         <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_business_addr" id="com_business_addr"></td>
                                     </tr>
                                     <tr>
-                                        <th class="ats-tablecolor-f" style="width: 14%">法定代表人</th>
+                                        <th class="acc-unedit" style="width: 14%">法定代表人</th>
                                         <td style="width: 20%"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                       name="com_legal_rep" id="com_legal_rep"></td>
-                                        <th class="ats-tablecolor-f" style="width: 8%">资本注册(万)</th>
+                                        <th class="acc-unedit" style="width: 8%">资本注册(万)</th>
                                         <td style="width: 20%"><input type="text" placeholder="100 ~ 1000"
                                                                       onkeyup="limit_number(this)"
                                                                       name="com_regist_cap" id="com_regist_cap"></td>
-                                        <th class="ats-tablecolor-f" style="width: 8%">经营期限(年)</th>
+                                        <th class="acc-unedit" style="width: 8%">经营期限(年)</th>
                                         <td style="width: 20%"><input type="text" placeholder="5 ~ 500"
                                                                       onkeyup="limit_number(this)"
                                                                       name="com_operate_period" id="com_operate_period">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="ats-tablecolor-f" style="height: 100px">经营范围</th>
+                                        <th class="acc-unedit" style="height: 100px">经营范围</th>
                                         <td colspan="5"><textarea rows="4" onkeyup="illegalCharFilter(this)"
                                                                   name="com_business_scope"
                                                                   id="com_business_scope"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="ats-tablecolor-f" rowspan="5">股东(发起人)名称或姓名</th>
+                                        <th class="acc-unedit" rowspan="5">股东(发起人)名称或姓名</th>
                                         <td colspan="5"><input type="text" onkeyup="illegalCharFilter(this)"
                                                                name="com_shareholder_1" id="com_shareholder_1"></td>
                                     </tr>
@@ -219,7 +219,7 @@
                         <!-- 第二标签 -->
                         <div role="tabpanel" class="tab-pane fade" id="NewBusiness">
 
-                            <p class="ats-fontsize-20">2、新增业务
+                            <p class="acc-title">2、新增业务
                                 <span id="business_confirmed_span" class="glyphicon glyphicon-ok"
                                       style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
                             </p>
