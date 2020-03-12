@@ -24,10 +24,16 @@
     font-size: 18px;
     font-weight: 800;
 }
+
 /*不可编辑背景,灰色*/
 .acc-unedit {
     background-color: #f5f5f5;
     padding: 4px !important;
+}
+.ats-fontsize-15 {
+	  margin-top:20px;
+    font-size: 15px;
+    font-weight: 700;
 }
 /*v-x表单格式*/
 .acc-container-tableformat th, td {

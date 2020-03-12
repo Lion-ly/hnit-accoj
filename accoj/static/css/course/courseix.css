@@ -1,3 +1,11 @@
+table textarea {
+    border-style: none;
+    border-width: thin;
+    border-color: red;
+    height: 100%;
+    width: 100%;
+}
+
 td input {
     text-align: center;
     border-style: none;

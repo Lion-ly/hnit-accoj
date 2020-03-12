@@ -7,9 +7,10 @@ table input {
     height: 25px;
 }
 
-table label {
+td label {
     margin-bottom: 0;
     font-weight: inherit;
+    display: block;
 }
 
 tr td {

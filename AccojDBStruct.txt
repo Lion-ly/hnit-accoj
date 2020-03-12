@@ -1,4 +1,3 @@
-# 当前为终端操作
 # Flask-PyMongo见https://flask-pymongo.readthedocs.io/en/latest/
 # 建议用notepad++打开
 # new Date()在python中为`datetime.datetime`对象，获取当前时间datetime.datetime.now()
@@ -46,7 +45,7 @@ db.accoj.question.insert({"questions_no": 1， 			# 题库号
 						})
 
 (用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为"student_no_cp")
-# 公司集合
+# 公司集合(已确定)
 db.accoj.company.insert({"student_no": student_no,		# 用户ID
 						 "com_name": " ",	  			# 公司名称
 						 "com_address": " ",	  		# 公司地址
@@ -74,7 +73,12 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											"acc_balance_sheet_confirm": false, # 科目余额表部分进度
 											"new_balance_sheet_confirm": false, # 资产负债表部分进度
 											"profit_statement_confirm": false,  # 利润表部分进度
+											"trend_analysis_confirm":{"first": false, "second": false},
+											"common_ratio_analysis_confirm":{"first": false, "second": false},
+											"ratio_analysis_confirm":false,
+											"dupont_analysis_saved":false
 											},
+
 						 # 课程保存进度
 						 "schedule_saved": {
 											"business_saved": false,			# 增加业务部分是否完成
@@ -88,9 +92,11 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											"acc_balance_sheet_saved": false,	# 科目余额表部分进度
 											"new_balance_sheet_saved": false,	# 资产负债表部分进度
 											"profit_statement_saved": false,	# 利润表部分进度
+											"trend_analysis_saved":{"first": false, "second": false},
+											"common_ratio_analysis_saved":{"first": false, "second": false},
+											"ratio_analysis_saved":false,
+											"dupont_analysis_saved":false
 											},
-db.company.updateMany({}, {"$set": {"schedule_confirm.new_balance_sheet_confirm": false, "schedule_confirm.profit_statement_confirm": false}})
-db.company.updateMany({}, {"$set": {"schedule_saved.new_balance_sheet_saved": false, "schedule_saved.profit_statement_saved": false}})
 						 # 公司业务
 						 "businesses": [{"questions_no": 1， 			# 题库号
 									   "question_no": 1,				# 题目编号
@@ -167,7 +173,7 @@ db.company.updateMany({}, {"$set": {"schedule_saved.new_balance_sheet_saved": fa
 																	   }]
 												}
 						# 账户明细账
-						"subsidiary_account_infos": {"subject_name":						# 科目名即账户名作为键
+						"subsidiary_account_infos": {"subject_name":						# 科目名即账户名作为键（动态变化）
 																	[{"date": "1998-05-05",	# 日期
 																	  "word": "",			# 字
 																	  "no":	1,				# 号
@@ -189,15 +195,50 @@ db.company.updateMany({}, {"$set": {"schedule_saved.new_balance_sheet_saved": fa
 													"lend_3": 1					 		# 贷方期末余额
 													}]
 						# 资产负债表
-						"new_balance_sheet_infos": {"project": {"period_end": 1, 		# 期末余额
-																 "period_last": 1}		# 上期余额
+						"new_balance_sheet_infos": {"project": 							# 'project'为项目名（动态变化），后述亦同
+															  {"period_end": 1, 		# 期末余额
+															   "period_last": 1}		# 上期余额
 													}
-						# 利润表集合
-						"profit_statement_infos": [{"project": {{"period_end": 1, 		# 本期金额
-																 "period_last": 1}		# 上期金额
-													}]
+						# 利润表
+						"profit_statement_infos": {"project":
+															{"period_end": 1, 			# 本期金额
+															 "period_last": 1}			# 上期金额
+												  }
+						# 趋势分析法
+						"trend_analysis_infos": {"new_balance_sheet_infos": 			# 分析资产负债表，后述亦同
+																			{"project":
+																						{"period_end": 1, 		# 本期比上期增加额
+																					     "period_last": 1}		# 本期比上期增加率
+																			 "conclusion": "",					# 结论
+																			}
+												 "profit_statement_infos": 				# 分析利润表，后述亦同
+																			{"project":
+																						{"period_end": 1, 		# 本期比上期增加额
+																					    "period_last": 1}		# 本期比上期增加率
+																			 "conclusion": "",					# 结论
+																		   }
+												}
+						# 共同比分析法
+						"common_ratio_analysis_infos": {"new_balance_sheet_infos":
+																				 {"project":
+																							{"period_end": 1, 		# 本期占资产/负债总额百分比
+																							 "period_last": 1}		# 上期占资产/负债总额百分比
+																				  "conclusion": "",					# 结论
+																				 }
+														"profit_statement_infos":
+																				 {"project":
+																							{"period_end": 1, 		# 本期占收入百分比
+																							 "period_last": 1}		# 上期占收入百分比
+																				  "conclusion": "",					# 结论
+																				 }
+													   }
+						# 比率分析法
+						"ratio_analysis_infos": {"project":
+															{"period_end": 1, 		# 本期
+															 "period_last": 1}		# 上期
+												}
+						# 杜邦分析法
+						"dupont_analysis_infos": {"project": num,
+												  "conclusion": ""
+												 }
 						})
-
-# 比率分析法集合
-db.accoj.ratio_analysis.insert({
-							   })
