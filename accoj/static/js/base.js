@@ -191,6 +191,8 @@ function submit_confirm_clicked() {
     }, 3000)
 }
 
+//==================================正则表达式限制输入==================================//
+
 /**
  * 限制输入只能为正整数
  * @param obj
@@ -205,10 +207,21 @@ function limit_number(obj) {
  * @param obj
  */
 function RealNumber(obj) {
-    let reg = /^([-+])?\d+(\.\d+)?$/;
-    let thisValue = $(obj).val();
+    let reg = /^([-+])?\d+(\.\d+)?$/,
+        thisValue = $(obj).val();
     if (thisValue && !thisValue.match(reg))
-        $(obj).val("");
+        $(obj).val(0);
+}
+
+/**
+ * 限制输入只能为百分比
+ * @param obj
+ */
+function LimitPercent(obj) {
+    let reg = /^-?(100|[1-9]\d|\d)(.\d{1,2})?%$/,
+        thisValue = $(obj).val();
+    if (thisValue && !thisValue.match(reg))
+        $(obj).val("0%");
 }
 
 /**
@@ -216,7 +229,7 @@ function RealNumber(obj) {
  * @param obj
  */
 function illegalCharFilter(obj) {
-    let reg = /[${}().]/g;
+    let reg = /[${}().@%]/g;
     $(obj).val($(obj).val().replace(reg, ""))
 }
 

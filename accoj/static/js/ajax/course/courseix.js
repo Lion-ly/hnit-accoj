@@ -1,8 +1,8 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
-    bindControlViii();
-    get_new_balance_sheet_info();
-    get_profit_statement_info();
+    bindControlIx();
+    get_ixFirst_info();
+    get_ixSecond_info();
 });
 
 //======================================提交资产负债表信息======================================//
@@ -10,15 +10,15 @@ $(document).ready(function () {
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
-function confirm_new_balance_sheet() {
-    bind_confirm_info("confirm_new_balance_sheet_button", "submit_new_balance_sheet_info");
+function confirm_ixFirst() {
+    bind_confirm_info("confirm_ixFirst_button", "submit_ixFirst_info");
 }
 
 /**
  * 保存资产负债表信息
  */
-function save_new_balance_sheet() {
-    bind_save_info("save_new_balance_sheet_button", submit_new_balance_sheet_info);
+function save_ixFirst() {
+    bind_save_info("save_ixFirst_button", submit_ixFirst_info);
 }
 
 
@@ -26,40 +26,40 @@ function save_new_balance_sheet() {
  * 提交资产负债表信息
  * @param submit_type confirm or save
  */
-function submit_new_balance_sheet_info(submit_type) {
+function submit_ixFirst_info(submit_type) {
     // 获取用户输入
-    let data = viiiGetInput(true);
+    let data = ixGetInput(true);
     data["submit_type"] = submit_type;
     data = JSON.stringify(data);
 
     // 提交数据
-    let url = "/submit_new_balance_sheet_info",
-        messageDivID = "course_viii1_message",
-        successFunc = get_new_balance_sheet_info;
+    let url = "/submit_ix_first_info",
+        messageDivID = "course_ix1_message",
+        successFunc = get_ixFirst_info;
     submit_info(submit_type, url, data, messageDivID, successFunc);
 }
 
 //======================================获取资产负债表信息======================================//
-let new_balance_sheet_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    new_balance_sheet_confirmed,
-    new_balance_sheet_saved;
+let ixFirst_infos, // 保存本次课程全部信息，减少后端数据请求次数
+    ixFirst_confirmed,
+    ixFirst_saved;
 
 /**
  * 从后端获取资产负债表信息
  */
-function get_new_balance_sheet_info() {
+function get_ixFirst_info() {
 
-    // 若new_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
-    if (new_balance_sheet_infos && new_balance_sheet_confirmed) {
-        map_new_balance_sheet_info();
+    // 若ixFirst_infos不为空且已经确认提交过，则不再发送数据请求
+    if (ixFirst_infos && ixFirst_confirmed) {
+        map_ixFirst_info();
         return;
     }
 
     //  获取数据
     let data = {},
-        url = "/get_new_balance_sheet_info",
-        successFunc = map_new_balance_sheet_info,
-        messageDivID = "course_viii1_message";
+        url = "/get_ix_first_info",
+        successFunc = map_ixFirst_info,
+        messageDivID = "course_ix1_message";
     get_info(data, url, successFunc, messageDivID);
 
 }
@@ -68,20 +68,23 @@ function get_new_balance_sheet_info() {
 /**
  * 将数据映射到前端
  */
-function map_new_balance_sheet_info(data) {
-
+function map_ixFirst_info(data) {
+    console.log("data: " + data);
+    console.log("ixFirst_infos: " + data["ixFirst_infos"]);
+    console.log("ixFirst_confirmed: " + data["ixFirst_confirmed"]);
+    console.log("ixFirst_saved: " + data["ixFirst_saved"]);
     data = data ? data : "";
-    new_balance_sheet_infos = data ? data["new_balance_sheet_infos"] : new_balance_sheet_infos;
-    new_balance_sheet_confirmed = data ? data["new_balance_sheet_confirmed"] : new_balance_sheet_confirmed;
-    new_balance_sheet_saved = data ? data["new_balance_sheet_infos"] : new_balance_sheet_saved;
+    ixFirst_infos = data ? data["ixFirst_infos"] : ixFirst_infos;
+    ixFirst_confirmed = data ? data["ixFirst_confirmed"] : ixFirst_confirmed;
+    ixFirst_saved = data ? data["ixFirst_saved"] : ixFirst_saved;
     // 重置输入
-    $("#viiiFirst").find("input").val("");
+    $("#ixFirst").find("input").val("");
     // `完成状态`标签控制
-    spanStatusCtr(new_balance_sheet_confirmed, new_balance_sheet_saved, "new_balance_sheet_span");
+    spanStatusCtr(ixFirst_confirmed, ixFirst_saved, "ixFirst_span");
 
-    if (!new_balance_sheet_infos) return;
+    if (!ixFirst_infos) return;
     // 填充数据
-    viiiPaddingData(new_balance_sheet_infos, true);
+    IxPaddingData(ixFirst_infos, true);
 }
 
 //============================================提交利润表信息============================================//
@@ -89,15 +92,15 @@ function map_new_balance_sheet_info(data) {
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
-function confirm_profit_statement() {
-    bind_confirm_info("confirm_profit_statement_button", "submit_profit_statement_info");
+function confirm_ixSecond() {
+    bind_confirm_info("confirm_ixSecond_button", "submit_ixSecond_info");
 }
 
 /**
  * 保存利润表信息
  */
-function save_profit_statement() {
-    bind_save_info("save_profit_statement_button", submit_profit_statement_info);
+function save_ixSecond() {
+    bind_save_info("save_ixSecond_button", submit_ixSecond_info);
 }
 
 
@@ -105,40 +108,40 @@ function save_profit_statement() {
  * 提交利润表信息
  * @param submit_type confirm or save
  */
-function submit_profit_statement_info(submit_type) {
+function submit_ixSecond_info(submit_type) {
     // 获取用户输入
-    let data = viiiGetInput(false);
+    let data = ixGetInput(false);
     data["submit_type"] = submit_type;
     data = JSON.stringify(data);
 
     // 提交数据
-    let url = "/submit_profit_statement_info",
-        messageDivID = "course_viii2_message",
-        successFunc = get_profit_statement_info;
+    let url = "/submit_ix_second_info",
+        messageDivID = "course_ix2_message",
+        successFunc = get_ixSecond_info;
     submit_info(submit_type, url, data, messageDivID, successFunc);
 }
 
 //============================================获取利润表信息============================================//
-let profit_statement_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    profit_statement_confirmed,
-    profit_statement_saved;
+let ixSecond_infos, // 保存本次课程全部信息，减少后端数据请求次数
+    ixSecond_confirmed,
+    ixSecond_saved;
 
 /**
  * 从后端获取利润表信息
  */
-function get_profit_statement_info() {
+function get_ixSecond_info() {
 
-    // 若profit_statement_infos不为空且已经确认提交过，则不再发送数据请求
-    if (profit_statement_infos && profit_statement_confirmed) {
-        map_profit_statement_info();
+    // 若ixSecond_infos不为空且已经确认提交过，则不再发送数据请求
+    if (ixSecond_infos && ixSecond_confirmed) {
+        map_ixSecond_info();
         return;
     }
 
     //  获取数据
     let data = {},
-        url = "/get_profit_statement_info",
-        successFunc = map_profit_statement_info,
-        messageDivID = "course_viii2_message";
+        url = "/get_ix_second_info",
+        successFunc = map_ixSecond_info,
+        messageDivID = "course_ix2_message";
     get_info(data, url, successFunc, messageDivID);
 
 }
@@ -147,20 +150,20 @@ function get_profit_statement_info() {
 /**
  * 将数据映射到前端
  */
-function map_profit_statement_info(data) {
+function map_ixSecond_info(data) {
 
     data = data ? data : "";
-    profit_statement_infos = data ? data["profit_statement_infos"] : profit_statement_infos;
-    profit_statement_confirmed = data ? data["profit_statement_confirmed"] : profit_statement_confirmed;
-    profit_statement_saved = data ? data["profit_statement_infos"] : profit_statement_saved;
+    ixSecond_infos = data ? data["ixSecond_infos"] : ixSecond_infos;
+    ixSecond_confirmed = data ? data["ixSecond_confirmed"] : ixSecond_confirmed;
+    ixSecond_saved = data ? data["ixSecond_saved"] : ixSecond_saved;
     // 重置输入
-    $("#viiiSecond").find("input").val("");
+    $("#ixSecond").find("input").val("");
     // `完成状态`标签控制
-    spanStatusCtr(profit_statement_confirmed, profit_statement_saved, "profit_statement_span");
+    spanStatusCtr(ixSecond_confirmed, ixSecond_saved, "ixSecond_span");
 
-    if (!profit_statement_infos) return;
+    if (!ixSecond_infos) return;
     // 填充数据
-    viiiPaddingData(profit_statement_infos, false);
+    IxPaddingData(ixSecond_infos, false);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -168,12 +171,12 @@ function map_profit_statement_info(data) {
  * 获取用户输入信息
  * @returns {Object}
  */
-function viiiGetInput(isFirst) {
-    let divId = "viiiFirst",
-        infosName = "new_balance_sheet_infos";
+function ixGetInput(isFirst) {
+    let divId = "ixFirst",
+        infosName = "ixFirst_infos";
     if (!isFirst) {
-        divId = "viiiSecond";
-        infosName = "profit_statement_infos";
+        divId = "ixSecond";
+        infosName = "ixSecond_infos";
     }
     let infos = Object(),
         flag = true,
@@ -189,6 +192,7 @@ function viiiGetInput(isFirst) {
         infos[project][period] = parseFloat(value);
         flag = !flag;
     });
+    infos["conclusion"] = $("#" + divId + "Conclusion").val();
     return {[infosName]: infos};
 }
 
@@ -197,20 +201,27 @@ function viiiGetInput(isFirst) {
  * @param data
  * @param isFirst
  */
-function viiiPaddingData(data, isFirst) {
-    let divID = "viiiFirst";
-    if (!isFirst) divID = "viiiSecond";
+function IxPaddingData(data, isFirst) {
+    let divID = "ixFirst";
+    if (!isFirst) divID = "ixSecond";
     let flag = true,
         inputs = $("#" + divID).find("input");
 
     $.each(inputs, function (index, item) {
         let name = $(item).attr("name").replace(/End|Last/, ""),
-            period = "period_end";
-        if (!flag) period = "period_last";
-        let value = data[name][period];
+            period = "period_end",
+            percent = "";
+
+        if (!flag) {
+            period = "period_last";
+            percent = "%"
+        }
+        let value = data[name][period] ? data[name][period] + percent : "";
         $(item).val(value);
         flag = !flag;
     });
+    let conclusion = data["conclusion"];
+    $("#" + divID + "Conclusion").val(conclusion);
 }
 
 //===============================================事件控制===============================================//
@@ -221,16 +232,25 @@ let firstChange = true,
 /**
  * 将事件`处理函数`绑定
  */
-function bindControlViii() {
-    let inputs1 = $("#viiiFirst").find("input"),
-        inputs2 = $("#viiiSecond").find("input");
+function bindControlIx() {
+    let inputs1 = $("#ixFirst").find("input"),
+        inputs2 = $("#ixSecond").find("input"),
+        conclusions = $("[id^=ix][id$=Conclusion]"),
+        flag = true;
 
     $.each(inputs1, function (index, item) {
-        $(item).attr("onchange", "RealNumber(this)");
+        let limit = "LimitPercent(this)";
+        if (flag) limit = "RealNumber(this)";
+        $(item).attr("onchange", limit);
+        flag = !flag;
+    });
+    flag = true;
+    $.each(inputs2, function (index, item) {
+        $(item).attr("onchange", "eventChangeIx(this)");
     });
 
-    $.each(inputs2, function (index, item) {
-        $(item).attr("onchange", "eventChangeViii(this)");
+    $.each(conclusions, function (index, item) {
+        $(item).attr("onkeyup", "illegalCharFilter(this)");
     });
 }
 
@@ -238,11 +258,16 @@ function bindControlViii() {
  * 用户输入数据改变事件响应函数
  * @param obj
  */
-function eventChangeViii(obj) {
-    RealNumber(obj);
+function eventChangeIx(obj) {
+    let name = $(obj).attr("name"),
+        isEnd = name.endsWith("End");
+
+    if (isEnd) RealNumber(obj);
+    else LimitPercent(obj);
+
     if (firstChange) {
-        let Data = viiiGetInput(false);
-        Data = Data["profit_statement_infos"];
+        let Data = ixGetInput(false);
+        Data = Data["ixSecond_infos"];
         for (let key in Data) {
             if (Data.hasOwnProperty(key)) {
                 periodEndData[key] = Data[key]["period_end"];
@@ -252,9 +277,8 @@ function eventChangeViii(obj) {
         firstChange = false;
     }
 
-    let name = $(obj).attr("name"),
-        isEnd = name.endsWith("End"),
-        value = parseFloat($(obj).val());
+
+    let value = parseFloat($(obj).val());
     name = name.replace(/End|Last/, "");
     if (isEnd) {
         periodEndData[name] = value;
@@ -280,7 +304,7 @@ function eventChangeViii(obj) {
     } else {
         periodLastData["营业利润"] = result;
     }
-    $("#viiiSecond").find("input[name=" + inputName + "]").val(result);
+    $("#ixSecond").find("input[name=" + inputName + "]").val(result);
 
     // 计算利润总额
     inputName = isEnd ? "利润总额End" : "利润总额Last";
@@ -294,7 +318,7 @@ function eventChangeViii(obj) {
     } else {
         periodLastData["利润总额"] = result;
     }
-    $("#viiiSecond").find("input[name=" + inputName + "]").val(result);
+    $("#ixSecond").find("input[name=" + inputName + "]").val(result);
 
     // 计算净利润
     inputName = isEnd ? "净利润End" : "净利润Last";
@@ -302,5 +326,5 @@ function eventChangeViii(obj) {
     result = 0;
     result += data.hasOwnProperty("利润总额") ? data["利润总额"] : result;
     result -= data.hasOwnProperty("所得税费用") ? data["所得税费用"] : result;
-    $("#viiiSecond").find("input[name=" + inputName + "]").val(result);
+    $("#ixSecond").find("input[name=" + inputName + "]").val(result);
 }
