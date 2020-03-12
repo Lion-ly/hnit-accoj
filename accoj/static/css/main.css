@@ -5,30 +5,16 @@
 #CompanyLawText dd {
     padding-left: 20px;
 }
-
-.ats-rock {
+/*主体和页尾之间的空白*/
+.acc-container-separate {
     height: 500px;
 }
-
-.ats-subject {
+/*练习题主体*/
+.acc-container-answer {
     margin-left: 4%;
     margin-right: 4%;
-    font-size: 16px;
 }
 
-.ats-subject input {
-    margin-top: 20px;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    width: 40px;
-    height: 16px;
-    text-align: center;
-}
-
-.ats-board {
-    margin: 20px 4%;
-}
 
 .ats-unmargin-tb {
     margin-top: 0;
