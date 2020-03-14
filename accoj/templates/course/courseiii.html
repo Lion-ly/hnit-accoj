@@ -15,26 +15,27 @@
                                 <li><a aria-label="Previous" href="#"> <span
                                         aria-hidden="true">&laquo;</span>
                                 </a></li>
-                                <li class="active" id="courseiii_split_li_1"><a onclick="courseiii_li_control(1)">1</a></li>
-                                <li id="courseiii_split_li_2"><a onclick="courseiii_li_control(2)">2</a></li>
-                                <li id="courseiii_split_li_3"><a onclick="courseiii_li_control(3)">3</a></li>
-                                <li id="courseiii_split_li_4"><a onclick="courseiii_li_control(4)">4</a></li>
-                                <li id="courseiii_split_li_5"><a onclick="courseiii_li_control(5)">5</a></li>
-                                <li id="courseiii_split_li_6"><a onclick="courseiii_li_control(6)">6</a></li>
-                                <li id="courseiii_split_li_7"><a onclick="courseiii_li_control(7)">7</a></li>
-                                <li id="courseiii_split_li_8"><a onclick="courseiii_li_control(8)">8</a></li>
-                                <li id="courseiii_split_li_9"><a onclick="courseiii_li_control(9)">9</a></li>
-                                <li id="courseiii_split_li_10"><a onclick="courseiii_li_control(10)">10</a></li>
-                                <li id="courseiii_split_li_11"><a onclick="courseiii_li_control(11)">11</a></li>
-                                <li id="courseiii_split_li_12"><a onclick="courseiii_li_control(12)">12</a></li>
-                                <li id="courseiii_split_li_13"><a onclick="courseiii_li_control(13)">13</a></li>
-                                <li id="courseiii_split_li_14"><a onclick="courseiii_li_control(14)">14</a></li>
-                                <li id="courseiii_split_li_15"><a onclick="courseiii_li_control(15)">15</a></li>
-                                <li id="courseiii_split_li_16"><a onclick="courseiii_li_control(16)">16</a></li>
-                                <li id="courseiii_split_li_17"><a onclick="courseiii_li_control(17)">17</a></li>
-                                <li id="courseiii_split_li_18"><a onclick="courseiii_li_control(18)">18</a></li>
-                                <li id="courseiii_split_li_19"><a onclick="courseiii_li_control(19)">19</a></li>
-                                <li id="courseiii_split_li_20"><a onclick="courseiii_li_control(20)">20</a></li>
+                                <li class="active" id="business_split_li_1"><a onclick="courseiii_li_control(1)">1</a>
+                                </li>
+                                <li id="business_split_li_2"><a onclick="courseiii_li_control(2)">2</a></li>
+                                <li id="business_split_li_3"><a onclick="courseiii_li_control(3)">3</a></li>
+                                <li id="business_split_li_4"><a onclick="courseiii_li_control(4)">4</a></li>
+                                <li id="business_split_li_5"><a onclick="courseiii_li_control(5)">5</a></li>
+                                <li id="business_split_li_6"><a onclick="courseiii_li_control(6)">6</a></li>
+                                <li id="business_split_li_7"><a onclick="courseiii_li_control(7)">7</a></li>
+                                <li id="business_split_li_8"><a onclick="courseiii_li_control(8)">8</a></li>
+                                <li id="business_split_li_9"><a onclick="courseiii_li_control(9)">9</a></li>
+                                <li id="business_split_li_10"><a onclick="courseiii_li_control(10)">10</a></li>
+                                <li id="business_split_li_11"><a onclick="courseiii_li_control(11)">11</a></li>
+                                <li id="business_split_li_12"><a onclick="courseiii_li_control(12)">12</a></li>
+                                <li id="business_split_li_13"><a onclick="courseiii_li_control(13)">13</a></li>
+                                <li id="business_split_li_14"><a onclick="courseiii_li_control(14)">14</a></li>
+                                <li id="business_split_li_15"><a onclick="courseiii_li_control(15)">15</a></li>
+                                <li id="business_split_li_16"><a onclick="courseiii_li_control(16)">16</a></li>
+                                <li id="business_split_li_17"><a onclick="courseiii_li_control(17)">17</a></li>
+                                <li id="business_split_li_18"><a onclick="courseiii_li_control(18)">18</a></li>
+                                <li id="business_split_li_19"><a onclick="courseiii_li_control(19)">19</a></li>
+                                <li id="business_split_li_20"><a onclick="courseiii_li_control(20)">20</a></li>
                                 <li><a aria-label="Next" href="#"> <span
                                         aria-hidden="true">&raquo;</span>
                                 </a></li>
@@ -44,16 +45,16 @@
                     <hr class="simple" style="color: #6f5499"/>
                     <!-- 业务一 -->
                     <div>
+                        <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
                         <h4>
-                            <span class="glyphicon glyphicon-bookmark"></span> <em id="em_3"></em>
-                            <span class="glyphicon glyphicon-ok" id="subject_submit_span"
+                            <span class="glyphicon glyphicon-bookmark"></span> <em id="em_no"></em>
+                            <span id="submit_status_span" class="glyphicon glyphicon-ok"
                                   style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
                         </h4>
                         <div class="acc-container-answer">
                             <blockquote>
-                                <label class="label label-success" id="business_type_3"></label>
-                                <p id="business_content_3">
-                                </p>
+                                <label id="business_type" class="label label-success"></label>
+                                <p id="business_content"></p>
                             </blockquote>
                         </div>
                         <div class="acc-container-answer">
@@ -349,7 +350,7 @@
                                                                         value="以前年度损益调整">
                                                     以前年度损益调整
                                                 </label> <label><input data-type="profitlossbox" type="checkbox"
-                                                                      value="管理费用">
+                                                                       value="管理费用">
                                                     管理费用
                                                 </label>
                                                 </div>

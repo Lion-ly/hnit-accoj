@@ -1,270 +1,285 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<script src="{{ url_for('static', filename='js/ajax/course/courseii.js') }}" charset="UTF-8"></script>
-<div class="courseBody">
-	<!-- 习题主体 -->
-	<div class="container">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span>1、理解六大会计要素及含义。<br /> 2、掌握会计等式，了解业务发生对会计等式的影响。
+    <script src="{{ url_for('static', filename='js/ajax/course/courseii.js') }}" charset="UTF-8"></script>
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+				<span>1、理解六大会计要素及含义。<br/> 2、掌握会计等式，了解业务发生对会计等式的影响。
 				</span>
-			</div>
-			<div class="panel-body">
-				<div style="text-align: center">
-					<nav aria-label="Page navigation">
-						<ul class="pagination">
-							<li><a href="#" aria-label="Previous"> <span
-									aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li id="courseii_split_li_1" class="active"><a onclick="courseii_li_control(1)" >1</a></li>
-							<li id="courseii_split_li_2"><a onclick="courseii_li_control(2)">2</a></li>
-							<li id="courseii_split_li_3"><a onclick="courseii_li_control(3)">3</a></li>
-							<li id="courseii_split_li_4"><a onclick="courseii_li_control(4)">4</a></li>
-							<li id="courseii_split_li_5"><a onclick="courseii_li_control(5)">5</a></li>
-							<li id="courseii_split_li_6"><a onclick="courseii_li_control(6)">6</a></li>
-							<li id="courseii_split_li_7"><a onclick="courseii_li_control(7)">7</a></li>
-							<li id="courseii_split_li_8"><a onclick="courseii_li_control(8)">8</a></li>
-							<li id="courseii_split_li_9"><a onclick="courseii_li_control(9)">9</a></li>
-							<li id="courseii_split_li_10"><a onclick="courseii_li_control(10)">10</a></li>
-							<li id="courseii_split_li_11"><a onclick="courseii_li_control(11)">11</a></li>
-							<li id="courseii_split_li_12"><a onclick="courseii_li_control(12)">12</a></li>
-							<li id="courseii_split_li_13"><a onclick="courseii_li_control(13)">13</a></li>
-							<li id="courseii_split_li_14"><a onclick="courseii_li_control(14)">14</a></li>
-							<li id="courseii_split_li_15"><a onclick="courseii_li_control(15)">15</a></li>
-							<li id="courseii_split_li_16"><a onclick="courseii_li_control(16)">16</a></li>
-							<li id="courseii_split_li_17"><a onclick="courseii_li_control(17)">17</a></li>
-							<li id="courseii_split_li_18"><a onclick="courseii_li_control(18)">18</a></li>
-							<li id="courseii_split_li_19"><a onclick="courseii_li_control(19)">19</a></li>
-							<li id="courseii_split_li_20"><a onclick="courseii_li_control(20)">20</a></li>
-							<li><a href="#" aria-label="Next"> <span
-									aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
-				</div>
-				<hr class="simple" style="color: #6f5499"/>
-				<!-- 业务一 -->
-				<div>
-                    <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
-					<h4>
-						<span class="glyphicon glyphicon-bookmark"></span> <em id="em_2"></em>
-                        <span id="key_element_submit_span" class="glyphicon glyphicon-ok" style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
-					</h4>
-					<div class="acc-container-answer">
-						<blockquote>
-							<label id="business_type_2" class="label label-success"></label>
-							<p id="business_content_2">
-							</p>
-						</blockquote>
-					</div>
-					<div class="acc-container-answer">
-						<div style="">
-							<p class="acc-title">1、会计要素及增减金额</p>
-						</div>
+                </div>
+                <div class="panel-body">
+                    <div style="text-align: center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"> <span
+                                        aria-hidden="true">&laquo;</span>
+                                </a></li>
+                                <li id="business_split_li_1" class="active"><a onclick="courseii_li_control(1)">1</a>
+                                </li>
+                                <li id="business_split_li_2"><a onclick="courseii_li_control(2)">2</a></li>
+                                <li id="business_split_li_3"><a onclick="courseii_li_control(3)">3</a></li>
+                                <li id="business_split_li_4"><a onclick="courseii_li_control(4)">4</a></li>
+                                <li id="business_split_li_5"><a onclick="courseii_li_control(5)">5</a></li>
+                                <li id="business_split_li_6"><a onclick="courseii_li_control(6)">6</a></li>
+                                <li id="business_split_li_7"><a onclick="courseii_li_control(7)">7</a></li>
+                                <li id="business_split_li_8"><a onclick="courseii_li_control(8)">8</a></li>
+                                <li id="business_split_li_9"><a onclick="courseii_li_control(9)">9</a></li>
+                                <li id="business_split_li_10"><a onclick="courseii_li_control(10)">10</a></li>
+                                <li id="business_split_li_11"><a onclick="courseii_li_control(11)">11</a></li>
+                                <li id="business_split_li_12"><a onclick="courseii_li_control(12)">12</a></li>
+                                <li id="business_split_li_13"><a onclick="courseii_li_control(13)">13</a></li>
+                                <li id="business_split_li_14"><a onclick="courseii_li_control(14)">14</a></li>
+                                <li id="business_split_li_15"><a onclick="courseii_li_control(15)">15</a></li>
+                                <li id="business_split_li_16"><a onclick="courseii_li_control(16)">16</a></li>
+                                <li id="business_split_li_17"><a onclick="courseii_li_control(17)">17</a></li>
+                                <li id="business_split_li_18"><a onclick="courseii_li_control(18)">18</a></li>
+                                <li id="business_split_li_19"><a onclick="courseii_li_control(19)">19</a></li>
+                                <li id="business_split_li_20"><a onclick="courseii_li_control(20)">20</a></li>
+                                <li><a href="#" aria-label="Next"> <span
+                                        aria-hidden="true">&raquo;</span>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <hr class="simple" style="color: #6f5499"/>
+                    <!-- 业务一 -->
+                    <div>
+                        <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
+                        <h4>
+                            <span class="glyphicon glyphicon-bookmark"></span> <em id="em_no"></em>
+                            <span id="submit_status_span" class="glyphicon glyphicon-ok"
+                                  style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
+                        </h4>
+                        <div class="acc-container-answer">
+                            <blockquote>
+                                <label id="business_type" class="label label-success"></label>
+                                <p id="business_content"></p>
+                            </blockquote>
+                        </div>
+                        <div class="acc-container-answer">
+                            <div style="">
+                                <p class="acc-title">1、会计要素及增减金额</p>
+                            </div>
 
-						<form class="" id="courseii-1-1">
-							<label class="sr-only" for="assets"></label>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                            <form class="" id="courseii-1-1">
+                                <label class="sr-only" for="assets"></label>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check1">
 									</span>
-									<div class="input-group-addon">资产</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" name="+资产" id="key_elem1"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                        <div class="input-group-addon">资产</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="+资产" id="key_elem1"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check2">
 									</span>
-									<div class="input-group-addon">资产</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" name="-资产" id="key_elem2"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
+                                        <div class="input-group-addon">资产</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="-资产" id="key_elem2"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
 
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check3">
 									</span>
-									<div class="input-group-addon">负债</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" name="+负债" id="key_elem3"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                        <div class="input-group-addon">负债</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="+负债" id="key_elem3"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check4">
 									</span>
-									<div class="input-group-addon">负债</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" name="-负债" id="key_elem4"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
+                                        <div class="input-group-addon">负债</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="-负债" id="key_elem4"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
 
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check5">
 									</span>
-									<div class="input-group-addon">收入</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" name="+收入" id="key_elem5"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                        <div class="input-group-addon">收入</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="+收入" id="key_elem5"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check6">
 									</span>
-									<div class="input-group-addon">收入</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" name="-收入" id="key_elem6"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
+                                        <div class="input-group-addon">收入</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="-收入" id="key_elem6"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
 
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check7">
 									</span>
-									<div class="input-group-addon">费用</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" name="+费用" id="key_elem7"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                        <div class="input-group-addon">费用</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="+费用" id="key_elem7"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check8">
 									</span>
-									<div class="input-group-addon">费用</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" name="-费用" id="key_elem8"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
+                                        <div class="input-group-addon">费用</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="-费用" id="key_elem8"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
 
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check9">
 									</span>
-									<div class="input-group-addon">利润</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" name="+利润" id="key_elem9"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                        <div class="input-group-addon">利润</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="+利润" id="key_elem9"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check10">
 									</span>
-									<div class="input-group-addon">利润</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" name="-利润" id="key_elem10"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
+                                        <div class="input-group-addon">利润</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="-利润" id="key_elem10"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
 
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check11">
 									</span>
-									<div class="input-group-addon">所有者权益</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></div>
-									<input type="text" class="form-control  input-sm" name="+所有者权益" id="key_elem11"
-										placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-							<div class="form-group col-xs-12 col-sm-6 col-md-6">
-								<div class="input-group">
+                                        <div class="input-group-addon">所有者权益</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-plus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="+所有者权益" id="key_elem11"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group">
 									<span class="input-group-addon">
                                         <input class="form-check-input" type="checkbox" id="check12">
 									</span>
-									<div class="input-group-addon">所有者权益</div>
-									<div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></div>
-									<input type="text" class="form-control  input-sm" name="-所有者权益" id="key_elem12"
-                                           placeholder="0.0" onkeyup="limit_number(this)">
-									<div class="input-group-addon">￥</div>
-								</div>
-							</div>
-                        </form>
+                                        <div class="input-group-addon">所有者权益</div>
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-minus"></span>
+                                        </div>
+                                        <input type="text" class="form-control  input-sm" name="-所有者权益" id="key_elem12"
+                                               placeholder="0.0" onchange="RealNumber(this)">
+                                        <div class="input-group-addon">￥</div>
+                                    </div>
+                                </div>
+                            </form>
 
-                        <form>
-							<div style="clear: both;">
-								<p class="acc-title">2、属于对会计等式“资产=负债+所有者权益”影响的哪种类型？</p>
-							</div>
-							<div class="radio">
-								<!-- aer = AccountingEquationRadio : 会计等式单选框-->
-								<label> <input type="radio" name="aer" id="aer1"
-									value=1 checked> <span>引起资产项目内部此增彼减，增减金额相等。</span>
-								</label>
-							</div>
-							<div class="radio">
-								<label> <input type="radio" name="aer" id="aer2"
-									value=2> <span>引起负债与所有者权益项目内部此增彼减，增减金额相等。</span>
-								</label>
-							</div>
-							<div class="radio">
-								<label> <input type="radio" name="aer" id="aer3"
-									value=3> <span>引起资产和负债与所有者权益项目同时增加，增加的金额相等。</span>
-								</label>
-							</div>
-							<div class="radio ">
-								<label> <input type="radio" name="aer" id="aer4"
-									value=4> <span>引起资产和负债与所有者权益项目同时减少，减少的金额相等。</span>
-								</label>
-							</div>
-                            <div class="radio ">
-								<label> <input type="radio" name="aer" id="aer0"
-									value=0> <span>无（难以判别）。</span>
-								</label>
-							</div>
-						</form>
-					</div>
-					<hr class="simple" style="clear: both;color: #6f5499"/>
-                    <div id="course_ii_message"></div>
-					<div style="text-align: right">
-                        <button type="button" class="btn btn-info" id="save_key_element_button" onclick="save_key_element()">
-							<span class="glyphicon"></span>&nbsp;保存
-						</button>
-						<button type="button" class="btn btn-success" id="confirm_key_element_button" onclick="confirm_key_element()">
-							<span class="glyphicon"></span>&nbsp;提交
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                            <form>
+                                <div style="clear: both;">
+                                    <p class="acc-title">2、属于对会计等式“资产=负债+所有者权益”影响的哪种类型？</p>
+                                </div>
+                                <div class="radio">
+                                    <!-- aer = AccountingEquationRadio : 会计等式单选框-->
+                                    <label> <input type="radio" name="aer" id="aer1"
+                                                   value=1 checked> <span>引起资产项目内部此增彼减，增减金额相等。</span>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label> <input type="radio" name="aer" id="aer2"
+                                                   value=2> <span>引起负债与所有者权益项目内部此增彼减，增减金额相等。</span>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label> <input type="radio" name="aer" id="aer3"
+                                                   value=3> <span>引起资产和负债与所有者权益项目同时增加，增加的金额相等。</span>
+                                    </label>
+                                </div>
+                                <div class="radio ">
+                                    <label> <input type="radio" name="aer" id="aer4"
+                                                   value=4> <span>引起资产和负债与所有者权益项目同时减少，减少的金额相等。</span>
+                                    </label>
+                                </div>
+                                <div class="radio ">
+                                    <label> <input type="radio" name="aer" id="aer0"
+                                                   value=0> <span>无（难以判别）。</span>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                        <hr class="simple" style="clear: both;color: #6f5499"/>
+                        <div id="course_ii_message"></div>
+                        <div style="text-align: right">
+                            <button type="button" class="btn btn-info" id="save_key_element_button"
+                                    onclick="save_key_element()">
+                                <span class="glyphicon"></span>&nbsp;保存
+                            </button>
+                            <button type="button" class="btn btn-success" id="confirm_key_element_button"
+                                    onclick="confirm_key_element()">
+                                <span class="glyphicon"></span>&nbsp;提交
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- 防尾前移 -->
-<div class="acc-container-separate"></div>
+    <!-- 防尾前移 -->
+    <div class="acc-container-separate"></div>
 
 
 {% endblock courseBody %}

@@ -1,6 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
-    get_subject_info(1);
+    getBusinessList();
+    get_subject_info();
 });
 //==================================提交会计科目信息==================================//
 let now_business_no = 1;
@@ -25,25 +26,9 @@ function save_subject() {
  */
 function submit_subject_info(submit_type) {
 
-    let business_no = now_business_no,
-        subject_infos = Array(),
-        right_box = $("#plusbox"),
-        left_box = $("#minusbox"),
-        right_input = right_box.children().children(":input"),
-        left_input = left_box.children().children(":input"),
-        right_inputLen = right_input.length,
-        left_inputLen = left_input.length,
-        is_up = true;
-    for (let i = 0; i < right_inputLen; i++) {
-        let subject = $(right_input[i]).val();
-        subject_infos.push({"subject": subject, "is_up": is_up});
-    }
-    is_up = false;
-    for (let i = 0; i < left_inputLen; i++) {
-        let subject = $(left_input[i]).val();
-        subject_infos.push({"subject": subject, "is_up": is_up});
-    }
-    let data = {"subject_infos": subject_infos, "business_no": business_no, "submit_type": submit_type};
+    let data = iiiGetInput();
+    data["submit_type"] = submit_type;
+
     data = JSON.stringify(data);
 
     // 提交数据
@@ -55,7 +40,7 @@ function submit_subject_info(submit_type) {
 }
 
 //==================================获取会计要素信息==================================//
-let business_list; // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+let subject_infos = Array(); // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
 /**
  * 从后端获取会计要素信息
  */
@@ -64,8 +49,8 @@ function get_subject_info() {
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-    // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
+    // 若subject_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
+    if (subject_infos.length > 0 && subject_infos[now_business_no - 1]["confirmed"]) {
         map_subject_info();
         return;
     }
@@ -85,64 +70,64 @@ function get_subject_info() {
  */
 function map_subject_info(data) {
     data = data ? data : "";
-    business_list = data ? data["business_list"] : business_list;
+    subject_infos = data ? data["subject_infos"] : subject_infos;
 
-    let business_index = now_business_no - 1;
+    let business_index = now_business_no - 1,
+        confirmed = subject_infos[business_index]["confirmed"],
+        saved = subject_infos[business_index]["saved"];
 
     // 先清空box
     clear_box();
-    if (business_index === -1) return;
+    if (now_business_no < 0 || now_business_no > 20) return;
 
-    let content = business_list[business_index]["content"],
-        business_type = business_list[business_index]["business_type"],
-        confirmed = business_list[business_index]["confirmed"],
-        saved = business_list[business_index]["saved"],
-        subject_infos = business_list[business_index]["subject_infos"],
-        em_no = business_index + 1;
-    // 填充业务编号
-    em_no = em_no < 10 ? "0" + em_no : em_no;
-    $("#em_3").text(em_no);
-    // 填充活动类型
-    let business_type_3 = $("#business_type_3");
-    business_type_3.removeClass();
-    let business_type_class = "label label-" + "success"; //  初始化为筹资活动
-    if (business_type === "投资活动") {
-        business_type_class = "label label-" + "info";
-    } else if (business_type === "经营活动") {
-        business_type_class = "label label-" + "warning";
+    // `完成状态`标签控制
+    spanStatusCtr(confirmed, saved, "submit_status_span");
+
+    // 如果已保存
+    if (saved) iiiPaddingData(subject_infos[business_index]);
+}
+
+// ===============================获取和填充数据===============================//
+/**
+ * 获取数据
+ * @returns {Object}
+ */
+function iiiGetInput() {
+    let business_no = now_business_no,
+        subject_infos = Array(),
+        right_box = $("#plusbox"),
+        left_box = $("#minusbox"),
+        right_input = right_box.children().children(":input"),
+        left_input = left_box.children().children(":input"),
+        right_inputLen = right_input.length,
+        left_inputLen = left_input.length,
+        is_up = true,
+        data;
+    for (let i = 0; i < right_inputLen; i++) {
+        let subject = $(right_input[i]).val();
+        subject_infos.push({"subject": subject, "is_up": is_up});
     }
-    business_type_3.addClass(business_type_class);
-    business_type_3.text(business_type);
-
-    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let subject_submit_span = $("#subject_submit_span");
-    if (confirmed || saved) {
-        // 初始化为saved
-        let span_text = "已保存",
-            span_color = "#5bc0de";
-        if (confirmed) {
-            span_text = "已完成";
-            span_color = "#5cb85c";
-        }
-        subject_submit_span.css("color", span_color);
-        subject_submit_span.text(span_text);
-        subject_submit_span.show();
-    } else {
-        subject_submit_span.hide();
+    is_up = false;
+    for (let i = 0; i < left_inputLen; i++) {
+        let subject = $(left_input[i]).val();
+        subject_infos.push({"subject": subject, "is_up": is_up});
     }
-    // 填充业务内容
-    $("#business_content_3").text(content);
+    data = {"subject_infos": subject_infos, "business_no": business_no};
+    return data;
+}
 
+/**
+ * 填充数据
+ * @param data
+ */
+function iiiPaddingData(data) {
     // 填充会计科目信息
-    if (!subject_infos || !subject_infos.length) {
-        // 科目信息为空则返回
-        return;
-    }
-    let rightbox_subject_array = Array();
-    let leftbox_subject_array = Array();
-    for (let i = 0; i < subject_infos.length; i++) {
-        let subject = subject_infos[i]["subject"],
-            is_up = subject_infos[i]["is_up"];
+    let subject_info = data["subject_info"],
+        rightbox_subject_array = Array(),
+        leftbox_subject_array = Array();
+    for (let i = 0; i < subject_info.length; i++) {
+        let subject = subject_info[i]["subject"],
+            is_up = subject_info[i]["is_up"];
         if (is_up) {
             rightbox_subject_array.push(subject);
         } else {
@@ -159,12 +144,8 @@ function map_subject_info(data) {
  * 分页标签li的激活状态控制
  */
 function courseiii_li_control(business_no) {
-    // 移除激活的li的.active
-    $("li[id^=courseiii_split_li][class=active]").removeClass("active");
-    let add_li_id = "courseiii_split_li_" + business_no;
-    // 给当前li添加.active
-    $("#" + add_li_id).addClass("active");
-    now_business_no = business_no;
+    now_business_no = parseInt(business_no);
+    businessLiControl(business_no);
     get_subject_info();
 }
 

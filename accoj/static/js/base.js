@@ -1,3 +1,4 @@
+let business_list = Array();
 /*	@ 导航当前位置
  *  # courseBase
  *	? 控制导航栏的active，确定当前处于导航栏的位置
@@ -342,7 +343,7 @@ function get_info(data, url, successFunc, messageDivID) {
     })
 }
 
-//==================================获取信息==================================//
+//==================================提交状态标签控制==================================//
 function spanStatusCtr(confirmed, saved, spanID) {
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
 
@@ -361,6 +362,51 @@ function spanStatusCtr(confirmed, saved, spanID) {
     } else {
         $span.hide();
     }
+}
+
+//==================================获取业务列表==================================//
+function getBusinessList() {
+    function successFunc(data) {
+        business_list = data["business_list"];
+        businessLiControl(1);
+    }
+
+    get_info({}, "/get_business_list", successFunc, "");
+}
+
+//==================================业务分页控制==================================//
+/**
+ * 业务分页标签li的激活状态控制
+ */
+function businessLiControl(business_no) {
+    // 移除激活的li的.active
+    $("li[id^=business_split_li][class=active]").removeClass("active");
+    let add_li_id = "business_split_li_" + business_no;
+    // 给当前li添加.active
+    $("#" + add_li_id).addClass("active");
+    // 填充业务信息
+    business_no = parseInt(business_no);
+    let business_index = business_no - 1,
+        content = business_list[business_index]["content"],
+        business_type = business_list[business_index]["business_type"];
+    let em_no = business_index + 1;
+    // 填充业务编号
+    em_no = em_no < 10 ? "0" + em_no : em_no;
+    $("#em_no").text(em_no);
+    // 填充活动类型
+    let $business_type = $("#business_type");
+    $business_type.removeClass();
+    let business_class = "label label-" + "success"; //  初始化为筹资活动
+    if (business_type === "投资活动") {
+        business_class = "label label-" + "info";
+    } else if (business_type === "经营活动") {
+        business_class = "label label-" + "warning";
+    }
+    $business_type.addClass(business_class);
+    $business_type.text(business_type);
+
+    // 填充业务内容
+    $("#business_content").text(content);
 }
 
 /**

@@ -30,36 +30,9 @@ function save_ledger() {
  * @param submit_type confirm or save
  */
 function submit_ledger_info(submit_type) {
-    let is_left = $("li.active[id^=coursevli]").attr("id").startsWith("coursevli_left"),  //  是否为左T表
-        opening_balance = $("input[name=opening_balance]").val(),       //  期初余额
-        current_amount_dr = $("input[name=current_amount_dr]").val(),   //  本期发生额借记方
-        current_amount_cr = $("input[name=current_amount_cr]").val(),   //  本期发生额贷记方
-        ending_balance = $("input[name=ending_balance]").val();         //  期末余额
+    let data = vGetInput();
+    data["submit_type"] = submit_type;
 
-    let dr_array = Array(),     //  借方信息列表
-        cr_array = Array();     //  贷方信息列表
-    $("input[name=dr]").each(function () {
-        let business_no = $(this).parent().prev().children().val(),
-            money = $(this).val();
-        dr_array.push({"business_no": business_no, "money": money});
-    });
-    $("input[name=cr]").each(function () {
-        let business_no = $(this).parent().prev().children().val(),
-            money = $(this).val();
-        cr_array.push({"business_no": business_no, "money": money});
-    });
-
-    let ledger_info = {
-        "subject": $("#coursev_select").val(),      //  科目
-        "is_left": is_left,
-        "opening_balance": opening_balance,
-        "current_amount_dr": current_amount_dr,
-        "current_amount_cr": current_amount_cr,
-        "ending_balance": ending_balance,
-        "dr": dr_array,
-        "cr": cr_array
-    };
-    let data = {"ledger_info": ledger_info, "submit_type": submit_type};
     data = JSON.stringify(data);
 
     // 提交数据
@@ -135,7 +108,72 @@ function map_ledger_info(data) {
         // 账户信息为空则返回
         return;
     }
-    let confirmed = ledger_info["confirmed"],
+
+    vPaddingData(ledger_info);
+}
+
+//================================删除账户信息================================//
+function delete_ledger_info(subject) {
+    // 获取数据
+    let data = {"subject": subject};
+    data = JSON.stringify(data);
+    let url = "/delete_ledger_info",
+        successFunc = function () {
+        },
+        messageDivID = "course_v_message";
+    get_info(data, url, successFunc, messageDivID);
+
+}
+
+// ===============================获取和填充数据===============================//
+/**
+ * 获取数据
+ * @returns {Object}
+ */
+function vGetInput() {
+    let is_left = $("li.active[id^=coursevli]").attr("id").startsWith("coursevli_left"),  //  是否为左T表
+        opening_balance = $("input[name=opening_balance]").val(),       //  期初余额
+        current_amount_dr = $("input[name=current_amount_dr]").val(),   //  本期发生额借记方
+        current_amount_cr = $("input[name=current_amount_cr]").val(),   //  本期发生额贷记方
+        ending_balance = $("input[name=ending_balance]").val(),         //  期末余额
+        data;
+
+    let dr_array = Array(),     //  借方信息列表
+        cr_array = Array();     //  贷方信息列表
+    $("input[name=dr]").each(function () {
+        let business_no = $(this).parent().prev().children().val(),
+            money = $(this).val();
+        dr_array.push({"business_no": business_no, "money": money});
+    });
+    $("input[name=cr]").each(function () {
+        let business_no = $(this).parent().prev().children().val(),
+            money = $(this).val();
+        cr_array.push({"business_no": business_no, "money": money});
+    });
+
+    let ledger_info = {
+        "subject": $("#coursev_select").val(),      //  科目
+        "is_left": is_left,
+        "opening_balance": opening_balance,
+        "current_amount_dr": current_amount_dr,
+        "current_amount_cr": current_amount_cr,
+        "ending_balance": ending_balance,
+        "dr": dr_array,
+        "cr": cr_array
+    };
+    data = {"ledger_info": ledger_info};
+
+    return data;
+}
+
+/**
+ * 填充数据
+ * @param data
+ */
+function vPaddingData(data) {
+
+    let ledger_info = data;
+        confirmed = ledger_info["confirmed"],
         saved = ledger_info["saved"],
         is_left = ledger_info["is_left"],
         opening_balance = ledger_info["opening_balance"],
@@ -144,7 +182,6 @@ function map_ledger_info(data) {
         ending_balance = ledger_info["ending_balance"],
         dr_array = ledger_info["dr"],
         cr_array = ledger_info["cr"];
-
     //  移除旧表
     $("[id=ttableLeft], [id=ttableRight]").remove();
     //  创建新表
@@ -194,18 +231,6 @@ function map_ledger_info(data) {
         }
         now_active_li.children().css("color", li_color);
     }
-}
-
-//================================删除账户信息================================//
-function delete_ledger_info(subject) {
-    // 获取数据
-    let data = {"subject": subject};
-    data = JSON.stringify(data);
-    let url = "/delete_ledger_info",
-        successFunc = function(){},
-        messageDivID = "course_v_message";
-    get_info(data, url, successFunc, messageDivID);
-
 }
 
 //==================================事件控制==================================//

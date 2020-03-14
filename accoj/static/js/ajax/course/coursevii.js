@@ -1,22 +1,19 @@
 // 正确答案中包含的所有科目列表
-let involve_subjects = Array(),
-    business_list = Array();
+let involve_subjects = Array();
 // 页面加载完成填充数据
 $(document).ready(function () {
-    get_business_list();
+    get_involve_subjects();
     get_subsidiary_account_info();
 });
 
 /**
  * 获取业务内容信息列表
  */
-function get_business_list() {
+function get_involve_subjects() {
     function successFunc(data) {
-        business_list = data["business_list"];
         involve_subjects = data["involve_subjects"];
-        let firstOption = true,
-            dateNow = new Date();
-        $("#yearNow").val(dateNow.getFullYear());
+        let firstOption = true;
+
         $.each(involve_subjects, function (index, item) {
             $("#anchorOption").before("<option>" + item + "</option>");
             if (firstOption) {
@@ -24,7 +21,6 @@ function get_business_list() {
                 firstOption = false;
             }
         });
-        coursevii_li_control(1);
     }
 
     // 获取数据
@@ -51,51 +47,9 @@ function save_subsidiary_account() {
  * @param submit_type confirm or save
  */
 function submit_subsidiary_account_info(submit_type) {
-    let subject = $("#subjectSelect").val();
-    // 获取明细账数据
-    let subsidiary_account_info = Array(),
-        year = $("#yearNow").val();
-    $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
-        let thisInput = $(this).find("input"),
-            index = 0,
-            month = $(thisInput[index++]).val(),
-            day = $(thisInput[index++]).val(),
-            word = $(thisInput[index++]).val(),
-            no = $(thisInput[index++]).val(),
-            summary = $(thisInput[index++]).val(),
-            dr_money = "",
-            cr_money = "";
-        for (; index < 25; index++) {
-            let money = $(thisInput[index]).val();
-            dr_money += index < 15 ? money : "";
-            cr_money += index < 15 ? "" : money;
-        }
-        let orientation = $(thisInput[index++]).val(),
-            balance_money = "";
-        for (; index < 36; index++) {
-            balance_money += $(thisInput[index]);
-        }
-        let date = year + "-" + month + "-" + day;
-        dr_money = dr_money ? parseFloat(dr_money) / 100 : dr_money;
-        cr_money = cr_money ? parseFloat(cr_money) / 100 : cr_money;
-        balance_money = balance_money ? parseFloat(balance_money) / 100 : balance_money;
-        subsidiary_account_info.push({
-            "date": date,
-            "word": word,
-            "no": no,
-            "summary": summary,
-            "dr_money": dr_money,
-            "cr_money": cr_money,
-            "orientation": orientation,
-            "balance_money": balance_money
-        })
-    });
 
-    let data = {
-        "subsidiary_account_info": subsidiary_account_info,
-        "submit_type": submit_type,
-        "subject": subject,
-    };
+    let data = vii1GetInput();
+    data["submit_type"] = submit_type;
     data = JSON.stringify(data);
     // 提交数据
     let url = "/submit_subsidiary_account_info",
@@ -153,8 +107,6 @@ function map_subsidiary_account_info(data) {
             $(this).val("");
         }
     });
-    let confirmed = subsidiary_account_confirmed.indexOf(subject) !== -1,
-        saved = subsidiary_account_saved.indexOf(subject) !== -1;
     // 将option染色
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
         let $options = $("#subjectSelect").children();
@@ -170,22 +122,20 @@ function map_subsidiary_account_info(data) {
         });
     }
 
-    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let subsidiary_account_submit_span = $("#subsidiary_account_submit_span");
+    let confirmed = subsidiary_account_confirmed.indexOf(subject) !== -1,
+        saved = subsidiary_account_saved.indexOf(subject) !== -1;
+
+    // `完成状态`标签控制
+    spanStatusCtr(confirmed, saved, "subsidiary_account_submit_span");
+
     if (confirmed || saved) {
         // 初始化为saved
-        let span_text = "已保存",
-            span_color = "#5bc0de";
+        let span_color = "#5bc0de";
         if (confirmed) {
-            span_text = "已完成";
             span_color = "#5cb85c";
         }
         $("#subjectSelect").css("color", span_color);
-        subsidiary_account_submit_span.css("color", span_color);
-        subsidiary_account_submit_span.text(span_text);
-        subsidiary_account_submit_span.show();
     } else {
-        subsidiary_account_submit_span.hide();
         $("#subjectSelect").css("color", "#555");
     }
 
@@ -196,6 +146,151 @@ function map_subsidiary_account_info(data) {
         // 明细账信息为空则返回
         return;
     }
+    vii1PaddingData(subsidiary_account_info);
+
+}
+
+//==================================提交科目余额表信息==================================//
+
+/**
+ * 将处理函数绑定到模态框的确认提交按钮
+ */
+function confirm_acc_balance_sheet() {
+    bind_confirm_info("confirm_acc_balance_sheet_button", "submit_acc_balance_sheet_info");
+}
+
+/**
+ * 保存科目余额表信息
+ */
+function save_acc_balance_sheet() {
+    bind_save_info("save_acc_balance_sheet_button", submit_acc_balance_sheet_info);
+}
+
+
+/**
+ * 提交科目余额表信息
+ * @param submit_type confirm or save
+ */
+function submit_acc_balance_sheet_info(submit_type) {
+    let data = vii2GetInput();
+    data["submit_type"] = submit_type;
+
+    data = JSON.stringify(data);
+
+    // 提交数据
+    let url = "/submit_acc_balance_sheet_info",
+        messageDivID = "course_vii2_message",
+        successFunc = get_acc_balance_sheet_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+}
+
+//==================================获取科目余额表信息==================================//
+let acc_balance_sheet_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
+    acc_balance_sheet_confirmed = "",
+    acc_balance_sheet_saved = "";
+
+/**
+ * 从后端获取科目余额表信息
+ */
+function get_acc_balance_sheet_info() {
+
+    // 若acc_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
+    if (acc_balance_sheet_infos && acc_balance_sheet_confirmed) {
+        map_acc_balance_sheet_info();
+        return;
+    }
+
+    //  获取数据
+    let data = {},
+        url = "/get_acc_balance_sheet_info",
+        successFunc = map_acc_balance_sheet_info,
+        messageDivID = "course_vii2_message";
+    get_info(data, url, successFunc, messageDivID);
+
+}
+
+//==================================将科目余额表信息映射到前端==================================//
+/**
+ * 将数据映射到前端
+ */
+function map_acc_balance_sheet_info(data) {
+    data = data ? data : "";
+    acc_balance_sheet_infos = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_infos;
+    acc_balance_sheet_confirmed = data ? data["acc_balance_sheet_confirmed"] : acc_balance_sheet_confirmed;
+    acc_balance_sheet_saved = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_saved;
+    // 先重置科目余额表信息
+    $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
+    $("input").val("");
+
+    // `完成状态`标签控制
+    spanStatusCtr(acc_balance_sheet_confirmed, acc_balance_sheet_saved, "acc_balance_sheet_submit_span");
+
+    if (!acc_balance_sheet_infos) return;
+    vii2PaddingData(acc_balance_sheet_infos);
+}
+
+// ===============================获取和填充数据===============================//
+/**
+ * 获取数据
+ * @returns {Object}
+ */
+function vii1GetInput() {
+    // 获取明细账数据
+    let subject = $("#subjectSelect").val(),
+        subsidiary_account_info = Array(),
+        year = $("#yearNow").val(),
+        data;
+    $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
+        let thisInput = $(this).find("input"),
+            index = 0,
+            month = $(thisInput[index++]).val(),
+            day = $(thisInput[index++]).val(),
+            word = $(thisInput[index++]).val(),
+            no = $(thisInput[index++]).val(),
+            summary = $(thisInput[index++]).val(),
+            dr_money = "",
+            cr_money = "";
+        for (; index < 25; index++) {
+            let money = $(thisInput[index]).val();
+            dr_money += index < 15 ? money : "";
+            cr_money += index < 15 ? "" : money;
+        }
+        let orientation = $(thisInput[index++]).val(),
+            balance_money = "";
+        for (; index < 36; index++) {
+            balance_money += $(thisInput[index]);
+        }
+        let date = year + "-" + month + "-" + day;
+        dr_money = dr_money ? parseFloat(dr_money) / 100 : dr_money;
+        cr_money = cr_money ? parseFloat(cr_money) / 100 : cr_money;
+        balance_money = balance_money ? parseFloat(balance_money) / 100 : balance_money;
+        subsidiary_account_info.push({
+            "date": date,
+            "word": word,
+            "no": no,
+            "summary": summary,
+            "dr_money": dr_money,
+            "cr_money": cr_money,
+            "orientation": orientation,
+            "balance_money": balance_money
+        })
+    });
+
+    data = {
+        "subsidiary_account_info": subsidiary_account_info,
+        "subject": subject,
+    };
+
+    return data;
+}
+
+/**
+ * 填充数据
+ * @param data
+ */
+function vii1PaddingData(data) {
+    // 填充明细账数据
+    let subsidiary_account_info = data;
     // 添加行
     let firstPeriod = true;
     period1Vii1Row = 3;
@@ -269,29 +364,14 @@ function map_subsidiary_account_info(data) {
     });
 }
 
-//==================================提交科目余额表信息==================================//
-
 /**
- * 将处理函数绑定到模态框的确认提交按钮
+ * 获取数据
+ * @returns {Object}
  */
-function confirm_acc_balance_sheet() {
-    bind_confirm_info("confirm_acc_balance_sheet_button", "submit_acc_balance_sheet_info");
-}
-
-/**
- * 保存科目余额表信息
- */
-function save_acc_balance_sheet() {
-    bind_save_info("save_acc_balance_sheet_button", submit_acc_balance_sheet_info);
-}
-
-
-/**
- * 提交科目余额表信息
- * @param submit_type confirm or save
- */
-function submit_acc_balance_sheet_info(submit_type) {
-    let acc_balance_sheet_infos = Array();
+function vii2GetInput() {
+    // 获取科目余额表数据
+    let acc_balance_sheet_infos = Array(),
+        data;
 
     $("[id^=vii2Row]").each(function () {
         let thisInputs = $(this).find("input"),
@@ -315,76 +395,17 @@ function submit_acc_balance_sheet_info(submit_type) {
         })
     });
 
-    let data = {
-        "acc_balance_sheet_infos": acc_balance_sheet_infos,
-        "submit_type": submit_type
-    };
-    data = JSON.stringify(data);
-
-    // 提交数据
-    let url = "/submit_acc_balance_sheet_info",
-        messageDivID = "course_vii2_message",
-        successFunc = get_acc_balance_sheet_info;
-    submit_info(submit_type, url, data, messageDivID, successFunc);
+    data = {"acc_balance_sheet_infos": acc_balance_sheet_infos};
+    return data;
 }
 
-//==================================获取科目余额表信息==================================//
-let acc_balance_sheet_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    acc_balance_sheet_confirmed,
-    acc_balance_sheet_saved;
-
 /**
- * 从后端获取科目余额表信息
+ * 填充数据
+ * @param data
  */
-function get_acc_balance_sheet_info() {
-
-    // 若acc_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
-    if (acc_balance_sheet_infos && acc_balance_sheet_confirmed) {
-        map_acc_balance_sheet_info();
-        return;
-    }
-
-    //  获取数据
-    let data = {},
-        url = "/get_acc_balance_sheet_info",
-        successFunc = map_acc_balance_sheet_info,
-        messageDivID = "course_vii2_message";
-    get_info(data, url, successFunc, messageDivID);
-
-}
-
-//==================================将科目余额表信息映射到前端==================================//
-/**
- * 将数据映射到前端
- */
-function map_acc_balance_sheet_info(data) {
-    data = data ? data : "";
-    acc_balance_sheet_infos = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_infos;
-    acc_balance_sheet_confirmed = data ? data["acc_balance_sheet_confirmed"] : acc_balance_sheet_confirmed;
-    acc_balance_sheet_saved = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_saved;
-    // 先重置科目余额表信息
-    $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
-    $("input").val("");
-    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let confirmed = acc_balance_sheet_confirmed,
-        saved = acc_balance_sheet_saved,
-        acc_balance_sheet_submit_span = $("#acc_balance_sheet_submit_span");
-    if (confirmed || saved) {
-        // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
-        if (confirmed) {
-            span_text = "已完成";
-            span_color = "#5cb85c";
-        }
-        acc_balance_sheet_submit_span.css("color", span_color);
-        acc_balance_sheet_submit_span.text(span_text);
-        acc_balance_sheet_submit_span.show();
-    } else {
-        acc_balance_sheet_submit_span.hide();
-    }
-
-    if (!acc_balance_sheet_infos) return;
+function vii2PaddingData(data) {
+    // 填充科目余额表数据
+    let acc_balance_sheet_infos = data;
     // 创建行
     for (let i = 0; i < acc_balance_sheet_infos.length - 2; i++) {
         vii2_AddRow();
@@ -416,39 +437,6 @@ function map_acc_balance_sheet_info(data) {
 }
 
 // ==================================事件控制==================================//
-/**
- * 分页标签li的激活状态控制
- */
-function coursevii_li_control(business_no) {
-    // 移除激活的li的.active
-    $("li[id^=coursevii_split_li][class=active]").removeClass("active");
-    let add_li_id = "coursevii_split_li_" + business_no;
-    // 给当前li添加.active
-    $("#" + add_li_id).addClass("active");
-    // 填充业务信息
-    business_no = parseInt(business_no);
-    let business_index = business_no - 1,
-        content = business_list[business_index]["content"],
-        business_type = business_list[business_index]["business_type"];
-    let em_no = business_index + 1;
-    // 填充业务编号
-    em_no = em_no < 10 ? "0" + em_no : em_no;
-    $("#em_7").text(em_no);
-    // 填充活动类型
-    let business_type_7 = $("#business_type_7");
-    business_type_7.removeClass();
-    let business_type_class = "label label-" + "success"; //  初始化为筹资活动
-    if (business_type === "投资活动") {
-        business_type_class = "label label-" + "info";
-    } else if (business_type === "经营活动") {
-        business_type_class = "label label-" + "warning";
-    }
-    business_type_7.addClass(business_type_class);
-    business_type_7.text(business_type);
-
-    // 填充业务内容
-    $("#business_content_7").text(content);
-}
 
 /*
  * @ # coursevii1 -> 登记各账户明细表 ? 表格增加行
