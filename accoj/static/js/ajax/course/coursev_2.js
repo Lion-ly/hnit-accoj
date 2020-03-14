@@ -25,38 +25,9 @@ function save_balance_sheet() {
  * @param submit_type confirm or save
  */
 function submit_balance_sheet_info(submit_type) {
-    let accounting_period_1 = Array(),
-        accounting_period_2 = Array();
+    let data = v2GetInput();
+    data["submit_type"] = submit_type;
 
-    $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
-        let thisInputs = $(this).find("input"),
-            inputIndex = 0,
-            subject = $(this).attr("id").endsWith("last") ? "sum" : $(thisInputs[0]).val();
-        if (subject !== "sum") inputIndex = 1;
-        let borrow_1 = $(thisInputs[inputIndex]).val(),
-            lend_1 = $(thisInputs[inputIndex + 1]).val(),
-            borrow_2 = $(thisInputs[inputIndex + 2]).val(),
-            lend_2 = $(thisInputs[inputIndex + 3]).val(),
-            borrow_3 = $(thisInputs[inputIndex + 4]).val(),
-            lend_3 = $(thisInputs[inputIndex + 5]).val();
-        let content = {
-            "subject": subject,
-            "borrow_1": borrow_1,
-            "lend_1": lend_1,
-            "borrow_2": borrow_2,
-            "lend_2": lend_2,
-            "borrow_3": borrow_3,
-            "lend_3": lend_3,
-        };
-        if ($(this).attr("id").startsWith("period1"))
-            accounting_period_1.push(content);
-        else accounting_period_2.push(content);
-    });
-
-    let data = {
-        "balance_sheet_infos": {"accounting_period_1": accounting_period_1, "accounting_period_2": accounting_period_2},
-        "submit_type": submit_type
-    };
     data = JSON.stringify(data);
 
     // 提交数据
@@ -102,24 +73,62 @@ function map_balance_sheet_info(data) {
     $("input").val("");
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
     let confirmed = balance_sheet_infos["confirmed"],
-        saved = balance_sheet_infos["saved"],
-        accounting_period_1 = balance_sheet_infos["accounting_period_1"],
-        accounting_period_2 = balance_sheet_infos["accounting_period_2"],
-        balance_sheet_submit_span = $("#balance_sheet_submit_span");
-    if (confirmed || saved) {
-        // 初始化为saved
-        let span_text = "已保存",
-            span_color = "#5bc0de";
-        if (confirmed) {
-            span_text = "已完成";
-            span_color = "#5cb85c";
-        }
-        balance_sheet_submit_span.css("color", span_color);
-        balance_sheet_submit_span.text(span_text);
-        balance_sheet_submit_span.show();
-    } else {
-        balance_sheet_submit_span.hide();
-    }
+        saved = balance_sheet_infos["saved"];
+
+    // `完成状态`标签控制
+    spanStatusCtr(confirmed, saved, "balance_sheet_submit_span");
+
+    v2PaddingData(balance_sheet_infos);
+}
+
+// ===============================获取和填充数据===============================//
+/**
+ * 获取数据
+ * @returns {Object}
+ */
+function v2GetInput() {
+    let accounting_period_1 = Array(),
+        accounting_period_2 = Array(),
+        data;
+
+    $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
+        let thisInputs = $(this).find("input"),
+            inputIndex = 0,
+            subject = $(this).attr("id").endsWith("last") ? "sum" : $(thisInputs[0]).val();
+        if (subject !== "sum") inputIndex = 1;
+        let borrow_1 = $(thisInputs[inputIndex]).val(),
+            lend_1 = $(thisInputs[inputIndex + 1]).val(),
+            borrow_2 = $(thisInputs[inputIndex + 2]).val(),
+            lend_2 = $(thisInputs[inputIndex + 3]).val(),
+            borrow_3 = $(thisInputs[inputIndex + 4]).val(),
+            lend_3 = $(thisInputs[inputIndex + 5]).val();
+        let content = {
+            "subject": subject,
+            "borrow_1": borrow_1,
+            "lend_1": lend_1,
+            "borrow_2": borrow_2,
+            "lend_2": lend_2,
+            "borrow_3": borrow_3,
+            "lend_3": lend_3,
+        };
+        if ($(this).attr("id").startsWith("period1"))
+            accounting_period_1.push(content);
+        else accounting_period_2.push(content);
+    });
+
+    data = {
+        "balance_sheet_infos": {"accounting_period_1": accounting_period_1, "accounting_period_2": accounting_period_2},
+    };
+    return data;
+}
+
+/**
+ * 填充数据
+ * @param data
+ */
+function v2PaddingData(data) {
+    let accounting_period_1 = data["accounting_period_1"],
+        accounting_period_2 = data["accounting_period_2"];
     // 创建行
     for (let i = 0; i < accounting_period_1.length - 2; i++) {
         v2_AddRow("period1");

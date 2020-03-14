@@ -371,20 +371,16 @@ def get_key_element_info():
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
-        business_list = list()
+        key_element_infos = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
-            key_element_infos = businesses[i].get("key_element_infos")
+            key_element_info = businesses[i].get("key_element_infos")
             confirmed = True if i in schedule_confirm.get("key_element_confirm") else False
             saved = True if i in schedule_saved.get("key_element_saved") else False
-            content = businesses[i].get("content")
             affect_type = businesses[i].get("affect_type")
-            business_type = businesses[i].get("business_type")
-            business_no = i + 1
-            business_list.append(dict(business_no=business_no, content=content, key_element_infos=key_element_infos,
-                                      affect_type=affect_type, confirmed=confirmed, saved=saved,
-                                      business_type=business_type))
-        return jsonify(result=True, business_list=business_list)
+            key_element_infos.append(
+                dict(key_element_info=key_element_info, affect_type=affect_type, confirmed=confirmed, saved=saved))
+        return jsonify(result=True, key_element_infos=key_element_infos)
 
 
 # 第二次课程----end---------------------------------------------------------------------------------
@@ -463,18 +459,14 @@ def get_subject_info():
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
-        business_list = list()
+        subject_infos = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
-            subject_infos = businesses[i].get("subject_infos")
+            subject_info = businesses[i].get("subject_infos")
             confirmed = True if i in schedule_confirm.get("subject_confirm") else False
             saved = True if i in schedule_saved.get("subject_saved") else False
-            content = businesses[i].get("content")
-            business_type = businesses[i].get("business_type")
-            business_no = i + 1
-            business_list.append(dict(business_no=business_no, content=content, subject_infos=subject_infos,
-                                      confirmed=confirmed, saved=saved, business_type=business_type))
-        return jsonify(result=True, business_list=business_list)
+            subject_infos.append(dict(subject_info=subject_info, confirmed=confirmed, saved=saved))
+        return jsonify(result=True, subject_infos=subject_infos)
 
 
 # 第三次课程----end---------------------------------------------------------------------------------
@@ -553,18 +545,14 @@ def get_entry_info():
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
-        business_list = list()
+        entry_infos = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
-            entry_infos = businesses[i].get("entry_infos")
+            entry_info = businesses[i].get("entry_infos")
             confirmed = True if i in schedule_confirm.get("entry_confirm") else False
             saved = True if i in schedule_saved.get("entry_saved") else False
-            content = businesses[i].get("content")
-            business_type = businesses[i].get("business_type")
-            business_no = i + 1
-            business_list.append(dict(business_no=business_no, content=content, entry_infos=entry_infos,
-                                      confirmed=confirmed, saved=saved, business_type=business_type))
-        return jsonify(result=True, business_list=business_list)
+            entry_infos.append(dict(entry_info=entry_info,confirmed=confirmed, saved=saved))
+        return jsonify(result=True, entry_infos=entry_infos)
 
 
 # 第四次课程----end---------------------------------------------------------------------------------
@@ -773,6 +761,7 @@ def coursevi():
 
 
 @accoj_bp.route('/submit_acc_document_info', methods=['POST'])
+@limit_content_length(5 * 1024 * 1024)
 def submit_acc_document_info():
     """
     提交会计凭证信息
@@ -843,7 +832,6 @@ def submit_acc_document_info():
 
 
 @accoj_bp.route('/get_acc_document_info', methods=['POST'])
-@limit_content_length(5 * 1024 * 1024)
 def get_acc_document_info():
     """
     获取会计凭证信息
@@ -854,18 +842,14 @@ def get_acc_document_info():
         businesses = company.get("businesses")
         schedule_confirm = g.schedule_confirm
         schedule_saved = g.schedule_saved
-        business_list = list()
+        acc_document_infos = list()
         businesses_len = len(businesses)
         for i in range(0, businesses_len):
-            acc_document_infos = businesses[i].get("acc_document_infos")
+            acc_document_info = businesses[i].get("acc_document_infos")
             confirmed = True if i in schedule_confirm.get("acc_document_confirm") else False
             saved = True if i in schedule_saved.get("acc_document_saved") else False
-            content = businesses[i].get("content")
-            business_type = businesses[i].get("business_type")
-            business_no = i + 1
-            business_list.append(dict(business_no=business_no, content=content, acc_document_infos=acc_document_infos,
-                                      confirmed=confirmed, saved=saved, business_type=business_type))
-        return jsonify(result=True, business_list=business_list)
+            acc_document_infos.append(dict(acc_document_info=acc_document_info,confirmed=confirmed, saved=saved))
+        return jsonify(result=True, acc_document_infos=acc_document_infos)
 
 
 @accoj_bp.route('/download_acc_document_info', methods=['POST'])
@@ -1519,6 +1503,7 @@ def get_ix2_second_info():
         return jsonify(result=True, ix2Second_infos=infos,
                        ix2Second_confirmed=confirmed,
                        ix2Second_saved=saved)
+
 
 # 第九次课程第三部分
 @accoj_bp.route('/courseix_3', methods=['POST', 'GET'])

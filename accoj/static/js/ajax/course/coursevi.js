@@ -1,6 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
-    get_acc_document_info(1);
+    getBusinessList();
+    get_acc_document_info();
 });
 let fileContent = "";
 //==================================提交会计凭证信息==================================//
@@ -25,6 +26,69 @@ function save_acc_document() {
  * @param submit_type confirm or save
  */
 function submit_acc_document_info(submit_type) {
+    let data = viGetInput();
+    data["submit_type"] = submit_type;
+    data = JSON.stringify(data);
+    // 提交数据
+    let url = "/submit_acc_document_info",
+        messageDivID = "course_vi_message",
+        successFunc = get_acc_document_info;
+    submit_info(submit_type, url, data, messageDivID, successFunc);
+}
+
+//==================================获取会计凭证信息==================================//
+let acc_document_infos = Array(); // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+/**
+ * 从后端获取会计凭证信息
+ */
+function get_acc_document_info() {
+    if (now_business_no < 0 || now_business_no > 20) {
+        return;
+    }
+
+    // 若acc_document_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
+    if (acc_document_infos.length > 0 && acc_document_infos[now_business_no - 1]["confirmed"]) {
+        map_acc_document_info();
+        return;
+    }
+    // 获取数据
+    let data = {},
+        url = "/get_acc_document_info",
+        successFunc = map_acc_document_info,
+        messageDivID = "course_vi_message";
+    get_info(data, url, successFunc, messageDivID);
+}
+
+/**
+ * 将数据映射到前端
+ * @param data
+ */
+function map_acc_document_info(data) {
+    acc_document_infos = data ? data["acc_document_infos"] : acc_document_infos;
+    let business_index = now_business_no - 1;
+
+    // 先重置凭证信息
+    $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
+    $("input").val("");
+    $("#vi_downloadFile_button").hide();
+    $("#vi_downloadSpan").text("");
+
+    let confirmed = acc_document_infos[business_index]["confirmed"],
+        saved = acc_document_infos[business_index]["saved"];
+
+    // `完成状态`标签控制
+    spanStatusCtr(confirmed, saved, "submit_status_span");
+
+    // 如果已保存
+    if (saved) viPaddingData(acc_document_infos[business_index]);
+}
+
+// ===============================获取和填充数据===============================//
+/**
+ * 获取数据
+ * @returns {Object}
+ */
+function viGetInput() {
     let business_no = now_business_no,
         data, acc_document_infos,
         doc_no,                     // 会计凭证编号
@@ -37,9 +101,9 @@ function submit_acc_document_info(submit_type) {
     doc_nums = $("input[name=doc_nums]").val();
 
     $("tr[id^=vi_row]").each(function () {
-            let summary,            //摘要
-                general_account,    //总账科目
-                detail_account,     //明细科目
+            let summary,             //摘要
+                general_account,     //总账科目
+                detail_account,      //明细科目
                 dr_money = "",       //借方金额
                 cr_money = "",       //贷方金额
                 thisId = $(this).attr("id"),
@@ -86,59 +150,24 @@ function submit_acc_document_info(submit_type) {
     };
     data = {
         "acc_document_infos": acc_document_infos,
-        "submit_type": submit_type,
         "business_no": business_no
     };
-    data = JSON.stringify(data);
-    // 提交数据
-    let url = "/submit_acc_document_info",
-        messageDivID = "course_vi_message",
-        successFunc = get_balance_sheet_info;
-    submit_info(submit_type, url, data, messageDivID, successFunc);
-}
-
-//==================================获取会计凭证信息==================================//
-let business_list; // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
-/**
- * 从后端获取会计凭证信息
- */
-function get_acc_document_info() {
-    if (now_business_no < 0 || now_business_no > 20) {
-        return;
-    }
-
-    // 若business_list不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (business_list && business_list[now_business_no - 1]["confirmed"] === true) {
-        map_acc_document_info();
-        return;
-    }
-    // 获取数据
-    let data = {},
-        url = "/get_acc_document_info",
-        successFunc = map_acc_document_info,
-        messageDivID = "course_vi_message";
-    get_info(data, url, successFunc, messageDivID);
+    return data;
 }
 
 /**
- * 将数据映射到前端
+ * 填充数据
  * @param data
  */
-function map_acc_document_info(data) {
-    business_list = data ? data["business_list"] : business_list;
-    let business_index = now_business_no - 1;
-    // 先重置凭证信息
-    $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
-    $("input").val("");
-    if (!business_list) return;
+function viPaddingData(data) {
+    let acc_document_info = data["acc_document_info"],
+        doc_no = acc_document_info["doc_no"],
+        date = acc_document_info["date"],
+        doc_nums = acc_document_info["doc_nums"],
+        contents = acc_document_info["contents"];
 
-    let content = business_list[business_index]["content"],
-        business_type = business_list[business_index]["business_type"],
-        confirmed = business_list[business_index]["confirmed"],
-        saved = business_list[business_index]["saved"],
-        acc_document_infos = business_list[business_index]["acc_document_infos"];
-    if (acc_document_infos) {
-        let filename = acc_document_infos["filename"];
+    if (acc_document_info) {
+        let filename = acc_document_info["filename"];
         if (filename) {
             $("#vi_downloadFile_button").show();
             $("#vi_downloadSpan").text(filename);
@@ -147,50 +176,7 @@ function map_acc_document_info(data) {
         $("#vi_downloadFile_button").hide();
         $("#vi_downloadSpan").text("")
     }
-    let em_no = business_index + 1;
-    // 填充业务编号
-    em_no = em_no < 10 ? "0" + em_no : em_no;
-    $("#em_6").text(em_no);
-    // 填充活动类型
-    let business_type_6 = $("#business_type_6");
-    business_type_6.removeClass();
-    let business_type_class = "label label-" + "success"; //  初始化为筹资活动
-    if (business_type === "投资活动") {
-        business_type_class = "label label-" + "info";
-    } else if (business_type === "经营活动") {
-        business_type_class = "label label-" + "warning";
-    }
-    business_type_6.addClass(business_type_class);
-    business_type_6.text(business_type);
 
-    // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let acc_document_submit_span = $("#acc_document_submit_span");
-    if (confirmed || saved) {
-        // 初始化为saved
-        let span_text = "已保存";
-        let span_color = "#5bc0de";
-        if (confirmed) {
-            span_text = "已完成";
-            span_color = "#5cb85c";
-        }
-        acc_document_submit_span.css("color", span_color);
-        acc_document_submit_span.text(span_text);
-        acc_document_submit_span.show();
-    } else {
-        acc_document_submit_span.hide();
-    }
-    // 填充业务内容
-    $("#business_content_6").text(content);
-
-    // 填充会计凭证信息
-    if (!acc_document_infos) {
-        // 凭证信息为空则返回
-        return;
-    }
-    let doc_no = acc_document_infos["doc_no"],
-        date = acc_document_infos["date"],
-        doc_nums = acc_document_infos["doc_nums"],
-        contents = acc_document_infos["contents"];
     date = formatDate(date);
     $("input[name=doc_no]").val(doc_no);
     $("input[name=date]").val(date);
@@ -257,7 +243,9 @@ function map_acc_document_info(data) {
     );
 }
 
-
+/**
+ * 下载文件
+ */
 function vi_downloadFile() {
     let data = {"business_no": now_business_no};
     data = JSON.stringify(data);
@@ -280,13 +268,9 @@ function vi_downloadFile() {
 /**
  * 分页标签li的激活状态控制
  */
-function courseiv_li_control(business_no) {
-    // 移除激活的li的.active
-    $("li[id^=courseiv_split_li][class=active]").removeClass("active");
-    let add_li_id = "courseiv_split_li_" + business_no;
-    // 给当前li添加.active
-    $("#" + add_li_id).addClass("active");
-    now_business_no = business_no;
+function coursevi_li_control(business_no) {
+    now_business_no = parseInt(business_no);
+    businessLiControl(business_no);
     get_acc_document_info();
 }
 
@@ -342,7 +326,7 @@ function vi_DeleteRow(obj) {
 }
 
 /**
- * 返回包含文件名和文件内容的Array
+ * 返回包含文件名和ArrayBuffer类型的文件内容
  */
 function getfileContents() {
     let files = $("#uploadFiles").prop("files");
