@@ -78,8 +78,8 @@ function map_subject_info(data) {
     subject_saved = data ? data["subject_saved"] : subject_saved;
 
     let business_index = now_business_no - 1,
-        confirmed = key_element_confirmed ? key_element_confirmed.indexOf(business_index) !== -1 : false,
-        saved = key_element_saved ? key_element_saved.indexOf(business_index) !== -1 : false;
+        confirmed = subject_confirmed ? subject_confirmed.indexOf(business_index) !== -1 : false,
+        saved = subject_saved ? subject_saved.indexOf(business_index) !== -1 : false;
 
     // 先清空box
     clear_box();
