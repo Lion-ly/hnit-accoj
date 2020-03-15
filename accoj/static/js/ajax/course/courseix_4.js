@@ -80,7 +80,7 @@ function map_ix4_info(data) {
 
     if (!ix4_infos) return;
     // 填充数据
-    Ix4PaddingData(ix4_infos);
+    if(ix4_saved) Ix4PaddingData(ix4_infos);
 }
 
 //===========================================获取和填充数据===========================================//

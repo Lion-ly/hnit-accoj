@@ -37,7 +37,10 @@ function submit_acc_document_info(submit_type) {
 }
 
 //==================================获取会计凭证信息==================================//
-let acc_document_infos = Array(); // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+let acc_document_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+    acc_document_confirmed = Array(),
+    acc_document_saved = Array();
+
 /**
  * 从后端获取会计凭证信息
  */
@@ -47,7 +50,7 @@ function get_acc_document_info() {
     }
 
     // 若acc_document_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (acc_document_infos.length > 0 && acc_document_infos[now_business_no - 1]["confirmed"]) {
+    if (acc_document_infos.length > 0 && acc_document_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_acc_document_info();
         return;
     }
@@ -64,8 +67,14 @@ function get_acc_document_info() {
  * @param data
  */
 function map_acc_document_info(data) {
+    data = data ? data : "";
     acc_document_infos = data ? data["acc_document_infos"] : acc_document_infos;
-    let business_index = now_business_no - 1;
+    acc_document_confirmed = data ? data["acc_document_confirmed"] : acc_document_confirmed;
+    acc_document_saved = data ? data["acc_document_saved"] : acc_document_saved;
+
+    let business_index = now_business_no - 1,
+        confirmed = acc_document_confirmed.indexOf(business_index) !== -1,
+        saved = acc_document_saved.indexOf(business_index) !== -1;
 
     // 先重置凭证信息
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
@@ -73,8 +82,6 @@ function map_acc_document_info(data) {
     $("#vi_downloadFile_button").hide();
     $("#vi_downloadSpan").text("");
 
-    let confirmed = acc_document_infos[business_index]["confirmed"],
-        saved = acc_document_infos[business_index]["saved"];
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -160,6 +167,7 @@ function viGetInput() {
  * @param data
  */
 function viPaddingData(data) {
+    if (!data["acc_document_info"]) return;
     let acc_document_info = data["acc_document_info"],
         doc_no = acc_document_info["doc_no"],
         date = acc_document_info["date"],
