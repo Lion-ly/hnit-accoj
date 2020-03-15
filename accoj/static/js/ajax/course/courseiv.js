@@ -76,8 +76,8 @@ function map_entry_info(data) {
     entry_saved = data ? data["entry_saved"] : entry_saved;
 
     let business_index = now_business_no - 1,
-        confirmed = key_element_confirmed ? key_element_confirmed.indexOf(business_index) !== -1 : false,
-        saved = key_element_saved ? key_element_saved.indexOf(business_index) !== -1 : false;
+        confirmed = entry_confirmed ? entry_confirmed.indexOf(business_index) !== -1 : false,
+        saved = entry_saved ? entry_saved.indexOf(business_index) !== -1 : false;
 
     // 先重置分录信息
     clear_entry();

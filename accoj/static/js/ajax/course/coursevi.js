@@ -73,8 +73,8 @@ function map_acc_document_info(data) {
     acc_document_saved = data ? data["acc_document_saved"] : acc_document_saved;
 
     let business_index = now_business_no - 1,
-        confirmed = key_element_confirmed ? key_element_confirmed.indexOf(business_index) !== -1 : false,
-        saved = key_element_saved ? key_element_saved.indexOf(business_index) !== -1 : false;
+        confirmed = acc_document_confirmed ? acc_document_confirmed.indexOf(business_index) !== -1 : false,
+        saved = acc_document_saved ? acc_document_saved.indexOf(business_index) !== -1 : false;
 
     // 先重置凭证信息
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
