@@ -39,7 +39,10 @@ function submit_balance_sheet_info(submit_type) {
 }
 
 //==================================获取会计平衡表信息==================================//
-let balance_sheet_infos; // 保存本次课程全部信息，减少后端数据请求次数
+let balance_sheet_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
+    balance_sheet_confirmed = "",
+    balance_sheet_saved = "";
+
 /**
  * 从后端获取会计平衡表信息
  */
@@ -66,14 +69,16 @@ function get_balance_sheet_info() {
 function map_balance_sheet_info(data) {
     data = data ? data : "";
     balance_sheet_infos = data ? data["balance_sheet_infos"] : balance_sheet_infos;
+    balance_sheet_confirmed = data ? data["balance_sheet_confirmed"] : balance_sheet_confirmed;
+    balance_sheet_saved = data ? data["balance_sheet_saved"] : balance_sheet_saved;
 
     if (!balance_sheet_infos) return;
     // 先清空数据
     $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period2_row_1]").remove();
     $("input").val("");
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
-    let confirmed = balance_sheet_infos["confirmed"],
-        saved = balance_sheet_infos["saved"];
+    let confirmed = balance_sheet_confirmed,
+        saved = balance_sheet_saved;
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "balance_sheet_submit_span");

@@ -160,7 +160,7 @@ function map_ix2Second_info(data) {
 
     if (!ix2Second_infos) return;
     // 填充数据
-    Ix2PaddingData(ix2Second_infos, false);
+    if (ix2Second_saved) Ix2PaddingData(ix2Second_infos, false);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -199,17 +199,16 @@ function ix2GetInput(isFirst) {
  * @param isFirst
  */
 function Ix2PaddingData(data, isFirst) {
-    let divID = "ix2First";
-    if (!isFirst) divID = "ix2Second";
-    let flag = true,
-        inputs = $("#" + divID).find("input");
+    data = isFirst ? data["new_balance_sheet_infos"] : data["profit_statement_infos"];
+    let divID = isFirst ? "ix2First" : "ix2Second",
+        inputs = $("#" + divID).find("input"),
+        flag = true;
 
     $.each(inputs, function (index, item) {
         let name = $(item).attr("name").replace(/End|Last/, ""),
             period = "period_end";
 
         if (!flag) period = "period_last";
-
         let value = data[name][period] ? data[name][period] + "%" : "";
         $(item).val(value);
         flag = !flag;

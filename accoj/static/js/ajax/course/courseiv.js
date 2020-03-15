@@ -39,7 +39,10 @@ function submit_entry_info(submit_type) {
 }
 
 //==================================获取会计分录信息==================================//
-let entry_infos = Array(); // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+let entry_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+    entry_confirmed = Array(),
+    entry_saved = Array();
+
 /**
  * 从后端获取会计分录信息
  */
@@ -48,7 +51,7 @@ function get_entry_info() {
         return;
     }
     // 若entry_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (entry_infos.length > 0 && entry_infos[now_business_no - 1]["confirmed"]) {
+    if (entry_infos.length > 0 && entry_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_entry_info();
         return;
     }
@@ -69,13 +72,15 @@ function get_entry_info() {
 function map_entry_info(data) {
     data = data ? data : "";
     entry_infos = data ? data["entry_infos"] : entry_infos;
+    entry_confirmed = data ? data["entry_confirmed"] : entry_confirmed;
+    entry_saved = data ? data["entry_saved"] : entry_saved;
 
-    let business_index = now_business_no - 1;
+    let business_index = now_business_no - 1,
+        confirmed = entry_confirmed.indexOf(business_index) !== -1,
+        saved = entry_saved.indexOf(business_index) !== -1;
+
     // 先重置分录信息
     clear_entry();
-
-    let confirmed = entry_infos[business_index]["confirmed"],
-        saved = entry_infos[business_index]["saved"];
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -120,6 +125,7 @@ function ivGetInput() {
  * @param data
  */
 function ivPaddingData(data) {
+    if (!data["entry_info"]) return;
 
     let entry_info = data["entry_info"],
         borrow_first = true,    // 借记第一行标记

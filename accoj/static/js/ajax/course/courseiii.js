@@ -40,7 +40,10 @@ function submit_subject_info(submit_type) {
 }
 
 //==================================获取会计要素信息==================================//
-let subject_infos = Array(); // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+let subject_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+    subject_confirmed = Array(),
+    subject_saved = Array();
+
 /**
  * 从后端获取会计要素信息
  */
@@ -50,7 +53,7 @@ function get_subject_info() {
         return;
     }
     // 若subject_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (subject_infos.length > 0 && subject_infos[now_business_no - 1]["confirmed"]) {
+    if (subject_infos.length > 0 && subject_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_subject_info();
         return;
     }
@@ -71,10 +74,12 @@ function get_subject_info() {
 function map_subject_info(data) {
     data = data ? data : "";
     subject_infos = data ? data["subject_infos"] : subject_infos;
+    subject_confirmed = data ? data["subject_confirmed"] : subject_confirmed;
+    subject_saved = data ? data["subject_saved"] : subject_saved;
 
     let business_index = now_business_no - 1,
-        confirmed = subject_infos[business_index]["confirmed"],
-        saved = subject_infos[business_index]["saved"];
+        confirmed = subject_confirmed.indexOf(business_index) !== -1,
+        saved = subject_saved.indexOf(business_index) !== -1;
 
     // 先清空box
     clear_box();
@@ -121,6 +126,7 @@ function iiiGetInput() {
  * @param data
  */
 function iiiPaddingData(data) {
+    if (!data["subject_info"]) return;
     // 填充会计科目信息
     let subject_info = data["subject_info"],
         rightbox_subject_array = Array(),

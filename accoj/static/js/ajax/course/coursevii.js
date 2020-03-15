@@ -60,8 +60,8 @@ function submit_subsidiary_account_info(submit_type) {
 
 //==================================获取会计明细账信息==================================//
 let subsidiary_account_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
-    subsidiary_account_confirmed = "",
-    subsidiary_account_saved = "";
+    subsidiary_account_confirmed = Array(),
+    subsidiary_account_saved = Array();
 
 /**
  * 从后端获取会计明细账信息
@@ -95,7 +95,7 @@ function map_subsidiary_account_info(data) {
     subsidiary_account_confirmed = data ? data["subsidiary_account_confirmed"] : subsidiary_account_confirmed;
     subsidiary_account_saved = data ? data["subsidiary_account_saved"] : subsidiary_account_saved;
     let subject = $("#subjectSelect").val();
-    if (involve_subjects.indexOf(subject) === -1) {
+    if (involve_subjects.indexOf(subject) === -1 || !subsidiary_account_infos) {
         return;
     }
     // 先重置明细账信息
@@ -107,39 +107,29 @@ function map_subsidiary_account_info(data) {
             $(this).val("");
         }
     });
-    // 将option染色
+    // option颜色控制
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
         let $options = $("#subjectSelect").children();
         $.each($options, function (index, item) {
             let optionValue = $(item).val(),
                 color = "#555";
-            if (subsidiary_account_saved && subsidiary_account_saved.indexOf(optionValue) !== -1) {
-                color = "#5bc0de";
-            } else if (subsidiary_account_confirmed && subsidiary_account_confirmed.indexOf(optionValue) !== -1) {
+            if (subsidiary_account_confirmed && subsidiary_account_confirmed.indexOf(optionValue) !== -1) {
                 color = "#5cb85c";
+            } else if (subsidiary_account_saved && subsidiary_account_saved.indexOf(optionValue) !== -1) {
+                color = "#5bc0de";
             }
             $(item).css("color", color);
         });
-    }
+    } else return;
 
-    let confirmed = subsidiary_account_confirmed.indexOf(subject) !== -1,
-        saved = subsidiary_account_saved.indexOf(subject) !== -1;
+    let confirmed = subsidiary_account_confirmed ? subsidiary_account_confirmed.indexOf(subject) !== -1 : false,
+        saved = subsidiary_account_saved ? subsidiary_account_saved.indexOf(subject) !== -1 : false;
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "subsidiary_account_submit_span");
 
-    if (confirmed || saved) {
-        // 初始化为saved
-        let span_color = "#5bc0de";
-        if (confirmed) {
-            span_color = "#5cb85c";
-        }
-        $("#subjectSelect").css("color", span_color);
-    } else {
-        $("#subjectSelect").css("color", "#555");
-    }
-
     if (!subsidiary_account_infos) return;
+
     let subsidiary_account_info = subsidiary_account_infos[subject];
     // 填充会计明细账信息
     if (!subsidiary_account_info) {

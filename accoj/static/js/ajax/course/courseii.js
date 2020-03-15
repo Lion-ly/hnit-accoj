@@ -40,7 +40,10 @@ function submit_key_element_info(submit_type) {
 }
 
 //==================================获取会计要素信息==================================//
-let key_element_infos = Array(); // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+    key_element_confirmed = Array(),
+    key_element_saved = Array();
+
 /**
  * 从后端获取会计要素信息
  */
@@ -50,7 +53,7 @@ function get_key_element_info() {
         return;
     }
     // 若key_element_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (key_element_infos.length > 0 && key_element_infos[now_business_no - 1]["confirmed"]) {
+    if (key_element_infos.length > 0 && key_element_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_key_element_info();
         return;
     }
@@ -70,10 +73,12 @@ function get_key_element_info() {
 function map_key_element_info(data) {
     data = data ? data : "";
     key_element_infos = data ? data["key_element_infos"] : key_element_infos;
+    key_element_confirmed = data ? data["key_element_confirmed"] : key_element_confirmed;
+    key_element_saved = data ? data["key_element_saved"] : key_element_saved;
 
     let business_index = now_business_no - 1,
-        confirmed = key_element_infos[business_index]["confirmed"],
-        saved = key_element_infos[business_index]["saved"];
+        confirmed = key_element_confirmed.indexOf(business_index) !== -1,
+        saved = key_element_saved.indexOf(business_index) !== -1;
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -110,7 +115,7 @@ function iiGetInput() {
             break;
         }
     }
-    affect_type = parseFloat(affect_type);
+    affect_type = parseInt(affect_type);
     // 获取已勾选的要素选项
     for (let i = 0; i < check_box_len; i++) {
         if ($(check_box[i]).is(':checked')) {
@@ -137,11 +142,11 @@ function iiGetInput() {
  * @param data
  */
 function iiPaddingData(data) {
+    if (!data["key_element_info"]) return;
     let affect_type = data["affect_type"],
         key_element_info = data["key_element_info"],
         key_element_num_dict = {"资产": 1, "负债": 3, "收入": 5, "费用": 7, "利润": 9, "所有者权益": 11},
         affect_type_id = "aer" + affect_type;
-
     // 填充影响类型
     $("#" + affect_type_id).prop("checked", true);
     // 填充会计要素信息

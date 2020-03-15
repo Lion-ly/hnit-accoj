@@ -69,10 +69,6 @@ function get_ixFirst_info() {
  * 将数据映射到前端
  */
 function map_ixFirst_info(data) {
-    console.log("data: " + data);
-    console.log("ixFirst_infos: " + data["ixFirst_infos"]);
-    console.log("ixFirst_confirmed: " + data["ixFirst_confirmed"]);
-    console.log("ixFirst_saved: " + data["ixFirst_saved"]);
     data = data ? data : "";
     ixFirst_infos = data ? data["ixFirst_infos"] : ixFirst_infos;
     ixFirst_confirmed = data ? data["ixFirst_confirmed"] : ixFirst_confirmed;
@@ -84,7 +80,7 @@ function map_ixFirst_info(data) {
 
     if (!ixFirst_infos) return;
     // 填充数据
-    IxPaddingData(ixFirst_infos, true);
+    if (ixFirst_saved) IxPaddingData(ixFirst_infos, true);
 }
 
 //============================================提交利润表信息============================================//
@@ -163,7 +159,7 @@ function map_ixSecond_info(data) {
 
     if (!ixSecond_infos) return;
     // 填充数据
-    IxPaddingData(ixSecond_infos, false);
+    if (ixSecond_saved) IxPaddingData(ixSecond_infos, false);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -202,10 +198,10 @@ function ixGetInput(isFirst) {
  * @param isFirst
  */
 function IxPaddingData(data, isFirst) {
-    let divID = "ixFirst";
-    if (!isFirst) divID = "ixSecond";
-    let flag = true,
-        inputs = $("#" + divID).find("input");
+    data = isFirst ? data["new_balance_sheet_infos"] : data["profit_statement_infos"];
+    let divID = isFirst ? "ixFirst" : "ixSecond",
+        inputs = $("#" + divID).find("input"),
+        flag = true;
 
     $.each(inputs, function (index, item) {
         let name = $(item).attr("name").replace(/End|Last/, ""),
@@ -216,8 +212,10 @@ function IxPaddingData(data, isFirst) {
             period = "period_last";
             percent = "%"
         }
-        let value = data[name][period] ? data[name][period] + percent : "";
-        $(item).val(value);
+        if (data.hasOwnProperty(name)) {
+            let value = data[name][period] ? data[name][period] + percent : "";
+            $(item).val(value);
+        }
         flag = !flag;
     });
     let conclusion = data["conclusion"];

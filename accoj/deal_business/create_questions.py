@@ -10,7 +10,7 @@ from accoj.extensions import mongo
 from accoj.utils import is_number
 
 
-def add_question(filename="accoj/utils/questions.xlsx"):
+def add_question(filename="accoj/deal_business/questions.xlsx"):
     """读取excel表创建题库"""
     workbook = open_workbook("{}".format(filename))  # 用wlrd提供的方法读取一个excel文件
     sheet1 = workbook.sheet_by_index(0)  # 根据序号获取sheet
@@ -71,9 +71,9 @@ def sheet_row_parsing(sheet_row):
 
     question_no, content, business_type, affect_type, key_elements, subjects, _ = sheet_row
 
-    question_no, content, business_type, affect_type, key_elements, subjects \
-        = int(question_no.value), content.value, business_type.value, \
-          int(affect_type.value), key_elements.value, subjects.value
+    question_no, content, business_type, affect_type, key_elements, subjects = int(
+        question_no.value), content.value, business_type.value, int(
+        affect_type.value), key_elements.value, subjects.value
 
     value = None
     value_index_start = None
