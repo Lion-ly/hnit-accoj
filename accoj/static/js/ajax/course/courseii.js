@@ -77,8 +77,8 @@ function map_key_element_info(data) {
     key_element_saved = data ? data["key_element_saved"] : key_element_saved;
 
     let business_index = now_business_no - 1,
-        confirmed = key_element_confirmed.indexOf(business_index) !== -1,
-        saved = key_element_saved.indexOf(business_index) !== -1;
+        confirmed = key_element_confirmed ? key_element_confirmed.indexOf(business_index) !== -1 : false,
+        saved = key_element_saved ? key_element_saved.indexOf(business_index) !== -1 : false;
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
