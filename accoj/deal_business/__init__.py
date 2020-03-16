@@ -6,6 +6,7 @@
 # @File    : __init__.py.py
 # @Software: PyCharm
 import random
+import re
 from accoj.extensions import mongo
 from _datetime import datetime
 from flask import session
@@ -350,24 +351,22 @@ def deal_with_question_1(company, question_no):
     subjects_infos_len = len(subjects_infos)
     for i in range(0, subjects_infos_len):
         value_index = subjects_infos[i].get("value_index")
-        if (i and question_no == 2) or (not i and question_no == 3):
-            content_tmp = None
+        if i and (question_no == 2 or question_no == 3):
             if question_no == 2:
                 # 问题2特判
-                year_tmp = int(content.find("年") - 1)
+                year_tmp = int(content[list(ii.start() for ii in re.finditer('年', content))[0] - 1])
+                if year_tmp == 1:
+                    subjects_infos[i]["subject"] = subjects_infos[i]["subject"].split("/")[0]
+                else:
+                    subjects_infos[i]["subject"] = subjects_infos[i]["subject"].split("/")[1]
             else:
                 # 问题3特判
                 for business in businesses:
                     if business.get("question_no") == 2:
-                        content_tmp = business.get("content")
+                        subject_temp = business.get("subjects_infos")
+                        subjects_infos[i]["subject"] = subject_temp[1]["subject"]
                         break
-                year_tmp = int(content_tmp.find("年") - 1)
-            subject_temp = subjects_infos[i].get("subject")
-            if year_tmp == 1:
-                subjects_infos[i]["subject"] = subject_temp.split("/")[0]
-            else:
-                if question_no == 2:
-                    subjects_infos[i]["subject"] = subject_temp.split("/")[1]
+
         if question_no == 23:
             # 问题23特判
             money = None
