@@ -151,7 +151,7 @@ def submit_infos2(infos, submit_type, infos_name, is_first):
                                             dict(schedule_confirm=1))
         _id = company.get("_id")
         schedule_confirm = company.get("schedule_confirm")
-        confirm = schedule_confirm.get("common_ratio_analysis_confirm")
+        confirm = schedule_confirm.get("{}_confirm".format(infos_name))
 
         if not confirm or not confirm.get("{}".format(times)):
             # 若当前账户信息提交未确认，则确认提交或保存
@@ -278,7 +278,7 @@ def submit_infos4(infos, submit_type, subject, infos_name):
     if subject not in involve_subjects:
         return False, "科目错误！"
 
-    if subject not in schedule_confirm.get("subsidiary_account_confirm"):
+    if subject not in schedule_confirm.get("{}_confirm".format(infos_name)):
         # 若当前账户信息提交未确认，则确认提交或保存
         update_prefix = "{}_infos.".format(infos_name)
         if submit_type == "confirm":
