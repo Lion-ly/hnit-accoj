@@ -298,7 +298,7 @@ def submit_infos4(infos, submit_type, subject, infos_name):
                                         "$addToSet": {"schedule_saved.{}_saved".format(infos_name): subject}}
                                     )
             return True, ""
-    elif subject in schedule_confirm.get("{}_confirm").format(infos_name):
+    elif subject in schedule_confirm.get("{}_confirm".format(infos_name)):
         # 已提交确认
         return False, "已经提交过！"
     return result, message
