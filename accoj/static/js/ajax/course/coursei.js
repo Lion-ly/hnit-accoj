@@ -65,20 +65,22 @@ function get_company_info() {
         cache: false,
         async: true,
         success: function (data) {
-            // 公司已经创立过，将值填充，表单不可编辑
-            $("#company_confirmed_span").show();
-            $(":text").attr("readonly", "readonly");
-            $("textarea").attr("readonly", "readonly");
-            let company_info = data["company_info"];
-            for (let prop in company_info) {
-                if (!company_info.hasOwnProperty(prop)) continue;
-                if (prop === "com_shareholder") {
-                    let com_shareholders = company_info[prop];
-                    for (let i = 0; i < com_shareholders.length; i++) {
-                        $("#com_shareholder_" + (i + 1)).val(com_shareholders[i]);
+            if (data["result"]) {
+                // 公司已经创立过，将值填充，表单不可编辑
+                $("#company_confirmed_span").show();
+                $(":text").attr("readonly", "readonly");
+                $("textarea").attr("readonly", "readonly");
+                let company_info = data["company_info"];
+                for (let prop in company_info) {
+                    if (!company_info.hasOwnProperty(prop)) continue;
+                    if (prop === "com_shareholder") {
+                        let com_shareholders = company_info[prop];
+                        for (let i = 0; i < com_shareholders.length; i++) {
+                            $("#com_shareholder_" + (i + 1)).val(com_shareholders[i]);
+                        }
+                    } else {
+                        $("#" + prop).val(company_info[prop]);
                     }
-                } else {
-                    $("#" + prop).val(company_info[prop]);
                 }
             }
         },

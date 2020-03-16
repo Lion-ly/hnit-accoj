@@ -40,11 +40,11 @@ def complete_required1(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         schedule = get_schedule()
-        schedule_confirm = schedule.get("schedule_confirm")
-        if schedule_confirm.get("business_confirm"):
-            return func(*args, **kwargs)
-        else:
-            return redirect("/coursei")
+        if schedule:
+            schedule_confirm = schedule.get("schedule_confirm")
+            if schedule_confirm.get("business_confirm"):
+                return func(*args, **kwargs)
+        return redirect("/coursei")
 
     return wrapper
 

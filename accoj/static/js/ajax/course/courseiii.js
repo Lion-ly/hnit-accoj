@@ -1,7 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     getBusinessList();
-    get_subject_info();
+    get_subject_info(true);
 });
 //==================================提交会计科目信息==================================//
 let now_business_no = 1;
@@ -47,13 +47,22 @@ let subject_infos = Array(), // 保存本次课程全部信息，减少后端数
 /**
  * 从后端获取会计要素信息
  */
-function get_subject_info() {
+function get_subject_info(isFromSubmit = false) {
 
+    // 清空信息
+    iiiResetInfo();
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-    // 若subject_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (subject_infos.length > 0 && subject_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!subject_saved.length || subject_saved.indexOf(now_business_no - 1) === -1)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
+
+    // 若请求的业务编号已经确认提交过，则不再发送数据请求
+    if (subject_confirmed.length > 0 && subject_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_subject_info();
         return;
     }
@@ -81,8 +90,6 @@ function map_subject_info(data) {
         confirmed = subject_confirmed ? subject_confirmed.indexOf(business_index) !== -1 : false,
         saved = subject_saved ? subject_saved.indexOf(business_index) !== -1 : false;
 
-    // 先清空box
-    clear_box();
     if (now_business_no < 0 || now_business_no > 20) return;
 
     // `完成状态`标签控制
@@ -150,8 +157,7 @@ function iiiPaddingData(data) {
  * 分页标签li的激活状态控制
  */
 function courseiii_li_control(business_no) {
-    now_business_no = parseInt(business_no);
-    businessLiControl(business_no);
+    now_business_no = courseLiCtrl(business_no, now_business_no);
     get_subject_info();
 }
 
@@ -180,7 +186,7 @@ function input_moveTo_center(box, subject_array) {
 /**
  * 清空两个box
  */
-function clear_box() {
+function iiiResetInfo() {
     let input_tmp = $("#minusbox, #plusbox").children().children(":input"),
         input_tmpLen = input_tmp.length;
     for (let i = 0; i < input_tmpLen; i++) {

@@ -1,7 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     getBusinessList();
-    get_acc_document_info();
+    get_acc_document_info(true);
 });
 let fileContent = "";
 //==================================提交会计凭证信息==================================//
@@ -44,13 +44,20 @@ let acc_document_infos = Array(), // 保存本次课程全部信息，减少后�
 /**
  * 从后端获取会计凭证信息
  */
-function get_acc_document_info() {
+function get_acc_document_info(isFromSubmit = false) {
+    //  清空信息
+    viResetInfo();
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-
-    // 若acc_document_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (acc_document_infos.length > 0 && acc_document_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!acc_document_saved.length || acc_document_saved.indexOf(now_business_no - 1) === -1)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
+    // 若请求的业务编号已经确认提交过，则不再发送数据请求
+    if (acc_document_confirmed.length > 0 && acc_document_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_acc_document_info();
         return;
     }
@@ -75,13 +82,6 @@ function map_acc_document_info(data) {
     let business_index = now_business_no - 1,
         confirmed = acc_document_confirmed ? acc_document_confirmed.indexOf(business_index) !== -1 : false,
         saved = acc_document_saved ? acc_document_saved.indexOf(business_index) !== -1 : false;
-
-    // 先重置凭证信息
-    $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
-    $("input").val("");
-    $("#vi_downloadFile_button").hide();
-    $("#vi_downloadSpan").text("");
-
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -277,9 +277,16 @@ function vi_downloadFile() {
  * 分页标签li的激活状态控制
  */
 function coursevi_li_control(business_no) {
-    now_business_no = parseInt(business_no);
-    businessLiControl(business_no);
+    now_business_no = courseLiCtrl(business_no, now_business_no);
     get_acc_document_info();
+}
+
+function viResetInfo(){
+    // 重置凭证信息
+    $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
+    $("input").val("");
+    $("#vi_downloadFile_button").hide();
+    $("#vi_downloadSpan").text("");
 }
 
 let row_num = 2;

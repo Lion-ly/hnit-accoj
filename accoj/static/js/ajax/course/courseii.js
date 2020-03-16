@@ -1,7 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     getBusinessList();
-    get_key_element_info();
+    get_key_element_info(true);
 });
 //==================================提交会计要素信息==================================//
 let now_business_no = 1;
@@ -47,13 +47,23 @@ let key_element_infos = Array(), // 保存本次课程全部信息，减少后�
 /**
  * 从后端获取会计要素信息
  */
-function get_key_element_info() {
+function get_key_element_info(isFromSubmit = false) {
+
+    // 清空信息
+    iiResetInfo();
 
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-    // 若key_element_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (key_element_infos.length > 0 && key_element_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!key_element_saved.length || key_element_saved.indexOf(now_business_no - 1) === -1)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
+
+    // 若请求的业务编号已经确认提交过，则不再发送数据请求
+    if (key_element_confirmed.length > 0 && key_element_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_key_element_info();
         return;
     }
@@ -82,11 +92,6 @@ function map_key_element_info(data) {
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
-
-    // 先清空会计要素信息
-    $("[id^=key_elem]").val("");
-    $("[id^=check]").prop("checked", false);
-    $("#aer1").prop("checked", true);
 
     // 如果已保存
     if (saved) iiPaddingData(key_element_infos[business_index]);
@@ -164,12 +169,19 @@ function iiPaddingData(data) {
 }
 
 // ==================================事件控制==================================//
-
 /**
  * 分页标签li的激活状态控制
  */
 function courseii_li_control(business_no) {
-    now_business_no = parseInt(business_no);
-    businessLiControl(business_no);
+    now_business_no = courseLiCtrl(business_no, now_business_no);
     get_key_element_info();
+}
+
+/**
+ * 清空会计要素信息
+ */
+function iiResetInfo() {
+    $("[id^=key_elem]").val("");
+    $("[id^=check]").prop("checked", false);
+    $("#aer1").prop("checked", true);
 }
