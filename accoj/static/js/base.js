@@ -285,7 +285,7 @@ function submit_info(submit_type, url, data, messageDivID, successFunc) {
                 } else if (type_flag === false) {
                     show_message(messageDivID, "保存成功！", "info", 1000);
                 }
-                successFunc();
+                successFunc(true);
             } else {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
@@ -407,6 +407,27 @@ function businessLiControl(business_no) {
 
     // 填充业务内容
     $("#business_content").text(content);
+}
+
+/**
+ * 分页标签控制封装
+ * @param businessNo
+ * @param nowBusinessNo
+ * @returns {number}
+ */
+function courseLiCtrl(businessNo, nowBusinessNo) {
+    businessNo = parseInt(businessNo);
+    if(businessNo === nowBusinessNo) return nowBusinessNo;
+    if (businessNo === -1) {      // 上一页
+        if(nowBusinessNo === 1) return nowBusinessNo;
+        nowBusinessNo -= 1;
+    } else if (businessNo === 0) { // 下一页
+        if(nowBusinessNo === 20) return nowBusinessNo;
+        nowBusinessNo += 1;
+    } else nowBusinessNo = businessNo;
+    businessLiControl(nowBusinessNo);
+
+    return nowBusinessNo
 }
 
 /**

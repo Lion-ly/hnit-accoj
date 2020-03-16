@@ -39,7 +39,8 @@ def get_company_info():
                                              com_shareholder=1))
     # 公司已经创立过，填充表单
     if company:
-        return jsonify(company_info=company)
+        return jsonify(result=True, company_info=company)
+    return jsonify(result=False)
 
 
 @accoj_bp.route('/company_form_submit', methods=['POST'])
@@ -110,14 +111,14 @@ def company_form_submit():
         data_dict["com_cash"] = 0
         data_dict["business_num"] = 0
         schedule_confirm = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[],
-                                entry_confirm=[], balance_sheet_confirm=False,
+                                entry_confirm=[], ledger_confirm=[], balance_sheet_confirm=False,
                                 acc_document_confirm=[], subsidiary_account_confirm=[],
                                 acc_balance_sheet_confirm=False, new_balance_sheet_confirm=False,
                                 profit_statement_confirm=False,
                                 trend_analysis_confirm={"first": False, "second": False},
                                 common_ratio_analysis_confirm={"first": False, "second": False},
                                 ratio_analysis_confirm=False, dupont_analysis_confirm=False)
-        schedule_saved = dict(key_element_saved=[], subject_saved=[], entry_saved=[],
+        schedule_saved = dict(key_element_saved=[], subject_saved=[], entry_saved=[], ledger_saved=[],
                               balance_sheet_svaed=False, acc_document_saved=[], subsidiary_account_saved=[],
                               acc_balance_sheet_saved=False, new_balance_sheet_saved=False,
                               profit_statement_saved=False,

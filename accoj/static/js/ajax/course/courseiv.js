@@ -1,7 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     getBusinessList();
-    get_entry_info();
+    get_entry_info(true);
 });
 //==================================提交会计分录信息==================================//
 let now_business_no = 1;
@@ -46,12 +46,21 @@ let entry_infos = Array(), // 保存本次课程全部信息，减少后端数�
 /**
  * 从后端获取会计分录信息
  */
-function get_entry_info() {
+function get_entry_info(isFromSubmit = false) {
+    // 先清空信息
+    ivResetInfo();
     if (now_business_no < 0 || now_business_no > 20) {
         return;
     }
-    // 若entry_infos不为空且请求的业务编号已经确认提交过，则不再发送数据请求
-    if (entry_infos.length > 0 && entry_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!entry_saved.length || entry_saved.indexOf(now_business_no - 1) === -1)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
+
+    // 若请求的业务编号已经确认提交过，则不再发送数据请求
+    if (entry_confirmed.length > 0 && entry_confirmed.indexOf(now_business_no - 1) !== -1) {
         map_entry_info();
         return;
     }
@@ -78,9 +87,6 @@ function map_entry_info(data) {
     let business_index = now_business_no - 1,
         confirmed = entry_confirmed ? entry_confirmed.indexOf(business_index) !== -1 : false,
         saved = entry_saved ? entry_saved.indexOf(business_index) !== -1 : false;
-
-    // 先重置分录信息
-    clear_entry();
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -162,15 +168,14 @@ function ivPaddingData(data) {
  * 分页标签li的激活状态控制
  */
 function courseiv_li_control(business_no) {
-    now_business_no = parseInt(business_no);
-    businessLiControl(business_no);
+    now_business_no = courseLiCtrl(business_no, now_business_no);
     get_entry_info();
 }
 
 /**
  * 重置分录信息
  */
-function clear_entry() {
+function ivResetInfo() {
     // 清空第一栏借贷信息
     $("#subject1").val("");
     $("#subject0").val("");

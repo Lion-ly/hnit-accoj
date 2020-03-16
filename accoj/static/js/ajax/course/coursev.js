@@ -62,6 +62,12 @@ function get_ledger_info(subject) {
             // 创建已保存或已提交的标签
             for (let key in ledger_infos) {
                 if (!ledger_infos.hasOwnProperty(key)) continue;
+                confirmed = ledger_infos[key]["confirmed"];
+                saved = ledger_infos[key]["saved"];
+                let li_color = "#337ab7";
+                if (confirmed || saved) {
+                    li_color = confirmed ? "#5cb85c": "#5bc0de";
+                }
                 let lcr = "left";
                 let subject = key;
                 if (!ledger_infos[key]["is_left"]) {
@@ -70,7 +76,7 @@ function get_ledger_info(subject) {
                 let coursevli_id = "coursevli_" + lcr + pageNum;
                 $("#coursev_li_new").before(
                     "<li role='presentation' class='active' onclick='coursevLiChange(this, true)' id='" + coursevli_id + "'>" +
-                    "<a>" + subject + "</a></li>"
+                    "<a style='color: "+ li_color +"'>" + subject + "</a></li>"
                 );
                 pageNum++;
             }
@@ -78,6 +84,7 @@ function get_ledger_info(subject) {
             let coursevli_list = $("li[id^=coursevli]");
             let coursevli_list_len = $(coursevli_list).length;
             if (coursevli_list_len) {
+                //  不为空则点击第一个标签
                 let last_li = $(coursevli_list[0]);
                 coursevLiChange(last_li);
             }
@@ -173,7 +180,7 @@ function vGetInput() {
 function vPaddingData(data) {
 
     let ledger_info = data;
-        confirmed = ledger_info["confirmed"],
+    confirmed = ledger_info["confirmed"],
         saved = ledger_info["saved"],
         is_left = ledger_info["is_left"],
         opening_balance = ledger_info["opening_balance"],
@@ -219,7 +226,7 @@ function vPaddingData(data) {
         cr_index += 1;
     });
 
-    // 如果已保存过则将li标签设为为保存状态的颜色，已提交过同上
+    // 如果已保存过则将li标签设为已保存状态的颜色，已提交过同上
     let now_active_li = $("li.active[id^=coursevli]");
     if (confirmed || saved) {
         now_active_li.attr("onclick", "coursevLiChange(this, true)");
@@ -379,7 +386,7 @@ function tTableAppendLeft() {
         '                <tr>' +
         '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
         '                    <th style="border: 0; width: 33%">' +
-        '                    <select style="width: auto" id="coursev_select" class="form-control pull-right" onchange="subject_change(this)">' +
+        '                    <select id="coursev_select" class="form-control pull-right" onchange="subject_change(this)">' +
         '                    </select></th>' +
         '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
         '                </tr>' +
@@ -480,7 +487,7 @@ function tTableAppendRight() {
         '                <tbody>' +
         '                <tr>' +
         '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
-        '                    <th style="border: 0; width: 33%"><select style="width: auto" id="coursev_select" class="form-control pull-right"' +
+        '                    <th style="border: 0; width: 33%"><select id="coursev_select" class="form-control pull-right"' +
         '                                                              onchange="subject_change(this)">' +
         '                    </select></th>' +
         '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
