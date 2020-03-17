@@ -466,3 +466,16 @@ function formatDate(date) {
 
     return [year, month, day].join('-');
 }
+
+/**
+ * 查看答案按钮的效果 具体功能实现需重构
+ * @param obj
+ * @returns
+ */
+function answer_source(obj){
+	let thisobj = $(obj);
+	thisobj.toggleClass("active");
+	let text = thisobj.text();
+	text = text === "查看答案" ? "我的作答" : "查看答案";
+	thisobj.text(text);
+}

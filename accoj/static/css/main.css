@@ -1,9 +1,9 @@
 /*公司法补充信息*/
-#CompanyLawText dt {
-    padding-left: 10px;
+dt {
+    text-indent:1em;
 }
-#CompanyLawText dd {
-    padding-left: 20px;
+dd {
+    text-indent:3em;
 }
 /*table标题垂直居中*/
 .table tbody tr th{
@@ -29,11 +29,6 @@
 .acc-unedit {
     background-color: #f5f5f5;
     padding: 4px !important;
-}
-.ats-fontsize-15 {
-	  margin-top:20px;
-    font-size: 15px;
-    font-weight: 700;
 }
 /*v-x表单格式*/
 .acc-container-tableformat th, td {
