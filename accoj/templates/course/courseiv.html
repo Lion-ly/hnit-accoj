@@ -76,7 +76,7 @@
                                                                                       placeholder="科目"></label></td>
                                     <td style="width: 40%;padding: 4px"><label><input type="text" name="money"
                                                                                       id="money1" placeholder="金额"
-                                                                                      onkeyup="limit_number(this)"></label>
+                                                                                      onchange="RealNumber(this)"></label>
                                     </td>
                                     <td style="width: 4%;border: 0;padding: 4px">
                                         <div style="text-align: center">
@@ -92,7 +92,7 @@
                                     <td><label><input type="text" name="subject" onkeyup="illegalCharFilter(this)"
                                                       id="subject0" placeholder="科目"></label></td>
                                     <td><label><input type="text" name="money" id="money0" placeholder="金额"
-                                                      onkeyup="limit_number(this)"></label></td>
+                                                      onchange="RealNumber(this)"></label></td>
                                     <td style="border: 0;padding: 4px">
                                         <div style="text-align: center;">
                                             <a style="color: green;padding: 0" type="button" class="btn"

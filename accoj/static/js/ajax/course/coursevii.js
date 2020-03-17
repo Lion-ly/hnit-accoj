@@ -3,11 +3,10 @@ let involve_subjects = Array();
 // 页面加载完成填充数据
 $(document).ready(function () {
     get_involve_subjects();
-    get_subsidiary_account_info();
 });
 
 /**
- * 获取业务内容信息列表
+ * 获取获取科目列表
  */
 function get_involve_subjects() {
     function successFunc(data) {
@@ -21,6 +20,8 @@ function get_involve_subjects() {
                 firstOption = false;
             }
         });
+        get_subsidiary_account_info(true);
+        get_acc_balance_sheet_info(true);
     }
 
     // 获取数据
@@ -66,10 +67,19 @@ let subsidiary_account_infos = "", // 保存本次课程全部信息，减少后
 /**
  * 从后端获取会计明细账信息
  */
-function get_subsidiary_account_info() {
+function get_subsidiary_account_info(isFromSubmit = false) {
+
+    // 重置信息
+    vii1ResetInfo();
     let subject = $("#subjectSelect").val();
-    // 若subsidiary_account_infos不为空且请求的科目已经确认提交过，则不再发送数据请求
-    if (subsidiary_account_infos && subsidiary_account_confirmed.indexOf(subject) !== -1) {
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!subsidiary_account_saved.length || subsidiary_account_saved.indexOf(subject) === -1)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
+    // 若请求的科目已经确认提交过，则不再发送数据请求
+    if (subsidiary_account_confirmed && subsidiary_account_confirmed.indexOf(subject) !== -1) {
         map_subsidiary_account_info();
         return;
     }
@@ -98,15 +108,7 @@ function map_subsidiary_account_info(data) {
     if (involve_subjects.indexOf(subject) === -1 || !subsidiary_account_infos) {
         return;
     }
-    // 先重置明细账信息
-    $("[id^=period1Vii1Row][id!=Vii1RowEnd][id!=period1Vii1Row1][id!=period1Vii1Row2][id!=period1Vii1RowLast]").remove();
-    $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1Row1][id!=period2Vii1Row2][id!=period2Vii1RowLast]").remove();
-    $("input").each(function () {
-        let thisValue = $(this).val();
-        if (["期初余额", "本期合计", "本年累计"].indexOf(thisValue) === -1) {
-            $(this).val("");
-        }
-    });
+
     // option颜色控制
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
         let $options = $("#subjectSelect").children();
@@ -182,10 +184,18 @@ let acc_balance_sheet_infos = "", // 保存本次课程全部信息，减少后�
 /**
  * 从后端获取科目余额表信息
  */
-function get_acc_balance_sheet_info() {
+function get_acc_balance_sheet_info(isFromSubmit = false) {
 
+    // 重置信息
+    vii2ResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!acc_balance_sheet_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若acc_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
-    if (acc_balance_sheet_infos && acc_balance_sheet_confirmed) {
+    if (acc_balance_sheet_confirmed) {
         map_acc_balance_sheet_info();
         return;
     }
@@ -208,9 +218,6 @@ function map_acc_balance_sheet_info(data) {
     acc_balance_sheet_infos = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_infos;
     acc_balance_sheet_confirmed = data ? data["acc_balance_sheet_confirmed"] : acc_balance_sheet_confirmed;
     acc_balance_sheet_saved = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_saved;
-    // 先重置科目余额表信息
-    $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
-    $("input").val("");
 
     // `完成状态`标签控制
     spanStatusCtr(acc_balance_sheet_confirmed, acc_balance_sheet_saved, "acc_balance_sheet_submit_span");
@@ -312,6 +319,8 @@ function vii1PaddingData(data) {
             balance_money = subsidiary_account_info[infoIndex]["balance_money"],
             year = date[0];
         if (firstRow) {
+            let dateTmp = new Date();
+            year = year ? year : dateTmp.getFullYear();
             $("#yearNow").val(year);
             firstRow = false;
         }
@@ -427,6 +436,30 @@ function vii2PaddingData(data) {
 }
 
 // ==================================事件控制==================================//
+/**
+ * 重置明细账信息
+ */
+function vii1ResetInfo() {
+    $("[id^=period1Vii1Row][id!=Vii1RowEnd][id!=period1Vii1Row1][id!=period1Vii1Row2][id!=period1Vii1RowLast]").remove();
+    $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1Row1][id!=period2Vii1Row2][id!=period2Vii1RowLast]").remove();
+    $("#first").find("input").each(function () {
+        let thisValue = $(this).val();
+        if (["期初余额", "本期合计", "本年累计"].indexOf(thisValue) === -1) {
+            $(this).val("");
+        }
+    });
+    let dateTmp = new Date(),
+        year = dateTmp.getFullYear();
+    $("#yearNow").val(year);
+}
+
+/**
+ * 重置科目余额表信息
+ */
+function vii2ResetInfo() {
+    $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
+    $("#second").find("input").val("");
+}
 
 /*
  * @ # coursevii1 -> 登记各账户明细表 ? 表格增加行

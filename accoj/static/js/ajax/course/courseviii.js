@@ -1,8 +1,8 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     bindControlViii();
-    get_new_balance_sheet_info();
-    get_profit_statement_info();
+    get_new_balance_sheet_info(true);
+    get_profit_statement_info(true);
 });
 
 //======================================提交资产负债表信息======================================//
@@ -47,8 +47,15 @@ let new_balance_sheet_infos, // 保存本次课程全部信息，减少后端数
 /**
  * 从后端获取资产负债表信息
  */
-function get_new_balance_sheet_info() {
-
+function get_new_balance_sheet_info(isFromSubmit = false) {
+    // 重置信息
+    viii1ResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!new_balance_sheet_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若new_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
     if (new_balance_sheet_infos && new_balance_sheet_confirmed) {
         map_new_balance_sheet_info();
@@ -74,8 +81,7 @@ function map_new_balance_sheet_info(data) {
     new_balance_sheet_infos = data ? data["new_balance_sheet_infos"] : new_balance_sheet_infos;
     new_balance_sheet_confirmed = data ? data["new_balance_sheet_confirmed"] : new_balance_sheet_confirmed;
     new_balance_sheet_saved = data ? data["new_balance_sheet_infos"] : new_balance_sheet_saved;
-    // 重置输入
-    $("#viiiFirst").find("input").val("");
+
     // `完成状态`标签控制
     spanStatusCtr(new_balance_sheet_confirmed, new_balance_sheet_saved, "new_balance_sheet_span");
 
@@ -126,8 +132,16 @@ let profit_statement_infos, // 保存本次课程全部信息，减少后端数�
 /**
  * 从后端获取利润表信息
  */
-function get_profit_statement_info() {
+function get_profit_statement_info(isFromSubmit = false) {
 
+    // 重置信息
+    viii2ResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!profit_statement_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若profit_statement_infos不为空且已经确认提交过，则不再发送数据请求
     if (profit_statement_infos && profit_statement_confirmed) {
         map_profit_statement_info();
@@ -153,8 +167,7 @@ function map_profit_statement_info(data) {
     profit_statement_infos = data ? data["profit_statement_infos"] : profit_statement_infos;
     profit_statement_confirmed = data ? data["profit_statement_confirmed"] : profit_statement_confirmed;
     profit_statement_saved = data ? data["profit_statement_infos"] : profit_statement_saved;
-    // 重置输入
-    $("#viiiSecond").find("input").val("");
+
     // `完成状态`标签控制
     spanStatusCtr(profit_statement_confirmed, profit_statement_saved, "profit_statement_span");
 
@@ -214,6 +227,20 @@ function viiiPaddingData(data, isFirst) {
 }
 
 //===============================================事件控制===============================================//
+/**
+ * 资产负债表重置
+ */
+function viii1ResetInfo() {
+    $("#viiiFirst").find("input").val("");
+}
+
+/**
+ * 利润表重置
+ */
+function viii2ResetInfo() {
+    $("#viiiSecond").find("input").val("");
+}
+
 let firstChange = true,
     periodEndData = Object(),
     periodLastData = Object();

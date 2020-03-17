@@ -1,8 +1,8 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     bindControlIx2();
-    get_ix2First_info();
-    get_ix2Second_info();
+    get_ix2First_info(true);
+    get_ix2Second_info(true);
 });
 
 //======================================提交资产负债表信息======================================//
@@ -47,8 +47,15 @@ let ix2First_infos, // 保存本次课程全部信息，减少后端数据请求
 /**
  * 从后端获取资产负债表信息
  */
-function get_ix2First_info() {
-
+function get_ix2First_info(isFromSubmit = false) {
+    // 重置信息
+    ix21ResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!ix2First_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若ix2First_infos不为空且已经确认提交过，则不再发送数据请求
     if (ix2First_infos && ix2First_confirmed) {
         map_ix2First_info();
@@ -74,8 +81,7 @@ function map_ix2First_info(data) {
     ix2First_infos = data ? data["ix2First_infos"] : ix2First_infos;
     ix2First_confirmed = data ? data["ix2First_confirmed"] : ix2First_confirmed;
     ix2First_saved = data ? data["ix2First_saved"] : ix2First_saved;
-    // 重置输入
-    $("#ix2First").find("input").val("");
+
     // `完成状态`标签控制
     spanStatusCtr(ix2First_confirmed, ix2First_saved, "ix2First_span");
 
@@ -126,8 +132,15 @@ let ix2Second_infos, // 保存本次课程全部信息，减少后端数据请�
 /**
  * 从后端获取利润表信息
  */
-function get_ix2Second_info() {
-
+function get_ix2Second_info(isFromSubmit = false) {
+    // 重置信息
+    ix22ResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!ix2Second_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若ix2Second_infos不为空且已经确认提交过，则不再发送数据请求
     if (ix2Second_infos && ix2Second_confirmed) {
         map_ix2Second_info();
@@ -153,8 +166,7 @@ function map_ix2Second_info(data) {
     ix2Second_infos = data ? data["ix2Second_infos"] : ix2Second_infos;
     ix2Second_confirmed = data ? data["ix2Second_confirmed"] : ix2Second_confirmed;
     ix2Second_saved = data ? data["ix2Second_saved"] : ix2Second_saved;
-    // 重置输入
-    $("#ix2Second").find("input").val("");
+
     // `完成状态`标签控制
     spanStatusCtr(ix2Second_confirmed, ix2Second_saved, "ix2Second_span");
 
@@ -218,6 +230,20 @@ function Ix2PaddingData(data, isFirst) {
 }
 
 //===============================================事件控制===============================================//
+/**
+ * 资产负债表重置
+ */
+function ix21ResetInfo() {
+    $("#ix2First").find("input").val("");
+}
+
+/**
+ * 利润表重置
+ */
+function ix22ResetInfo() {
+    $("#ix2Second").find("input").val("");
+}
+
 let firstChange = true,
     periodEndData = Object(),
     periodLastData = Object();
