@@ -30,7 +30,11 @@
                                 <!-- 第一标签 -->
                                 <div role="tabpanel" class="tab-pane active in fade" id="first">
                                     <div>
-                                        <p class="acc-title">1、登记各账户明细账</p>
+                                        <p class="acc-title">1、登记各账户明细账
+                                        <span id="subsidiary_account_submit_span"
+                                                                      class="glyphicon glyphicon-ok"
+                                                                      style="color: #5cb85c;font-size: medium;display: none">已完成</span>
+                                        </p>
                                         <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
@@ -46,7 +50,7 @@
                                                     <tr>
                                                         <td colspan="37" style="border: 0">
                                                             <div style="text-align: center">
-                                                                <label>
+                                                                <label style="display: inline;">
                                                                     <select id="subjectSelect" class="form-control"
                                                                             style="width: auto; display: inline-block;"
                                                                             onchange="get_subsidiary_account_info()">
@@ -54,10 +58,9 @@
                                                                                 style="display: none"></option>
                                                                     </select>
                                                                 </label>
-                                                                <p style="font-size: 24px; display: inline-block;">明&nbsp;细&nbsp;账</p>
-                                                                <span id="subsidiary_account_submit_span"
-                                                                      class="glyphicon glyphicon-ok"
-                                                                      style="color: #5cb85c;font-size: medium;display: none">已完成</span>
+                                                                <p style="font-size: 24px; display: inline;">明&nbsp;细&nbsp;账</p>
+                                                                
+                                                                
                                                             </div>
                                                         </td>
                                                     </tr>
