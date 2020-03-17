@@ -293,10 +293,10 @@ function vii1PaddingData(data) {
     period1Vii1Row = 3;
     period2Vii1Row = 3;
     for (let i = 2; i < subsidiary_account_info.length - 2; i++) {
-        if (subsidiary_account_info.length === 7) break;
+        if (subsidiary_account_info.length === 6) break;
         if (firstPeriod && subsidiary_account_info[i]["summary"] === "本期合计") {
             firstPeriod = false;
-            i += 3;
+            i += 2;
         }
         if (firstPeriod) {
             vii1_AddRow(true);
@@ -441,7 +441,7 @@ function vii2PaddingData(data) {
  */
 function vii1ResetInfo() {
     $("[id^=period1Vii1Row][id!=Vii1RowEnd][id!=period1Vii1Row1][id!=period1Vii1Row2][id!=period1Vii1RowLast]").remove();
-    $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1Row1][id!=period2Vii1Row2][id!=period2Vii1RowLast]").remove();
+    $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1Row1][id!=period2Vii1RowLast]").remove();
     $("#first").find("input").each(function () {
         let thisValue = $(this).val();
         if (["期初余额", "本期合计", "本年累计"].indexOf(thisValue) === -1) {
