@@ -364,28 +364,24 @@
                                 <div style="text-align: center;margin-top: 100px; margin-bottom: 230px">
                                     <div>
                                         <button class="btn btn-success" onclick="all_to('plusbox')"
-                                                type="button">
-                                            <span class="glyphicon"></span>&nbsp;增加
+                                                type="button">增加
                                         </button>
                                     </div>
                                     <div>
-                                        <button class="btn btn-info" onclick="to_all('plusbox')"
-                                                style="margin-top: 10px" type="button">
-                                            <span class="glyphicon"></span>&nbsp;撤销
+                                        <button class="btn btn-primary" onclick="to_all('plusbox')"
+                                                style="margin-top: 10px" type="button">撤销
                                         </button>
                                     </div>
                                 </div>
                                 <div style="text-align: center">
                                     <div>
                                         <button class="btn btn-danger" onclick="all_to('minusbox')"
-                                                type="button">
-                                            <span class="glyphicon"></span>&nbsp;减少
+                                                type="button">减少
                                         </button>
                                     </div>
                                     <div>
-                                        <button class="btn btn-info" onclick="to_all('minusbox')"
-                                                style="margin-top: 10px;" type="button">
-                                            <span class="glyphicon"></span>&nbsp;撤销
+                                        <button class="btn btn-primary" onclick="to_all('minusbox')"
+                                                style="margin-top: 10px;" type="button">撤销
                                         </button>
                                     </div>
                                 </div>
@@ -409,7 +405,10 @@
                     </div>
                     <hr class="simple" style="clear: both;color: #6f5499"/>
                     <div id="course_iii_message"></div>
-                    <div style="text-align: right">
+                    <div style="float: left;">
+                        	<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                    </div>
+                    <div style="float: right;">
                         <button class="btn btn-info" id="save_subject_button" onclick="save_subject()" type="button">
                             <span class="glyphicon"></span>&nbsp;保存
                         </button>

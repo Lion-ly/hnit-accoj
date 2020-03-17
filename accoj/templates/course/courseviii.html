@@ -282,7 +282,7 @@
 									<td><label><input name="所有者权益合计Last"></label></td>
 								</tr>
 								<tr>
-									<th class="ats-tablecolor-f">资产总计</th>
+									<th class="acc-unedit">资产总计</th>
 									<td><label><input name="资产总计End"></label></td>
 									<td><label><input name="资产总计Last"></label></td>
 									<th class="acc-unedit">负债及所有者权益总计</th>
@@ -292,8 +292,11 @@
 							</tbody>
 						</table>
 						<hr class="simple" style="clear: both; color: #6f5499" />
-						<div style="text-align: right">
-							<div id="course_viii1_message"></div>
+						<div id="course_viii1_message"></div>
+						<div style="float: left;">
+                        	<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                   		</div>
+						<div style="float: right;">
 							<button type="button" class="btn btn-info"
 								id="save_new_balance_sheet_button"
 								onclick="save_new_balance_sheet()">
@@ -433,8 +436,11 @@
 							</tbody>
 						</table>
 						<hr class="simple" style="clear: both; color: #6f5499" />
-						<div style="text-align: right">
-							<div id="course_viii2_message"></div>
+						<div id="course_viii2_message"></div>
+						<div style="float: left;">
+                        	<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                   		</div>
+						<div style="float: right;">
 							<button type="button" class="btn btn-info"
 								id="save_profit_statement_button"
 								onclick="save_profit_statement()">
