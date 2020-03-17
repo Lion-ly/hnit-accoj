@@ -1,6 +1,6 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
-    get_balance_sheet_info();
+    get_balance_sheet_info(true);
 });
 
 //==================================提交会计平衡表信息==================================//
@@ -46,10 +46,17 @@ let balance_sheet_infos = "", // 保存本次课程全部信息，减少后端�
 /**
  * 从后端获取会计平衡表信息
  */
-function get_balance_sheet_info() {
+function get_balance_sheet_info(isFromSubmit = false) {
 
-    // 若balance_sheet_info不为空且已经确认提交过，则不再发送数据请求
-    if (balance_sheet_infos && balance_sheet_infos["confirmed"] === true) {
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!balance_sheet_saved || balance_sheet_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
+
+    // 若已经确认提交过，则不再发送数据请求
+    if (balance_sheet_confirmed) {
         map_balance_sheet_info();
         return;
     }
@@ -191,17 +198,17 @@ function v2_AddRow(period) {
         "<tr id='" + period_row_id + "'>"
         + "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='borrow_1' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "                                              onchange='RealNumber(this)'></label></td>" +
         "<td><label><input name='lend_1' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "                                              onchange='RealNumber(this)'></label></td>" +
         "<td><label><input name='borrow_2' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "                                              onchange='RealNumber(this)'></label></td>" +
         "<td><label><input name='lend_2' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "                                              onchange='RealNumber(this)'></label></td>" +
         "<td><label><input name='borrow_3' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
+        "                                              onchange='RealNumber(this)'></label></td>" +
         "<td><label><input name='lend_3' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>"
+        "                                              onchange='RealNumber(this)'></label></td>"
         + "<td style='padding: 4px; border: 0'>"
         + "<div style='text-align: center'> "
         + "<a style='color: red;padding: 0' type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"

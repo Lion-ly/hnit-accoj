@@ -1,7 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     bindControlIx4();
-    get_ix4_info();
+    get_ix4_info(true);
 });
 
 //======================================提交比率分析法信息======================================//
@@ -46,8 +46,15 @@ let ix4_infos, // 保存本次课程全部信息，减少后端数据请求次�
 /**
  * 从后端获取比率分析法信息
  */
-function get_ix4_info() {
-
+function get_ix4_info(isFromSubmit = false) {
+    // 重置信息
+    ix4ResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!ix4_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若ix4_infos不为空且已经确认提交过，则不再发送数据请求
     if (ix4_infos && ix4_confirmed) {
         map_ix4_info();
@@ -73,8 +80,7 @@ function map_ix4_info(data) {
     ix4_infos = data ? data["ix4_infos"] : ix4_infos;
     ix4_confirmed = data ? data["ix4_confirmed"] : ix4_confirmed;
     ix4_saved = data ? data["ix4_saved"] : ix4_saved;
-    // 重置输入
-    $("#ix4").find("input").val("");
+
     // `完成状态`标签控制
     spanStatusCtr(ix4_confirmed, ix4_saved, "ix4_span");
 
@@ -128,6 +134,12 @@ function Ix4PaddingData(data) {
 }
 
 //===============================================事件控制===============================================//
+/**
+ * 重置信息
+ */
+function ix4ResetInfo() {
+    $("#ix4").find("input").val("");
+}
 
 /**
  * 将事件`处理函数`绑定

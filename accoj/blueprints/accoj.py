@@ -472,19 +472,11 @@ def get_ledger_info():
     获取会计账户信息
     :return:
     """
-    company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                        {"ledger_infos"  : 1, "involve_subjects": 1, "schedule_confirm": 1,
-                                         "schedule_saved": 1, "_id": 0})
-    ledger_infos = company.get("ledger_infos")
-    involve_subjects = company.get("involve_subjects")
-    schedule_confirm = company.get("schedule_confirm")
-    schedule_saved = company.get("schedule_saved")
-    if not ledger_infos:
-        return jsonify(result=True, ledger_infos=None, involve_subjects=involve_subjects)
-    for key in list(ledger_infos):
-        ledger_infos[key]["confirmed"] = True if key in schedule_confirm.get("ledger_confirm") else False
-        ledger_infos[key]["saved"] = True if key in schedule_saved.get("ledger_saved") else False
-    return jsonify(result=True, ledger_infos=ledger_infos, involve_subjects=involve_subjects)
+    infos, confirmed, saved = get_infos1(infos_name="ledger")
+    return jsonify(result=True,
+                   ledger_infos=infos,
+                   ledger_confirmed=confirmed,
+                   ledger_saved=saved)
 
 
 @accoj_bp.route('/delete_ledger_info', methods=['POST'])
@@ -665,7 +657,6 @@ def get_subsidiary_account_info():
                    subsidiary_account_saved=saved)
 
 
-# 科目余额表
 @accoj_bp.route('/submit_acc_balance_sheet_info', methods=['POST'])
 def submit_acc_balance_sheet_info():
     """

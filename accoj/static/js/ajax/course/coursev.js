@@ -1,14 +1,30 @@
 let involve_subjects = Array(), // 正确答案中包含的所有科目列表
     pageNum = 0,
     ledger_infos,               // 嵌套字典，保存本次课程全部信息，减少后端数据请求次数
+    ledger_confirmed = Array(),
+    ledger_saved = Array(),
     now_subject = "",           // 当前所选科目
     first = true,
     involve_subjects_len = 0;
 
 // 页面加载完成填充数据
 $(document).ready(function () {
-    get_ledger_info(now_subject);
+    get_involve_subjects();
 });
+
+
+/**
+ * 获取科目列表
+ */
+function get_involve_subjects() {
+    function successFunc(data) {
+        involve_subjects = data["involve_subjects"];
+        get_ledger_info(now_subject, true);
+    }
+
+    // 获取数据
+    get_info({}, "/get_business_list", successFunc, "");
+}
 
 //==================================提交会计账户信息==================================//
 /**
@@ -47,9 +63,17 @@ function submit_ledger_info(submit_type) {
 /**
  * 从后端获取会计账户信息
  * @param subject
+ * @param isFromSubmit
  */
-function get_ledger_info(subject) {
+function get_ledger_info(subject, isFromSubmit = false) {
     now_subject = subject;
+
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!ledger_saved.length || ledger_saved.indexOf(now_subject) === -1)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若ledger_infos不为空且请求的账户已经确认提交过，则不再发送数据请求
     if (ledger_infos && ledger_infos.hasOwnProperty(now_subject) && ledger_infos[now_subject]["confirmed"]) {
         map_ledger_info();
@@ -57,16 +81,18 @@ function get_ledger_info(subject) {
     }
 
     function successFunc(data) {
-        let ledger_infos = data["ledger_infos"];
         if (first) {
+            let ledger_infos = data["ledger_infos"],
+                ledger_confirmed = data["ledger_confirmed"],
+                ledger_saved = data["ledger_saved"];
             // 创建已保存或已提交的标签
             for (let key in ledger_infos) {
                 if (!ledger_infos.hasOwnProperty(key)) continue;
-                confirmed = ledger_infos[key]["confirmed"];
-                saved = ledger_infos[key]["saved"];
+                let confirmed = ledger_confirmed.indexOf(key) !== -1,
+                    saved = ledger_saved.indexOf(key) !== -1;
                 let li_color = "#337ab7";
                 if (confirmed || saved) {
-                    li_color = confirmed ? "#5cb85c": "#5bc0de";
+                    li_color = confirmed ? "#5cb85c" : "#5bc0de";
                 }
                 let lcr = "left";
                 let subject = key;
@@ -76,7 +102,7 @@ function get_ledger_info(subject) {
                 let coursevli_id = "coursevli_" + lcr + pageNum;
                 $("#coursev_li_new").before(
                     "<li role='presentation' class='active' onclick='coursevLiChange(this, true)' id='" + coursevli_id + "'>" +
-                    "<a style='color: "+ li_color +"'>" + subject + "</a></li>"
+                    "<a style='color: " + li_color + "'>" + subject + "</a></li>"
                 );
                 pageNum++;
             }
@@ -107,7 +133,8 @@ function get_ledger_info(subject) {
 function map_ledger_info(data) {
     data = data ? data : "";
     ledger_infos = data ? data["ledger_infos"] : ledger_infos;
-    involve_subjects = data ? data["involve_subjects"] : involve_subjects;
+    ledger_confirmed = data ? data["ledger_confirmed"] : ledger_confirmed;
+    ledger_saved = data ? data["ledger_saved"] : ledger_saved;
 
     if (!ledger_infos) return;
     let ledger_info = ledger_infos.hasOwnProperty(now_subject) ? ledger_infos[now_subject] : "";
@@ -121,12 +148,17 @@ function map_ledger_info(data) {
 
 //================================删除账户信息================================//
 function delete_ledger_info(subject) {
+    function successFunc(data) {
+        if (data["result"]) {
+            show_message(messageDivID, "删除成功！", "info", 1000);
+        }
+    }
+
     // 获取数据
     let data = {"subject": subject};
     data = JSON.stringify(data);
+
     let url = "/delete_ledger_info",
-        successFunc = function () {
-        },
         messageDivID = "course_v_message";
     get_info(data, url, successFunc, messageDivID);
 
@@ -179,9 +211,9 @@ function vGetInput() {
  */
 function vPaddingData(data) {
 
-    let ledger_info = data;
-    confirmed = ledger_info["confirmed"],
-        saved = ledger_info["saved"],
+    let ledger_info = data,
+        confirmed = ledger_confirmed.indexOf(now_subject) !== -1,
+        saved = ledger_saved.indexOf(now_subject) !== -1,
         is_left = ledger_info["is_left"],
         opening_balance = ledger_info["opening_balance"],
         current_amount_dr = ledger_info["current_amount_dr"],
@@ -307,13 +339,15 @@ function coursevLiChange(obj, role = false) {
  */
 function deleteTableV(obj) {
     let subject = $("li[id^=coursevli][class=active]").children().text();
-    if (ledger_infos && ledger_infos.hasOwnProperty(subject) && ledger_infos[subject]["confirmed"]) {
+    if (ledger_confirmed.length > 0 && ledger_confirmed.indexOf(subject) !== -1) {
         show_message("course_v_message", "已经提交过, 不可删除", "danger", 1000, "删除失败！");
         return;
     }
-    if (involve_subjects.indexOf(subject) !== -1) {
+    if (ledger_saved.length > 0 && ledger_saved.indexOf(subject) !== -1) {
+        //  如果已保存才向后台发送删除请求
         delete_ledger_info(subject);
     }
+    show_message("course_v_message", "删除成功！", "info", 1000);
     // 删除li标签
     $("li[id^=coursevli][class=active]").remove();
     // 删除Table
@@ -341,9 +375,9 @@ function v_AddLeftRow(obj, pm, business_no = "", money = "") {
         + "class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>"
-        + "<td><input title='业务编号' type='number' name='business_no' value='" + business_no
+        + "<td><input style='text-align: left' title='业务编号' onkeyup='limit_number(this)' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
-        + "<td><input title='金额 ' type='number' name='" + is_dr + "' value='" + money + "'"
+        + "<td><input style='text-align: left' title='金额 ' onchange='RealNumber(this)' name='" + is_dr + "' value='" + money + "'"
         + " placeholder='0'></td></tr>");
 }
 
@@ -354,9 +388,9 @@ function v_AddRightRow(obj, pm, business_no = "", money = "") {
     }
     $(obj).parent().parent().parent().after(
         "<tr>"
-        + "<td><input title='业务编号' type='number' name='business_no' value='" + business_no
+        + "<td><input style='text-align: right' onkeyup='limit_number(this)' title='业务编号' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
-        + "<td><input title='金额 ' type='number' name='" + is_dr + "' value='" + money + "'"
+        + "<td><input style='text-align: right' onchange='RealNumber(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
         + " name='" + is_dr + "' id='' placeholder='0'></td>"
         + "<td style='width: 40%;'>" + "<div style='text-align: right'>"
         + "<a style='color: red; padding: 0 0' "
@@ -400,14 +434,19 @@ function tTableAppendLeft() {
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
-        '                                    <td style="width: 40%;">' +
+        '                                    <td style="width: 40%;"></td>' +
+        '                                    <td style="width: 30%;text-align: left">业务编号</td>' +
+        '                                    <td style="width: 30%;text-align: left">金额</td>' +
+        '                                </tr>' +
+        '                                <tr>' +
+        '                                    <td>' +
         '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
         '                                                             class="btn"' +
         '                                                             onclick="v_AddLeftRow(this, true)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
         '                                    </td>' +
-        '                                    <th style="width: 30%;">期初余额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="opening_balance" placeholder="0"></td>' +
+        '                                    <th>期初余额</th>' +
+        '                                    <td><input name="opening_balance" placeholder="0"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -418,8 +457,8 @@ function tTableAppendLeft() {
         '                            <table id="ttable-01" class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
-        '                                    <th style="width: 30%;"></th>' +
-        '                                    <td style="width: 30%;"></td>' +
+        '                                    <td style="width: 30%;text-align: right">业务编号</td>' +
+        '                                    <td style="width: 30%;text-align: right">金额</td>' +
         '                                    <td style="width: 40%;">' +
         '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
         '                                                              class="btn"' +
@@ -440,12 +479,12 @@ function tTableAppendLeft() {
         '                                <tr>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="current_amount_dr" id="" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" name="current_amount_dr"  placeholder="0"></td>' +
         '                                </tr>' +
         '                                <tr>' +
         '                                    <td></td>' +
         '                                    <th>期末余额</th>' +
-        '                                    <td><input type="number" name="ending_balance" id="" placeholder="0"></td>' +
+        '                                    <td><input onchange="RealNumber(this)" name="ending_balance" placeholder="0"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -456,8 +495,8 @@ function tTableAppendLeft() {
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="current_amount_cr" id="" placeholder="0"></td>' +
+        '                                    <th style="width: 30%;text-align: right">本期发生额</th>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
@@ -507,8 +546,8 @@ function tTableAppendRight() {
         '                                                             class="btn" onclick="v_AddLeftRow(this,false)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
         '                                    </td>' +
-        '                                    <th style="width: 30%;"></th>' +
-        '                                    <td style="width: 30%;"></td>' +
+        '                                    <td style="width: 30%;text-align: left">业务编号</td>' +
+        '                                    <td style="width: 30%;text-align: left">金额</td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -519,8 +558,13 @@ function tTableAppendRight() {
         '                            <table id="ttable-01" class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
-        '                                    <th style="width: 30%;">期初余额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;text-align: right">业务编号</td>' +
+        '                                    <td style="width: 30%;text-align: right">金额</td>' +
+        '                                    <td style="width: 40%;"></td>' +
+        '                                </tr>' +
+        '                                <tr>' +
+        '                                    <th style="width: 30%;text-align: right">期初余额</th>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" style="text-align: right" name="opening_balance" placeholder="0"></td>' +
         '                                    <td style="width: 40%;">' +
         '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
         '                                                              class="btn"' +
@@ -541,7 +585,7 @@ function tTableAppendRight() {
         '                                <tr>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" name="current_amount_dr" placeholder="0"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -552,13 +596,13 @@ function tTableAppendRight() {
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
         '                                <tr>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <th style="width: 30%;text-align: right">本期发生额</th>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                </tr>' +
         '                                <tr>' +
-        '                                    <th>期末余额</th>' +
-        '                                    <td><input type="number" name="" id="" placeholder="0"></td>' +
+        '                                    <th style="text-align: right">期末余额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" style="text-align: right" name="ending_balance"  placeholder="0"></td>' +
         '                                    <td></td>' +
         '                                </tr>' +
         '                                </tbody>' +

@@ -306,7 +306,7 @@ def submit_infos4(infos, submit_type, subject, infos_name):
 
 def get_infos1(infos_name):
     """
-    获取信息（第一类，用于非第九次课程一二部分、第六七次）
+    获取信息（第一类，用于`非第九次课程一二部分`、`第五六七次课程`）
     :param infos_name: infos name
     :return: infos, confirmed, saved
     """

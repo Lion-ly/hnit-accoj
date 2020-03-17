@@ -16,11 +16,11 @@
                         <div class="acc-container-answer">
                             <!-- 作业标签 -->
                             <ul class="nav nav-tabs">
-                                <li role="presentation" class="active" onclick="get_subsidiary_account_info()"><a
+                                <li role="presentation" class="active"><a
                                         href="#first"
                                         aria-controls="first" role="tab"
                                         data-toggle="tab">登记各账户明细账</a></li>
-                                <li role="presentation" onclick="get_acc_balance_sheet_info()"><a href="#second"
+                                <li role="presentation"><a href="#second"
                                                                                                   aria-controls="second"
                                                                                                   role="tab"
                                                                                                   data-toggle="tab">登记科目余额表</a>
@@ -65,7 +65,9 @@
                                                         <td style="border-right: 0;padding: 4px;width: auto;height: auto">
                                                             <label><input id="yearNow"
                                                                           style="width: 40px;height: 100%;border-bottom-style: solid;border-bottom-color: #0f0f0f"
-                                                                          name="year"></label></td>
+                                                                          name="year" onkeyup="limit_number(this)">
+                                                            </label>
+                                                        </td>
                                                         <th style="border-left: 0; ">年</th>
                                                         <th class="acc-unedit" colspan="2">记账凭证</th>
                                                         <th class="acc-unedit" rowspan="2">摘要</th>

@@ -1,7 +1,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     bindControlCoursex();
-    get_coursex_info();
+    get_coursex_info(true);
 });
 
 //======================================提交杜邦分析法信息======================================//
@@ -46,8 +46,15 @@ let coursex_infos, // 保存本次课程全部信息，减少后端数据请求�
 /**
  * 从后端获取杜邦分析法信息
  */
-function get_coursex_info() {
-
+function get_coursex_info(isFromSubmit = false) {
+    // 重置信息
+    xResetInfo();
+    if (!isFromSubmit) {
+        //  若不是从按钮或第一次加载调用
+        if (!coursex_saved)
+        //  若未保存，则不向后台请求数据
+            return;
+    }
     // 若coursex_infos不为空且已经确认提交过，则不再发送数据请求
     if (coursex_infos && coursex_confirmed) {
         map_coursex_info();
@@ -73,8 +80,7 @@ function map_coursex_info(data) {
     coursex_infos = data ? data["coursex_infos"] : coursex_infos;
     coursex_confirmed = data ? data["coursex_confirmed"] : coursex_confirmed;
     coursex_saved = data ? data["coursex_saved"] : coursex_saved;
-    // 重置输入
-    $("#coursexData").find("input").val("");
+
     // `完成状态`标签控制
     spanStatusCtr(coursex_confirmed, coursex_saved, "coursex_span");
 
@@ -125,6 +131,12 @@ function CoursexPaddingData(data) {
 }
 
 //===============================================事件控制===============================================//
+/**
+ * 重置信息
+ */
+function xResetInfo() {
+    $("#coursexData").find("input").val("");
+}
 
 /**
  * 将事件`处理函数`绑定
