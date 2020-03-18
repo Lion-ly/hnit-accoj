@@ -194,7 +194,7 @@ def deal_with_question_1(company, question_no):
                 value_tmp = 0
                 for asset in com_assets:
                     if asset.get("asset_name") == values_list[0]:
-                        value_tmp = values_list[1] - asset.get("asset_value")
+                        value_tmp = values_list[1] - asset.get("market_value")
                         break
                 if values_list[1] >= value_tmp:
                     value = value.split("/")[0]
@@ -244,7 +244,7 @@ def deal_with_question_1(company, question_no):
                     # 问题13特判
                     for asset in com_assets:
                         if asset.get("asset_name") == values_list[0]:
-                            value = abs(values_list[1] - asset.get("asset_value"))
+                            value = abs(values_list[1] - asset.get("market_value"))
                             break
                 elif question_no == 14:
                     # 问题14特判
