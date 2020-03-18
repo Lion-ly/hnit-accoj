@@ -10,7 +10,7 @@ $(document).ready(function () {
  */
 function get_involve_subjects() {
     function successFunc(data) {
-        involve_subjects = data["involve_subjects"];
+        involve_subjects = data["involve_subjects"]["involve_subjects_2"];
         let firstOption = true;
 
         $.each(involve_subjects, function (index, item) {
