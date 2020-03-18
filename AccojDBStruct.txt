@@ -66,7 +66,8 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											"key_element_confirm": [],			# 会计要素部分进度
 											"subject_confirm": [],				# 会计科目部分进度
 											"entry_confirm": [],				# 会计分录部分进度
-											"ledger_confirm": [],				# 会计账户部分进度
+											"ledger_confirm": {"ledger_confirm1": [],# 会计账户部分进度
+															   "ledger_confirm2": []},
 											"balance_sheet_confirm": [],		# 会计平衡表部分进度
 											"acc_document_confirm": [], 		# 会计凭证部分进度
 											"subsidiary_account_confirm": [],   # 会计明细账部分进度
@@ -76,7 +77,7 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											"trend_analysis_confirm":{"first": false, "second": false},
 											"common_ratio_analysis_confirm":{"first": false, "second": false},
 											"ratio_analysis_confirm":false,
-											"dupont_analysis_saved":false
+											"dupont_analysis_confirm":false
 											},
 
 						 # 课程保存进度
@@ -85,7 +86,8 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											"key_element_saved": [],			# 会计要素部分进度
 											"subjects_saved": [],				# 会计科目部分进度
 											"entry_saved": [],					# 会计分录部分进度
-											"ledger_saved": [],					# 会计账户部分进度
+											"ledger_saved": {"ledger_saved1": [],# 会计账户部分进度
+															 "ledger_saved2": []},
 											"balance_sheet_saved": [],			# 会计平衡表部分进度
 											"acc_document_saved": [],			# 会计凭证部分进度
 											"subsidiary_account_saved": [],		# 会计明细账部分进度
@@ -127,7 +129,7 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 															   "document_no": "",					# 学号名+业务索引号(在company集合中businesses的下标)
 															   "filename": "",						# 文件名
 															   "doc_no": 1,					 		# 会计凭证记号
-															   "date": new Date(),		 		# 日期
+															   "date": new Date(),		 			# 日期
 															   "doc_nums": 1,				 		# 单据数量
 															   "contents":[{
 																		   "summary": " ",				 		# 摘要
@@ -139,7 +141,7 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 															   }]
 										}]
 						 # 会计账户
-						 "ledger_infos": {"subject_name":										# 科目名即账户名作为键
+						 "ledger_infos": {"ledger_infos_1": {"subject_name":					# 科目名即账户名作为键
 														{
 													   "subject": "",							# 科目名
 													   "opening_balance": 1, 					# 期初余额
@@ -150,6 +152,19 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 													   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
 													   "is_left": boolean						# 是否左T表
 													   }
+										  }
+										  "ledger_infos_2": {"subject_name":					# 科目名即账户名作为键
+														{
+													   "subject": "",							# 科目名
+													   "opening_balance": 1, 					# 期初余额
+													   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
+													   "current_amount_dr": 1,					# 本期借方发生额
+													   "current_amount_cr": 1,					# 本期贷方发生额
+													   "ending_balance": 1,						# 期末余额
+													   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
+													   "is_left": boolean						# 是否左T表
+													   }
+										  }
 										 }
 						 # 试算平衡集合
 						 "balance_sheet_infos": {

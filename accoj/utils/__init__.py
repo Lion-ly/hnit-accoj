@@ -103,22 +103,25 @@ def submit_infos1(infos, submit_type, infos_name):
         _id = company.get("_id")
         schedule_confirm = company.get("schedule_confirm")
 
+        set_key1 = "{}".format(infos_name)
+        set_key2 = "schedule_confirm.{}_confirm".format(infos_name)
+        set_key3 = "schedule_saved.{}_saved".format(infos_name)
         if not schedule_confirm.get("{}_confirm".format(infos_name)):
             # 若当前账户信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
                 # 提交类型为确认提交
                 mongo.db.company.update({"_id": _id},
-                                        {"$set": {"{}".format(infos_name)                         : infos,
-                                                  "schedule_confirm.{}_confirm".format(infos_name): True,
-                                                  "schedule_saved.{}_saved".format(infos_name)    : True}}
+                                        {"$set": {set_key1: infos,
+                                                  set_key2: True,
+                                                  set_key3: True}}
                                         )
                 return True, ""
 
             elif submit_type == "save":
                 # 提交类型为保存
                 mongo.db.company.update({"_id": _id},
-                                        {"$set": {"{}".format(infos_name)                     : infos,
-                                                  "schedule_saved.{}_saved".format(infos_name): True}}
+                                        {"$set": {set_key1: infos,
+                                                  set_key3: True}}
                                         )
                 return True, ""
 
@@ -153,22 +156,25 @@ def submit_infos2(infos, submit_type, infos_name, is_first):
         schedule_confirm = company.get("schedule_confirm")
         confirm = schedule_confirm.get("{}_confirm".format(infos_name))
 
+        set_key1 = "{}_infos.{}".format(infos_name, sheet_name)
+        set_key2 = "schedule_confirm.{}_confirm.{}".format(infos_name, times)
+        set_key3 = "schedule_saved.{}_saved.{}".format(infos_name, times)
         if not confirm or not confirm.get("{}".format(times)):
             # 若当前账户信息提交未确认，则确认提交或保存
             if submit_type == "confirm":
                 # 提交类型为确认提交
                 mongo.db.company.update({"_id": _id},
-                                        {"$set": {"{}_infos.{}".format(infos_name, sheet_name)              : infos,
-                                                  "schedule_confirm.{}_confirm.{}".format(infos_name, times): True,
-                                                  "schedule_saved.{}_saved.{}".format(infos_name, times)    : True}}
+                                        {"$set": {set_key1: infos,
+                                                  set_key2: True,
+                                                  set_key3: True}}
                                         )
                 return True, ""
 
             elif submit_type == "save":
                 # 提交类型为保存
                 mongo.db.company.update({"_id": _id},
-                                        {"$set": {"{}_infos.{}".format(infos_name, sheet_name)          : infos,
-                                                  "schedule_saved.{}_saved.{}".format(infos_name, times): True}}
+                                        {"$set": {set_key1: infos,
+                                                  set_key3: True}}
                                         )
                 return True, ""
         elif schedule_confirm.get("{}_confirm".format(infos_name)).get("{}".format(times)):
@@ -232,12 +238,15 @@ def submit_infos3(infos, submit_type, business_no, infos_name, affect_type=""):
                         (update_prefix + ".affect_type")                : affect_type}
         else:
             set_dict = {(update_prefix + ".{}_infos".format(infos_name)): infos}
+
+        add_key1 = "schedule_confirm.{}_confirm".format(infos_name)
+        add_key2 = "schedule_saved.{}_saved".format(infos_name)
         if submit_type == "confirm":
             # 提交类型为确认提交
             mongo.db.company.update({"_id": _id},
                                     {"$set"     : set_dict,
-                                     "$addToSet": {"schedule_confirm.{}_confirm".format(infos_name): business_no,
-                                                   "schedule_saved.{}_saved".format(infos_name)    : business_no}}
+                                     "$addToSet": {add_key1: business_no,
+                                                   add_key2: business_no}}
                                     )
             return True, ""
 
@@ -245,7 +254,7 @@ def submit_infos3(infos, submit_type, business_no, infos_name, affect_type=""):
             # 提交类型为保存
             mongo.db.company.update({"_id": _id},
                                     {"$set"     : set_dict,
-                                     "$addToSet": {"schedule_saved.{}_saved".format(infos_name): business_no}}
+                                     "$addToSet": {add_key2: business_no}}
                                     )
             return True, ""
 
@@ -256,13 +265,14 @@ def submit_infos3(infos, submit_type, business_no, infos_name, affect_type=""):
     return result, message
 
 
-def submit_infos4(infos, submit_type, subject, infos_name):
+def submit_infos4(infos, submit_type, subject, infos_name, ledger_period=False):
     """
     提交信息（第四类，账户和明细账部分）
     :param infos: submit infos
     :param submit_type: submit type
     :param subject: subject
     :param infos_name: infos name
+    :param ledger_period: leger period # 对于会计账户部分的特判 值为`1 or 2`
     :return: (boolean: result, str: message)
     """
     result, message = False, "未知错误！"
@@ -275,30 +285,48 @@ def submit_infos4(infos, submit_type, subject, infos_name):
     schedule_confirm = company.get("schedule_confirm")
     involve_subjects = company.get("involve_subjects")
 
-    if subject not in involve_subjects:
-        return False, "科目错误！"
+    involve_subjects_1 = involve_subjects.get("involve_subjects_1")
+    involve_subjects_2 = involve_subjects.get("involve_subjects_2")
 
-    if subject not in schedule_confirm.get("{}_confirm".format(infos_name)):
+    confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
+    if ledger_period:
+        if ledger_period == 1 and subject not in involve_subjects_1:
+            return False, "科目错误！"
+        elif ledger_period == 2 and subject not in involve_subjects_2:
+            return False, "科目错误！"
+    else:
+        if subject not in involve_subjects_2:
+            return False, "科目错误！"
+
+    set_prefix = "{}_infos.".format(infos_name)
+    add_suffix1 = ""
+    add_suffix2 = ""
+    if infos_name == "ledger":
+        set_prefix += "ledger_infos_{}.".format(ledger_period)
+        add_suffix1 += ".ledger{}_confirm".format(ledger_period)
+        add_suffix2 += ".ledger{}_saved".format(ledger_period)
+    set_key = set_prefix + subject
+    add_key1 = "schedule_confirm.{}_confirm{}".format(infos_name, add_suffix1)
+    add_key2 = "schedule_saved.{}_saved{}".format(infos_name, add_suffix2)
+
+    if subject not in confirmed:
         # 若当前账户信息提交未确认，则确认提交或保存
-        update_prefix = "{}_infos.".format(infos_name)
         if submit_type == "confirm":
             # 提交类型为确认提交
             mongo.db.company.update({"_id": _id},
-                                    {"$set"        : {
-                                        (update_prefix + subject): infos},
-                                        "$addToSet": {"schedule_confirm.{}_confirm".format(infos_name): subject,
-                                                      "schedule_saved.{}_saved".format(infos_name)    : subject}}
+                                    {"$set"     : {set_key: infos},
+                                     "$addToSet": {add_key1: subject,
+                                                   add_key2: subject}}
                                     )
             return True, ""
         elif submit_type == "save":
             # 提交类型为保存
             mongo.db.company.update({"_id": _id},
-                                    {"$set"        : {
-                                        (update_prefix + subject): infos},
-                                        "$addToSet": {"schedule_saved.{}_saved".format(infos_name): subject}}
+                                    {"$set"     : {set_key: infos},
+                                     "$addToSet": {add_key2: subject}}
                                     )
             return True, ""
-    elif subject in schedule_confirm.get("{}_confirm".format(infos_name)):
+    elif subject in confirmed:
         # 已提交确认
         return False, "已经提交过！"
     return result, message
@@ -310,11 +338,9 @@ def get_infos1(infos_name):
     :param infos_name: infos name
     :return: infos, confirmed, saved
     """
+    infos_key = "{}_infos".format(infos_name)
     company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                        {"{}_infos".format(infos_name): 1,
-                                         "schedule_confirm"           : 1,
-                                         "schedule_saved"             : 1,
-                                         "_id"                        : 0})
+                                        {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "_id": 0})
 
     infos = company.get("{}_infos".format(infos_name))
     schedule_confirm = company.get("schedule_confirm")
@@ -331,11 +357,10 @@ def get_infos2(is_first, infos_name):
     :param infos_name: infos name
     :return: infos, confirmed, saved
     """
+    infos_key = "{}_infos".format(infos_name)
     company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                        {"{}_infos".format(infos_name): 1,
-                                         "schedule_confirm"           : 1,
-                                         "schedule_saved"             : 1,
-                                         "_id"                        : 0})
+                                        {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "_id": 0})
+
     times = "first" if is_first else "second"
     infos = company.get("{}_infos".format(infos_name))
     schedule_confirm = company.get("schedule_confirm")
@@ -354,10 +379,8 @@ def get_infos3(infos_name):
     :return: infos, confirmed, saved
     """
     company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                        {"businesses"      : 1,
-                                         "schedule_confirm": 1,
-                                         "schedule_saved"  : 1,
-                                         "_id"             : 0})
+                                        dict(businesses=1, schedule_confirm=1, schedule_saved=1, _id=0))
+
     businesses = company.get("businesses")
     schedule_confirm = company.get("schedule_confirm")
     schedule_saved = company.get("schedule_saved")

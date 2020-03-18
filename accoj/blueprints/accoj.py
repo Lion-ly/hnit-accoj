@@ -111,14 +111,15 @@ def company_form_submit():
         data_dict["com_cash"] = 0
         data_dict["business_num"] = 0
         schedule_confirm = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[],
-                                entry_confirm=[], ledger_confirm=[], balance_sheet_confirm=False,
-                                acc_document_confirm=[], subsidiary_account_confirm=[],
+                                entry_confirm=[], ledger_confirm={"ledger1_confirm": [], "ledger2_confirm": []},
+                                balance_sheet_confirm=False, acc_document_confirm=[], subsidiary_account_confirm=[],
                                 acc_balance_sheet_confirm=False, new_balance_sheet_confirm=False,
                                 profit_statement_confirm=False,
                                 trend_analysis_confirm={"first": False, "second": False},
                                 common_ratio_analysis_confirm={"first": False, "second": False},
                                 ratio_analysis_confirm=False, dupont_analysis_confirm=False)
-        schedule_saved = dict(key_element_saved=[], subject_saved=[], entry_saved=[], ledger_saved=[],
+        schedule_saved = dict(key_element_saved=[], subject_saved=[], entry_saved=[],
+                              ledger_saved={"ledger1_saved": [], "ledger2_saved": []},
                               balance_sheet_svaed=False, acc_document_saved=[], subsidiary_account_saved=[],
                               acc_balance_sheet_saved=False, new_balance_sheet_saved=False,
                               profit_statement_saved=False,
@@ -169,21 +170,34 @@ def submit_business_infos():
         if business_types_2[key] < 2:
             return jsonify(result=False, message="请检查第二个会计区间的每种业务是否至少有两笔")
     if business_num == 20 and not business_confirm:
-        involve_subjects = set()
+        subjects_tmp1 = list()
+        subjects_tmp2 = list()
         company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
                                                dict(businesses=1, _id=0))
         businesses_cp = company_cp.get("businesses")
+        i = 0
         for business in businesses_cp:
             subjects_infos = business.get("subjects_infos")
             for subjects_info in subjects_infos:
-                involve_subjects.add(subjects_info.get("subject"))
+                subject = subjects_info.get("subject")
+                if i < 10:
+                    subjects_tmp1.append(subject)
+                subjects_tmp2.append(subject)
+                i += 1
+
+        subjects_tmp1 = set(subjects_tmp1)
+        subjects_tmp2 = set(subjects_tmp2)
+        subjects_tmp1.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
+        subjects_tmp2.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
+        involve_subjects = dict(involve_subjects_1=list(subjects_tmp1), involve_subjects_2=list(subjects_tmp2))
+
         mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
                                 {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : list(involve_subjects)}}
+                                          "involve_subjects"                 : involve_subjects}}
                                 )
         mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
                                 {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : list(involve_subjects)}}
+                                          "involve_subjects"                 : involve_subjects}}
                                 )
         return jsonify(result=True)
     elif business_num == 20 and business_confirm:
@@ -456,13 +470,15 @@ def submit_ledger_info():
     json_data = request.get_json()
     infos = json_data.get("ledger_info")
     submit_type = json_data.get("submit_type")
+    ledger_period = json_data.get("ledger_period")
     if infos:
         subject = infos.get("subject")
     else:
         return jsonify(result=False, message="信息为空")
     infos_name = "ledger"
 
-    result, message = submit_infos4(infos=infos, submit_type=submit_type, subject=subject, infos_name=infos_name)
+    result, message = submit_infos4(infos=infos, submit_type=submit_type, subject=subject,
+                                    infos_name=infos_name, ledger_period=ledger_period)
     return jsonify(result=result, message=message)
 
 
@@ -487,19 +503,24 @@ def delete_ledger_info():
     """
     json_data = request.get_json()
     subject = json_data.get("subject")
+    ledger_period = json_data.get("ledger_period")
     if subject:
         company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                            {"involve_subjects": 1, "_id": 0})
+                                            {"involve_subjects": 1, "schedule_confirm": 1, "_id": 0})
         involve_subjects = company.get("involve_subjects")
-        schedule = get_schedule()
-        schedule_confirm = schedule.get("schedule_confirm")
+        schedule_confirm = company.get("schedule_confirm")
+
         if subject in schedule_confirm.get("ledger_confirm"):
             return jsonify(result=False, message="已经提交过, 删除失败")
         if subject in involve_subjects:
+            unset_key = "ledger_infos.ledger_infos_{}.{}".format(ledger_period, subject)
+            pull_key1 = "schedule_confirm.ledger{}_confirm.ledger_confirm".format(ledger_period)
+            pull_key2 = "schedule_saved.ledger{}_saved.ledger_saved".format(ledger_period)
+
             mongo.db.company.update({"student_no": session.get("username")},
-                                    {"$unset": {"ledger_infos.{}".format(subject): True},
-                                     "$pull" : {"schedule_confirm.ledger_confirm": subject,
-                                                "schedule_saved.ledger_saved"    : subject}})
+                                    {"$unset": {unset_key: True},
+                                     "$pull" : {pull_key1: subject,
+                                                pull_key2: subject}})
             return jsonify(result=True)
         else:
             return jsonify(result=False, message="科目错误")
