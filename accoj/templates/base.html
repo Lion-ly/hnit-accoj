@@ -40,21 +40,11 @@
     <div class="container">
         <!-- 项目标题 -->
         <nav class="navbar navbar-default" id="project-title">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed"
-                        data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                        aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span> <span
-                        class="glyphicon glyphicon-user"></span>
-                </button>
                 <a class="navbar-brand" href="{{ url_for('index.index') }}">会计实训系统
-                    Accounting training system</a>
-            </div>
-
-            <div class="collapse navbar-collapse"
-                 id="bs-example-navbar-collapse-1">
-                <div class="nav navbar-nav navbar-right"
-                     style="margin-top: 10px; margin-right: 20px" id="login_signin">
+                    Accounting training system</a>          
+                <div class="pull-right"
+                     style="padding: 10px 10px;" id="login_signin">
+                     
                     <!-- 登录验证 -->
                     {% if username %}
                         <div class="btn-group btn-group-sm" role="group" aria-label="..."
@@ -62,7 +52,8 @@
                             <!-- 已登录 -->
                             <button type="button" class="btn btn-default btn-sm"
                                     disabled="disabled" id="username">
-                                <span class="glyphicon glyphicon-user"></span>&nbsp;{{ username }}
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                &nbsp;{{ username }}
                             </button>
                             <button type="button"
                                     class="btn btn-default btn-sm dropdown-toggle"
@@ -72,12 +63,12 @@
                             </button>
 
                             <ul class="dropdown-menu">
-                                <li><a href="#">个人</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a></li>
                                 <li><a href="#" data-toggle="modal"
-                                       data-target="#update-password">更改密码</a></li>
+                                       data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
-                                        class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;注销</a></li>
+                                        class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出登录</a></li>
                             </ul>
                         </div>
                     {% else %}
@@ -85,8 +76,7 @@
                         <div class="btn-group btn-group-sm" role="group" aria-label="..."
                              id="not_logged_in">
                             <button type="button" class="btn btn-default" data-toggle="modal"
-                                    data-target="#signin">登录
-                            </button>
+                                    data-target="#signin">登录</button>
                             <button type="button" class="btn btn-default" data-toggle="modal"
                                     data-target="#login">注册
                             </button>
@@ -95,8 +85,7 @@
                             </button>
                         </div>
                     {% endif %}
-                </div>
-            </div>
+ </div>
         </nav>
     </div>
     <!-- 登录模态框 -->
