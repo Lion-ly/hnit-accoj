@@ -1,543 +1,540 @@
-{% extends 'course/courseBase.html' %}
-{% block courseBody %}
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <link
-                href="{{ url_for('static', filename='css/course/courseix.css') }}"
-                rel="stylesheet">
-        <script
-                src="{{ url_for('static', filename='js/ajax/course/courseix.js') }}"
-                charset="UTF-8"></script>
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span>1、掌握财务报表基本分析方法及其运用。 </span>
-                </div>
-                <div class="panel-body">
-                    <div style="text-align: center">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li><a href="#" aria-label="Previous"> <span
-                                        aria-hidden="true">&laquo;</span>
-                                </a></li>
-                                <li class="active"><a href="{{ url_for('accoj.courseix') }}">趋势分析法</a></li>
-                                <li><a href="{{ url_for('accoj.courseix_2') }}">共同比分析法</a></li>
-                                <li><a href="{{ url_for('accoj.courseix_3') }}">因素分析法</a></li>
-                                <li><a href="{{ url_for('accoj.courseix_4') }}">比率分析法</a></li>
-                                <li><a href="#" aria-label="Next"> <span
-                                        aria-hidden="true">&raquo;</span>
-                                </a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <hr class="simple" style="color: #6f5499"/>
-                    <p class="acc-title">1、趋势分析法</p>
+{% extends 'course/courseBase.html' %} {% block courseBody %}
+<link href="{{ url_for('static', filename='css/course/courseix.css') }}"
+	rel="stylesheet">
+<script
+	src="{{ url_for('static', filename='js/ajax/course/courseix.js') }}"
+	charset="UTF-8"></script>
+<div class="courseBody">
+	<!-- 习题主体 -->
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span>1、掌握财务报表基本分析方法及其运用。 </span>
+			</div>
+			<div class="panel-body">
+				<div style="text-align: center">
+					<nav aria-label="Page navigation">
+						<ul class="pagination">
+							<li><a href="#" aria-label="Previous"> <span
+									aria-hidden="true">&laquo;</span>
+							</a></li>
+							<li class="active"><a href="{{ url_for('accoj.courseix') }}">趋势分析法</a></li>
+							<li><a href="{{ url_for('accoj.courseix_2') }}">共同比分析法</a></li>
+							<li><a href="{{ url_for('accoj.courseix_3') }}">因素分析法</a></li>
+							<li><a href="{{ url_for('accoj.courseix_4') }}">比率分析法</a></li>
+							<li><a href="#" aria-label="Next"> <span
+									aria-hidden="true">&raquo;</span>
+							</a></li>
+						</ul>
+					</nav>
+				</div>
+				<hr class="simple" style="color: #6f5499" />
+				<p class="acc-title">1、趋势分析法</p>
 
-                    <p>趋势分析法是根据企业连续几个时期的会计报表，比较、分析各有关项目增减变化情况，从而判断其财务状况、经营成果、现金流量等发展变化趋势和变化规律，并对未来的结果作出预测的一种分析方法。</p>
+				<p>趋势分析法是根据企业连续几个时期的会计报表，比较、分析各有关项目增减变化情况，从而判断其财务状况、经营成果、现金流量等发展变化趋势和变化规律，并对未来的结果作出预测的一种分析方法。</p>
 
-                    <div>
-                        <!-- 作业标签 -->
-                        <ul class="nav nav-tabs">
-                            <li role="presentation" class="active"><a href="#ixFirst"
-                                                                      aria-controls="AssetLiability" role="tab"
-                                                                      data-toggle="tab">资产负债表</a>
-                            </li>
-                            <li role="presentation"><a href="#ixSecond"
-                                                       aria-controls="Profit" role="tab" data-toggle="tab">利润表</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <!-- 第一标签 -->
-                            <div id="ixFirst" role="tabpanel" class="tab-pane active in fade">
-                                <p class="acc-title">
-                                    1.1、分析资产负债表 <span id="ixFirst_span"
-                                                      class="glyphicon glyphicon-ok"
-                                                      style="color: #5cb85c; font-size: medium; display: none;">已完成
+				<div>
+					<!-- 作业标签 -->
+					<ul class="nav nav-tabs">
+						<li role="presentation" class="active"><a href="#ixFirst"
+							aria-controls="AssetLiability" role="tab" data-toggle="tab">资产负债表</a>
+						</li>
+						<li role="presentation"><a href="#ixSecond"
+							aria-controls="Profit" role="tab" data-toggle="tab">利润表</a></li>
+					</ul>
+					<div class="tab-content">
+						<!-- 第一标签 -->
+						<div id="ixFirst" role="tabpanel" class="tab-pane active in fade">
+							<p class="acc-title">
+								1.1、分析资产负债表 <span id="ixFirst_span"
+									class="glyphicon glyphicon-ok"
+									style="color: #5cb85c; font-size: medium; display: none;">已完成
 								</span>
-                                </p>
-                                <table class="table table-bordered acc-container-tableformat">
-                                    <tbody>
-                                    <tr class="acc-unedit">
-                                        <th colspan="2"><span style="float: left;">编制单位：admin</span>
-                                        </th>
-                                        <th colspan="2"><span>2020年2月28日</span></th>
-                                        <th colspan="2"><span style="float: right;">单位：元</span></th>
-                                    </tr>
-                                    <tr class="acc-unedit">
-                                        <th style="width: 16%">资产</th>
-                                        <th style="width: 17%">本期比上期增加额</th>
-                                        <th style="width: 17%">本期比上期增加率</th>
-                                        <th style="width: 16%">负债及所有者权益</th>
-                                        <th style="width: 17%">本期比上期增加额</th>
-                                        <th style="width: 17%">本期比上期增加率</th>
-                                    </tr>
-                                    <tr class="acc-unedit">
-                                        <th style="text-align: left">流动资产：</th>
-                                        <td></td>
-                                        <td></td>
-                                        <th style="text-align: left">流动负债：</th>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">货币资金</td>
-                                        <td><label><input name="货币资金End"></label></td>
-                                        <td><label><input name="货币资金Last"></label></td>
-                                        <td class="acc-unedit">短期借款</td>
-                                        <td><label><input name="短期借款End"></label></td>
-                                        <td><label><input name="短期借款Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">金融资产</td>
-                                        <td><label><input name="金融资产End"></label></td>
-                                        <td><label><input name="金融资产Last"></label></td>
-                                        <td class="acc-unedit">金融负债</td>
-                                        <td><label><input name="金融负债End"></label></td>
-                                        <td><label><input name="金融负债Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">应收票据</td>
-                                        <td><label><input name="应收票据End"></label></td>
-                                        <td><label><input name="应收票据Last"></label></td>
-                                        <td class="acc-unedit">应付票据</td>
-                                        <td><label><input name="应付票据End"></label></td>
-                                        <td><label><input name="应付票据Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">应收账款</td>
-                                        <td><label><input name="应收账款End"></label></td>
-                                        <td><label><input name="应收账款Last"></label></td>
-                                        <td class="acc-unedit">应付账款</td>
-                                        <td><label><input name="应付账款End"></label></td>
-                                        <td><label><input name="应付账款Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">预付账款</td>
-                                        <td><label><input name="预付账款End"></label></td>
-                                        <td><label><input name="预付账款Last"></label></td>
-                                        <td class="acc-unedit">预收账款</td>
-                                        <td><label><input name="预收账款End"></label></td>
-                                        <td><label><input name="预收账款Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">应收利息</td>
-                                        <td><label><input name="应收利息End"></label></td>
-                                        <td><label><input name="应收利息Last"></label></td>
-                                        <td class="acc-unedit">应付职工薪酬</td>
-                                        <td><label><input name="应付职工薪酬End"></label></td>
-                                        <td><label><input name="应付职工薪酬Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">应收股利</td>
-                                        <td><label><input name="应收股利End"></label></td>
-                                        <td><label><input name="应收股利Last"></label></td>
-                                        <td class="acc-unedit">应交税费</td>
-                                        <td><label><input name="应交税费End"></label></td>
-                                        <td><label><input name="应交税费Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">其他应收款</td>
-                                        <td><label><input name="其他应收款End"></label></td>
-                                        <td><label><input name="其他应收款Last"></label></td>
-                                        <td class="acc-unedit">应付利息</td>
-                                        <td><label><input name="应付利息End"></label></td>
-                                        <td><label><input name="应付利息Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">存货</td>
-                                        <td><label><input name="存货End"></label></td>
-                                        <td><label><input name="存货Last"></label></td>
-                                        <td class="acc-unedit">应付股利</td>
-                                        <td><label><input name="应付股利End"></label></td>
-                                        <td><label><input name="应付股利Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">一年内到期的非流动资产</td>
-                                        <td><label><input name="一年内到期的非流动资产End"></label></td>
-                                        <td><label><input name="一年内到期的非流动资产Last"></label></td>
-                                        <td class="acc-unedit">其他应付款</td>
-                                        <td><label><input name="其他应付款End"></label></td>
-                                        <td><label><input name="其他应付款Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">其他流动资产</td>
-                                        <td><label><input name="其他流动资产End"></label></td>
-                                        <td><label><input name="其他流动资产Last"></label></td>
-                                        <td class="acc-unedit">一年内到期的非流动负债</td>
-                                        <td><label><input name="一年内到期的非流动负债End"></label></td>
-                                        <td><label><input name="一年内到期的非流动负债Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="acc-unedit">流动资产合计</th>
-                                        <td><label><input name="流动资产合计End"></label></td>
-                                        <td><label><input name="流动资产合计Last"></label></td>
-                                        <td class="acc-unedit">其他流动负债</td>
-                                        <td><label><input name="其他流动负债End"></label></td>
-                                        <td><label><input name="其他流动负债Last"></label></td>
-                                    </tr>
+							</p>
+							<table class="table table-bordered acc-container-tableformat">
+								<tbody>
+									<tr class="acc-unedit">
+										<th colspan="2"><span style="float: left;">编制单位：admin</span>
+										</th>
+										<th colspan="2"><span>2020年2月28日</span></th>
+										<th colspan="2"><span style="float: right;">单位：元</span></th>
+									</tr>
+									<tr class="acc-unedit">
+										<th style="width: 16%">资产</th>
+										<th style="width: 17%">本期比上期增加额</th>
+										<th style="width: 17%">本期比上期增加率</th>
+										<th style="width: 16%">负债及所有者权益</th>
+										<th style="width: 17%">本期比上期增加额</th>
+										<th style="width: 17%">本期比上期增加率</th>
+									</tr>
+									<tr class="acc-unedit">
+										<th style="text-align: left">流动资产：</th>
+										<td></td>
+										<td></td>
+										<th style="text-align: left">流动负债：</th>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">货币资金</td>
+										<td><label><input name="货币资金End"></label></td>
+										<td><label><input name="货币资金Last"></label></td>
+										<td class="acc-unedit">短期借款</td>
+										<td><label><input name="短期借款End"></label></td>
+										<td><label><input name="短期借款Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">金融资产</td>
+										<td><label><input name="金融资产End"></label></td>
+										<td><label><input name="金融资产Last"></label></td>
+										<td class="acc-unedit">金融负债</td>
+										<td><label><input name="金融负债End"></label></td>
+										<td><label><input name="金融负债Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">应收票据</td>
+										<td><label><input name="应收票据End"></label></td>
+										<td><label><input name="应收票据Last"></label></td>
+										<td class="acc-unedit">应付票据</td>
+										<td><label><input name="应付票据End"></label></td>
+										<td><label><input name="应付票据Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">应收账款</td>
+										<td><label><input name="应收账款End"></label></td>
+										<td><label><input name="应收账款Last"></label></td>
+										<td class="acc-unedit">应付账款</td>
+										<td><label><input name="应付账款End"></label></td>
+										<td><label><input name="应付账款Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">预付账款</td>
+										<td><label><input name="预付账款End"></label></td>
+										<td><label><input name="预付账款Last"></label></td>
+										<td class="acc-unedit">预收账款</td>
+										<td><label><input name="预收账款End"></label></td>
+										<td><label><input name="预收账款Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">应收利息</td>
+										<td><label><input name="应收利息End"></label></td>
+										<td><label><input name="应收利息Last"></label></td>
+										<td class="acc-unedit">应付职工薪酬</td>
+										<td><label><input name="应付职工薪酬End"></label></td>
+										<td><label><input name="应付职工薪酬Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">应收股利</td>
+										<td><label><input name="应收股利End"></label></td>
+										<td><label><input name="应收股利Last"></label></td>
+										<td class="acc-unedit">应交税费</td>
+										<td><label><input name="应交税费End"></label></td>
+										<td><label><input name="应交税费Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">其他应收款</td>
+										<td><label><input name="其他应收款End"></label></td>
+										<td><label><input name="其他应收款Last"></label></td>
+										<td class="acc-unedit">应付利息</td>
+										<td><label><input name="应付利息End"></label></td>
+										<td><label><input name="应付利息Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">存货</td>
+										<td><label><input name="存货End"></label></td>
+										<td><label><input name="存货Last"></label></td>
+										<td class="acc-unedit">应付股利</td>
+										<td><label><input name="应付股利End"></label></td>
+										<td><label><input name="应付股利Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">一年内到期的非流动资产</td>
+										<td><label><input name="一年内到期的非流动资产End"></label></td>
+										<td><label><input name="一年内到期的非流动资产Last"></label></td>
+										<td class="acc-unedit">其他应付款</td>
+										<td><label><input name="其他应付款End"></label></td>
+										<td><label><input name="其他应付款Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">其他流动资产</td>
+										<td><label><input name="其他流动资产End"></label></td>
+										<td><label><input name="其他流动资产Last"></label></td>
+										<td class="acc-unedit">一年内到期的非流动负债</td>
+										<td><label><input name="一年内到期的非流动负债End"></label></td>
+										<td><label><input name="一年内到期的非流动负债Last"></label></td>
+									</tr>
+									<tr>
+										<th class="acc-unedit">流动资产合计</th>
+										<td><label><input name="流动资产合计End"></label></td>
+										<td><label><input name="流动资产合计Last"></label></td>
+										<td class="acc-unedit">其他流动负债</td>
+										<td><label><input name="其他流动负债End"></label></td>
+										<td><label><input name="其他流动负债Last"></label></td>
+									</tr>
 
-                                    <tr>
-                                        <th class="acc-unedit" style="text-align: left">非流动资产：</th>
-                                        <td class="acc-unedit"></td>
-                                        <td class="acc-unedit"></td>
-                                        <th class="acc-unedit">流动负债合计</th>
-                                        <td><label><input name="流动负债合计End"></label></td>
-                                        <td><label><input name="流动负债合计Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">可供出售金融资产</td>
-                                        <td><label><input name="可供出售金融资产End"></label></td>
-                                        <td><label><input name="可供出售金融资产Last"></label></td>
-                                        <th class="acc-unedit" style="text-align: left">非流动负债：</th>
-                                        <td class="acc-unedit"></td>
-                                        <td class="acc-unedit"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">持有至到期投资</td>
-                                        <td><label><input name="持有至到期投资End"></label></td>
-                                        <td><label><input name="持有至到期投资Last"></label></td>
-                                        <td class="acc-unedit">长期借款</td>
-                                        <td><label><input name="长期借款End"></label></td>
-                                        <td><label><input name="长期借款Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">长期应收款</td>
-                                        <td><label><input name="长期应收款End"></label></td>
-                                        <td><label><input name="长期应收款Last"></label></td>
-                                        <td class="acc-unedit">应付债券</td>
-                                        <td><label><input name="应付债券End"></label></td>
-                                        <td><label><input name="应付债券Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">长期股权投资</td>
-                                        <td><label><input name="长期股权投资End"></label></td>
-                                        <td><label><input name="长期股权投资"></label></td>
-                                        <td class="acc-unedit">长期应付款</td>
-                                        <td><label><input name="长期应付款End"></label></td>
-                                        <td><label><input name="长期应付款Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">投资性房地产</td>
-                                        <td><label><input name="投资性房地产End"></label></td>
-                                        <td><label><input name="投资性房地产Last"></label></td>
-                                        <td class="acc-unedit">预计负债</td>
-                                        <td><label><input name="预计负债End"></label></td>
-                                        <td><label><input name="预计负债Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">固定资产</td>
-                                        <td><label><input name="固定资产End"></label></td>
-                                        <td><label><input name="固定资产Last"></label></td>
-                                        <td class="acc-unedit">递延所得税负债</td>
-                                        <td><label><input name="递延所得税负债End"></label></td>
-                                        <td><label><input name="递延所得税负债Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">在建工程</td>
-                                        <td><label><input name="在建工程End"></label></td>
-                                        <td><label><input name="在建工程Last"></label></td>
-                                        <td class="acc-unedit">其他非流动负债</td>
-                                        <td><label><input name="其他非流动负债End"></label></td>
-                                        <td><label><input name="其他非流动负债Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">工程物资</td>
-                                        <td><label><input name="工程物资End"></label></td>
-                                        <td><label><input name="工程物资Last"></label></td>
-                                        <th class="acc-unedit">非流动负债合计</th>
-                                        <td><label><input name="非流动负债合计End"></label></td>
-                                        <td><label><input name="非流动负债合计Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">固定资产清理</td>
-                                        <td><label><input name="固定资产清理End"></label></td>
-                                        <td><label><input name="固定资产清理Last"></label></td>
-                                        <th class="acc-unedit">负债合计</th>
-                                        <td><label><input name="负债合计End"></label></td>
-                                        <td><label><input name="负债合计Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">无形资产</td>
-                                        <td><label><input name="无形资产End"></label></td>
-                                        <td><label><input name="无形资产Last"></label></td>
-                                        <th class="acc-unedit" style="text-align: left">所有者权益：</th>
-                                        <td class="acc-unedit"></td>
-                                        <td class="acc-unedit"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">开发支出</td>
-                                        <td><label><input name="开发支出End"></label></td>
-                                        <td><label><input name="开发支出Last"></label></td>
-                                        <td class="acc-unedit">实收资本（股本）</td>
-                                        <td><label><input name="实收资本End"></label></td>
-                                        <td><label><input name="实收资本Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">长期待摊费用</td>
-                                        <td><label><input name="长期待摊费用End"></label></td>
-                                        <td><label><input name="长期待摊费用Last"></label></td>
-                                        <td class="acc-unedit">资本公积</td>
-                                        <td><label><input name="资本公积End"></label></td>
-                                        <td><label><input name="资本公积Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">递延所得税资产</td>
-                                        <td><label><input name="递延所得税资产End"></label></td>
-                                        <td><label><input name="递延所得税资产Last"></label></td>
-                                        <td class="acc-unedit">盈余公积</td>
-                                        <td><label><input name="盈余公积End"></label></td>
-                                        <td><label><input name="盈余公积Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">其他非流动资产</td>
-                                        <td><label><input name="其他非流动资产End"></label></td>
-                                        <td><label><input name="其他非流动资产Last"></label></td>
-                                        <td class="acc-unedit">未分配利润</td>
-                                        <td><label><input name="未分配利润End"></label></td>
-                                        <td><label><input name="未分配利润Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="acc-unedit">非流动资产合计</th>
-                                        <td><label><input name="非流动资产合计End"></label></td>
-                                        <td><label><input name="非流动资产合计Last"></label></td>
-                                        <th class="acc-unedit">所有者权益合计</th>
-                                        <td><label><input name="所有者权益合计End"></label></td>
-                                        <td><label><input name="所有者权益合计Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="acc-unedit">资产总计</th>
-                                        <td><label><input name="资产总计End"></label></td>
-                                        <td><label><input name="资产总计Last"></label></td>
-                                        <th class="acc-unedit">负债及所有者权益总计</th>
-                                        <td><label><input name="负债及所有者权益总计End"></label></td>
-                                        <td><label><input name="负债及所有者权益总计Last"></label></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+									<tr>
+										<th class="acc-unedit" style="text-align: left">非流动资产：</th>
+										<td class="acc-unedit"></td>
+										<td class="acc-unedit"></td>
+										<th class="acc-unedit">流动负债合计</th>
+										<td><label><input name="流动负债合计End"></label></td>
+										<td><label><input name="流动负债合计Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">可供出售金融资产</td>
+										<td><label><input name="可供出售金融资产End"></label></td>
+										<td><label><input name="可供出售金融资产Last"></label></td>
+										<th class="acc-unedit" style="text-align: left">非流动负债：</th>
+										<td class="acc-unedit"></td>
+										<td class="acc-unedit"></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">持有至到期投资</td>
+										<td><label><input name="持有至到期投资End"></label></td>
+										<td><label><input name="持有至到期投资Last"></label></td>
+										<td class="acc-unedit">长期借款</td>
+										<td><label><input name="长期借款End"></label></td>
+										<td><label><input name="长期借款Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">长期应收款</td>
+										<td><label><input name="长期应收款End"></label></td>
+										<td><label><input name="长期应收款Last"></label></td>
+										<td class="acc-unedit">应付债券</td>
+										<td><label><input name="应付债券End"></label></td>
+										<td><label><input name="应付债券Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">长期股权投资</td>
+										<td><label><input name="长期股权投资End"></label></td>
+										<td><label><input name="长期股权投资"></label></td>
+										<td class="acc-unedit">长期应付款</td>
+										<td><label><input name="长期应付款End"></label></td>
+										<td><label><input name="长期应付款Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">投资性房地产</td>
+										<td><label><input name="投资性房地产End"></label></td>
+										<td><label><input name="投资性房地产Last"></label></td>
+										<td class="acc-unedit">预计负债</td>
+										<td><label><input name="预计负债End"></label></td>
+										<td><label><input name="预计负债Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">固定资产</td>
+										<td><label><input name="固定资产End"></label></td>
+										<td><label><input name="固定资产Last"></label></td>
+										<td class="acc-unedit">递延所得税负债</td>
+										<td><label><input name="递延所得税负债End"></label></td>
+										<td><label><input name="递延所得税负债Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">在建工程</td>
+										<td><label><input name="在建工程End"></label></td>
+										<td><label><input name="在建工程Last"></label></td>
+										<td class="acc-unedit">其他非流动负债</td>
+										<td><label><input name="其他非流动负债End"></label></td>
+										<td><label><input name="其他非流动负债Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">工程物资</td>
+										<td><label><input name="工程物资End"></label></td>
+										<td><label><input name="工程物资Last"></label></td>
+										<th class="acc-unedit">非流动负债合计</th>
+										<td><label><input name="非流动负债合计End"></label></td>
+										<td><label><input name="非流动负债合计Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">固定资产清理</td>
+										<td><label><input name="固定资产清理End"></label></td>
+										<td><label><input name="固定资产清理Last"></label></td>
+										<th class="acc-unedit">负债合计</th>
+										<td><label><input name="负债合计End"></label></td>
+										<td><label><input name="负债合计Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">无形资产</td>
+										<td><label><input name="无形资产End"></label></td>
+										<td><label><input name="无形资产Last"></label></td>
+										<th class="acc-unedit" style="text-align: left">所有者权益：</th>
+										<td class="acc-unedit"></td>
+										<td class="acc-unedit"></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">开发支出</td>
+										<td><label><input name="开发支出End"></label></td>
+										<td><label><input name="开发支出Last"></label></td>
+										<td class="acc-unedit">实收资本（股本）</td>
+										<td><label><input name="实收资本End"></label></td>
+										<td><label><input name="实收资本Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">长期待摊费用</td>
+										<td><label><input name="长期待摊费用End"></label></td>
+										<td><label><input name="长期待摊费用Last"></label></td>
+										<td class="acc-unedit">资本公积</td>
+										<td><label><input name="资本公积End"></label></td>
+										<td><label><input name="资本公积Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">递延所得税资产</td>
+										<td><label><input name="递延所得税资产End"></label></td>
+										<td><label><input name="递延所得税资产Last"></label></td>
+										<td class="acc-unedit">盈余公积</td>
+										<td><label><input name="盈余公积End"></label></td>
+										<td><label><input name="盈余公积Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">其他非流动资产</td>
+										<td><label><input name="其他非流动资产End"></label></td>
+										<td><label><input name="其他非流动资产Last"></label></td>
+										<td class="acc-unedit">未分配利润</td>
+										<td><label><input name="未分配利润End"></label></td>
+										<td><label><input name="未分配利润Last"></label></td>
+									</tr>
+									<tr>
+										<th class="acc-unedit">非流动资产合计</th>
+										<td><label><input name="非流动资产合计End"></label></td>
+										<td><label><input name="非流动资产合计Last"></label></td>
+										<th class="acc-unedit">所有者权益合计</th>
+										<td><label><input name="所有者权益合计End"></label></td>
+										<td><label><input name="所有者权益合计Last"></label></td>
+									</tr>
+									<tr>
+										<th class="acc-unedit">资产总计</th>
+										<td><label><input name="资产总计End"></label></td>
+										<td><label><input name="资产总计Last"></label></td>
+										<th class="acc-unedit">负债及所有者权益总计</th>
+										<td><label><input name="负债及所有者权益总计End"></label></td>
+										<td><label><input name="负债及所有者权益总计Last"></label></td>
+									</tr>
+								</tbody>
+							</table>
 
-                                <p class="acc-title">结论：</p>
-                                <label style="display: inherit"> <textarea
-                                        id="ixFirstConclusion" class="form-control" rows="5"></textarea>
-                                </label>
-                                <hr class="simple" style="clear: both; color: #6f5499"/>
-                                <div id="course_ix1_message"></div>
-                                <div style="float: left;">
-                                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
-                                    </button>
-                                </div>
-                                <div style="float: right;">
-                                    <button type="button" class="btn btn-info"
-                                            id="save_ixFirst_button" onclick="save_ixFirst()">
-                                        <span class="glyphicon"></span>&nbsp;保存
-                                    </button>
-                                    <button type="button" class="btn btn-success"
-                                            id="confirm_ixFirst_button" onclick="confirm_ixFirst()">
-                                        <span class="glyphicon"></span>&nbsp;提交
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- 第二标签 -->
-                            <div id="ixSecond" role="tabpanel" class="tab-pane fade">
-                                <p class="acc-title">
-                                    1.2、分析利润表 <span id="ixSecond_span"
-                                                    class="glyphicon glyphicon-ok"
-                                                    style="color: #5cb85c; font-size: medium; display: none;">已完成
+							<p class="acc-title">结论：</p>
+							<label style="display: inherit"> <textarea
+									id="ixFirstConclusion" class="form-control" rows="5"></textarea>
+							</label>
+							<hr class="simple" style="clear: both; color: #6f5499" />
+							<div id="course_ix1_message"></div>
+							<div style="float: left;">
+								<button type="button" class="btn btn-info"
+									onclick="answer_source(this)">查看答案</button>
+							</div>
+							<div style="float: right;">
+								<button type="button" class="btn btn-info"
+									id="save_ixFirst_button" onclick="save_ixFirst()">
+									<span class="glyphicon"></span>&nbsp;保存
+								</button>
+								<button type="button" class="btn btn-success"
+									id="confirm_ixFirst_button" onclick="confirm_ixFirst()">
+									<span class="glyphicon"></span>&nbsp;提交
+								</button>
+							</div>
+						</div>
+						<!-- 第二标签 -->
+						<div id="ixSecond" role="tabpanel" class="tab-pane fade">
+							<p class="acc-title">
+								1.2、分析利润表 <span id="ixSecond_span"
+									class="glyphicon glyphicon-ok"
+									style="color: #5cb85c; font-size: medium; display: none;">已完成
 								</span>
-                                </p>
-                                <table class="table table-bordered acc-container-tableformat">
-                                    <tbody>
-                                    <tr class="acc-unedit">
-                                        <th colspan="3"><span style="float: left;">编制单位：admin</span>
-                                            <span>2020年2月</span> <span style="float: right;">单位：元</span>
-                                        </th>
-                                    </tr>
-                                    <tr class="acc-unedit">
-                                        <th style="width: 50%;">项目</th>
-                                        <th style="width: 25%;">本期比上期增加额</th>
-                                        <th style="width: 25%;">本期比上期增加率</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="acc-unedit" style="text-align: left">一、营业收入</th>
-                                        <td><label><input name="营业收入End"></label></td>
-                                        <td><label><input name="营业收入Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">减：营业成本</td>
-                                        <td><label><input name="营业成本End"></label></td>
-                                        <td><label><input name="营业成本Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">税金及附加</td>
-                                        <td><label><input name="税金及附加End"></label></td>
-                                        <td><label><input name="税金及附加Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">销售费用</td>
-                                        <td><label><input name="销售费用End"></label></td>
-                                        <td><label><input name="销售费用Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">管理费用</td>
-                                        <td><label><input name="管理费用End"></label></td>
-                                        <td><label><input name="管理费用Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">财务费用</td>
-                                        <td><label><input name="财务费用End"></label></td>
-                                        <td><label><input name="财务费用Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">资产减值损失</td>
-                                        <td><label><input name="资产减值损失End"></label></td>
-                                        <td><label><input name="资产减值损失Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">加：公允价值变动收益（损失以“-”号填列）</td>
-                                        <td><label><input name="公允价值变动收益End"></label></td>
-                                        <td><label><input name="公允价值变动收益Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">投资收益（损失以“-”号填列）</td>
-                                        <td><label><input name="投资收益End"></label></td>
-                                        <td><label><input name="投资收益Last"></label></td>
-                                    </tr>
+							</p>
+							<table class="table table-bordered acc-container-tableformat">
+								<tbody>
+									<tr class="acc-unedit">
+										<th colspan="3"><span style="float: left;">编制单位：admin</span>
+											<span>2020年2月</span> <span style="float: right;">单位：元</span>
+										</th>
+									</tr>
+									<tr class="acc-unedit">
+										<th style="width: 50%;">项目</th>
+										<th style="width: 25%;">本期比上期增加额</th>
+										<th style="width: 25%;">本期比上期增加率</th>
+									</tr>
+									<tr>
+										<th class="acc-unedit" style="text-align: left">一、营业收入</th>
+										<td><label><input name="营业收入End"></label></td>
+										<td><label><input name="营业收入Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">减：营业成本</td>
+										<td><label><input name="营业成本End"></label></td>
+										<td><label><input name="营业成本Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">税金及附加</td>
+										<td><label><input name="税金及附加End"></label></td>
+										<td><label><input name="税金及附加Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">销售费用</td>
+										<td><label><input name="销售费用End"></label></td>
+										<td><label><input name="销售费用Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">管理费用</td>
+										<td><label><input name="管理费用End"></label></td>
+										<td><label><input name="管理费用Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">财务费用</td>
+										<td><label><input name="财务费用End"></label></td>
+										<td><label><input name="财务费用Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">资产减值损失</td>
+										<td><label><input name="资产减值损失End"></label></td>
+										<td><label><input name="资产减值损失Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">加：公允价值变动收益（损失以“-”号填列）</td>
+										<td><label><input name="公允价值变动收益End"></label></td>
+										<td><label><input name="公允价值变动收益Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">投资收益（损失以“-”号填列）</td>
+										<td><label><input name="投资收益End"></label></td>
+										<td><label><input name="投资收益Last"></label></td>
+									</tr>
 
-                                    <tr>
-                                        <th class="acc-unedit" style="text-align: left">二、营业利润（亏损以“-”号填列）</th>
-                                        <td class="acc-unedit"><label><input
-                                                name="营业利润End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                        <td class="acc-unedit"><label><input
-                                                name="营业利润Last" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">加：营业外收入</td>
-                                        <td><label><input name="营业外收入End"></label></td>
-                                        <td><label><input name="营业外收入Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">其中：对联营企业和合营企业的投资收益</td>
-                                        <td><label><input name="对联营企业和合营企业的投资收益End"></label></td>
-                                        <td><label><input name="对联营企业和合营企业的投资收益Last"></label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">减：营业外支出</td>
-                                        <td><label><input name="营业外支出End"></label></td>
-                                        <td><label><input name="营业外支出Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">其中，非流动资产处置损失</td>
-                                        <td><label><input name="非流动资产处置损失End"></label></td>
-                                        <td><label><input name="非流动资产处置损失Last"></label></td>
-                                    </tr>
+									<tr>
+										<th class="acc-unedit" style="text-align: left">二、营业利润（亏损以“-”号填列）</th>
+										<td class="acc-unedit"><label><input
+												name="营业利润End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+										<td class="acc-unedit"><label><input
+												name="营业利润Last" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">加：营业外收入</td>
+										<td><label><input name="营业外收入End"></label></td>
+										<td><label><input name="营业外收入Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">其中：对联营企业和合营企业的投资收益</td>
+										<td><label><input name="对联营企业和合营企业的投资收益End"></label></td>
+										<td><label><input name="对联营企业和合营企业的投资收益Last"></label>
+										</td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">减：营业外支出</td>
+										<td><label><input name="营业外支出End"></label></td>
+										<td><label><input name="营业外支出Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">其中，非流动资产处置损失</td>
+										<td><label><input name="非流动资产处置损失End"></label></td>
+										<td><label><input name="非流动资产处置损失Last"></label></td>
+									</tr>
 
-                                    <tr>
-                                        <th class="acc-unedit" style="text-align: left">三、利润总额（亏损总额以“-”号填列）</th>
-                                        <td class="acc-unedit"><label><input
-                                                name="利润总额End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                        <td class="acc-unedit"><label><input
-                                                name="利润总额Last" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">减：所得税费用</td>
-                                        <td><label><input name="所得税费用End"></label></td>
-                                        <td><label><input name="所得税费用Last"></label></td>
-                                    </tr>
+									<tr>
+										<th class="acc-unedit" style="text-align: left">三、利润总额（亏损总额以“-”号填列）</th>
+										<td class="acc-unedit"><label><input
+												name="利润总额End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+										<td class="acc-unedit"><label><input
+												name="利润总额Last" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">减：所得税费用</td>
+										<td><label><input name="所得税费用End"></label></td>
+										<td><label><input name="所得税费用Last"></label></td>
+									</tr>
 
-                                    <tr>
-                                        <th class="acc-unedit" style="text-align: left">四、净利润（净亏损以“-”号填列）</th>
-                                        <td class="acc-unedit"><label><input
-                                                name="净利润End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                        <td class="acc-unedit"><label><input
-                                                name="净利润Last" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                    </tr>
+									<tr>
+										<th class="acc-unedit" style="text-align: left">四、净利润（净亏损以“-”号填列）</th>
+										<td class="acc-unedit"><label><input
+												name="净利润End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+										<td class="acc-unedit"><label><input
+												name="净利润Last" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+									</tr>
 
-                                    <tr class="acc-unedit">
-                                        <th style="text-align: left">五、其他综合收益的税后净额</th>
-                                        <td class="acc-unedit"><label><input
-                                                name="其他综合收益的税后净额End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                        <td class="acc-unedit"><label><input
-                                                name="其他综合收益的税后净额End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">（一）以后不能重分类净损益的其他综合收益</td>
-                                        <td><label><input name="以后不能重分类净损益的其他综合收益End"></label></td>
-                                        <td><label><input name="以后不能重分类净损益的其他综合收益Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">（二）以后将重分类净损益的其他综合收益</td>
-                                        <td><label><input name="以后将重分类净损益的其他综合收益End"></label></td>
-                                        <td><label><input name="以后将重分类净损益的其他综合收益Last"></label></td>
-                                    </tr>
+									<tr class="acc-unedit">
+										<th style="text-align: left">五、其他综合收益的税后净额</th>
+										<td class="acc-unedit"><label><input
+												name="其他综合收益的税后净额End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+										<td class="acc-unedit"><label><input
+												name="其他综合收益的税后净额End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">（一）以后不能重分类净损益的其他综合收益</td>
+										<td><label><input name="以后不能重分类净损益的其他综合收益End"></label></td>
+										<td><label><input name="以后不能重分类净损益的其他综合收益Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">（二）以后将重分类净损益的其他综合收益</td>
+										<td><label><input name="以后将重分类净损益的其他综合收益End"></label></td>
+										<td><label><input name="以后将重分类净损益的其他综合收益Last"></label></td>
+									</tr>
 
-                                    <tr class="acc-unedit">
-                                        <th style="text-align: left">六、综合收益总额</th>
-                                        <td class="acc-unedit"><label><input
-                                                name="综合收益总额End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                        <td class="acc-unedit"><label><input
-                                                name="综合收益总额End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                    </tr>
+									<tr class="acc-unedit">
+										<th style="text-align: left">六、综合收益总额</th>
+										<td class="acc-unedit"><label><input
+												name="综合收益总额End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+										<td class="acc-unedit"><label><input
+												name="综合收益总额End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+									</tr>
 
-                                    <tr class="acc-unedit">
-                                        <th style="text-align: left">七、每股收益</th>
-                                        <td class="acc-unedit"><label><input
-                                                name="每股收益End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                        <td class="acc-unedit"><label><input
-                                                name="每股收益End" disabled="disabled"
-                                                style="background-color: #f5f5f5"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">（一）基本每股收益</td>
-                                        <td><label><input name="基本每股收益End"></label></td>
-                                        <td><label><input name="基本每股收益Last"></label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="acc-unedit">（二）稀释每股收益</td>
-                                        <td><label><input name="稀释每股收益End"></label></td>
-                                        <td><label><input name="稀释每股收益Last"></label></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+									<tr class="acc-unedit">
+										<th style="text-align: left">七、每股收益</th>
+										<td class="acc-unedit"><label><input
+												name="每股收益End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+										<td class="acc-unedit"><label><input
+												name="每股收益End" disabled="disabled"
+												style="background-color: #f5f5f5"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">（一）基本每股收益</td>
+										<td><label><input name="基本每股收益End"></label></td>
+										<td><label><input name="基本每股收益Last"></label></td>
+									</tr>
+									<tr>
+										<td class="acc-unedit">（二）稀释每股收益</td>
+										<td><label><input name="稀释每股收益End"></label></td>
+										<td><label><input name="稀释每股收益Last"></label></td>
+									</tr>
+								</tbody>
+							</table>
 
-                                <p class="acc-title">结论：</p>
-                                <label style="display: inherit"> <textarea
-                                        id="ixSecondConclusion" class="form-control" rows="5"></textarea>
-                                </label>
-                                <hr class="simple" style="clear: both; color: #6f5499"/>
-                                <div id="course_ix2_message"></div>
-                                <div style="float: left;">
-                                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
-                                    </button>
-                                </div>
-                                <div style="float: right;">
-                                    <button type="button" class="btn btn-info"
-                                            id="save_ixSecond_button" onclick="save_ixSecond()">
-                                        <span class="glyphicon"></span>&nbsp;保存
-                                    </button>
-                                    <button type="button" class="btn btn-success"
-                                            id="confirm_ixSecond_button" onclick="confirm_ixSecond()">
-                                        <span class="glyphicon"></span>&nbsp;提交
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+							<p class="acc-title">结论：</p>
+							<label style="display: inherit"> <textarea
+									id="ixSecondConclusion" class="form-control" rows="5"></textarea>
+							</label>
+							<hr class="simple" style="clear: both; color: #6f5499" />
+							<div id="course_ix2_message"></div>
+							<div style="float: left;">
+								<button type="button" class="btn btn-info"
+									onclick="answer_source(this)">查看答案</button>
+							</div>
+							<div style="float: right;">
+								<button type="button" class="btn btn-info"
+									id="save_ixSecond_button" onclick="save_ixSecond()">
+									<span class="glyphicon"></span>&nbsp;保存
+								</button>
+								<button type="button" class="btn btn-success"
+									id="confirm_ixSecond_button" onclick="confirm_ixSecond()">
+									<span class="glyphicon"></span>&nbsp;提交
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-    <!-- 防尾前移 -->
-    <div class="acc-container-separate"></div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

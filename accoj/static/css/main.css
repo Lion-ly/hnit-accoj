@@ -10,9 +10,9 @@ dd {
     vertical-align: middle;
 }
 /*主体和页尾之间的空白容器*/
-.acc-container-separate {
-    height: 500px;
-}
+/* .acc-container-separate {
+    height: 0px;
+} */
 /*练习题主体容器*/
 .acc-container-answer {
     margin-left: 4%;
