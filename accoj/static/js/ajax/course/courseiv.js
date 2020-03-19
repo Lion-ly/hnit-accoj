@@ -188,6 +188,7 @@ function ivResetInfo() {
     for (let i = 0; i < removeRowsLen; i++) {
         $(removeRows[i]).parent().parent().remove();
     }
+    $("#submit_status_span").hide();
 }
 
 /*
