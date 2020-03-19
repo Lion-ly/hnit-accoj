@@ -115,6 +115,7 @@ function add_business(labelType) {
                     labelType = "经营活动";
                 }
                 body_text_append(labelType, content);
+                show_message("add_business_message", data["message"], "info", 750, "增加成功！");
             } else {
                 show_message("add_business_message", data["message"], "warning", 1000);
             }
@@ -139,7 +140,7 @@ function revoke_add_business() {
         async: true,
         success: function (data) {
             if (data["result"] === true) {
-                show_message("add_business_message", "撤销成功！", "info", 500);
+                show_message("add_business_message", data["message"], "info", 750, "撤销成功！");
                 remove_business_row();
             } else {
                 show_message("add_business_message", data["message"], "warning", 1000, "撤销失败！");

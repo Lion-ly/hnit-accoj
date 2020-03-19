@@ -143,6 +143,8 @@ def deal_with_question_1(company, question_no):
     question = mongo.db.question.find_one(dict(questions_no=1,
                                                question_no=question_no))
     businesses = company.get("businesses")
+    com_key_element_infos = company.get("key_element_infos")
+    com_subjects_infos = company.get("subjects_infos")
     com_assets = company.get("com_assets")
     business_num = company.get("business_num")
     date = datetime.now()
@@ -204,9 +206,10 @@ def deal_with_question_1(company, question_no):
                     subjects_infos[i]["is_up"] = False
             elif question_no == 23 and (i == 2 or i == 3):
                 # 问题23特判
+                index_tmp = 0
                 for business in businesses:
                     if business.get("question_no") == 20:
-                        value_tmp = business.get("key_element_infos")[0].get("money")
+                        value_tmp = com_key_element_infos["info"][index_tmp][0].get("money")
                         if values_list[1] > value_tmp:
                             value = value.split("/")[0]
                         elif values_list[1] < value_tmp:
@@ -217,6 +220,7 @@ def deal_with_question_1(company, question_no):
                                 content_tmp.pop(-1)
                                 content = "，".join(content_tmp)
                         break
+                    index_tmp += 1
             elif value_type == "asset":
                 if value[0] == "*":
                     value = value.lstrip("*")
@@ -251,25 +255,31 @@ def deal_with_question_1(company, question_no):
                     value = 10000 * values_list[1]
                 elif question_no == 18:
                     # 问题18特判
+                    index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 17:
-                            high = business.get("key_element_infos")[0].get("money")
+                            high = com_key_element_infos["info"][index_tmp][0].get("money")
                             value = random.randrange(90000, high, 100)
                             break
+                        index_tmp += 1
                 elif question_no == 20:
                     # 问题20特判
+                    index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 15:
-                            high = business.get("key_element_infos")[0].get("money")
+                            high = com_key_element_infos["info"][index_tmp][0].get("money")
                             value = random.randrange(1000, high, 100)
                             break
+                        index_tmp += 1
                 elif question_no == 23:
                     # 问题23特判
+                    index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 20:
-                            medium = business.get("key_element_infos")[0].get("money")
+                            medium = com_key_element_infos["info"][index_tmp][0].get("money")
                             value = random.randrange(medium - 1000, medium + 1000, 100)
                             break
+                        index_tmp += 1
                 elif question_no == 27:
                     # 问题27特判
                     pass
@@ -278,37 +288,45 @@ def deal_with_question_1(company, question_no):
                     content = content.replace("+", "")
                     asset_name = values_list[0].replace("+", "")
                     com_assets.append(dict(asset_name=asset_name, market_value=value, question_no=question_no))
+                    index_tmp = 0
                     for business in businesses:
                         value = 0
                         if business.get("question_no") in [24, 25, 26, 27]:
-                            value += business.get("subjects_infos")[0].get("money")
+                            value += com_subjects_infos[index_tmp][0].get("money")
+                        index_tmp += 1
                 elif question_no == 30:
                     # 问题30特判
                     if i == 2:
+                        index_tmp = 0
                         for business in businesses:
                             if business.get("question_no") == 28:
-                                tmp = business.get("key_element_infos")[0].get("money")
+                                tmp = com_key_element_infos["info"][index_tmp][0].get("money")
                                 value = tmp / 2
                                 break
+                            index_tmp += 1
                     if i == 3:
                         value = values_list[i - 1] * 0.8
                 elif question_no == 31:
                     # 问题31特判
                     if i == 2:
+                        index_tmp = 0
                         for business in businesses:
                             if business.get("question_no") == 30:
-                                value = business.get("key_element_infos")[0].get("money")
+                                value = com_key_element_infos["info"][index_tmp][0].get("money")
                                 break
+                            index_tmp += 1
                     if i == 3:
                         value = values_list[i - 1] * 0.8
                 elif question_no == 33:
                     # 问题33特判
                     if i == 2:
+                        index_tmp = 0
                         for business in businesses:
                             if business.get("question_no") == 28:
-                                tmp = business.get("key_element_infos")[2].get("money")
+                                tmp = com_key_element_infos["info"][index_tmp][2].get("money")
                                 value = tmp / 2
                                 break
+                            index_tmp += 1
                     if i == 3:
                         value = values_list[i - 1] * 0.8
 
@@ -361,21 +379,25 @@ def deal_with_question_1(company, question_no):
                     subjects_infos[i]["subject"] = subjects_infos[i]["subject"].split("/")[1]
             else:
                 # 问题3特判
+                index_tmp = 0
                 for business in businesses:
                     if business.get("question_no") == 2:
-                        subject_temp = business.get("subjects_infos")
+                        subject_temp = com_subjects_infos[index_tmp]
                         subjects_infos[i]["subject"] = subject_temp[1]["subject"]
                         break
+                    index_tmp += 1
 
         if question_no == 23:
             # 问题23特判
             money = None
             if content.find("多于"):
                 value_tmp = 0
+                index_tmp = 0
                 for business in businesses:
                     if business.get("question_no") == 20:
-                        value_tmp = business.get("key_element_infos")[0].get("money")
+                        value_tmp = com_key_element_infos["info"][index_tmp][0].get("money")
                         break
+                    index_tmp += 1
                 if i == 0:
                     money = values_list[0]
                 elif i == 1:
@@ -389,10 +411,12 @@ def deal_with_question_1(company, question_no):
                     money = values_list[0]
                 else:
                     value_tmp = 0
+                    index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 20:
-                            value_tmp = business.get("key_element_infos")[0].get("money")
+                            value_tmp = com_key_element_infos["info"][index_tmp][0].get("money")
                             break
+                        index_tmp += 1
                     subjects_infos.append(dict(subject="银行存款",
                                                money=abs(values_list[0] - value_tmp),
                                                is_up=False))
@@ -421,20 +445,9 @@ def deal_with_question_1(company, question_no):
     # end---------------------------------------------------------------------------
 
     content = "{}年{}月{}日，".format(year, month, day) + content
-    business = dict(questions_no=1,
-                    question_no=question_no,
-                    content=content,
-                    date=date,
-                    business_type=business_type)
+    business = dict(questions_no=1, question_no=question_no, content=content, date=date, business_type=business_type)
 
-    business_cp = dict(questions_no=1,
-                       question_no=question_no,
-                       content=content,
-                       date=date,
-                       business_type=business_type,
-                       affect_type=affect_type,
-                       key_element_infos=key_element_infos,
-                       subjects_infos=subjects_infos)
+    key_element_infos_dict = dict(affect_type=affect_type, info=key_element_infos)
     # 用户公司写入业务
     mongo.db.company.update({"student_no": "{}".format(session["username"])},
                             {"$push": {"businesses": business},
@@ -442,7 +455,9 @@ def deal_with_question_1(company, question_no):
                              "$inc" : {"business_num": 1}})
     # 副本公司存储答案
     mongo.db.company.update({"student_no": "{}_cp".format(session["username"])},
-                            {"$push": {"businesses": business_cp},
+                            {"$push": dict(businesses=business,
+                                           key_element_infos=key_element_infos_dict,
+                                           subjects_infos=subjects_infos),
                              "$set" : {"com_assets": com_assets},
                              "$inc" : {"business_num": 1}}
                             )

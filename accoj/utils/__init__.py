@@ -184,14 +184,13 @@ def submit_infos2(infos, submit_type, infos_name, is_first):
     return result, message
 
 
-def submit_infos3(infos, submit_type, business_no, infos_name, affect_type=""):
+def submit_infos3(infos, submit_type, business_no, infos_name):
     """
     提交信息（第三类，第二三四六次课程）
     :param infos: submit infos
     :param submit_type: submit type
     :param business_no: business_no
     :param infos_name: infos name
-    :param affect_type: affect_type
     :return: (boolean: result, str: message)
     """
     result, message = False, "未知错误！"
@@ -232,12 +231,8 @@ def submit_infos3(infos, submit_type, business_no, infos_name, affect_type=""):
                 mongo.db.file.update({"document_no": "{}".format(document_no)}, {"$set": file}, True)  # upsert
             infos.pop("file")
 
-        update_prefix = "businesses." + str(business_no)
-        if affect_type:
-            set_dict = {(update_prefix + ".{}_infos".format(infos_name)): infos,
-                        (update_prefix + ".affect_type")                : affect_type}
-        else:
-            set_dict = {(update_prefix + ".{}_infos".format(infos_name)): infos}
+        set_dict_key = "{}_infos.".format(infos_name) + str(business_no)
+        set_dict = {set_dict_key: infos}
 
         add_key1 = "schedule_confirm.{}_confirm".format(infos_name)
         add_key2 = "schedule_saved.{}_saved".format(infos_name)
@@ -334,7 +329,7 @@ def submit_infos4(infos, submit_type, subject, infos_name, ledger_period=False):
 
 def get_infos1(infos_name):
     """
-    获取信息（第一类，用于`非第九次课程一二部分`、`第五六七次课程`）
+    获取信息（第一类，用于`非第九次课程一二部分`）
     :param infos_name: infos name
     :return: infos, confirmed, saved
     """
@@ -369,34 +364,6 @@ def get_infos2(is_first, infos_name):
     confirmed = confirmed.get(times) if confirmed else False
     saved = schedule_saved.get("{}_saved".format(infos_name))
     saved = saved.get(times) if saved else False
-    return infos, confirmed, saved
-
-
-def get_infos3(infos_name):
-    """
-    获取信息（第三类，用于第二三四六次课程）
-    :param infos_name: infos name
-    :return: infos, confirmed, saved
-    """
-    company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                        dict(businesses=1, schedule_confirm=1, schedule_saved=1, _id=0))
-
-    businesses = company.get("businesses")
-    schedule_confirm = company.get("schedule_confirm")
-    schedule_saved = company.get("schedule_saved")
-    confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
-    saved = schedule_saved.get("{}_saved".format(infos_name))
-    infos = list()
-    businesses_len = len(businesses)
-    if infos_name == "key_element":
-        for i in range(0, businesses_len):
-            info = businesses[i].get("{}_infos".format(infos_name))
-            affect_type = businesses[i].get("affect_type")
-            infos.append({"{}_info".format(infos_name): info, "affect_type": affect_type})
-    else:
-        for i in range(0, businesses_len):
-            info = businesses[i].get("{}_infos".format(infos_name))
-            infos.append({"{}_info".format(infos_name): info})
     return infos, confirmed, saved
 
 
