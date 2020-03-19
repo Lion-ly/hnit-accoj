@@ -184,4 +184,5 @@ function iiResetInfo() {
     $("[id^=key_elem]").val("");
     $("[id^=check]").prop("checked", false);
     $("#aer1").prop("checked", true);
+    $("#submit_status_span").hide();
 }

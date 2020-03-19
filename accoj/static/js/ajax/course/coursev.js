@@ -20,7 +20,7 @@ $(document).ready(function () {
 function get_involve_subjects() {
     function successFunc(data) {
         involve_subjects = data["involve_subjects"];
-        get_ledger_info(now_subject, true);
+        get_ledger_info(true, now_subject);
     }
 
     // 获取数据
@@ -67,8 +67,8 @@ function submit_ledger_info(submit_type) {
  * @param subject
  * @param isFromSubmit
  */
-function get_ledger_info(subject, isFromSubmit = false) {
-    now_subject = subject;
+function get_ledger_info(isFromSubmit = false, subject = "") {
+    now_subject = subject ? subject : now_subject;
     let confirmed_key = "ledger" + now_period + "_confirm",
         saved_key = "ledger" + now_period + "_saved",
         ledger_confirmed_tmp = ledger_confirmed[confirmed_key],
@@ -76,12 +76,12 @@ function get_ledger_info(subject, isFromSubmit = false) {
 
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!ledger_saved_tmp || ledger_saved_tmp.indexOf(now_subject) === -1)
+        if (!ledger_saved_tmp || ledger_saved_tmp.indexOf(subject) === -1)
         //  若未保存，则不向后台请求数据
             return;
     }
     // 若请求的账户已经确认提交过，则不再发送数据请求
-    if (ledger_confirmed_tmp && ledger_confirmed_tmp.indexOf(now_period)) {
+    if (ledger_confirmed_tmp && ledger_confirmed_tmp.indexOf(subject) !== -1) {
         map_ledger_info();
         return;
     }
@@ -127,10 +127,8 @@ function map_ledger_info(data) {
 //================================删除账户信息================================//
 function delete_ledger_info(subject) {
 
-    function successFunc(data) {
-        if (data["result"]) {
-            show_message(messageDivID, "删除成功！", "info", 1000);
-        }
+    function successFunc() {
+        get_ledger_info(true, subject);
     }
 
     let data = {"subject": subject, "ledger_period": now_period};
@@ -188,6 +186,7 @@ function vGetInput() {
  * @param data
  */
 function vPaddingData(data) {
+
 
     let confirmed_key = "ledger" + now_period + "_confirm",
         saved_key = "ledger" + now_period + "_saved",
@@ -285,11 +284,9 @@ function initLi(data) {
     $("li[id^=coursevli]").remove();
     $("#TTablePage").children().remove();
     if (!ledger_infos && !first) {
-        console.log("1:create failed!");
         return;
     }
     if (data && !data["ledger_infos"]) {
-        console.log("2:create failed!");
         return;
     }
     let info_key = "ledger_infos_" + now_period,
@@ -380,7 +377,7 @@ function coursevLiChange(obj, role = false) {
             $("#coursev_select").val(first_option);
         }
     }
-    get_ledger_info(now_li_subject);
+    get_ledger_info(false, now_li_subject);
 }
 
 /**
@@ -388,12 +385,18 @@ function coursevLiChange(obj, role = false) {
  * @param obj
  */
 function deleteTableV(obj) {
-    let subject = $("li[id^=coursevli][class=active]").children().text();
-    if (ledger_confirmed.length > 0 && ledger_confirmed.indexOf(subject) !== -1) {
+
+    let confirmed_key = "ledger" + now_period + "_confirm",
+        saved_key = "ledger" + now_period + "_saved",
+        ledger_confirmed_tmp = ledger_confirmed[confirmed_key],
+        ledger_saved_tmp = ledger_saved[saved_key],
+        subject = $("li[id^=coursevli][class=active]").children().text();
+
+    if (ledger_confirmed_tmp.length > 0 && ledger_confirmed_tmp.indexOf(subject) !== -1) {
         show_message("course_v_message", "已经提交过, 不可删除", "danger", 1000, "删除失败！");
         return;
     }
-    if (ledger_saved.length > 0 && ledger_saved.indexOf(subject) !== -1) {
+    if (ledger_saved_tmp.length > 0 && ledger_saved_tmp.indexOf(subject) !== -1) {
         //  如果已保存才向后台发送删除请求
         delete_ledger_info(subject);
     }
