@@ -281,12 +281,13 @@ function coursevi_li_control(business_no) {
     get_acc_document_info();
 }
 
-function viResetInfo(){
+function viResetInfo() {
     // 重置凭证信息
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
     $("input").val("");
     $("#vi_downloadFile_button").hide();
     $("#vi_downloadSpan").text("");
+    $("#submit_status_span").hide();
 }
 
 let row_num = 2;

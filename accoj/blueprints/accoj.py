@@ -7,7 +7,7 @@
 # @Software: PyCharm
 from flask import Blueprint, render_template, request, jsonify, session
 from accoj.utils import login_required, complete_required1
-from accoj.utils import get_schedule, submit_infos1, submit_infos2, submit_infos3, submit_infos4, get_infos1, get_infos2
+from accoj.utils import submit_infos1, submit_infos2, submit_infos3, submit_infos4, get_infos1, get_infos2
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo
 from accoj.deal_business import deal_business
@@ -147,6 +147,7 @@ def submit_business_infos():
     提交业务内容信息，提交成功后不可修改
     :return:
     """
+
     def is_at_least2():
         # 判断每个会计区间的每种业务是否至少有两笔
         business_types_1 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
@@ -522,11 +523,20 @@ def delete_ledger_info():
     if subject:
         company = mongo.db.company.find_one({"student_no": session.get("username")},
                                             {"involve_subjects": 1, "schedule_confirm": 1, "_id": 0})
-        involve_subjects = company.get("involve_subjects")
         schedule_confirm = company.get("schedule_confirm")
+        involve_subjects = company.get("involve_subjects")
+        ledger_confirm = schedule_confirm.get("ledger_confirm")
+        if ledger_period == 1:
+            ledger_confirm = ledger_confirm.get("ledger1_confirm")
+            involve_subjects = involve_subjects["involve_subjects_1"]
+        elif ledger_period == 2:
+            ledger_confirm = ledger_confirm.get("ledger2_confirm")
+            involve_subjects = involve_subjects["involve_subjects_2"]
+        else:
+            return jsonify(result=False, message="期间错误！")
 
-        if subject in schedule_confirm.get("ledger_confirm"):
-            return jsonify(result=False, message="已经提交过, 删除失败")
+        if subject in ledger_confirm:
+            return jsonify(result=False, message="已经提交过, 删除失败！")
         if subject in involve_subjects:
             unset_key = "ledger_infos.ledger_infos_{}.{}".format(ledger_period, subject)
             pull_key1 = "schedule_confirm.ledger{}_confirm.ledger_confirm".format(ledger_period)
@@ -538,9 +548,9 @@ def delete_ledger_info():
                                                 pull_key2: subject}})
             return jsonify(result=True)
         else:
-            return jsonify(result=False, message="科目错误")
+            return jsonify(result=False, message="科目错误！")
     else:
-        return jsonify(result=False, message="未知错误")
+        return jsonify(result=False, message="未知错误！")
 
 
 @accoj_bp.route('/coursev_2', methods=['GET'])

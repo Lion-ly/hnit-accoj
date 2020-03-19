@@ -197,6 +197,7 @@ function iiiResetInfo() {
     for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", false);
     }
+    $("#submit_status_span").hide();
 }
 
 /**
