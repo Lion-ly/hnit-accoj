@@ -7,8 +7,7 @@
 # @Software: PyCharm
 from flask import Blueprint, render_template, request, jsonify, session
 from accoj.utils import login_required, complete_required1
-from accoj.utils import get_schedule, submit_infos1, submit_infos2, submit_infos3, submit_infos4, get_infos1, \
-    get_infos2, get_infos3
+from accoj.utils import get_schedule, submit_infos1, submit_infos2, submit_infos3, submit_infos4, get_infos1, get_infos2
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo
 from accoj.deal_business import deal_business
@@ -108,8 +107,7 @@ def company_form_submit():
             elif key == "com_regist_cap" or key == "com_operate_period":
                 data_dict[key] = float(data_dict[key])
         data_dict["com_bank_savings"] = data_dict["com_regist_cap"] * 10000
-        data_dict["com_cash"] = 0
-        data_dict["business_num"] = 0
+        data_dict.update(dict(com_cash=0, business_num=0))
         schedule_confirm = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[],
                                 entry_confirm=[], ledger_confirm={"ledger1_confirm": [], "ledger2_confirm": []},
                                 balance_sheet_confirm=False, acc_document_confirm=[], subsidiary_account_confirm=[],
@@ -118,6 +116,7 @@ def company_form_submit():
                                 trend_analysis_confirm={"first": False, "second": False},
                                 common_ratio_analysis_confirm={"first": False, "second": False},
                                 ratio_analysis_confirm=False, dupont_analysis_confirm=False)
+
         schedule_saved = dict(key_element_saved=[], subject_saved=[], entry_saved=[],
                               ledger_saved={"ledger1_saved": [], "ledger2_saved": []},
                               balance_sheet_svaed=False, acc_document_saved=[], subsidiary_account_saved=[],
@@ -127,10 +126,14 @@ def company_form_submit():
                               common_ratio_analysis_saved={"first": False, "second": False},
                               ratio_analysis_saved=False, dupont_analysis_saved=False)
 
-        data_dict["schedule_confirm"] = schedule_confirm
-        data_dict["schedule_saved"] = schedule_saved
-        data_dict["com_assets"] = []
-        data_dict["businesses"] = []
+        data_dict.update(dict(schedule_confirm=schedule_confirm,
+                              schedule_saved=schedule_saved,
+                              com_assets=[],
+                              businesses=[],
+                              key_element_infos=[],
+                              subjects_infos=[],
+                              entry_infos=[],
+                              acc_document_infos=[]))
         data_dict_cp = data_dict.copy()
         # 副本公司同时创建
         data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
@@ -144,43 +147,52 @@ def submit_business_infos():
     提交业务内容信息，提交成功后不可修改
     :return:
     """
+    def is_at_least2():
+        # 判断每个会计区间的每种业务是否至少有两笔
+        business_types_1 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
+        business_types_2 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
+        businesses_len = len(businesses)
+        for j in range(businesses_len):
+            business_type = businesses[j].get("business_type")
+            business_types = business_types_1 if j < period_num else business_types_2
+            for key in business_types:
+                if key == business_type:
+                    business_types[key] += 1
+        for key in business_types_1:
+            # 判断第一个会计区间的每种业务是否至少有两笔
+            if business_types_2[key] < 2:
+                return False, "请检查第一个会计区间的每种业务是否至少有两笔"
+        for key in business_types_2:
+            # 判断第二个会计区间的每种业务是否至少有两笔
+            if business_types_2[key] < 2:
+                return False, "请检查第二个会计区间的每种业务是否至少有两笔"
+        return True, ""
+
+    max_business_num = 20
+    period_num = 10
     company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-                                        dict(businesses=1, business_num=1, schedule_confirm=1, _id=0))
+                                        dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
     if not company:
         return jsonify(result=False, message="公司未创立")
     business_num = company.get("business_num")
     schedule_confirm = company.get("schedule_confirm")
     businesses = company.get("businesses")
     business_confirm = schedule_confirm.get("business_confirm")
-    business_types_1 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
-    business_types_2 = {"筹资活动": 0, "投资活动": 0, "经营活动": 0}
-    businesses_len = len(businesses)
-    for i in range(businesses_len):
-        business_type = businesses[i].get("business_type")
-        business_types = business_types_1 if i < 10 else business_types_2
-        for key in business_types:
-            if key == business_type:
-                business_types[key] += 1
-    for key in business_types_1:
-        # 判断第一个会计区间的每种业务是否至少有两笔
-        if business_types_2[key] < 2:
-            return jsonify(result=False, message="请检查第一个会计区间的每种业务是否至少有两笔")
-    for key in business_types_2:
-        # 判断第二个会计区间的每种业务是否至少有两笔
-        if business_types_2[key] < 2:
-            return jsonify(result=False, message="请检查第二个会计区间的每种业务是否至少有两笔")
-    if business_num == 20 and not business_confirm:
+
+    if business_num == max_business_num and not business_confirm:
+        result, message = is_at_least2()
+        if not result:
+            return jsonify(result=result, message=message)
         subjects_tmp1 = list()
         subjects_tmp2 = list()
         company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
-                                               dict(businesses=1, _id=0))
-        businesses_cp = company_cp.get("businesses")
+                                               dict(subjects_infos=1, _id=0))
+        subjects_infos = company_cp.get("subjects_infos")
         i = 0
-        for business in businesses_cp:
-            subjects_infos = business.get("subjects_infos")
-            for subjects_info in subjects_infos:
-                subject = subjects_info.get("subject")
-                if i < 10:
+        for subjects_info in subjects_infos:
+            for info in subjects_info:
+                subject = info.get("subject")
+                if i < period_num:
                     subjects_tmp1.append(subject)
                 subjects_tmp2.append(subject)
                 i += 1
@@ -200,7 +212,7 @@ def submit_business_infos():
                                           "involve_subjects"                 : involve_subjects}}
                                 )
         return jsonify(result=True)
-    elif business_num == 20 and business_confirm:
+    elif business_num == max_business_num and business_confirm:
         return jsonify(result=False, message="已经提交过")
     else:
         return jsonify(result=False, message="公司业务数量过少")
@@ -237,10 +249,11 @@ def revoke_add_business():
     :return:
     """
     company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-                                        dict(businesses=1, schedule_confirm=1, _id=1))
+                                        dict(businesses=1, schedule_confirm=1, _id=1, business_num=1))
     if company:
         businesses = company.get("businesses")
         schedule_confirm = company.get("schedule_confirm")
+        business_num = company.get("business_num")
         business_confirm = schedule_confirm.get("business_confirm")
         _id = company.get("_id")
         if not businesses:
@@ -253,10 +266,11 @@ def revoke_add_business():
                                  "$inc" : {"business_num": -1},
                                  "$pull": {"com_assets": {"question_no": question_no}}})
         mongo.db.company.update({"student_no": "{}_cp".format(session.get("username"))},
-                                {"$pop" : {"businesses": 1},
+                                {"$pop" : {"businesses": 1, "key_element_infos": 1, "subjects_infos": 1},
                                  "$inc" : {"business_num": -1},
                                  "$pull": {"com_assets": {"question_no": question_no}}})
-        return jsonify(result=True)
+        message = "第" + str(business_num) + "笔业务撤销成功！"
+        return jsonify(result=True, message=message)
     else:
         return jsonify(result=False, message="公司未创立")
 
@@ -272,7 +286,8 @@ def add_business():
     business_type = form.get("business_type")
     company = mongo.db.company.find_one({"student_no": "{}_cp".format(session.get("username"))})
 
-    schedule_confirm = get_schedule().get("schedule_confirm")
+    business_num = company.get("business_num") + 1
+    schedule_confirm = company.get("schedule_confirm")
     if not company or not schedule_confirm:
         return jsonify(result=False, message="公司未创立！")
 
@@ -288,8 +303,9 @@ def add_business():
         questions_no = random.randint(questions_no_low, questions_no_high)
         # 第一笔业务，注册资本存入银行
         if questions_no == 1:
+            message = "第" + str(business_num) + "笔业务增加成功！"
             business_content, _ = deal_business(company=company, business_type="筹资业务", questions_no=1)
-            return jsonify(result=True, content=business_content)
+            return jsonify(result=True, content=business_content, message=message)
     elif business_confirm:
         message = "已经确认提交过"
         return jsonify(result=False, message=message)
@@ -304,7 +320,8 @@ def add_business():
         if not business_content:
             return jsonify(result=False, message=message)
         else:
-            return jsonify(result=True, content=business_content)
+            message = "第" + str(business_num) + "笔业务增加成功！"
+            return jsonify(result=True, content=business_content, message=message)
 
 
 # 第一次课程----end---------------------------------------------------------------------------------
@@ -327,7 +344,6 @@ def submit_key_element_info():
     :return:
     """
     json_data = request.get_json()
-    affect_type = json_data.get("affect_type")
     business_no = json_data.get("business_no")
     infos = json_data.get("key_element_infos")
     submit_type = json_data.get("submit_type")
@@ -336,8 +352,7 @@ def submit_key_element_info():
     result, message = submit_infos3(infos=infos,
                                     submit_type=submit_type,
                                     business_no=business_no,
-                                    infos_name=infos_name,
-                                    affect_type=affect_type)
+                                    infos_name=infos_name)
 
     return jsonify(result=result, message=message)
 
@@ -348,7 +363,7 @@ def get_key_element_info():
     # 获取会计要素信息
     :return:
     """
-    infos, confirmed, saved = get_infos3(infos_name="key_element")
+    infos, confirmed, saved = get_infos1(infos_name="key_element")
     return jsonify(result=True,
                    key_element_infos=infos,
                    key_element_confirmed=confirmed,
@@ -394,7 +409,7 @@ def get_subject_info():
     获取会计科目信息
     :return:
     """
-    infos, confirmed, saved = get_infos3(infos_name="subject")
+    infos, confirmed, saved = get_infos1(infos_name="subject")
     return jsonify(result=True,
                    subject_infos=infos,
                    subject_confirmed=confirmed,
@@ -440,7 +455,7 @@ def get_entry_info():
     获取会计分录信息
     :return:
     """
-    infos, confirmed, saved = get_infos3(infos_name="entry")
+    infos, confirmed, saved = get_infos1(infos_name="entry")
     return jsonify(result=True,
                    entry_infos=infos,
                    entry_confirmed=confirmed,
@@ -606,7 +621,7 @@ def get_acc_document_info():
     获取会计凭证信息
     :return:
     """
-    infos, confirmed, saved = get_infos3(infos_name="acc_document")
+    infos, confirmed, saved = get_infos1(infos_name="acc_document")
     return jsonify(result=True,
                    acc_document_infos=infos,
                    acc_document_confirmed=confirmed,

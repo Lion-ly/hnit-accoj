@@ -133,9 +133,9 @@ function iiGetInput() {
             key_element_infos.push({"key_element": key_element, "money": money, "is_up": is_up});
         }
     }
+    key_element_infos = {"affect_type": affect_type, "info": key_element_infos};
 
     data = {
-        "affect_type": affect_type,
         "key_element_infos": key_element_infos,
         "business_no": business_no,
     };
@@ -147,9 +147,9 @@ function iiGetInput() {
  * @param data
  */
 function iiPaddingData(data) {
-    if (!data["key_element_info"]) return;
+    if (!data) return;
     let affect_type = data["affect_type"],
-        key_element_info = data["key_element_info"],
+        key_element_info = data["info"],
         key_element_num_dict = {"资产": 1, "负债": 3, "收入": 5, "费用": 7, "利润": 9, "所有者权益": 11},
         affect_type_id = "aer" + affect_type;
     // 填充影响类型

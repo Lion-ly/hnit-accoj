@@ -59,15 +59,17 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 						 "com_cash": 0.0,				# 公司现金存量
 						 "com_assets: [{"asset_name": "", "market_value": 1, "question_no", 1}],	# 公司资产列表
 						 "business_num": 0,				# 公司业务数
-						 "involve_subjects": [],		# 所有业务涉及的科目列表
+						 # 所有业务涉及的科目列表
+						 "involve_subjects": {"involve_subjects_1":[], 会计期间一
+											  "involve_subjects_2":[]},会计期间二
 						 # 课程确认进度
 						 "schedule_confirm": {
 											"business_confirm": false,			# 增加业务部分是否完成
 											"key_element_confirm": [],			# 会计要素部分进度
 											"subject_confirm": [],				# 会计科目部分进度
 											"entry_confirm": [],				# 会计分录部分进度
-											"ledger_confirm": {"ledger_confirm1": [],# 会计账户部分进度
-															   "ledger_confirm2": []},
+											"ledger_confirm": {"ledger1_confirm": [],# 会计账户部分进度
+															   "ledger2_confirm": []},
 											"balance_sheet_confirm": [],		# 会计平衡表部分进度
 											"acc_document_confirm": [], 		# 会计凭证部分进度
 											"subsidiary_account_confirm": [],   # 会计明细账部分进度
@@ -86,8 +88,8 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											"key_element_saved": [],			# 会计要素部分进度
 											"subjects_saved": [],				# 会计科目部分进度
 											"entry_saved": [],					# 会计分录部分进度
-											"ledger_saved": {"ledger_saved1": [],# 会计账户部分进度
-															 "ledger_saved2": []},
+											"ledger_saved": {"ledger1_saved": [],# 会计账户部分进度
+															 "ledger2_saved": []},
 											"balance_sheet_saved": [],			# 会计平衡表部分进度
 											"acc_document_saved": [],			# 会计凭证部分进度
 											"subsidiary_account_saved": [],		# 会计明细账部分进度
@@ -101,70 +103,70 @@ db.accoj.company.insert({"student_no": student_no,		# 用户ID
 											},
 						 # 公司业务
 						 "businesses": [{"questions_no": 1， 			# 题库号
-									   "question_no": 1,				# 题目编号
-									   "content": "...", 	    		# 内容
-									   "date": new Date(),  			# 日期
-									   "business_type": "",				# 业务类型（筹资活动、投资活动、经营活动）
-									   "affect_type": 1,				# 对会计等式影响类型
-									   # 会计要素信息
-									   "key_element_infos": [
-															{"key_element": "",	# 会计要素
-															 "money": 1, 		# 金额
-															 "is_up": boolean	# 正负判定
-															}],
-										# 科目列表
-									   "subjects_infos": [
-														 {"subject": "",		# 科目
-														  "money": 1,			# 金额
-														  "is_up": boolean		# 增减判定
-														 }],
-										# 会计分录
-									   "entry_infos": [{
-													   "subject": " ",			# 科目
-													   "money": 1,				# 金额
-													   "is_dr": boolean,		# 是否借记
-													  }],
-										# 会计凭证
-									    "acc_document_infos": [{
-															   "document_no": "",					# 学号名+业务索引号(在company集合中businesses的下标)
-															   "filename": "",						# 文件名
-															   "doc_no": 1,					 		# 会计凭证记号
-															   "date": new Date(),		 			# 日期
-															   "doc_nums": 1,				 		# 单据数量
-															   "contents":[{
-																		   "summary": " ",				 		# 摘要
-																		   "general_account": subject,			# 总账科目
-																		   "detail_account": " ",		 		# 明细科目
-																		   "dr_money": 1,			 			# 借方金额
-																		   "cr_money": 1				 		# 贷方金额
-																		 }]
-															   }]
-										}]
+										 "question_no": 1,				# 题目编号
+									     "content": "...", 	    		# 内容
+									     "date": new Date(),  			# 日期
+									     "business_type": "",			# 业务类型（筹资活动、投资活动、经营活动）
+									   }]
+
+						# 会计要素信息（数组顺序即业务顺序）
+						"key_element_infos": [{
+												"affect_type": 1,			# 对会计等式影响类型
+												"info":[{"key_element": "",	# 会计要素
+														"money": 1, 		# 金额
+														"is_up": boolean	# 正负判定
+														}]
+											  }],
+						# 会计科目（数组顺序即业务顺序）
+						"subjects_infos": [[{"subject": "",			# 科目
+											 "money": 1,			# 金额
+											 "is_up": boolean		# 增减判定
+											}]],
+						# 会计分录（数组顺序即业务顺序）
+						"entry_infos": [[{"subject": " ",			# 科目
+										  "money": 1,				# 金额
+										  "is_dr": boolean,			# 是否借记
+										}]],
+						# 会计凭证（数组顺序即业务顺序）
+						"acc_document_infos": [{
+												"document_no": "",					# 学号名+业务索引号(在company集合中businesses的下标)
+												"filename": "",						# 文件名
+												"doc_no": 1,					 	# 会计凭证记号
+												"date": new Date(),		 			# 日期
+												"doc_nums": 1,				 		# 单据数量
+												"contents":[{
+															 "summary": " ",				 	# 摘要
+															 "general_account": subject,		# 总账科目
+															 "detail_account": " ",		 		# 明细科目
+															 "dr_money": 1,			 			# 借方金额
+															 "cr_money": 1				 		# 贷方金额
+															 }]
+											   }]
 						 # 会计账户
 						 "ledger_infos": {"ledger_infos_1": {"subject_name":					# 科目名即账户名作为键
-														{
-													   "subject": "",							# 科目名
-													   "opening_balance": 1, 					# 期初余额
-													   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
-													   "current_amount_dr": 1,					# 本期借方发生额
-													   "current_amount_cr": 1,					# 本期贷方发生额
-													   "ending_balance": 1,						# 期末余额
-													   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
-													   "is_left": boolean						# 是否左T表
-													   }
-										  }
+																			{
+																		   "subject": "",							# 科目名
+																		   "opening_balance": 1, 					# 期初余额
+																		   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
+																		   "current_amount_dr": 1,					# 本期借方发生额
+																		   "current_amount_cr": 1,					# 本期贷方发生额
+																		   "ending_balance": 1,						# 期末余额
+																		   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
+																		   "is_left": boolean						# 是否左T表
+																		   }
+															}
 										  "ledger_infos_2": {"subject_name":					# 科目名即账户名作为键
-														{
-													   "subject": "",							# 科目名
-													   "opening_balance": 1, 					# 期初余额
-													   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
-													   "current_amount_dr": 1,					# 本期借方发生额
-													   "current_amount_cr": 1,					# 本期贷方发生额
-													   "ending_balance": 1,						# 期末余额
-													   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
-													   "is_left": boolean						# 是否左T表
-													   }
-										  }
+																			{
+																		   "subject": "",							# 科目名
+																		   "opening_balance": 1, 					# 期初余额
+																		   "dr": [{"business_no": 1, "money": 1}], 	# 借方额
+																		   "current_amount_dr": 1,					# 本期借方发生额
+																		   "current_amount_cr": 1,					# 本期贷方发生额
+																		   "ending_balance": 1,						# 期末余额
+																		   "cr": [{"business_no": 1, "money": 1}]	# 贷方额
+																		   "is_left": boolean						# 是否左T表
+																		   }
+															}
 										 }
 						 # 试算平衡集合
 						 "balance_sheet_infos": {
