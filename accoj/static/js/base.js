@@ -5,17 +5,22 @@ let business_list = Array();
  */
 let csrf_token;
 $(function () {
-    $("ul.navbar-nav").find("li").each(function () {
-        let a = $(this).find("a:first")[0];
-        let href = $(a).attr("href");
-        if (href === location.pathname.split("_")[0]) {
-            $(this).addClass("active");
+    $("#menu").find("li").each(function (index, item) {
+        let href = $(item).children().attr("href"),
+            pathname = location.pathname.split("_")[0],
+            isAddClass = href === pathname;
+        if (isAddClass) {
+            $(item).addClass("active");
         } else {
-            $(this).removeClass("active");
+            $(item).removeClass("active");
         }
     });
 });
 
+// 初始化tooltip插件
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
 
 /*	@ 返回首页
  *  # base -> 会计实训系统Accountiong training system
@@ -417,12 +422,12 @@ function businessLiControl(business_no) {
  */
 function courseLiCtrl(businessNo, nowBusinessNo) {
     businessNo = parseInt(businessNo);
-    if(businessNo === nowBusinessNo) return nowBusinessNo;
+    if (businessNo === nowBusinessNo) return nowBusinessNo;
     if (businessNo === -1) {      // 上一页
-        if(nowBusinessNo === 1) return nowBusinessNo;
+        if (nowBusinessNo === 1) return nowBusinessNo;
         nowBusinessNo -= 1;
     } else if (businessNo === 0) { // 下一页
-        if(nowBusinessNo === 20) return nowBusinessNo;
+        if (nowBusinessNo === 20) return nowBusinessNo;
         nowBusinessNo += 1;
     } else nowBusinessNo = businessNo;
     businessLiControl(nowBusinessNo);
@@ -472,10 +477,10 @@ function formatDate(date) {
  * @param obj
  * @returns
  */
-function answer_source(obj){
-	let thisobj = $(obj);
-	thisobj.toggleClass("active");
-	let text = thisobj.text();
-	text = text === "查看答案" ? "我的作答" : "查看答案";
-	thisobj.text(text);
+function answer_source(obj) {
+    let thisobj = $(obj);
+    thisobj.toggleClass("active");
+    let text = thisobj.text();
+    text = text === "查看答案" ? "我的作答" : "查看答案";
+    thisobj.text(text);
 }

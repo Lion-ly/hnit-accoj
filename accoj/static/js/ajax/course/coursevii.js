@@ -110,6 +110,7 @@ function map_subsidiary_account_info(data) {
     }
 
     // option颜色控制
+    let nowSubject = $("#subjectSelect").val();
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
         let $options = $("#subjectSelect").children();
         $.each($options, function (index, item) {
@@ -121,12 +122,19 @@ function map_subsidiary_account_info(data) {
                 color = "#5bc0de";
             }
             $(item).css("color", color);
+            if (optionValue === nowSubject) $("#subjectSelect").css("color", color);
         });
     } else return;
 
-    let confirmed = subsidiary_account_confirmed ? subsidiary_account_confirmed.indexOf(subject) !== -1 : false,
-        saved = subsidiary_account_saved ? subsidiary_account_saved.indexOf(subject) !== -1 : false;
+    let confirmed = false,
+        saved = false;
 
+    $.each(subsidiary_account_saved, function (index, item) {
+        saved = subsidiary_account_saved.indexOf(item) === -1;
+    });
+    $.each(subsidiary_account_confirmed, function (index, item) {
+        confirmed = subsidiary_account_confirmed.indexOf(item) === -1;
+    });
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "subsidiary_account_submit_span");
 
@@ -442,6 +450,7 @@ function vii2PaddingData(data) {
 function vii1ResetInfo() {
     $("[id^=period1Vii1Row][id!=Vii1RowEnd][id!=period1Vii1Row1][id!=period1Vii1Row2][id!=period1Vii1RowLast]").remove();
     $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1Row1][id!=period2Vii1RowLast]").remove();
+    $("#subjectSelect").css("color", "#555");
     $("#first").find("input").each(function () {
         let thisValue = $(this).val();
         if (["期初余额", "本期合计", "本年累计"].indexOf(thisValue) === -1) {
