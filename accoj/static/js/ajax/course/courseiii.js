@@ -1,11 +1,14 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_subject_info();
+    }, 20);
     getBusinessList();
     get_subject_info(true);
 });
-//==================================提交会计科目信息==================================//
-let now_business_no = 1;
 
+//==================================提交会计科目信息==================================//
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
@@ -51,18 +54,19 @@ function get_subject_info(isFromSubmit = false) {
 
     // 清空信息
     iiiResetInfo();
-    if (now_business_no < 0 || now_business_no > 20) {
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!subject_saved.length || subject_saved.indexOf(now_business_no - 1) === -1)
+        if (!subject_saved.length || subject_saved.indexOf(nowBusinessNo - 1) === -1)
         //  若未保存，则不向后台请求数据
             return;
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
-    if (subject_confirmed.length > 0 && subject_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (subject_confirmed.length > 0 && subject_confirmed.indexOf(nowBusinessNo - 1) !== -1) {
         map_subject_info();
         return;
     }
@@ -86,11 +90,12 @@ function map_subject_info(data) {
     subject_confirmed = data ? data["subject_confirmed"] : subject_confirmed;
     subject_saved = data ? data["subject_saved"] : subject_saved;
 
-    let business_index = now_business_no - 1,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_index = nowBusinessNo - 1,
         confirmed = subject_confirmed ? subject_confirmed.indexOf(business_index) !== -1 : false,
         saved = subject_saved ? subject_saved.indexOf(business_index) !== -1 : false;
 
-    if (now_business_no < 0 || now_business_no > 20) return;
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
 
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -105,7 +110,8 @@ function map_subject_info(data) {
  * @returns {Object}
  */
 function iiiGetInput() {
-    let business_no = now_business_no,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_no = nowBusinessNo,
         subject_infos = Array(),
         right_box = $("#plusbox"),
         left_box = $("#minusbox"),
@@ -152,15 +158,6 @@ function iiiPaddingData(data) {
 }
 
 // ==================================事件控制==================================//
-
-/**
- * 分页标签li的激活状态控制
- */
-function courseiii_li_control(business_no) {
-    now_business_no = courseLiCtrl(business_no, now_business_no);
-    get_subject_info();
-}
-
 /**
  * 往box中添加会计科目
  * @param box plusbox or minusbox(string)

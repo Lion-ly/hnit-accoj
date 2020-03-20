@@ -1,7 +1,7 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<link href="{{ url_for('static', filename='css/course/coursevii.css') }}" rel="stylesheet">
-<script src="{{ url_for('static', filename='js/ajax/course/coursevii.js') }}" charset="UTF-8"></script>
+    <link href="{{ url_for('static', filename='css/course/coursevii.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/ajax/course/coursevii.js') }}" charset="UTF-8"></script>
     <div class="courseBody">
         <!-- 习题主体 -->
         <div class="container-fluid">
@@ -21,9 +21,9 @@
                                         aria-controls="first" role="tab"
                                         data-toggle="tab">登记各账户明细账</a></li>
                                 <li role="presentation"><a href="#second"
-                                                                                                  aria-controls="second"
-                                                                                                  role="tab"
-                                                                                                  data-toggle="tab">登记科目余额表</a>
+                                                           aria-controls="second"
+                                                           role="tab"
+                                                           data-toggle="tab">登记科目余额表</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -31,9 +31,9 @@
                                 <div role="tabpanel" class="tab-pane active in fade" id="first">
                                     <div>
                                         <p class="acc-title">1、登记各账户明细账
-                                        <span id="subsidiary_account_submit_span"
-                                                                      class="glyphicon glyphicon-ok"
-                                                                      style="color: #5cb85c;font-size: medium;display: none">已完成</span>
+                                            <span id="subsidiary_account_submit_span"
+                                                  class="glyphicon glyphicon-ok"
+                                                  style="color: #5cb85c;font-size: medium;display: none">已完成</span>
                                         </p>
                                         <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -59,8 +59,8 @@
                                                                     </select>
                                                                 </label>
                                                                 <p style="font-size: 24px; display: inline;">明&nbsp;细&nbsp;账</p>
-                                                                
-                                                                
+
+
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -438,11 +438,12 @@
 
                                     </div>
                                     <hr class="simple" style="clear: both;color: #6f5499"/>
-                                     <div id="course_vii1_message"></div>
+                                    <div id="course_vii1_message"></div>
                                     <div style="float: left;">
-                        				<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
-                  				    </div>
-                                    <div style="float: right;"> 
+                                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
+                                        </button>
+                                    </div>
+                                    <div style="float: right;">
                                         <button type="button" class="btn btn-info" id="save_subsidiary_account_button"
                                                 onclick="save_subsidiary_account()">
                                             <span class="glyphicon"></span>&nbsp;保存
@@ -527,8 +528,9 @@
                                     <hr class="simple" style="clear: both;color: #6f5499"/>
                                     <div id="course_vii2_message"></div>
                                     <div style="float: left;">
-                        				<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
-                  				    </div>
+                                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
+                                        </button>
+                                    </div>
                                     <div style="float: right;">
                                         <button type="button" class="btn btn-info" id="save_acc_balance_sheet_button"
                                                 onclick="save_acc_balance_sheet()">

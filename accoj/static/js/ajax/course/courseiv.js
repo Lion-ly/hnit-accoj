@@ -1,11 +1,14 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_entry_info();
+    }, 20);
     getBusinessList();
     get_entry_info(true);
 });
-//==================================提交会计分录信息==================================//
-let now_business_no = 1;
 
+//==================================提交会计分录信息==================================//
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
@@ -49,18 +52,19 @@ let entry_infos = Array(), // 保存本次课程全部信息，减少后端数�
 function get_entry_info(isFromSubmit = false) {
     // 先清空信息
     ivResetInfo();
-    if (now_business_no < 0 || now_business_no > 20) {
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!entry_saved.length || entry_saved.indexOf(now_business_no - 1) === -1)
+        if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1)
         //  若未保存，则不向后台请求数据
             return;
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
-    if (entry_confirmed.length > 0 && entry_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (entry_confirmed.length > 0 && entry_confirmed.indexOf(nowBusinessNo - 1) !== -1) {
         map_entry_info();
         return;
     }
@@ -84,7 +88,8 @@ function map_entry_info(data) {
     entry_confirmed = data ? data["entry_confirmed"] : entry_confirmed;
     entry_saved = data ? data["entry_saved"] : entry_saved;
 
-    let business_index = now_business_no - 1,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_index = nowBusinessNo - 1,
         confirmed = entry_confirmed ? entry_confirmed.indexOf(business_index) !== -1 : false,
         saved = entry_saved ? entry_saved.indexOf(business_index) !== -1 : false;
 
@@ -101,7 +106,8 @@ function map_entry_info(data) {
  * @returns {Object}
  */
 function ivGetInput() {
-    let business_no = now_business_no,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_no = nowBusinessNo,
         entry_infos = Array(),
         crSubjects = $("[id^=subject1]"),    // 借记科目input列表
         drSubjects = $("[id^=subject0]"),    // 贷记科目input列表
@@ -164,14 +170,6 @@ function ivPaddingData(data) {
 }
 
 // ==================================事件控制==================================//
-/**
- * 分页标签li的激活状态控制
- */
-function courseiv_li_control(business_no) {
-    now_business_no = courseLiCtrl(business_no, now_business_no);
-    get_entry_info();
-}
-
 /**
  * 重置分录信息
  */

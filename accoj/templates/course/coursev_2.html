@@ -1,7 +1,7 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<link href="{{ url_for('static', filename='css/course/coursev_2.css') }}" rel="stylesheet">
-<script src="{{ url_for('static', filename='js/ajax/course/coursev_2.js') }}" charset="UTF-8"></script>
+    <link href="{{ url_for('static', filename='css/course/coursev_2.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/ajax/course/coursev_2.js') }}" charset="UTF-8"></script>
     <div class="courseBody">
         <!-- 习题主体 -->
         <div class="container">
@@ -36,18 +36,18 @@
                            style="border: 0 ">
                         <tbody>
                         <tr>
-                            <th rowspan="2" class="acc-unedit" >会计科目</th>
-                            <th colspan="2" class="acc-unedit" >期初余额</th>
-                            <th colspan="2" class="acc-unedit" >本期发生额</th>
-                            <th colspan="2" class="acc-unedit" >期末余额</th>
+                            <th rowspan="2" class="acc-unedit">会计科目</th>
+                            <th colspan="2" class="acc-unedit">期初余额</th>
+                            <th colspan="2" class="acc-unedit">本期发生额</th>
+                            <th colspan="2" class="acc-unedit">期末余额</th>
                         </tr>
                         <tr>
-                            <th class="acc-unedit" >借方</th>
-                            <th class="acc-unedit" >贷方</th>
-                            <th class="acc-unedit" >借方</th>
-                            <th class="acc-unedit" >贷方</th>
-                            <th class="acc-unedit" >借方</th>
-                            <th class="acc-unedit" >贷方</th>
+                            <th class="acc-unedit">借方</th>
+                            <th class="acc-unedit">贷方</th>
+                            <th class="acc-unedit">借方</th>
+                            <th class="acc-unedit">贷方</th>
+                            <th class="acc-unedit">借方</th>
+                            <th class="acc-unedit">贷方</th>
                             <td style="padding: 0; border: 0; width: 5%">
                                 <div style="text-align: center;">
                                     <a style="color: green;padding: 0;" type="button" class="btn"
@@ -72,7 +72,7 @@
                                               onchange="RealNumber(this)"></label></td>
                         </tr>
                         <tr id="period1_last">
-                            <th class="acc-unedit" >合计</th>
+                            <th class="acc-unedit">合计</th>
                             <td><label><input name="borrow_1" title="金额￥"
                                               onchange="RealNumber(this)"></label></td>
                             <td><label><input name="lend_1" title="金额￥"
@@ -93,19 +93,19 @@
                            style="border: 0">
                         <tbody>
                         <tr>
-                            <th rowspan="2" class="acc-unedit" >会计科目</th>
-                            <th colspan="2" class="acc-unedit" >期初余额</th>
-                            <th colspan="2" class="acc-unedit" >本期发生额</th>
-                            <th colspan="2" class="acc-unedit" >期末余额</th>
+                            <th rowspan="2" class="acc-unedit">会计科目</th>
+                            <th colspan="2" class="acc-unedit">期初余额</th>
+                            <th colspan="2" class="acc-unedit">本期发生额</th>
+                            <th colspan="2" class="acc-unedit">期末余额</th>
 
                         </tr>
                         <tr>
-                            <th class="acc-unedit" >借方</th>
-                            <th class="acc-unedit" >贷方</th>
-                            <th class="acc-unedit" >借方</th>
-                            <th class="acc-unedit" >贷方</th>
-                            <th class="acc-unedit" >借方</th>
-                            <th class="acc-unedit" >贷方</th>
+                            <th class="acc-unedit">借方</th>
+                            <th class="acc-unedit">贷方</th>
+                            <th class="acc-unedit">借方</th>
+                            <th class="acc-unedit">贷方</th>
+                            <th class="acc-unedit">借方</th>
+                            <th class="acc-unedit">贷方</th>
                             <td style="padding: 0; border: 0; width: 5%">
                                 <div style="text-align: center">
                                     <a style="color: green;padding: 0;" type="button" class="btn"
@@ -131,7 +131,7 @@
                                               onchange="RealNumber(this)"></label></td>
                         </tr>
                         <tr id="period2_last">
-                            <th class="acc-unedit" >合计</th>
+                            <th class="acc-unedit">合计</th>
                             <td><label><input name="borrow_1" title="金额￥"
                                               onchange="RealNumber(this)"></label></td>
                             <td><label><input name="lend_1" title="金额￥"
@@ -150,7 +150,7 @@
                     <hr class="simple" style="clear: both; color:#6f5499"/>
                     <div id="course_v_2_message"></div>
                     <div style="float: left;">
-                        	<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
                     </div>
                     <div style="float: right;">
                         <button type="button" class="btn btn-info" id="save_balance_sheet_button"
