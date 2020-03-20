@@ -1,3 +1,17 @@
+/*固定footer*/
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 200px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
 /*页面顶部*/
 #project-title{
 	margin-bottom: 0;

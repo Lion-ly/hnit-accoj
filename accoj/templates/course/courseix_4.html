@@ -1,8 +1,8 @@
 {% extends 'course/courseBase.html' %} {% block courseBody %}
+ <link href="{{ url_for('static', filename='css/course/courseix.css') }}" rel="stylesheet">
+ <script src="{{ url_for('static', filename='js/ajax/course/courseix_4.js') }}" charset="UTF-8"></script>
     <div class="courseBody">
         <!-- 习题主体 -->
-        <link href="{{ url_for('static', filename='css/course/courseix.css') }}" rel="stylesheet">
-        <script src="{{ url_for('static', filename='js/ajax/course/courseix_4.js') }}" charset="UTF-8"></script>
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -11,7 +11,7 @@
                 <div class="panel-body">
                     <div style="text-align: center">
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
+                            <ul class="pagination pagination-sm">
                                 <li><a href="#" aria-label="Previous"> <span
                                         aria-hidden="true">&laquo;</span>
                                 </a></li>
