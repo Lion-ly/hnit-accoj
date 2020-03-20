@@ -1,10 +1,14 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_key_element_info();
+    }, 20);
     getBusinessList();
     get_key_element_info(true);
 });
+
 //==================================提交会计要素信息==================================//
-let now_business_no = 1;
 
 /**
  * 将处理函数绑定到模态框的确认提交按钮
@@ -51,19 +55,19 @@ function get_key_element_info(isFromSubmit = false) {
 
     // 清空信息
     iiResetInfo();
-
-    if (now_business_no < 0 || now_business_no > 20) {
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!key_element_saved.length || key_element_saved.indexOf(now_business_no - 1) === -1)
+        if (!key_element_saved.length || key_element_saved.indexOf(nowBusinessNo - 1) === -1)
         //  若未保存，则不向后台请求数据
             return;
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
-    if (key_element_confirmed.length > 0 && key_element_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (key_element_confirmed.length > 0 && key_element_confirmed.indexOf(nowBusinessNo - 1) !== -1) {
         map_key_element_info();
         return;
     }
@@ -86,7 +90,8 @@ function map_key_element_info(data) {
     key_element_confirmed = data ? data["key_element_confirmed"] : key_element_confirmed;
     key_element_saved = data ? data["key_element_saved"] : key_element_saved;
 
-    let business_index = now_business_no - 1,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_index = nowBusinessNo - 1,
         confirmed = key_element_confirmed ? key_element_confirmed.indexOf(business_index) !== -1 : false,
         saved = key_element_saved ? key_element_saved.indexOf(business_index) !== -1 : false;
 
@@ -104,7 +109,8 @@ function map_key_element_info(data) {
  * @returns {Object}
  */
 function iiGetInput() {
-    let business_no = now_business_no,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_no = nowBusinessNo,
         key_element_infos = Array(),
         aers = $("input[id^=aer]"),
         aers_len = aers.length,
@@ -169,13 +175,6 @@ function iiPaddingData(data) {
 }
 
 // ==================================事件控制==================================//
-/**
- * 分页标签li的激活状态控制
- */
-function courseii_li_control(business_no) {
-    now_business_no = courseLiCtrl(business_no, now_business_no);
-    get_key_element_info();
-}
 
 /**
  * 清空会计要素信息

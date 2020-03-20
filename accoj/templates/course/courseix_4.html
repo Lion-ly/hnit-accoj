@@ -1,6 +1,7 @@
-{% extends 'course/courseBase.html' %} {% block courseBody %}
- <link href="{{ url_for('static', filename='css/course/courseix.css') }}" rel="stylesheet">
- <script src="{{ url_for('static', filename='js/ajax/course/courseix_4.js') }}" charset="UTF-8"></script>
+{% extends 'course/courseBase.html' %}
+{% block courseBody %}
+    <link href="{{ url_for('static', filename='css/course/courseix.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/ajax/course/courseix_4.js') }}" charset="UTF-8"></script>
     <div class="courseBody">
         <!-- 习题主体 -->
         <div class="container">
@@ -154,7 +155,7 @@
                     <hr class="simple" style="clear: both;color: #6f5499"/>
                     <div id="course_ix4_message"></div>
                     <div style="float: left;">
-                        	<button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
                     </div>
                     <div style="float: right;">
                         <button type="button" class="btn btn-info" id="save_ix4_button"

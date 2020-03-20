@@ -1,12 +1,15 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_acc_document_info();
+    }, 20);
     getBusinessList();
     get_acc_document_info(true);
 });
 let fileContent = "";
-//==================================提交会计凭证信息==================================//
-let now_business_no = 1;
 
+//==================================提交会计凭证信息==================================//
 /**
  * 将处理函数绑定到模态框的确认提交按钮
  */
@@ -47,17 +50,19 @@ let acc_document_infos = Array(), // 保存本次课程全部信息，减少后�
 function get_acc_document_info(isFromSubmit = false) {
     //  清空信息
     viResetInfo();
-    if (now_business_no < 0 || now_business_no > 20) {
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
+
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!acc_document_saved.length || acc_document_saved.indexOf(now_business_no - 1) === -1)
+        if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1)
         //  若未保存，则不向后台请求数据
             return;
     }
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
-    if (acc_document_confirmed.length > 0 && acc_document_confirmed.indexOf(now_business_no - 1) !== -1) {
+    if (acc_document_confirmed.length > 0 && acc_document_confirmed.indexOf(nowBusinessNo - 1) !== -1) {
         map_acc_document_info();
         return;
     }
@@ -79,7 +84,8 @@ function map_acc_document_info(data) {
     acc_document_confirmed = data ? data["acc_document_confirmed"] : acc_document_confirmed;
     acc_document_saved = data ? data["acc_document_saved"] : acc_document_saved;
 
-    let business_index = now_business_no - 1,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_index = nowBusinessNo - 1,
         confirmed = acc_document_confirmed ? acc_document_confirmed.indexOf(business_index) !== -1 : false,
         saved = acc_document_saved ? acc_document_saved.indexOf(business_index) !== -1 : false;
 
@@ -96,7 +102,8 @@ function map_acc_document_info(data) {
  * @returns {Object}
  */
 function viGetInput() {
-    let business_no = now_business_no,
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        business_no = nowBusinessNo,
         data, acc_document_infos,
         doc_no,                     // 会计凭证编号
         date,                       // 日期
@@ -255,7 +262,9 @@ function viPaddingData(data) {
  * 下载文件
  */
 function vi_downloadFile() {
-    let data = {"business_no": now_business_no};
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        data = {"business_no": nowBusinessNo};
+
     data = JSON.stringify(data);
 
     function successFunc(data) {
@@ -274,15 +283,9 @@ function vi_downloadFile() {
 
 // ==================================事件控制==================================//
 /**
- * 分页标签li的激活状态控制
+ * 重置凭证信息
  */
-function coursevi_li_control(business_no) {
-    now_business_no = courseLiCtrl(business_no, now_business_no);
-    get_acc_document_info();
-}
-
 function viResetInfo() {
-    // 重置凭证信息
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
     $("input").val("");
     $("#vi_downloadFile_button").hide();
