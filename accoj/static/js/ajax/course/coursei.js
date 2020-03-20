@@ -2,6 +2,7 @@
 // 页面加载完成填充数据
 $(document).ready(function () {
     get_company_info();
+    get_business_info()
 });
 
 /**
@@ -175,6 +176,9 @@ function submit_business_info() {
             if (data["result"] === true) {
                 $("#business_confirmed_span").show();
                 show_message("submit_confirm_message", "提交成功", "info", 1000);
+                $("#menu").children().children().each(function (index, item) {
+                    $(item).children().attr("data-original-title", "已开放");
+                });
             } else {
                 show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
             }
@@ -206,6 +210,9 @@ function get_business_info() {
                 let business_confirm = data["business_confirm"];
                 if (business_confirm) {
                     $("#business_confirmed_span").show();
+                    $("#menu").children().children().each(function (index, item) {
+                        $(item).children().attr("data-original-title", "已开放");
+                    });
                 }
                 while (rowNumI > 101) {
                     remove_business_row();
@@ -219,6 +226,9 @@ function get_business_info() {
             } else {
                 if (data["message"] !== "暂无业务")
                     show_message("course_i2_message", data["message"], "warning", 1000);
+                $("#menu").children().children().each(function (index, item) {
+                    if (index) $(item).children().attr("data-original-title", "未开放");
+                });
             }
         },
         error: function (err) {

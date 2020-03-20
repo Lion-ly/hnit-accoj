@@ -178,9 +178,8 @@ def submit_business_infos():
     business_num = company.get("business_num")
     schedule_confirm = company.get("schedule_confirm")
     businesses = company.get("businesses")
-    business_confirm = schedule_confirm.get("business_confirm")
 
-    if business_num == max_business_num and not business_confirm:
+    if business_num == max_business_num and not schedule_confirm:
         result, message = is_at_least2()
         if not result:
             return jsonify(result=result, message=message)
@@ -213,7 +212,7 @@ def submit_business_infos():
                                           "involve_subjects"                 : involve_subjects}}
                                 )
         return jsonify(result=True)
-    elif business_num == max_business_num and business_confirm:
+    elif business_num == max_business_num and schedule_confirm:
         return jsonify(result=False, message="已经提交过")
     else:
         return jsonify(result=False, message="公司业务数量过少")
