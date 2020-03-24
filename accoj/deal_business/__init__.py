@@ -12,65 +12,93 @@ from _datetime import datetime
 from flask import session
 
 
-def deal_business(company, business_type, questions_no):
+def create_businesses(company):
+    """
+    生成业务
+    :param company: company_cp document
+    :return:
+    """
+    low, high = 1, 1  # 题库编号随机生成
+    questions_no = random.randint(low, high)
+    flag = deal_business(company, questions_no)
+    message = "生成业务成功！"
+    if not flag:
+        message = "业务逻辑出现问题，生成业务失败！"
+        return False, message
+    return True, message
+
+
+def deal_business(company, questions_no):
     """
     业务处理
-    :param company: company document
-    :param business_type: business_type
+    :param company: company_cp document
     :param questions_no: questions_no
-    :return: business_content, message
+    :return:
     """
-    business_content, message = "", ""
-    if questions_no == 1:
-        business_content, message = deal_business_1(company=company, business_type=business_type)
-    return business_content, message
+    questions = mongo.db.question.find(dict(questions_no=questions_no))
+    deal_function_list = [deal_business_1]
+    func_index = questions_no - 1
+    max_no = 20
+    company.update(dict(business_num=0, com_assets=[],
+                        businesses=[], key_element_infos=[],
+                        subjects_infos=[], entry_infos=[],
+                        acc_document_infos=[]))
+    no_pop = ["business_num", "com_assets", "businesses", "key_element_infos",
+              "subjects_infos", "com_shareholder", "com_regist_cap"]
+    for key in list(company.keys()):
+        if key not in no_pop:
+            company.pop(key)
+    for i in range(0, max_no):
+        flag, company = deal_function_list[func_index](company=company, questions=questions)
+        if not flag:
+            return False
+
+    # 副本公司存储答案
+    mongo.db.company.update({"student_no": "{}_cp".format(session["username"])},
+                            {"$set": company})
+    [company.pop(key) for key in ["key_element_infos", "subjects_infos"]]
+    # 用户公司写入业务
+    mongo.db.company.update({"student_no": "{}".format(session["username"])},
+                            {"$set": company})
+    return True
 
 
-def deal_business_1(company, business_type):
+def deal_business_1(company, questions):
     """
-    题库1的处理，返回业务内容，报错信息
-    :param company: company document
-    :param business_type: business_type
-    :return: business_content,message
+    题库1的处理
+    :param company: company_cp document
+    :return: True if added successfully else False
+    :param questions: question cursor
     """
-    message = ""
     com_businesses = company["businesses"]
     business_num = company["business_num"]
-    business_content = None
 
     if business_num == 0:
         # 第一笔业务
-        business_content = deal_with_question_1(company, 1)
+        company = deal_with_question_1(company, 1, questions)
     elif business_num == 9:
-        # 第一个会计区间
-        business_content = deal_with_question_1(company, 34)
+        # 第一个会计区间结束
+        company = deal_with_question_1(company, 34, questions)
     elif business_num == 19:
-        # 第一个会计区间,  业务数量最多20
-        business_content = deal_with_question_1(company, 34)
+        # 第二个会计区间结束
+        company = deal_with_question_1(company, 34, questions)
     else:
         # 公司已有的业务
         success_flag = False
         question_set = set()
         for com_business in com_businesses:
             question_set.add(com_business["question_no"])
-        # 筹资活动2-7
-        random_list = list(range(2, 8))
-        if business_type == "投资活动":
-            random_list = list(range(8, 15))
-        elif business_type == "经营活动":
-            random_list = list(range(15, 33))
+        random_list = list(range(2, 33))
         for question_no_tmp in question_set:
             if question_no_tmp in random_list:
                 random_list.remove(question_no_tmp)
         if not random_list:
-            message = "请选择其他活动"
-            return business_content, message
+            return False, company
         while True:
             # 随机选择题目
             if not random_list:
                 # 随机数序列为空
-                message = "请选择其他活动"
-                return business_content, message
+                return False, company
             question_no = random.choice(random_list)
             if question_no in question_set:
                 continue
@@ -96,8 +124,7 @@ def deal_business_1(company, business_type):
                 continue
             elif question_no == 27:
                 # 业务[5,8,9]为业务27前提
-                # 集合子集判断
-                if {5, 8, 9} < question_set:
+                if {5, 8, 9} < question_set:  # 集合子集判断
                     success_flag = True
                     break
                 random_list.remove(27)
@@ -128,20 +155,18 @@ def deal_business_1(company, business_type):
                 success_flag = True
                 break
         if success_flag:
-            business_content = deal_with_question_1(company=company, question_no=question_no)
+            company = deal_with_question_1(company=company, question_no=question_no, questions=questions)
+    return True, company
 
-    return business_content, message
 
-
-def deal_with_question_1(company, question_no):
+def deal_with_question_1(company, question_no, questions):
     """
     1号题库对应题号生成对应业务
     :param company: company document
     :param question_no: question no
-    :return: business content
+    :param questions: question cursor
     """
-    question = mongo.db.question.find_one(dict(questions_no=1,
-                                               question_no=question_no))
+    question = questions[question_no - 1]
     businesses = company.get("businesses")
     com_key_element_infos = company.get("key_element_infos")
     com_subjects_infos = company.get("subjects_infos")
@@ -175,6 +200,7 @@ def deal_with_question_1(company, question_no):
     # deal values and content------------------------------------------------------------------------
     values_list = list()
     if question_no == 1:
+        # 第一题特判
         content = content.replace("v1", company.get("com_shareholder")[0])
         num_tmp = company.get("com_regist_cap")
         num_tmp *= float(10000)
@@ -209,7 +235,7 @@ def deal_with_question_1(company, question_no):
                 index_tmp = 0
                 for business in businesses:
                     if business.get("question_no") == 20:
-                        value_tmp = com_key_element_infos["info"][index_tmp][0].get("money")
+                        value_tmp = com_key_element_infos[index_tmp]["info"][0].get("money")
                         if values_list[1] > value_tmp:
                             value = value.split("/")[0]
                         elif values_list[1] < value_tmp:
@@ -258,7 +284,7 @@ def deal_with_question_1(company, question_no):
                     index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 17:
-                            high = com_key_element_infos["info"][index_tmp][0].get("money")
+                            high = com_key_element_infos[index_tmp]["info"][0].get("money")
                             value = random.randrange(90000, high, 100)
                             break
                         index_tmp += 1
@@ -267,7 +293,7 @@ def deal_with_question_1(company, question_no):
                     index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 15:
-                            high = com_key_element_infos["info"][index_tmp][0].get("money")
+                            high = com_key_element_infos[index_tmp]["info"][0].get("money")
                             value = random.randrange(1000, high, 100)
                             break
                         index_tmp += 1
@@ -276,7 +302,7 @@ def deal_with_question_1(company, question_no):
                     index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 20:
-                            medium = com_key_element_infos["info"][index_tmp][0].get("money")
+                            medium = com_key_element_infos[index_tmp]["info"][0].get("money")
                             value = random.randrange(medium - 1000, medium + 1000, 100)
                             break
                         index_tmp += 1
@@ -300,7 +326,7 @@ def deal_with_question_1(company, question_no):
                         index_tmp = 0
                         for business in businesses:
                             if business.get("question_no") == 28:
-                                tmp = com_key_element_infos["info"][index_tmp][0].get("money")
+                                tmp = com_key_element_infos[index_tmp]["info"][0].get("money")
                                 value = tmp / 2
                                 break
                             index_tmp += 1
@@ -312,7 +338,7 @@ def deal_with_question_1(company, question_no):
                         index_tmp = 0
                         for business in businesses:
                             if business.get("question_no") == 30:
-                                value = com_key_element_infos["info"][index_tmp][0].get("money")
+                                value = com_key_element_infos[index_tmp]["info"][0].get("money")
                                 break
                             index_tmp += 1
                     if i == 3:
@@ -395,7 +421,7 @@ def deal_with_question_1(company, question_no):
                 index_tmp = 0
                 for business in businesses:
                     if business.get("question_no") == 20:
-                        value_tmp = com_key_element_infos["info"][index_tmp][0].get("money")
+                        value_tmp = com_key_element_infos[index_tmp]["info"][0].get("money")
                         break
                     index_tmp += 1
                 if i == 0:
@@ -414,7 +440,7 @@ def deal_with_question_1(company, question_no):
                     index_tmp = 0
                     for business in businesses:
                         if business.get("question_no") == 20:
-                            value_tmp = com_key_element_infos["info"][index_tmp][0].get("money")
+                            value_tmp = com_key_element_infos[index_tmp]["info"][0].get("money")
                             break
                         index_tmp += 1
                     subjects_infos.append(dict(subject="银行存款",
@@ -448,17 +474,15 @@ def deal_with_question_1(company, question_no):
     business = dict(questions_no=1, question_no=question_no, content=content, date=date, business_type=business_type)
 
     key_element_infos_dict = dict(affect_type=affect_type, info=key_element_infos)
-    # 用户公司写入业务
-    mongo.db.company.update({"student_no": "{}".format(session["username"])},
-                            {"$push": {"businesses": business},
-                             "$set" : {"com_assets": com_assets},
-                             "$inc" : {"business_num": 1}})
-    # 副本公司存储答案
-    mongo.db.company.update({"student_no": "{}_cp".format(session["username"])},
-                            {"$push": dict(businesses=business,
-                                           key_element_infos=key_element_infos_dict,
-                                           subjects_infos=subjects_infos),
-                             "$set" : {"com_assets": com_assets},
-                             "$inc" : {"business_num": 1}}
-                            )
-    return content
+
+    businesses.append(business)
+    com_key_element_infos.append(key_element_infos_dict)
+    com_subjects_infos.append(subjects_infos)
+    business_num += 1
+
+    company.update(dict(businesses=businesses,
+                        com_assets=com_assets,
+                        business_num=business_num,
+                        key_element_infos=com_key_element_infos,
+                        subjects_infos=com_subjects_infos))
+    return company

@@ -104,7 +104,7 @@ function check_email(email) {
 }
 
 /**
- *
+ * 显示提示信息
  * @param id
  * @param message
  * @param message_type danger or info
@@ -139,7 +139,7 @@ function show_message(id, message, message_type, timeout, message_head = false) 
 }
 
 /**
- * 点击提交按钮
+ * 点击提交按钮事件处理
  * @param submit_deal_fun
  */
 function show_submit_confirm(submit_deal_fun) {
@@ -149,7 +149,7 @@ function show_submit_confirm(submit_deal_fun) {
 }
 
 /**
- * 将处理函数绑定到模态框的确认提交按钮
+ * 确认提交事件绑定
  * @param buttonID
  * @param submit_infoName String
  */
@@ -168,7 +168,7 @@ function bind_confirm_info(buttonID, submit_infoName) {
 }
 
 /**
- * 保存信息
+ * 保存信息事件绑定
  * @param buttonID
  * @param submit_info function
  */
@@ -258,8 +258,10 @@ function limitJieDai(obj) {
  * @param data  post data (JSON)
  * @param messageDivID  show message's divID
  * @param successFunc   success function if post successfully
+ * @param failedFunc    success function if post failed
  */
-function submit_info(submit_type, url, data, messageDivID, successFunc) {
+function submit_info(submit_type, url, data, messageDivID, successFunc, failedFunc) {
+    failedFunc = failedFunc ? failedFunc : function(data){};
     let type_flag = null;
     if (submit_type === "confirm") {
         type_flag = true;
@@ -297,6 +299,7 @@ function submit_info(submit_type, url, data, messageDivID, successFunc) {
                 } else if (type_flag === false) {
                     show_message(messageDivID, data["message"], "danger", 1000, "保存失败！");
                 }
+                failedFunc(data);
             }
         },
         error: function (err) {
@@ -349,6 +352,12 @@ function get_info(data, url, successFunc, messageDivID) {
 }
 
 //==================================提交状态标签控制==================================//
+/**
+ * 提交状态标签控制
+ * @param confirmed
+ * @param saved
+ * @param spanID
+ */
 function spanStatusCtr(confirmed, saved, spanID) {
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
 
@@ -370,6 +379,9 @@ function spanStatusCtr(confirmed, saved, spanID) {
 }
 
 //==================================获取业务列表==================================//
+/**
+ * 获取业务列表
+ */
 function getBusinessList() {
     function successFunc(data) {
         business_list = data["business_list"];
@@ -403,7 +415,7 @@ function pageSplitBind(callbackFuc, maxPage = 20) {
                 firstArray = [...Array(maxLen)].map(_ => ++jj),
                 lastArray = [...Array(maxLen)].map(_ => maxNo - --ii);
             if (clickedSpanNo === "‹") {
-                if (activeNoInt < minus) {
+                if (activeNoInt <= minus) {
                     return;
                 }
             }
@@ -500,7 +512,6 @@ function businessLiControl(business_no) {
     $("#em_no").text(em_no);
     // 填充活动类型
     let $business_type = $("#business_type");
-    $business_type.removeClass();
     let business_class = "label label-" + "success"; //  初始化为筹资活动
     if (business_type === "投资活动") {
         business_class = "label label-" + "info";

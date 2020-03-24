@@ -1,8 +1,16 @@
+let businesses = "",
+    business_confirmed = "";
 //==================================新增公司==================================//
 // 页面加载完成填充数据
 $(document).ready(function () {
+    $("#menu").children().children().each(function (index, item) {
+        if (index) $(item).children().attr("data-original-title", "未开放");
+    });
     get_company_info();
-    get_business_info()
+    get_business_info();
+    pageSplitBind(function () {
+        get_business_info();
+    }, 2);
 });
 
 /**
@@ -15,142 +23,96 @@ function confirm_company() {
 /**
  * 提交公司信息
  */
-function submit_company_info() {
-    let data = $('#company_form').serialize();
-    $(":text").css({"border-style": "none"});
-    $("#com_business_scope").css({"border-style": "none"});
-    // 提交公司信息
-    $.ajax({
-        url: "/company_form_submit",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                $("#company_confirmed_span").show();
-                show_message("submit_confirm_message", "提交成功！", "info", 1000);
-            } else if (data.hasOwnProperty("err_pos")) {
-                // 提交失败，标出出错位置
-                let data_err_pos = data["err_pos"];
-                for (let x = 0; x < data_err_pos.length; x++) {
-                    let err_pos = data_err_pos[x]["err_pos"];
-                    $("#" + err_pos).css({"border-style": "solid"});
-                }
-                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-            } else {
-                get_company_info();
-                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
+function submit_company_info(submit_type) {
+    function successFunc(data) {
+        $(":text").css({"border-style": "none"});
+        $("#com_business_scope").css({"border-style": "none"});
+        get_company_info();
+    }
+
+    function failedFunc(data) {
+        if (data.hasOwnProperty("err_pos")) {
+            // 提交失败，标出出错位置
+            let data_err_pos = data["err_pos"];
+            for (let x = 0; x < data_err_pos.length; x++) {
+                let err_pos = data_err_pos[x]["err_pos"];
+                $("#" + err_pos).css({"border-style": "solid"});
             }
-        },
-        error: function (err) {
-            console.log(err.statusText + "异常");
-        },
-        complete: function () {
-            submit_confirm_clicked();
         }
-    });
+    }
+
+    // 提交公司信息
+    let url = "/submit_company_info",
+        data = JSON.stringify(iGetInput()),
+        messageDivID = "submit_confirm_message";
+    submit_info(submit_type, url, data, messageDivID, successFunc, failedFunc);
 }
 
 /**
- * 获取公司信息
+ * 从后端获取获取公司信息
  */
 function get_company_info() {
-    let data = $.param({"csrf_token": get_csrf_token()});
-    $.ajax({
-        url: "/get_company_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"]) {
-                // 公司已经创立过，将值填充，表单不可编辑
-                $("#company_confirmed_span").show();
-                $(":text").attr("readonly", "readonly");
-                $("textarea").attr("readonly", "readonly");
-                let company_info = data["company_info"];
-                for (let prop in company_info) {
-                    if (!company_info.hasOwnProperty(prop)) continue;
-                    if (prop === "com_shareholder") {
-                        let com_shareholders = company_info[prop];
-                        for (let i = 0; i < com_shareholders.length; i++) {
-                            $("#com_shareholder_" + (i + 1)).val(com_shareholders[i]);
-                        }
-                    } else {
-                        $("#" + prop).val(company_info[prop]);
-                    }
-                }
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText + "异常");
-        }
-    })
-
+    let data = {},
+        url = "/get_company_info",
+        successFunc = paddingCompany,
+        messageDivID = "course_i1_message";
+    get_info(data, url, successFunc, messageDivID);
 }
 
-//==================================新增业务==================================//
+// ===============================获取和填充数据===============================//
 /**
- * 新增业务
- * @param labelType
+ * 获取数据
+ * @returns {Object}
  */
-function add_business(labelType) {
-    let data = $.param({"business_type": labelType}) + "&" + $.param({"csrf_token": get_csrf_token()});
-    $.ajax({
-        url: "/add_business",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                let content = data["content"];
-                if (content.match("月1日")) {
-                    labelType = "筹资活动";
-                }
-                if (content.match("结转本月损益")) {
-                    labelType = "经营活动";
-                }
-                body_text_append(labelType, content);
-                show_message("add_business_message", data["message"], "info", 750, "增加成功！");
-            } else {
-                show_message("add_business_message", data["message"], "warning", 1000);
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText + "异常");
-        }
-    });
+function iGetInput() {
+    function getFormData($form) {
+        let unindexed_array = $form.serializeArray();
+        let indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+
+    return getFormData($('#company_form'));
 }
 
 /**
- * 撤销新增业务
+ * 填充公司信息
+ * @param data
  */
-function revoke_add_business() {
-    let data = $.param({"csrf_token": get_csrf_token()});
-    $.ajax({
-        url: "/revoke_add_business",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                show_message("add_business_message", data["message"], "info", 750, "撤销成功！");
-                remove_business_row();
-            } else {
-                show_message("add_business_message", data["message"], "warning", 1000, "撤销失败！");
+function paddingCompany(data) {
+    // 公司已经创立过，将值填充，表单不可编辑
+    $("#company_confirmed_span").show();
+    $(":text").attr("readonly", "readonly");
+    $("textarea").attr("readonly", "readonly");
+    let company_info = data["company_info"];
+    for (let prop in company_info) {
+        if (!company_info.hasOwnProperty(prop)) continue;
+        if (prop === "com_shareholder") {
+            let com_shareholders = company_info[prop];
+            for (let i = 0; i < com_shareholders.length; i++) {
+                $("#com_shareholder_" + (i + 1)).val(com_shareholders[i]);
+                $("#submit_company_button").attr("disabled", "disabled");
             }
-        },
-        error: function (err) {
-            console.log(err.statusText + "异常");
+        } else {
+            $("#" + prop).val(company_info[prop]);
         }
-    });
+    }
+}
+
+//==================================生成业务==================================//
+/**
+ * 生成业务
+ */
+function create_business() {
+    let data = {},
+        url = "/create_business",
+        successFunc = get_business_info,
+        messageDivID = "create_business_message";
+    get_info(data, url, successFunc, messageDivID);
 }
 
 /**
@@ -163,93 +125,77 @@ function confirm_business() {
 /**
  * 提交业务信息，提交成功后不可更改
  */
-function submit_business_info() {
-    let data = $.param({"csrf_token": get_csrf_token()});
-    $.ajax({
-        url: "/submit_business_infos",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                $("#business_confirmed_span").show();
-                show_message("submit_confirm_message", "提交成功", "info", 1000);
-                $("#menu").children().children().each(function (index, item) {
-                    $(item).children().attr("data-original-title", "已开放");
-                });
-            } else {
-                show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText + "异常")
-        },
-        complete: function () {
-            submit_confirm_clicked();
-        }
-    });
+function submit_business_info(submit_type) {
+    function successFunc() {
+        $("#menu").children().children().each(function (index, item) {
+            $(item).children().attr("data-original-title", "已开放");
+        });
+        get_key_element_info();
+    }
+
+    let url = "/submit_business_info",
+        data = {},
+        messageDivID = "submit_confirm_message";
+    submit_info(submit_type, url, data, messageDivID, successFunc);
 }
 
 /**
- * 获取业务内容信息
+ * 从后端获取获取业务内容信息
  */
 function get_business_info() {
-    let data = $.param({"csrf_token": get_csrf_token()});
-    $.ajax({
-        url: "/get_business_info",
-        type: "post",
-        data: data,
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function (data) {
-            if (data["result"] === true) {
-                let content_list = data["content_list"];
-                let business_confirm = data["business_confirm"];
-                if (business_confirm) {
-                    $("#business_confirmed_span").show();
-                    $("#menu").children().children().each(function (index, item) {
-                        $(item).children().attr("data-original-title", "已开放");
-                    });
-                }
-                while (rowNumI > 101) {
-                    remove_business_row();
-                }
-                for (let i in content_list) {
-                    if (!content_list.hasOwnProperty(i)) continue;
-                    let labelType = content_list[i]["business_type"],
-                        content = content_list[i]["content"];
-                    body_text_append(labelType, content);
-                }
-            } else {
-                if (data["message"] !== "暂无业务")
-                    show_message("course_i2_message", data["message"], "warning", 1000);
-                $("#menu").children().children().each(function (index, item) {
-                    if (index) $(item).children().attr("data-original-title", "未开放");
-                });
-            }
-        },
-        error: function (err) {
-            console.log(err.statusText + "异常")
-        }
+    if (business_confirmed) {
+        paddingBusiness();
+        return;
+    }
+    let data = {},
+        url = "/get_business_info",
+        successFunc = paddingBusiness,
+        messageDivID = "course_i2_message";
+    get_info(data, url, successFunc, messageDivID);
+}
+
+// ===============================获取和填充数据===============================//
+/**
+ * 填充业务信息
+ * @param data
+ */
+function paddingBusiness(data) {
+    businesses = data ? data["businesses"] : businesses;
+    business_confirmed = data ? data["confirmed"] : business_confirmed;
+    let periodNo = parseInt($("li[data-page-control][class=active]").children().text());
+    if (!businesses) return;
+
+    $("#businessPeriod").show();
+    $("#createBusiness").addClass("btn-warning").removeClass("btn-success");
+    $("#createBusiness").text("重新生成");
+    if (business_confirmed) {
+        $("#business_confirmed_span").show();
+        $("#createBusiness").attr("disabled", "disabled");
+        $("#submit_business_button").attr("disabled", "disabled");
+    }
+    $("#menu").children().children().each(function (index, item) {
+        $(item).children().attr("data-original-title", "已开放");
     });
+    resetBusiness();
+    let [low, high] = [1, 10];
+    if (periodNo === 2) [low, high] = [11, 20];
+    for (let i = low; i <= high; i++) {
+        let business = businesses[i - 1],
+            labelType = business["business_type"],
+            content = business["content"];
+        body_text_append(labelType, content, i);
+    }
 }
 
 // ==================================事件控制==================================//
-
-let rowNumI = 101;
-
 /**
  * 增加业务行
  * @param labelType
  * @param content
+ * @param businessNo
  */
-function body_text_append(labelType, content) {
-    let rowName = "row-" + rowNumI,
-        bg,
-        business_no = rowNumI >= 110 ? rowNumI - 100 : "0" + (rowNumI - 100);
+function body_text_append(labelType, content, businessNo) {
+    let bg;
     switch (labelType) {
         case "筹资活动":
             bg = "#5cb85c";
@@ -262,29 +208,22 @@ function body_text_append(labelType, content) {
             break;
     }
     $("#body-text").append(
-        "<tr id='" + rowName + "'>"
+        "<tr>"
         + "<th style='background-color: " + bg + ";width: 4%'>"
         + labelType
         + "</th>"
         + "<td style='text-align: left;vertical-align: middle;'>"
-        + "<strong style='color: " + bg + "'>" + business_no + ".&nbsp;&nbsp;</strong>"
+        + "<strong style='color: " + bg + "'>" + businessNo + ".&nbsp;&nbsp;</strong>"
         + content
         + "</td>"
         +
         +"</tr>"
     );
-    rowNumI++;
 }
 
 /**
- * 删除业务行
+ * 清空业务信息
  */
-function remove_business_row() {
-    if (rowNumI - 1 < 101) {
-        rowNumI = 101;
-    } else {
-        rowNumI = rowNumI - 1;
-    }
-    let rowName = "row-" + rowNumI;
-    $("#" + rowName).remove();
+function resetBusiness() {
+    $("#body-text").children("[hidden!=hidden]").remove();
 }
