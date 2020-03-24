@@ -9,7 +9,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
 				<span>1、了解会计主体的含义及公司设立流程。<br/>2、了解会计对象的含义，理解会计核算的内容即交易或事项的含义。
-                    <br/>3、<strong>注意： </strong>假设一个月为一个会计区间，每个会计区间每一种活动应不少于2种。
+                    <br/>3、<strong>注意： </strong>假设一个月为一个会计区间。
 				</span>
                 </div>
                 <div class="panel-body">
@@ -17,23 +17,22 @@
                     <ul class="nav nav-tabs">
                         <li role="presentation" class="active" id="CreateCompany-li"><a
                                 href="#CreateCompany" aria-controls="CreateCompany" role="tab"
-                                data-toggle="tab">新增公司</a></li>
+                                data-toggle="tab">注册公司</a></li>
                         <li role="presentation"><a href="#NewBusiness"
                                                    aria-controls="NewBusiness" role="tab"
-                                                   data-toggle="tab">新增业务</a>
+                                                   data-toggle="tab">业务生成</a>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <!-- 第一标签 -->
                         <div role="tabpanel" class="tab-pane active in fade"
                              id="CreateCompany">
-                            <p class="acc-title">1、新增公司
+                            <p class="acc-title">1、注册公司
                                 <span id="company_confirmed_span" class="glyphicon glyphicon-ok"
                                       style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
 
                             </p>
                             <form id="company_form">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th class="acc-unedit">公司名称</th>
@@ -220,32 +219,16 @@
                         <!-- 第二标签 -->
                         <div role="tabpanel" class="tab-pane fade" id="NewBusiness">
 
-                            <p class="acc-title">2、新增业务
+                            <p class="acc-title">2、业务生成
                                 <span id="business_confirmed_span" class="glyphicon glyphicon-ok"
                                       style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
                             </p>
-
-                            <div class="btn-group btn-group-sm" role="group" aria-label="..."
-                                 style="">
-                                <button type="button" class="btn btn-success btn-sm">新增</button>
-                                <button type="button"
-                                        class="btn btn-success btn-sm dropdown-toggle"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <span class="caret"></span> <span class="sr-only">Toggle
-									Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li onclick="add_business('筹资活动')"><a
-                                            style="color: #ffffff; background-color: #449d44">筹资活动</a></li>
-                                    <li onclick="add_business('投资活动')"><a
-                                            style="color: #ffffff; background-color: #5bc0de">投资活动</a></li>
-                                    <li onclick="add_business('经营活动')"><a
-                                            style="color: #ffffff; background-color: #f0ad4e">经营活动</a></li>
-                                </ul>
-                            </div>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="revoke_add_business()">撤销
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="createBusiness" onclick="create_business()" type="button"
+                                    class="btn btn-success btn-sm" style="outline: none">
+                                生成业务
                             </button>
-                            <div id="add_business_message"></div>
+                            <div id="create_business_message"></div>
 
                             <div class="acc-container-answer">
                                 <table class="table table-hover acc-container-newbusiness"
@@ -259,10 +242,22 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div id="businessPeriod" style="text-align: center;display: none">
+                                <nav aria-label="Page navigation">
+                                    <ul data-page class="pagination">
+                                        <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span>
+                                        </li>
+                                        <li data-page-control class="active"><span class="no-select">1</span></li>
+                                        <li data-page-control><span class="no-select">2</span></li>
+                                        <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                             <hr style="clear: both;color: #6f5499" class="simple"/>
                             <div id="course_i2_message"></div>
                             <div style="text-align: right">
-                                <button type="button" class="btn btn-success" id="submit_business_button"
+                                <button id="submit_business_button" type="button" class="btn btn-success"
                                         onclick="confirm_business()">
                                     <span class="glyphicon"></span>&nbsp;提交
                                 </button>
