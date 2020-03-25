@@ -35,57 +35,58 @@
 
 <!-- 头引入： -->
 <div class="header" id="base_header">
-    <div class="container">
-        <!-- 项目标题 -->
-        <nav class="navbar navbar-default" id="project-title">
-                <a class="navbar-brand" href="{{ url_for('index.index') }}">会计实训系统
-                    Accounting training system</a>          
-                <div class="pull-right"
-                     style="padding: 10px 10px;" id="login_signin">
-                     
-                    <!-- 登录验证 -->
-                    {% if username %}
-                        <div class="btn-group btn-group-sm" role="group" aria-label="..."
-                             id="logged_in">
-                            <!-- 已登录 -->
-                            <button type="button" class="btn btn-default btn-sm"
-                                    disabled="disabled" id="username">
-                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                                &nbsp;{{ username }}
-                            </button>
-                            <button type="button"
-                                    class="btn btn-default btn-sm dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span class="caret"></span> <span class="sr-only">Toggle
+    <!-- 项目标题 -->
+    <nav class="navbar navbar-default" id="project-title">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{ url_for('index.index') }}">会计实训系统 Accounting training system</a>
+            </div>
+            <div class="navbar-form navbar-right" id="login_signin">
+                <!-- 登录验证 -->
+                {% if username %}
+                <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                     id="logged_in">
+                    <!-- 已登录 -->
+                    <button type="button" class="btn btn-default btn-sm"
+                            disabled="disabled" id="username">
+                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                        &nbsp;{{ username }}
+                    </button>
+                    <button type="button"
+                            class="btn btn-default btn-sm dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="caret"></span> <span class="sr-only">Toggle
 									Dropdown</span>
-                            </button>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a></li>
+                        <li><a href="#" data-toggle="modal"
+                               data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
+                                class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出登录</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <!-- 未登录 -->
+                <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                     id="not_logged_in">
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#signin">登录
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#login">注册
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#findpwd">忘记了
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 
-                            <ul class="dropdown-menu">
-                                <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a></li>
-                                <li><a href="#" data-toggle="modal"
-                                       data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
-                                        class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出登录</a></li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <!-- 未登录 -->
-                        <div class="btn-group btn-group-sm" role="group" aria-label="..."
-                             id="not_logged_in">
-                            <button type="button" class="btn btn-default" data-toggle="modal"
-                                    data-target="#signin">登录</button>
-                            <button type="button" class="btn btn-default" data-toggle="modal"
-                                    data-target="#login">注册
-                            </button>
-                            <button type="button" class="btn btn-default" data-toggle="modal"
-                                    data-target="#findpwd">忘记了
-                            </button>
-                        </div>
-                    {% endif %}
- </div>
-        </nav>
-    </div>
     <!-- 登录模态框 -->
     <div class="modal fade " id="signin" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel">
@@ -335,40 +336,44 @@
 
 {% block meun %}{% endblock meun %}
 {% block courseBody %}{% endblock courseBody %}
-
 <!-- 尾引入： -->
-<footer class="bs-docs-footer footer"
-        style="background-color: #2a2730; color: #99979c;">
-    <div class="container" style="padding-top: 50px; padding-bottom: 30px">
-        <div style="width: 80%;float: left">
-            <ul class="list-inline">
-                <li><a href="{{ url_for('index.about') }}#help"
-                       target="_blank">帮助</a></li>
-                <li><a href="{{ url_for('index.about') }}#feedback"
-                       target="_blank">反馈</a></li>
-                <li><a href="{{ url_for('index.about') }}#about"
-                       target="_blank">关于</a></li>
-            </ul>
-            <p>
-                Copyright © 2019-2020 <a href="">null</a>. All Rights Reserved.
-            </p>
-            <p>本项目处于开发阶段，仅作为Demo展示。</p>
-        </div>
-        <div style="width: 20%;height:100%;float: right;">
-            <ul class="list-inline" style="text-align: right">
-                <li class="acc-qq"><a class="acc-footer-icon"> <i
-                        class="fa fa-qq fa-2x" aria-hidden="true"></i> <img
-                        class="acc-footer-icontext" src="../static/img/qqcode.jpg" style="width:100px" alt="">
-                </a></li>
-                <li class="acc-weixin"><a class="acc-footer-icon">
-                    <i class="fa fa-weixin fa-2x" aria-hidden="true"></i>
-                    <img
-                            class="acc-footer-icontext" src="../static/img/qqcode.jpg" style="width:100px" alt="">
-                </a></li>
-            </ul>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-md-10">
+                <h2>
+                    NULL工作室
+                </h2>
+                <ul class="list-inline">
+                    <li><a href="{{ url_for('index.about') }}#help" target="_blank">帮助</a></li>
+                    <li><a href="{{ url_for('index.about') }}#feedback" target="_blank">反馈</a></li>
+                    <li><a href="{{ url_for('index.about') }}#about" target="_blank">关于</a></li>
+                </ul>
+                <p>
+                    Copyright © 2019-2020 <a href="">null</a>. All Rights Reserved.
+                </p>
+                <p>
+                    本项目处于开发阶段，仅作为Demo展示。
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-md-2">
+                <ul class="list-inline">
+                    <li class="acc-qq">
+                        <a class="acc-footer-icon">
+                            <i class="fa fa-qq fa-2x" aria-hidden="true"></i>
+                            <img class="acc-footer-icontext acc-footer-img" src="../static/img/qqcode.jpg" alt="qq">
+                        </a>
+                    </li>
+                    <li class="acc-weixin">
+                        <a class="acc-footer-icon">
+                            <i class="fa fa-weixin fa-2x" aria-hidden="true"></i>
+                            <img class="acc-footer-icontext acc-footer-img" src="../static/img/qqcode.jpg" alt="wx">
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </footer>
-
 </body>
 </html>
