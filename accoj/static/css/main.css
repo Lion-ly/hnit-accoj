@@ -1,14 +1,17 @@
 /*公司法补充信息*/
 dt {
-    text-indent:1em;
+    text-indent: 1em;
 }
+
 dd {
-    text-indent:3em;
+    text-indent: 3em;
 }
+
 /*table标题垂直居中*/
-.table tbody tr th{
+.table tbody tr th {
     vertical-align: middle;
 }
+
 /*主体和页尾之间的空白容器*/
 /* .acc-container-separate {
     height: 0px;
@@ -18,22 +21,19 @@ dd {
     margin-left: 4%;
     margin-right: 4%;
 }
+
 /*大标题*/
 .acc-title {
-	margin-top:20px;
+    margin-top: 20px;
     font-size: 18px;
     font-weight: 800;
 }
 
-/*不可编辑背景,灰色*/
-.acc-unedit {
-    background-color: #f5f5f5;
-    padding: 4px !important;
-}
 /*v-x表单格式*/
 .acc-container-tableformat th, td {
     text-align: center;
 }
+
 /*vi表单内的input*/
 .acc-input-vi {
     width: 40px;
@@ -41,25 +41,118 @@ dd {
     border-top: 0;
     border-right: 0;
 }
+
 /*新建业务容器*/
 .acc-container-newbusiness {
-	font-size: 16px;
-	text-align: left;
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: left;
 }
+
 /*新建业务容器 头字体*/
-.acc-container-newbusiness th{
-	color:#ffffff;
+.acc-container-newbusiness th {
+    color: #ffffff;
 }
+
 /*T表*/
 .acc-ttable {
-	width: 100%;
+    width: 100%;
 }
+
 /*T表input*/
-.acc-ttable input{
-	border-width: thin;
-	width: 100%;
+.acc-ttable input {
+    border-width: thin;
+    width: 100%;
     height: 100%;
     border-left: 0;
     border-top: 0;
     border-right: 0;
+}
+
+/*已完成*/
+.acc-completed {
+    color: #5cb85c;
+    font-size: medium;
+    display: none;
+}
+
+/*页码居中*/
+.acc-pn-center {
+    text-align: center;
+}
+
+/*分割线*/
+.simple {
+    clear: both;
+}
+
+/*底部按钮居右*/
+.acc-btn-right {
+    text-align: right;
+}
+
+/*底部按钮居左*/
+.acc-btn-left {
+    text-align: left;
+}
+
+/*
+    un 取消
+*/
+/*文本框不可拖拽改变大小*/
+.acc-unresize {
+    resize: none;
+}
+
+/*不可编辑背景,灰色*/
+.acc-unedit {
+    background-color: #f5f5f5;
+    padding: 4px !important;
+}
+
+/*取消A标签的下划线*/
+.acc-a-unline, .acc-a-unline:hover, .acc-a-unline:focus {
+    text-decoration: none;
+}
+
+.acc-a-unline:hover {
+    text-decoration: none;
+}
+
+
+/*
+    format 格式
+*/
+/*.acc-table-format-1-1*/
+.acc-table-format-1-1 > :nth-child(1) {
+    width: 14%;
+}
+
+.acc-table-format-1-1 > :nth-child(2) {
+    width: 20%;
+}
+
+.acc-table-format-1-1 > :nth-child(3) {
+    width: 8%;
+}
+
+.acc-table-format-1-1 > :nth-child(4) {
+    width: 20%;
+}
+
+.acc-table-format-1-1 > :nth-child(5) {
+    width: 8%;
+}
+
+.acc-table-format-1-1 > :nth-child(6) {
+    width: 20%;
+}
+
+/*acc-table-format-1-2*/
+.acc-table-format-1-2 > :nth-child(1) {
+    width: 5%;
+}
+
+.acc-table-format-1-2 > :nth-child(2) {
+    width: 95%;
 }
