@@ -7,6 +7,7 @@ dd {
     text-indent: 3em;
 }
 
+
 /*table标题垂直居中*/
 .table tbody tr th {
     vertical-align: middle;
@@ -109,6 +110,11 @@ dd {
     background-color: #f5f5f5;
     padding: 4px !important;
 }
+/*取消表格内的label内边距和外边距*/
+.acc-label-0pm label{
+    padding: 0 0;
+    margin: 0 0;
+}
 
 /*取消A标签的下划线*/
 .acc-a-unline, .acc-a-unline:hover, .acc-a-unline:focus {
@@ -150,9 +156,11 @@ dd {
 
 /*acc-table-format-1-2*/
 .acc-table-format-1-2 > :nth-child(1) {
-    width: 5%;
+    width: 4%;
 }
 
 .acc-table-format-1-2 > :nth-child(2) {
-    width: 95%;
+    width: 96%;
+    text-align: left;
+    vertical-align: middle;
 }

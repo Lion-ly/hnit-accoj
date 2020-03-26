@@ -34,49 +34,48 @@
                         <p class="acc-title">1、注册公司
                             <span id="company_confirmed_span" class="glyphicon glyphicon-ok acc-completed">已完成</span>
                         </p>
-                        <form id="company_form">
+                        <form id="company_form" class="acc-label-0pm">
                             <table class="table table-bordered">
-                                <tbody>
                                 <tr>
-                                    <th class="acc-unedit">公司名称</th>
+                                    <th class="acc-unedit"><label for="com_name">公司名称</label></th>
                                     <td colspan="5">
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_name"
                                                id="com_name">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="acc-unedit">住所</th>
+                                    <th class="acc-unedit"><label for="com_address">住所</label></th>
                                     <td colspan="5">
                                         <input type="text" name="com_address" onkeyup="illegalCharFilter(this)"
                                                id="com_address">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="acc-unedit">生产经营地</th>
+                                    <th class="acc-unedit"><label for="com_business_addr">生产经营地</label></th>
                                     <td colspan="5">
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_business_addr"
                                                id="com_business_addr">
                                     </td>
                                 </tr>
                                 <tr class="acc-table-format-1-1">
-                                    <th class="acc-unedit">法定代表人</th>
+                                    <th class="acc-unedit"><label for="com_legal_rep">法定代表人</label></th>
                                     <td>
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_legal_rep"
                                                id="com_legal_rep">
                                     </td>
-                                    <th class="acc-unedit">资本注册(万)</th>
+                                    <th class="acc-unedit"><label for="com_regist_cap">资本注册(万)</label></th>
                                     <td>
                                         <input type="text" placeholder="100 ~ 1000" onkeyup="limit_number(this)"
                                                name="com_regist_cap" id="com_regist_cap">
                                     </td>
-                                    <th class="acc-unedit">经营期限(年)</th>
+                                    <th class="acc-unedit"><label for="com_operate_period">经营期限(年)</label></th>
                                     <td>
                                         <input type="text" placeholder="5 ~ 500" onkeyup="limit_number(this)"
                                                name="com_operate_period" id="com_operate_period">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="acc-unedit">经营范围</th>
+                                    <th class="acc-unedit"><label for="com_business_scope">经营范围</label></th>
                                     <td colspan="5">
                                         <textarea class="acc-unresize" rows="4"
                                                   onkeyup="illegalCharFilter(this)" name="com_business_scope"
@@ -85,7 +84,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="acc-unedit" rowspan="5">股东(发起人)名称或姓名</th>
+                                    <th class="acc-unedit" rowspan="5">
+                                        <label for="com_shareholder_1">股东(发起人)名称或姓名</label>
+                                    </th>
                                     <td colspan="5">
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_shareholder_1"
                                                id="com_shareholder_1">
@@ -93,29 +94,32 @@
                                 </tr>
                                 <tr>
                                     <td colspan="5">
+                                        <label for="com_shareholder_2" hidden></label>
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_shareholder_2"
                                                id="com_shareholder_2">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="5">
+                                        <label for="com_shareholder_3" hidden></label>
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_shareholder_3"
                                                id="com_shareholder_3">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="5">
+                                        <label for="com_shareholder_4" hidden></label>
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_shareholder_4"
                                                id="com_shareholder_4">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="5">
+                                        <label for="com_shareholder_5" hidden></label>
                                         <input type="text" onkeyup="illegalCharFilter(this)" name="com_shareholder_5"
                                                id="com_shareholder_5">
                                     </td>
                                 </tr>
-                            </table>
                             </table>
                         </form>
                         <!--补充资料-->
@@ -145,7 +149,7 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingTwo">
                                     <h4 class="panel-title">
-                                        <a class="acc-a-unline" class="collapsed" role="button"
+                                        <a class="collapsed acc-a-unline" role="button"
                                            data-toggle="collapse"
                                            data-parent="#accordion" href="#CompanyLaw"
                                            aria-expanded="false" aria-controls="CompanyLaw">
