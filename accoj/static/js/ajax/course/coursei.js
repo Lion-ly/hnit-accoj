@@ -130,7 +130,7 @@ function submit_business_info(submit_type) {
         $("#menu").children().children().each(function (index, item) {
             $(item).children().attr("data-original-title", "已开放");
         });
-        get_key_element_info();
+        get_business_info();
     }
 
     let url = "/submit_business_info",
