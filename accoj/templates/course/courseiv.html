@@ -1,115 +1,121 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-    <!-- courseiv css -->
-    <link href="{{ url_for('static', filename='css/course/courseiv.css') }}"
-          rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/ajax/course/courseiv.js') }}" charset="UTF-8"></script>
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+<!-- courseiv css -->
+<link href="{{ url_for('static', filename='css/course/courseiv.css') }}"
+      rel="stylesheet">
+<script src="{{ url_for('static', filename='js/ajax/course/courseiv.js') }}" charset="UTF-8"></script>
+<!--第四次课程-->
+<div class="courseBody">
+    <!-- 习题主体 -->
+    <div class="container">
+        <div class="panel panel-default">
+            <!--作业要求-->
+            <div class="panel-heading">
 				<span>1、掌握借贷记账法的原理：包括账户结构、记账规则、会计分录编写规范。<br/> 2、理解并运用常用会计科目。
 				</span>
+            </div>
+            <div class="panel-body">
+                <div class="acc-pn-center">
+                    <nav aria-label="Page navigation">
+                        <ul data-page class="pagination">
+                            <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
+                            <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
+                            <li data-page-control class="active"><span class="no-select">1</span></li>
+                            <li data-page-control><span class="no-select">2</span></li>
+                            <li data-page-control><span class="no-select">3</span></li>
+                            <li data-page-control><span class="no-select">4</span></li>
+                            <li data-page-control><span class="no-select">5</span></li>
+                            <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
+                            <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
+                        </ul>
+                    </nav>
                 </div>
-                <div class="panel-body">
-                    <div style="text-align: center">
-                        <nav aria-label="Page navigation">
-                            <ul data-page class="pagination">
-                                <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
-                                <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
-                                <li data-page-control class="active"><span class="no-select">1</span></li>
-                                <li data-page-control><span class="no-select">2</span></li>
-                                <li data-page-control><span class="no-select">3</span></li>
-                                <li data-page-control><span class="no-select">4</span></li>
-                                <li data-page-control><span class="no-select">5</span></li>
-                                <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
-                                <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
-                            </ul>
-                        </nav>
+                <hr class="simple"/>
+                <h4>
+                    <span class="glyphicon glyphicon-bookmark"></span> <em id="em_no"></em>
+                    <span id="submit_status_span" class="glyphicon glyphicon-ok acc-completed">已完成</span>
+                </h4>
+                <div class="acc-container-answer">
+                    <blockquote>
+                        <label id="business_type" class="label label-success"></label>
+                        <p id="business_content"></p>
+                    </blockquote>
+                </div>
+                <div class="acc-container-answer">
+                    <div>
+                        <p class="acc-title">填写完整分录</p>
+                        <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
+                        <table class="table table-bordered acc-unborder">
+                            <tbody>
+                            <tr class="acc-table-format-4-1">
+                                <th class="acc-unedit">借：</th>
+                                <td class="acc-unedit"></td>
+                                <td>
+                                    <label>
+                                        <input type="text" name="subject" onkeyup="illegalCharFilter(this)"
+                                               id="subject1" placeholder="科目">
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="text" name="money" id="money1" placeholder="金额"
+                                               onchange="RealNumber(this)">
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="acc-plus">
+                                        <a type="button" class="btn" onclick="iv_AddRow('borrow')">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="borrowRowAfter" class="acc-table-format-4-1">
+                                <td class="acc-unedit"></td>
+                                <th class="acc-unedit">贷：</th>
+                                <td>
+                                    <label>
+                                        <input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject0" placeholder="科目">
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="text" name="money" id="money0" placeholder="金额" onchange="RealNumber(this)">
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="acc-plus">
+                                        <a type="button" class="btn" onclick="iv_AddRow('loan')">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="loanRowAfter"></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <hr class="simple" style="color: #6f5499"/>
-
-                    <h4>
-                        <span class="glyphicon glyphicon-bookmark"></span> <em id="em_no"></em>
-                        <span id="submit_status_span" class="glyphicon glyphicon-ok"
-                              style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
-                    </h4>
-                    <div class="acc-container-answer">
-                        <blockquote>
-                            <label id="business_type" class="label label-success"></label>
-                            <p id="business_content"></p>
-                        </blockquote>
-                    </div>
-
-                    <div class="acc-container-answer">
-                        <div>
-                            <p class="acc-title">填写完整分录</p>
-                            <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
-
-                            <table class="table table-bordered" style="border: 0">
-                                <tbody>
-                                <tr>
-                                    <th style="width: 8%; border-right:0;padding: 4px;" class="acc-unedit">借：</th>
-                                    <td style="width: 8%; border-left:0;padding: 4px" class="acc-unedit"></td>
-                                    <td style="width: 40%;padding: 4px"><label><input type="text" name="subject"
-                                                                                      onkeyup="illegalCharFilter(this)"
-                                                                                      id="subject1"
-                                                                                      placeholder="科目"></label></td>
-                                    <td style="width: 40%;padding: 4px"><label><input type="text" name="money"
-                                                                                      id="money1" placeholder="金额"
-                                                                                      onchange="RealNumber(this)"></label>
-                                    </td>
-                                    <td style="width: 4%;border: 0;padding: 4px">
-                                        <div style="text-align: center">
-                                            <a style="color: green;padding: 0" type="button" class="btn"
-                                               onclick="iv_AddRow('borrow')"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="borrowRowAfter">
-                                    <td style="border-right:0;padding: 4px" class="acc-unedit"></td>
-                                    <th style="border-left:0;padding: 4px;" class="acc-unedit">贷：</th>
-                                    <td><label><input type="text" name="subject" onkeyup="illegalCharFilter(this)"
-                                                      id="subject0" placeholder="科目"></label></td>
-                                    <td><label><input type="text" name="money" id="money0" placeholder="金额"
-                                                      onchange="RealNumber(this)"></label></td>
-                                    <td style="border: 0;padding: 4px">
-                                        <div style="text-align: center;">
-                                            <a style="color: green;padding: 0" type="button" class="btn"
-                                               onclick="iv_AddRow('loan')"><span
-                                                    class="glyphicon glyphicon-plus-sign"></span></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="loanRowAfter"></tr>
-                                </tbody>
-                            </table>
-
-
-                        </div>
-                    </div>
-                    <hr class="simple" style="clear: both;color: #6f5499"/>
-                    <div id="course_iv_message"></div>
-                    <div style="float: left;">
-                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
-                    </div>
-                    <div style="float: right;">
-                        <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
-                            <span class="glyphicon"></span>&nbsp;保存
-                        </button>
-                        <button type="button" class="btn btn-success" id="confirm_entry_button"
-                                onclick="confirm_entry()">
-                            <span class="glyphicon"></span>&nbsp;提交
-                        </button>
-                    </div>
+                </div>
+                <hr class="simple"/>
+                <!--信息提示窗口-->
+                <div id="course_iv_message"></div>
+                <div class="acc-btn-left">
+                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                </div>
+                <div class="acc-btn-right">
+                    <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
+                        <span class="glyphicon"></span>&nbsp;保存
+                    </button>
+                    <button type="button" class="btn btn-success" id="confirm_entry_button" onclick="confirm_entry()">
+                        <span class="glyphicon"></span>&nbsp;提交
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 防尾前移 -->
-    <div class="acc-container-separate"></div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

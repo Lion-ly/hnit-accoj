@@ -1,3 +1,5 @@
+/*--------------------------------------------COMMON START--------------------------------------------*/
+
 /*公司法补充信息*/
 dt {
     text-indent: 1em;
@@ -6,16 +8,6 @@ dt {
 dd {
     text-indent: 3em;
 }
-
-/*table标题垂直居中*/
-.table tbody tr th {
-    vertical-align: middle;
-}
-
-/*主体和页尾之间的空白容器*/
-/* .acc-container-separate {
-    height: 0px;
-} */
 
 /*练习题主体容器*/
 .acc-container-answer {
@@ -29,6 +21,64 @@ dd {
     font-size: 18px;
     font-weight: 800;
 }
+
+/*已完成*/
+.acc-completed {
+    color: #5cb85c;
+    font-size: medium;
+    display: none;
+}
+
+/*页码居中*/
+.acc-pn-center {
+    text-align: center;
+}
+
+/*分割线*/
+.simple {
+    clear: both;
+}
+
+/*底部按钮居右*/
+.acc-btn-right {
+    text-align: right;
+}
+
+/*底部按钮居左*/
+.acc-btn-left {
+    text-align: left;
+}
+
+/*新建 +*/
+.acc-plus{
+    text-align: center;
+}
+
+.acc-plus a{
+    color: green;padding: 0;
+}
+
+/*删除 -*/
+.acc-minus{
+    text-align: center;
+}
+
+.acc-minus a{
+    color: red;padding: 0;
+}
+
+/*---------------------------------------------COMMON END---------------------------------------------*/
+
+
+/*table标题垂直居中*/
+.table tbody tr th {
+    vertical-align: middle;
+}
+
+/*主体和页尾之间的空白容器*/
+/* .acc-container-separate {
+    height: 0px;
+} */
 
 /*v-x表单格式*/
 .acc-container-tableformat th, td {
@@ -70,32 +120,7 @@ dd {
     border-right: 0;
 }
 
-/*已完成*/
-.acc-completed {
-    color: #5cb85c;
-    font-size: medium;
-    display: none;
-}
 
-/*页码居中*/
-.acc-pn-center {
-    text-align: center;
-}
-
-/*分割线*/
-.simple {
-    clear: both;
-}
-
-/*底部按钮居右*/
-.acc-btn-right {
-    text-align: right;
-}
-
-/*底部按钮居左*/
-.acc-btn-left {
-    text-align: left;
-}
 
 /*--------------------------------------------III START--------------------------------------------*/
 
@@ -164,8 +189,10 @@ dd {
     text-decoration: none;
 }
 
-.acc-a-unline:hover {
-    text-decoration: none;
+/*取消外边框*/
+.acc-unborder{
+    border: none;
+    outline: none;
 }
 
 
@@ -206,4 +233,25 @@ dd {
     width: 96%;
     text-align: left;
     vertical-align: middle;
+}
+
+/*acc-table-format-4-1*/
+.acc-table-format-4-1 > :nth-child(1) {
+    width: 8%; border-right:0;
+}
+
+.acc-table-format-4-1 > :nth-child(2) {
+    width: 8%; border-left:0;
+}
+
+.acc-table-format-4-1 > :nth-child(3) {
+    width: 40%;
+}
+
+.acc-table-format-4-1 > :nth-child(4) {
+    width: 40%;
+}
+
+.acc-table-format-4-1 > :nth-child(5) {
+    width: 4%;border: 0;
 }
