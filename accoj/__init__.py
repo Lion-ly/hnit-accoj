@@ -27,7 +27,7 @@ def create_app(config_name=None):
     register_extensions(app)
     register_blueprints(app)
     try:
-        if add_question() is False:
+        if not add_question(questions_no=1) or not add_question(questions_no=2):
             print("\n创建题库时出错，未写入数据库!")
     except:
         print("\nExcel格式检查中断!格式出错!")

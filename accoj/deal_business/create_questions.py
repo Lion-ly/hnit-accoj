@@ -10,8 +10,10 @@ from accoj.extensions import mongo
 from accoj.utils import is_number
 
 
-def add_question(filename="accoj/deal_business/questions.xlsx"):
+def add_question(questions_no):
     """读取excel表创建题库"""
+    print("\n题库:{}".format(questions_no))
+    filename = "accoj/deal_business/questions_{}.xlsx".format(questions_no)
     workbook = open_workbook("{}".format(filename))  # 用wlrd提供的方法读取一个excel文件
     sheet1 = workbook.sheet_by_index(0)  # 根据序号获取sheet
     sheet_rows = sheet1.nrows  # sheet总的行数
@@ -22,10 +24,11 @@ def add_question(filename="accoj/deal_business/questions.xlsx"):
         val = sheet1.row(0)[col].value
         sheet_head_tmp.append(val)
     if sheet_head != sheet_head_tmp:
-        print("Error:表头错误")
+        print("sheet_head: {}".format(sheet_head_tmp))
+        print("Error:表头错误！")
         return False
     if sheet_clos != 7:
-        print("Error:表格列数应为7")
+        print("Error:表格列数应为7！")
         return False
 
     posts = list()
@@ -35,11 +38,11 @@ def add_question(filename="accoj/deal_business/questions.xlsx"):
         question_no, content, business_type, affect_type, values, key_element_infos, subjects_infos \
             = sheet_row_parsing(sheet1.row(row))
         print("question_no:{}/{} 检查成功".format(question_no, sheet_rows - 1), end='\r')
-        question_exit = mongo.db.question.find_one({"question_no": question_no})
+        question_exit = mongo.db.question.find_one({"questions_no": questions_no, "question_no": question_no})
         if question_exit:
             question_exit_list.append(question_no)
             continue
-        document = dict(questions_no=1,
+        document = dict(questions_no=questions_no,
                         question_no=question_no,
                         content=content,
                         business_type=business_type,
@@ -58,7 +61,7 @@ def add_question(filename="accoj/deal_business/questions.xlsx"):
     else:
         print("\n无数据写入数据库")
     if question_exit_list:
-        print("\n{}个题目已存在，题目编号如下:\n".format(len(question_exit_list)))
+        print("{}个题目已存在，题目编号如下:".format(len(question_exit_list)))
         print(str(question_exit_list))
     return True
 
@@ -183,7 +186,3 @@ def sheet_row_parsing(sheet_row):
                                        is_up=is_up))
 
     return question_no, new_content, business_type, affect_type, values, key_element_infos, subjects_infos
-
-
-if __name__ == '__main__':
-    add_question("questions.xlsx")

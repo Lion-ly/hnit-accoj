@@ -152,8 +152,9 @@ def submit_business_info():
     if not company:
         return jsonify(result=False, message="公司未创立")
     schedule_confirm = company.get("schedule_confirm")
+    business_confirm = schedule_confirm.get("business_confirm")
 
-    if not schedule_confirm:
+    if not business_confirm:
         subjects_tmp1 = list()
         subjects_tmp2 = list()
         company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
@@ -193,7 +194,8 @@ def get_business_info():
     获取业务内容信息
     :return:
     """
-    company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
+    username = session.get("username")
+    company = mongo.db.company.find_one(dict(student_no="{}".format(username)),
                                         dict(businesses=1, schedule_confirm=1, _id=0))
     if company:
         schedule_confirm = company.get("schedule_confirm")
@@ -211,7 +213,8 @@ def create_business():
     生成业务
     :return:
     """
-    company = mongo.db.company.find_one({"student_no": "{}_cp".format(session.get("username"))})
+    username = session.get("username")
+    company = mongo.db.company.find_one({"student_no": "{}_cp".format(username)})
 
     schedule_confirm = company.get("schedule_confirm")
     business_confirm = schedule_confirm.get("business_confirm")
