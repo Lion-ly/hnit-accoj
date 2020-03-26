@@ -7,7 +7,6 @@ dd {
     text-indent: 3em;
 }
 
-
 /*table标题垂直居中*/
 .table tbody tr th {
     vertical-align: middle;
@@ -17,6 +16,7 @@ dd {
 /* .acc-container-separate {
     height: 0px;
 } */
+
 /*练习题主体容器*/
 .acc-container-answer {
     margin-left: 4%;
@@ -97,6 +97,48 @@ dd {
     text-align: left;
 }
 
+/*--------------------------------------------III START--------------------------------------------*/
+
+/*三色 默认盒子*/
+.acc-tricolor-default {
+    float: left;
+    width: 45%;
+    height: 600px;
+}
+
+.acc-tricolor-default > div:first-of-type {
+    height: 100%;
+}
+
+/*三色 增加/减少/撤销按钮*/
+.acc-tricolor-btn {
+    float: left;
+    width: 10%;
+    height: 600px;
+    text-align: center;
+}
+
+.acc-tricolor-btn > div:first-of-type {
+    margin-top: 90px;
+    margin-bottom: 220px
+}
+
+.acc-tricolor-btn button {
+    margin: 5px auto;
+}
+
+/*三色 浅绿/浅红盒子*/
+.acc-tricolor-scsAndDg {
+    float: left;
+    width: 45%;
+}
+
+.acc-tricolor-scsAndDg > div {
+    height: 288px;
+}
+
+/*---------------------------------------------III END---------------------------------------------*/
+
 /*
     un 取消
 */
@@ -110,8 +152,9 @@ dd {
     background-color: #f5f5f5;
     padding: 4px !important;
 }
+
 /*取消表格内的label内边距和外边距*/
-.acc-label-0pm label{
+.acc-label-0pm label {
     padding: 0 0;
     margin: 0 0;
 }
