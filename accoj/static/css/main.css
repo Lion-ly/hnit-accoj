@@ -52,12 +52,12 @@ dd {
 
 /*底部按钮居右*/
 .acc-btn-right {
-    text-align: right;
+    float: right;
 }
 
 /*底部按钮居左*/
 .acc-btn-left {
-    text-align: left;
+    float: left;
 }
 
 /*新建 +*/
@@ -104,6 +104,7 @@ dd {
     border-left: 0;
     border-top: 0;
     border-right: 0;
+    border-bottom-style: solid;border-bottom-color: #0f0f0f;
 }
 
 /*新建业务容器*/
@@ -216,6 +217,7 @@ dd {
 .acc-unborder {
     border: 0px !important;
     outline: none;
+    background: #ffffff;
 }
 
 
@@ -281,3 +283,17 @@ dd {
     width: 4%;
     border: 0;
 }
+
+/*acc-table-format-6-1*/
+.acc-table-format-6-1 > :nth-child(1),
+.acc-table-format-6-1 > :nth-child(2),
+.acc-table-format-6-1 > :nth-child(3){
+    width: 14%;
+}
+
+.acc-table-format-6-1 > :nth-child(4),
+.acc-table-format-6-1 > :nth-child(5){
+    width: 29%;
+}
+
+

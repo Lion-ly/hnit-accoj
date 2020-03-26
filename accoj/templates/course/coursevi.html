@@ -1,202 +1,213 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-    <link href="{{ url_for('static', filename='css/course/coursevi.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/ajax/course/coursevi.js') }}" charset="UTF-8"></script>
-    <div class="courseBody">
-        <!--习题主体-->
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-				<span>1、理解会计凭证的分类。<br/> 2、了解各类原始凭证。<br/> 3、掌握记账凭证的填制方法。
+<link href="{{ url_for('static', filename='css/course/coursevi.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='js/ajax/course/coursevi.js') }}" charset="UTF-8"></script>
+<!--第六次课程-->
+<div class="courseBody">
+    <!--习题主体-->
+    <div class="container">
+        <div class="panel panel-default">
+            <!--作业要求-->
+            <div class="panel-heading">
+				<span>
+                    1、理解会计凭证的分类。
+                    <br/>
+                    2、了解各类原始凭证。
+                    <br/>
+                    3、掌握记账凭证的填制方法。
 				</span>
+            </div>
+            <div class="panel-body">
+                <div class="acc-pn-center">
+                    <nav aria-label="Page navigation">
+                        <ul data-page class="pagination">
+                            <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
+                            <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
+                            <li data-page-control class="active"><span class="no-select">1</span></li>
+                            <li data-page-control><span class="no-select">2</span></li>
+                            <li data-page-control><span class="no-select">3</span></li>
+                            <li data-page-control><span class="no-select">4</span></li>
+                            <li data-page-control><span class="no-select">5</span></li>
+                            <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
+                            <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
+                        </ul>
+                    </nav>
                 </div>
-                <div class="panel-body">
-                    <div style="text-align: center">
-                        <nav aria-label="Page navigation">
-                            <ul data-page class="pagination">
-                                <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
-                                <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
-                                <li data-page-control class="active"><span class="no-select">1</span></li>
-                                <li data-page-control><span class="no-select">2</span></li>
-                                <li data-page-control><span class="no-select">3</span></li>
-                                <li data-page-control><span class="no-select">4</span></li>
-                                <li data-page-control><span class="no-select">5</span></li>
-                                <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
-                                <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
-                            </ul>
-                        </nav>
-                    </div>
-
-                    <hr class="simple" style="color: #6f5499"/>
-                    <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
-                    <h4>
-                        <span class="glyphicon glyphicon-bookmark"></span> <em id="em_no"></em>
-                        <span id="submit_status_span" class="glyphicon glyphicon-ok"
-                              style="color: #5cb85c;font-size: medium;display:none;">已完成</span>
-                    </h4>
-                    <div class="acc-container-answer">
-                        <blockquote>
-                            <label id="business_type" class="label label-success"></label>
-                            <p id="business_content"></p>
-                        </blockquote>
-                    </div>
-                    <div class="acc-container-answer">
-                        <div>
-
-                            <p class="acc-title">1、上传原始凭证（上传图片或文档）</p>
-                            <form>
-                                <div class="form-group">
-                                    <label for="uploadFiles"><span
-                                            class="glyphicon glyphicon-upload"></span> Upload files </label> <input
-                                        type="file" id="uploadFiles" accept=".zip,.rar" onchange="getfileContents()">
-                                    <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖。</p>
-                                    <button type="button" id="vi_downloadFile_button" onclick="vi_downloadFile()"
-                                            style="display: none">下载附件
-                                    </button>&nbsp;&nbsp;
-                                    <span id="vi_downloadSpan"></span>
-                                </div>
-                            </form>
-
-                            <p class="acc-title">2、填制记账凭证：</p>
-                            <div class="table-responsive">
-                                <table class="table table-bordered acc-container-tableformat"
-                                       style="border: 0">
-                                    <tbody>
-                                    <tr>
-                                        <th colspan="23" class="acc-unedit">记账凭证</th>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="23">
-										<span style="float: left">记<label><input class="acc-input-vi" min="1"
-                                                                                 style="border-bottom-style: solid;border-bottom-color: #0f0f0f"
-                                                                                 name="doc_no"
-                                                                                 type="number"></label>号</span>
-                                            <span>日期：<label><input style="border: 0;" type="date"
-                                                                   name="date"></label></span>
-                                            <span style="float: right;">附单据<label><input class="acc-input-vi"
-                                                                                         min="1" name="doc_nums"
-                                                                                         style="border-bottom-style: solid;border-bottom-color: #0f0f0f"
-                                                                                         type="number"></label>张</span>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th rowspan="2" style="width: 10%;" class="acc-unedit">摘要</th>
-                                        <th rowspan="2" style="width: 10%;" class="acc-unedit">总账科目</th>
-                                        <th rowspan="2" style="width: 10%;" class="acc-unedit">明细科目</th>
-                                        <th colspan="10" style="width: 28%;" class="acc-unedit">借方金额</th>
-                                        <th colspan="10" style="width: 28%;" class="acc-unedit">贷方金额</th>
-                                    </tr>
-                                    <tr class="acc-unedit">
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>万</th>
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>元</th>
-                                        <th>角</th>
-                                        <th>分</th>
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>万</th>
-                                        <th>千</th>
-                                        <th>百</th>
-                                        <th>十</th>
-                                        <th>元</th>
-                                        <th>角</th>
-                                        <th>分</th>
-                                        <th style="width: 4%; border: 0; background: #ffffff">
-                                            <div style="text-align: center">
-                                                <a style="color: green; padding: 0 0" type="button"
-                                                   class="btn" onclick="vi_AddRow()"><span
-                                                        class="glyphicon glyphicon-plus-sign"></span></a>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                    <tr id="vi_row1">
-                                        <td><label><input name="summary" onkeyup="illegalCharFilter(this)"></label></td>
-                                        <td><label><input name="general_account"
-                                                          onkeyup="illegalCharFilter(this)"></label></td>
-                                        <td><label><input name="detail_account"
-                                                          onkeyup="illegalCharFilter(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    </tr>
-                                    <!-- 合计 -->
-                                    <tr id="vi_rowLast">
-                                        <th colspan="3" class="acc-unedit" style="padding: 4px;">合计</th>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    </tr>
-                                    <tr class="acc-unedit">
-                                        <th colspan="23" style="text-align: left;">制表人：{{ username }}</th>
-
-                                    </tr>
-                                    </tbody>
-                                </table>
+                <hr class="simple"/>
+                <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。</p>
+                <h4>
+                    <span class="glyphicon glyphicon-bookmark"></span> <em id="em_no"></em>
+                    <span id="submit_status_span" class="glyphicon glyphicon-ok acc-completed">已完成</span>
+                </h4>
+                <!--业务题目-->
+                <div class="acc-container-answer">
+                    <blockquote>
+                        <label id="business_type" class="label label-success"></label>
+                        <p id="business_content"></p>
+                    </blockquote>
+                </div>
+                <div class="acc-container-answer">
+                    <div>
+                        <p class="acc-title">1、上传原始凭证（上传图片或文档）</p>
+                        <!--文件上传-->
+                        <form>
+                            <div class="form-group">
+                                <label for="uploadFiles">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload files
+                                </label>
+                                <input type="file" id="uploadFiles" accept=".zip,.rar" onchange="getfileContents()">
+                                <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖。</p>
+                                <!--文件下载-->
+                                <button type="button" id="vi_downloadFile_button" onclick="vi_downloadFile()"
+                                        style="display: none">下载附件
+                                </button>&nbsp;&nbsp;
+                                <span id="vi_downloadSpan"></span>
                             </div>
+                        </form>
+                        <p class="acc-title">2、填制记账凭证：</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered acc-container-tableformat acc-unborder">
+                                <tbody>
+                                <tr>
+                                    <th colspan="23" class="acc-unedit">记账凭证</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="23">
+										<span style="float: left">记
+                                            <label>
+                                                <input class="acc-input-vi" min="1" name="doc_no" type="number">
+                                            </label>号
+                                        </span>
+                                        <span>日期：
+                                            <label>
+                                                <input class="acc-unborder" type="date" name="date">
+                                            </label>
+                                        </span>
+                                        <span style="float: right;">附单据
+                                            <label>
+                                                <input class="acc-input-vi" min="1" name="doc_nums" type="number">
+                                            </label>张
+                                        </span>
+                                    </th>
+                                </tr>
+                                <!--控制本表格式-->
+                                <tr class="acc-table-format-6-1">
+                                    <th rowspan="2" class="acc-unedit">摘要</th>
+                                    <th rowspan="2" class="acc-unedit">总账科目</th>
+                                    <th rowspan="2" class="acc-unedit">明细科目</th>
+                                    <th colspan="10" class="acc-unedit">借方金额</th>
+                                    <th colspan="10" class="acc-unedit">贷方金额</th>
+                                </tr>
+                                <tr class="acc-unedit">
+                                    <th>千</th>
+                                    <th>百</th>
+                                    <th>十</th>
+                                    <th>万</th>
+                                    <th>千</th>
+                                    <th>百</th>
+                                    <th>十</th>
+                                    <th>元</th>
+                                    <th>角</th>
+                                    <th>分</th>
+                                    <th>千</th>
+                                    <th>百</th>
+                                    <th>十</th>
+                                    <th>万</th>
+                                    <th>千</th>
+                                    <th>百</th>
+                                    <th>十</th>
+                                    <th>元</th>
+                                    <th>角</th>
+                                    <th>分</th>
+                                    <th class="acc-unborder">
+                                        <div class="acc-plus">
+                                            <a type="button" class="btn" onclick="vi_AddRow()">
+                                                <span class="glyphicon glyphicon-plus-sign"></span>
+                                            </a>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr id="vi_row1">
+                                    <td><label><input name="summary" onkeyup="illegalCharFilter(this)"></label></td>
+                                    <td><label><input name="general_account" onkeyup="illegalCharFilter(this)"></label>
+                                    </td>
+                                    <td><label><input name="detail_account" onkeyup="illegalCharFilter(this)"></label>
+                                    </td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                </tr>
+                                <!-- 合计 -->
+                                <tr id="vi_rowLast">
+                                    <th colspan="3" class="acc-unedit">合计</th>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                </tr>
+                                <tr class="acc-unedit">
+                                    <th colspan="23" style="text-align: left">制表人：{{ username }}</th>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <hr class="simple" style="clear: both;color: #6f5499"/>
-                    <div id="course_vi_message"></div>
-                    <div style="float: left;">
-                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
-                    </div>
-                    <div style="float: right;">
-                        <button type="button" class="btn btn-info" id="save_acc_document_button"
-                                onclick="save_acc_document()">
-                            <span class="glyphicon"></span>&nbsp;保存
-                        </button>
-                        <button type="button" class="btn btn-success" id="confirm_acc_document_button"
-                                onclick="confirm_acc_document()">
-                            <span class="glyphicon"></span>&nbsp;提交
-                        </button>
-                    </div>
+                </div>
+                <hr class="simple"/>
+                <!--信息提示窗口-->
+                <div id="course_vi_message"></div>
+                <div class="acc-btn-left">
+                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                </div>
+                <div class="acc-btn-right">
+                    <button type="button" class="btn btn-info" id="save_acc_document_button"
+                            onclick="save_acc_document()">
+                        <span class="glyphicon"></span>&nbsp;保存
+                    </button>
+                    <button type="button" class="btn btn-success" id="confirm_acc_document_button"
+                            onclick="confirm_acc_document()">
+                        <span class="glyphicon"></span>&nbsp;提交
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 防尾前移 -->
-    <div class="acc-container-separate"></div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
 
 {% endblock courseBody %}
