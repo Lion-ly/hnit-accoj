@@ -1,4 +1,15 @@
 /*--------------------------------------------COMMON START--------------------------------------------*/
+/*颜色*/
+/*绿色 已完成*/
+.acc-color-5cb85c {
+    color: #5cb85c;
+}
+
+/*浅蓝色 已保存*/
+.acc-color-5bc0de {
+    color: #5bc0de;
+}
+
 
 /*公司法补充信息*/
 dt {
@@ -50,21 +61,23 @@ dd {
 }
 
 /*新建 +*/
-.acc-plus{
+.acc-plus {
     text-align: center;
 }
 
-.acc-plus a{
-    color: green;padding: 0;
+.acc-plus a {
+    color: green;
+    padding: 0;
 }
 
 /*删除 -*/
-.acc-minus{
+.acc-minus {
     text-align: center;
 }
 
-.acc-minus a{
-    color: red;padding: 0;
+.acc-minus a {
+    color: red;
+    padding: 0;
 }
 
 /*---------------------------------------------COMMON END---------------------------------------------*/
@@ -121,7 +134,6 @@ dd {
 }
 
 
-
 /*--------------------------------------------III START--------------------------------------------*/
 
 /*三色 默认盒子*/
@@ -164,6 +176,17 @@ dd {
 
 /*---------------------------------------------III END---------------------------------------------*/
 
+/*---------------------------------------------V START--------------------------------------------*/
+
+/*期间提示*/
+.acc-period-tip {
+    font-weight: 600;
+    font-size: 15px;
+    color: #737373;
+}
+
+/*----------------------------------------------V END--------------------------------------------*/
+
 /*
     un 取消
 */
@@ -190,8 +213,8 @@ dd {
 }
 
 /*取消外边框*/
-.acc-unborder{
-    border: none;
+.acc-unborder {
+    border: 0px !important;
     outline: none;
 }
 
@@ -237,11 +260,13 @@ dd {
 
 /*acc-table-format-4-1*/
 .acc-table-format-4-1 > :nth-child(1) {
-    width: 8%; border-right:0;
+    width: 8%;
+    border-right: 0;
 }
 
 .acc-table-format-4-1 > :nth-child(2) {
-    width: 8%; border-left:0;
+    width: 8%;
+    border-left: 0;
 }
 
 .acc-table-format-4-1 > :nth-child(3) {
@@ -253,5 +278,6 @@ dd {
 }
 
 .acc-table-format-4-1 > :nth-child(5) {
-    width: 4%;border: 0;
+    width: 4%;
+    border: 0;
 }
