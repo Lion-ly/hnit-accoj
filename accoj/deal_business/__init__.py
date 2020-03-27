@@ -16,10 +16,11 @@ PERIOD_NUM = 10
 def create_businesses(company):
     """
     生成业务
-    :param company: company_cp document
+    :param company: company document
     :return:
     """
-    low, high = 1, 1  # 题库编号随机生成
+    # 1号题库已废弃
+    low, high = 2, 2  # 题库编号随机生成
     questions_no = random.randint(low, high)
     flag = deal_business(company, questions_no)
     message = "生成业务成功！"
@@ -32,13 +33,12 @@ def create_businesses(company):
 def deal_business(company, questions_no):
     """
     业务处理
-    :param company: company_cp document
+    :param company: company document
     :param questions_no: questions_no
     :return:
     """
     questions = mongo.db.question.find(dict(questions_no=questions_no))
     max_question_no = questions.count()
-    print("max_question_no{}".format(max_question_no))
     deal_function_list = [deal_business_1, deal_business_2]
     func_index = questions_no - 1
     max_no = 20
@@ -73,7 +73,7 @@ def deal_business(company, questions_no):
 def deal_business_1(company, questions, max_question_no):
     """
     题库1的处理
-    :param company: company_cp document
+    :param company: company document
     :param questions: question cursor
     :param max_question_no: max question no
     :return:
@@ -99,7 +99,7 @@ def deal_business_1(company, questions, max_question_no):
         random_list = list(range(2, max_question_no - 1))
         for question_no_tmp in question_set:
             if question_no_tmp in random_list:
-                random_list.remove(question_no_tmp)
+                _remove(random_list, question_no_tmp)
         while True:
             # 随机选择题目
             if not random_list:
@@ -110,52 +110,52 @@ def deal_business_1(company, questions, max_question_no):
                 continue
             elif question_no == 3 and 2 not in question_set:
                 # 业务2为业务3前提
-                random_list.remove(3)
+                _remove(random_list, 3)
                 continue
             elif question_no == 13 and 12 not in question_set:
                 # 业务12为业务13前提
-                random_list.remove(13)
+                _remove(random_list, 13)
                 continue
             elif question_no == 18 and 17 not in question_set:
                 # 业务17为业务18前提
-                random_list.remove(18)
+                _remove(random_list, 18)
                 continue
             elif question_no == 20 and 15 not in question_set:
                 # 业务15为业务20前提
-                random_list.remove(15)
+                _remove(random_list, 15)
                 continue
             elif question_no == 23 and 19 not in question_set:
                 # 业务19为业务23前提
-                random_list.remove(23)
+                _remove(random_list, 23)
                 continue
             elif question_no == 27:
                 # 业务[5,8,9]为业务27前提
                 if {5, 8, 9} < question_set:  # 集合子集判断
                     success_flag = True
                     break
-                random_list.remove(27)
+                _remove(random_list, 27)
                 continue
             elif question_no == 28:
                 if {24, 25, 26, 27} < question_set:
                     success_flag = True
                     break
                 # 业务[24,25,26,27]为业务28前提
-                random_list.remove(28)
+                _remove(random_list, 28)
                 continue
             elif question_no == 30 and 28 not in question_set:
                 # 业务28为业务30前提
-                random_list.remove(30)
+                _remove(random_list, 30)
                 continue
             elif question_no == 31:
                 # 业务[28，30]为业务31前提
                 if {24, 45, 26, 27} < question_set:
                     success_flag = True
                     break
-                random_list.remove(31)
+                _remove(random_list, 31)
                 continue
             elif question_no == 33 and (business_num != 18 or 25 not in question_set):
                 # 业务25为业务33前提且在业务34前一个单位（即结算第二会计区间本月损益）
-                random_list.remove(33)
+                _remove(random_list, 33)
                 continue
             else:
                 success_flag = True
@@ -287,7 +287,7 @@ def deal_with_question_1(company, question_no, questions):
                     # 问题33特判
                     if i == 2:
                         index_tmp = index_dict.get("{}".format(28))
-                        tmp = com_key_element_infos["info"][index_tmp][2].get("money")
+                        tmp = com_key_element_infos[index_tmp]["info"][2].get("money")
                         value = tmp / 2
                     if i == 3:
                         value = values_list[i - 1] * 0.8
@@ -343,11 +343,11 @@ def deal_with_question_1(company, question_no, questions):
     content = "{}年{}月{}日，".format(year, month, day) + content
     business = dict(questions_no=1, question_no=question_no, content=content, date=date, business_type=business_type)
 
-    company = _get_company_wrapper(company=company, affect_type=affect_type, key_element_infos=key_element_infos,
-                                   businesses=businesses, business=business,
-                                   com_key_element_infos=com_key_element_infos,
-                                   com_subjects_infos=com_subjects_infos, subjects_infos=subjects_infos,
-                                   business_num=business_num, com_assets=com_assets)
+    _update_company(company=company, affect_type=affect_type, key_element_infos=key_element_infos,
+                    businesses=businesses, business=business,
+                    com_key_element_infos=com_key_element_infos,
+                    com_subjects_infos=com_subjects_infos, subjects_infos=subjects_infos,
+                    business_num=business_num, com_assets=com_assets)
     return company
 
 
@@ -355,12 +355,12 @@ def deal_business_2(company, questions, max_question_no):
     """
     题库2的处理
     第一个月:
-    ` 1   rd      rd      rd   15-25 rd     last       last # 日期`
-    `[1] (5/8) (7/17/18)  25    27   rd1  [26,28,31]   [37] # 题号`
+    ` 1   rd      rd      rd   rd 15-25    last       last # 日期`
+    `[1] (5/8) (7/17/18)  25   rd1  27  [26,28,31]   [37] # 题号`
     第二个月:
     ` rd  rd   rd  f15  rd     15-25   last       last    # 日期`
     ` rd1 rd2  rd3 36 (33/34)    27  [26,28,31]   [37]    # 题号`
-    :param company: company_cp document
+    :param company: company document
     :param questions: question cursor
     :param max_question_no: max question no
     :return:
@@ -369,12 +369,14 @@ def deal_business_2(company, questions, max_question_no):
     business_num = company["business_num"]
 
     question_set = set()  # 公司已有的业务
+    question_list = list()
     for com_business in com_businesses:
         question_set.add(com_business["question_no"])
+        question_list.append(com_business["question_no"])
     random_list = list(range(2, max_question_no - 1))
     for question_no_tmp in question_set:
         if question_no_tmp in random_list:
-            random_list.remove(question_no_tmp)
+            _remove(random_list, question_no_tmp)
 
     if business_num == 0:
         # 第一笔业务
@@ -391,7 +393,7 @@ def deal_business_2(company, questions, max_question_no):
         question_no = random.choice([7, 17, 18])
     elif business_num == 3:
         question_no = 25
-    elif business_num == 4:
+    elif business_num == 5:
         question_no = 27
     elif 6 <= business_num <= 8:
         random_tmp = [26, 28, 31]
@@ -400,12 +402,12 @@ def deal_business_2(company, questions, max_question_no):
     elif business_num == 13:
         question_no = 36
     elif business_num == 14:
-        question_no = 27
-    elif business_num == 15:
         question_no = random.choice([33, 34])
+    elif business_num == 15:
+        question_no = 27
     elif 16 <= business_num <= 18:
         random_tmp = {26, 28, 31}
-        random_list = [k for k in random_tmp if random_list.count(k) == 1]
+        random_list = [k for k in random_tmp if question_list.count(k) == 1]
         question_no = random.choice(random_list)
     else:
         no_random = {5, 8, 7, 17, 18, 25, 26, 27, 28, 31, 33, 34, 36, 37}
@@ -420,59 +422,58 @@ def deal_business_2(company, questions, max_question_no):
                 continue
             elif question_no == 3 and 2 not in question_set:
                 # 业务2为业务3前提
-                random_list.remove(3)
+                _remove(random_list, 3)
                 continue
             elif question_no == 13 and 12 not in question_set:
                 # 业务12为业务13前提
-                random_list.remove(13)
+                _remove(random_list, 13)
                 continue
             elif question_no == 19 and 18 not in question_set:
                 # 业务18为业务19前提
-                random_list.remove(19)
+                _remove(random_list, 19)
                 continue
             elif question_no == 21 and 16 not in question_set:
                 # 业务16为业务21前提
-                random_list.remove(21)
+                _remove(random_list, 21)
                 continue
             elif question_no == 22 and not {17, 18} & question_set:
                 # 业务17/18为业务22前提
-                random_list.remove(22)
+                _remove(random_list, 22)
                 continue
             elif question_no == 24 and 21 not in question_set:
                 # 业务21为业务24前提
-                random_list.remove(24)
+                _remove(random_list, 24)
                 continue
             elif question_no == 25 and not {7, 17, 18} & question_set:
                 # 业务7/17/18为业务25前提
-                random_list.remove(25)
+                _remove(random_list, 25)
                 continue
             elif question_no == 28 and not {5, 8, 9, 15} & question_set:
                 # 业务5/8/9/15为业务28前提
-                random_list.remove(28)
+                _remove(random_list, 28)
                 continue
             elif question_no == 29 and not {6, 10, 11} & question_set:
                 # 业务6/10/11为业务29前提
-                random_list.remove(29)
+                _remove(random_list, 29)
                 continue
             elif question_no == 30 and 15 in question_set:
                 # 如果有业务15，则不发生
-                random_list.remove(30)
+                _remove(random_list, 30)
                 continue
             elif question_no == 33 and 31 not in question_set:
                 # 业务31为业务33前提
-                random_list.remove(33)
+                _remove(random_list, 33)
                 continue
             elif question_no == 34 and 31 not in question_set:
                 # 业务31为业务34前提
-                random_list.remove(34)
+                _remove(random_list, 34)
                 continue
             elif question_no == 35 and {33, 34} & question_set:
                 # 业务33/34为业务35前提
-                random_list.remove(35)
+                _remove(random_list, 35)
                 continue
             else:
                 break
-    print("question_no: {}".format(question_no), end=", ")
     company = deal_with_question_2(company=company, question_no=question_no, questions=questions)
     return True, company
 
@@ -523,7 +524,7 @@ def deal_with_question_2(company, question_no, questions):
         values_len = len(values)
         for i in range(0, values_len):
             value, value_type, is_random, low, high = _get_value_info(value_info=values[i])
-            if question_no == 13 and i == 3:
+            if question_no == 13 and i == 4:
                 # 问题13特判
                 now_m_value = values_list[1]
                 asset_name = values_list[0]
@@ -542,6 +543,10 @@ def deal_with_question_2(company, question_no, questions):
                 if is_random:
                     # 随机数处理
                     value = random.randrange(low, high, 100)
+                if i + 1 < values_len and values[i + 1].get("value_type") == "asset":
+                    value = int(value)
+                    if value == 1:
+                        value = "一"
                 if i and question_no != 31 and values[i - 1].get("value_type") == "asset" and \
                         values[i - 1].get("value")[0] == "+":
                     # 公司资产增加处理
@@ -583,41 +588,58 @@ def deal_with_question_2(company, question_no, questions):
                     index_tmp = index_dict.get("{}".format(21))
                     medium = com_key_element_infos[index_tmp]["info"][0].get("money")
                     value = random.randrange(medium - 1000, medium + 1000, 100)
-                elif (question_no == 26 or question_no == 27) and i == 3:
+                elif (question_no == 26 or question_no == 27) and (i == 0 or i == 3):
                     # 问题26和27特判
-                    values_list.append(value)
-                    values_list[0] = sum([values_list[index] for index in [1, 2, 3]])
+                    if i == 3:
+                        values_list.append(value)
+                        t_sum = sum([values_list[index] for index in [0, 1, 2]])
+                        values_list.insert(0, t_sum)
+                        content = content.replace("v{}".format(1), str(t_sum))
+                        content = content.replace("v{}".format(4), str(value))
                     continue
                 elif question_no == 28:
                     # 问题28特判
-                    if i == 1:
+                    if i == 0:
                         divisors = [120, 120, 60, 360]
                         question_nos = [5, 8, 9, 15]
                         value = 0
                         k = 0
                         for q in question_nos:
                             index_tmp = index_dict.get("{}".format(q))
+                            if not index_tmp:
+                                continue
                             value_tmp = com_subjects_infos[index_tmp][0].get("money")
                             value_tmp = value_tmp if value_tmp else 0
                             value_tmp /= divisors[k]
                             value += value_tmp
                             k += 1
-                    else:
-                        value = values_list[0] / 3
+                        value = round(value, 2)
+                    elif i > 0:
+                        if i < 3:
+                            value = values_list[0] / 3
+                        else:
+                            value = values_list[0] - values_list[1] - values_list[2]
+                        value = round(value, 2)
                 elif question_no == 29:
                     # 问题29特判
-                    if i == 1:
+                    if i == 0:
                         divisor = 60
                         question_nos = [6, 10, 11]
                         value = 0
                         for q in question_nos:
                             index_tmp = index_dict.get("{}".format(q))
+                            if not index_tmp:
+                                continue
                             value_tmp = com_subjects_infos[index_tmp][0].get("money")
                             value_tmp = value_tmp if value_tmp else 0
                             value_tmp /= divisor
                             value += value_tmp
-                    else:
-                        value = values_list[0] / 3
+                        value = round(value, 2)
+                    elif i > 0:
+                        if i < 3:
+                            value = values_list[0] / 3
+                        else:
+                            value = values_list[0] - values_list[1] - values_list[2]
                 elif question_no == 31:
                     # 问题31特判
                     content = content.replace("+", "")
@@ -626,12 +648,15 @@ def deal_with_question_2(company, question_no, questions):
                     value = 0
                     for tmp in [25, 30]:
                         index_tmp = index_dict.get("{}".format(tmp))
+                        if not index_tmp:
+                            continue
                         value_tmp = com_subjects_infos[index_tmp][0].get("money")
                         value += value_tmp if value_tmp else 0
                 elif question_no == 36:
                     # 问题36特判
                     index_tmp = index_dict.get("{}".format(26))
-                    value = com_key_element_infos["info"][index_tmp][2].get("money")
+                    # print(index_dict)
+                    value = com_subjects_infos[index_tmp][3].get("money")
 
             elif value_type == "percent":
                 if is_random:
@@ -677,11 +702,11 @@ def deal_with_question_2(company, question_no, questions):
     content = "{}年{}月{}日，".format(year, month, day) + content
     business = dict(questions_no=2, question_no=question_no, content=content, date=date, business_type=business_type)
 
-    company = _get_company_wrapper(company=company, affect_type=affect_type, key_element_infos=key_element_infos,
-                                   businesses=businesses, business=business,
-                                   com_key_element_infos=com_key_element_infos,
-                                   com_subjects_infos=com_subjects_infos, subjects_infos=subjects_infos,
-                                   business_num=business_num, com_assets=com_assets)
+    _update_company(company=company, affect_type=affect_type, key_element_infos=key_element_infos,
+                    businesses=businesses, business=business,
+                    com_key_element_infos=com_key_element_infos,
+                    com_subjects_infos=com_subjects_infos, subjects_infos=subjects_infos,
+                    business_num=business_num, com_assets=com_assets)
     return company
 
 
@@ -746,8 +771,8 @@ def _get_index_dict(businesses):
     index_dict = dict()
     index_tmp = 0
     for business in businesses:
-        business_no = business.get("business_no")
-        index_dict["{}".format(business_no)] = index_tmp
+        question_no = business.get("question_no")
+        index_dict["{}".format(question_no)] = index_tmp
         index_tmp += 1
     return index_dict
 
@@ -842,8 +867,8 @@ def _deal_sell_asset(value, com_assets, now_m_value, subjects_infos, asset_name,
     return value, subjects_infos
 
 
-def _get_company_wrapper(company, affect_type, key_element_infos, businesses, business, com_key_element_infos,
-                         com_subjects_infos, subjects_infos, business_num, com_assets):
+def _update_company(company, affect_type, key_element_infos, businesses, business, com_key_element_infos,
+                    com_subjects_infos, subjects_infos, business_num, com_assets):
     key_element_infos_dict = dict(affect_type=affect_type, info=key_element_infos)
 
     businesses.append(business)
@@ -856,4 +881,11 @@ def _get_company_wrapper(company, affect_type, key_element_infos, businesses, bu
                         business_num=business_num,
                         key_element_infos=com_key_element_infos,
                         subjects_infos=com_subjects_infos))
-    return company
+
+
+def _remove(t_list, value):
+    # list.remove(value)，捕获`若list不存在value，ValueError`异常
+    try:
+        t_list.remove(value)
+    except ValueError:
+        pass
