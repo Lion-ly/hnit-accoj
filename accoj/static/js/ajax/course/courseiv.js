@@ -200,14 +200,14 @@ function iv_AddRow(obj, subject = "", money = "") {
         type = "1";
     }
     $("#" + obj + "RowAfter").before(
-        "<tr>"
-        + "<td class='acc-unedit' style='border-right: 0;padding: 4px'></td>"
-        + "<td class='acc-unedit' style='border-left: 0;4px'></td>"
+          "<tr class='acc-table-format-4-1'>"
+        + "<td class='acc-unedit'></td>"
+        + "<td class='acc-unedit'></td>"
         + "<td><input type='text' id='subject" + type + "_" + rowNumIv + "' name='subject' placeholder='科目' value='" + subject + "' onchange='RealNumber(this)'></td>"
         + "<td><input type='text' id='money" + type + "_" + rowNumIv + "' name='money' placeholder='金额' value='" + money + "' onchange='RealNumber(this)'></td>"
-        + "<td style='padding:4px;border:0'>"
-        + "<div style='text-align: center'>"
-        + "<a style='color: red;padding: 0' type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "<td>"
+        + "<div class='acc-minus'>"
+        + "<a type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
         + "</td>"
         + "</tr>"

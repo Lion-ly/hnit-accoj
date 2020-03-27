@@ -208,16 +208,15 @@ function body_text_append(labelType, content, businessNo) {
             break;
     }
     $("#body-text").append(
-        "<tr>"
-        + "<th style='background-color: " + bg + ";width: 4%'>"
-        + labelType
+          "<tr class='acc-table-format-1-2'>"
+        + "<th style='background-color: " + bg + ";'>"
+        +  labelType
         + "</th>"
-        + "<td style='text-align: left;vertical-align: middle;'>"
+        + "<td>"
         + "<strong style='color: " + bg + "'>" + businessNo + ".&nbsp;&nbsp;</strong>"
-        + content
+        +  content
         + "</td>"
-        +
-        +"</tr>"
+        + "</tr>"
     );
 }
 

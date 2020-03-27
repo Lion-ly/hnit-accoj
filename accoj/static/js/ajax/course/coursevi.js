@@ -300,8 +300,8 @@ let row_num = 2;
  */
 function vi_AddRow() {
     $("#vi_rowLast").before(
-        "<tr id='vi_row" + row_num + "'>"
-        + "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<tr id='vi_row" + row_num + "'>" +
+        "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='general_account' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='detail_account' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input onkeyup='limit_number(this)'></label></td>" +
@@ -324,9 +324,9 @@ function vi_AddRow() {
         "<td><label><input onkeyup='limit_number(this)'></label></td>" +
         "<td><label><input onkeyup='limit_number(this)'></label></td>" +
         "<td><label><input onkeyup='limit_number(this)'></label></td>"
-        + "<th style='width: 4%; border: 0; background: #ffffff;padding: 4px'>"
-        + "<div style='text-align: center'>"
-        + "<a style='color: red; padding: 0 0' type='button' "
+        + "<th class='acc-unborder'>"
+        + "<div class='acc-minus'>"
+        + "<a type='button' "
         + "class='btn' onclick='vi_DeleteRow(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"

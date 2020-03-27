@@ -487,12 +487,11 @@ function vii1_AddRow(flag) {
     let now_id = idPrefix + vii1Row;
     $("#" + obj).before(
         "<tr id='" + now_id + "'>"
-        + "<td><label><input name='month' title='月' onkeyup='limit_number(this)'></label>"
-        + "<td><label><input name='day' title='日' onkeyup='limit_number(this)'></label>"
-        + "<td><label><input name='word' title='字' onkeyup='limit_number(this)'></label>"
-        + "<td><label><input name='no' title='号' onkeyup='limit_number(this)'></label>"
+        + "<td><label><input name='month' title='月' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='day' title='日' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='word' title='字' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='no' title='号' onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>"
-
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
@@ -503,7 +502,6 @@ function vii1_AddRow(flag) {
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
-
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
@@ -514,9 +512,7 @@ function vii1_AddRow(flag) {
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
-
         + "<td><label><input name='orientation' onkeyup='limitJieDai(this)'></label></td>"
-
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
@@ -528,9 +524,9 @@ function vii1_AddRow(flag) {
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
 
-        + "<td style='width: 1%; border: 0; background: #ffffff'>"
-        + "<div style='text-align: center'>"
-        + "<a style='color: red; padding:0' type='button' "
+        + "<td class='acc-unborder'>"
+        + "<div class='acc-minus'>"
+        + "<a type='button' "
         + "class='btn' onclick='vii1_DeleteRow(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
@@ -555,23 +551,23 @@ let vii2Row = 2;
 function vii2_AddRow() {
     let now_id = "vii2Row" + vii2Row;
     $("#vii2RowLast").before(
-        "<tr id='" + now_id + "'>"
-        + "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
-        "<td><label><input name='borrow_1' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='lend_1' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='borrow_2' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='lend_2' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='borrow_3' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='lend_3' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>"
-        + "<td style='padding: 0; border: 0'>"
-        + "<div style='text-align: center'> "
-        + "<a style='color: red;padding: 0;' type='button' class='btn' onclick='vii2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        "<tr id='" + now_id + "'>" +
+        "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<td><label><input name='borrow_1' title='金额￥' " +
+        "onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='lend_1' title='金额￥' " +
+        "onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='borrow_2' title='金额￥' " +
+        "onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='lend_2' title='金额￥' " +
+        "onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='borrow_3' title='金额￥' " +
+        "onkeyup='limit_number(this)'></label></td>" +
+        "<td><label><input name='lend_3' title='金额￥' " +
+        "onkeyup='limit_number(this)'></label></td>"
+        + "<td class='acc-unborder'>"
+        + "<div class='acc-minus'> "
+        + "<a type='button' class='btn' onclick='vii2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div> "
         + "</td> "
         + "</tr>"

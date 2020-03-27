@@ -424,7 +424,7 @@ function v_AddLeftRow(obj, pm, business_no = "", money = "") {
     }
     $(obj).parent().parent().parent().after(
         "<tr><td><div style='text-align: left'>"
-        + "<a style='color: red; padding: 0 0' type='button' "
+        + "<a style='color: red; padding: 0' type='button' "
         + "class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>"
@@ -446,7 +446,7 @@ function v_AddRightRow(obj, pm, business_no = "", money = "") {
         + "<td><input style='text-align: right' onchange='RealNumber(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
         + " name='" + is_dr + "' id='' placeholder='0'></td>"
         + "<td style='width: 40%;'>" + "<div style='text-align: right'>"
-        + "<a style='color: red; padding: 0 0' "
+        + "<a style='color: red; padding: 0' "
         + "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>" + "</tr>");

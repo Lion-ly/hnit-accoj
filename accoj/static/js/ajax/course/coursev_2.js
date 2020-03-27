@@ -209,9 +209,9 @@ function v2_AddRow(period) {
         "                                              onchange='RealNumber(this)'></label></td>" +
         "<td><label><input name='lend_3' title='金额￥'" +
         "                                              onchange='RealNumber(this)'></label></td>"
-        + "<td style='padding: 4px; border: 0'>"
-        + "<div style='text-align: center'> "
-        + "<a style='color: red;padding: 0' type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        + "<td class='acc-unborder'>"
+        + "<div class='acc-minus'> "
+        + "<a type='button' class='btn' onclick='v2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div> "
         + "</td> "
         + "</tr>"
