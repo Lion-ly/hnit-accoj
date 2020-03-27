@@ -214,7 +214,7 @@ def create_business():
     :return:
     """
     username = session.get("username")
-    company = mongo.db.company.find_one({"student_no": "{}_cp".format(username)})
+    company = mongo.db.company.find_one({"student_no": "{}".format(username)})
 
     schedule_confirm = company.get("schedule_confirm")
     business_confirm = schedule_confirm.get("business_confirm")
