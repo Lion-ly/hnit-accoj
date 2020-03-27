@@ -340,5 +340,42 @@ dd {
     width: 29%;
 }
 
+/*acc-table-format-8-1*/
+.acc-table-format-8-1 > :nth-child(1){
+    width: 16%;
+}
+
+.acc-table-format-8-1 > :nth-child(2){
+    width: 17%;
+}
+
+.acc-table-format-8-1 > :nth-child(3){
+    width: 17%;
+}
+
+.acc-table-format-8-1 > :nth-child(4){
+    width: 16%;
+}
+
+.acc-table-format-8-1 > :nth-child(5){
+    width: 17%;
+}
+
+.acc-table-format-8-1 > :nth-child(6){
+    width: 17%;
+}
+
+/*acc-table-format-8-2*/
+.acc-table-format-8-2 > :nth-child(1){
+    width: 50%;
+}
+
+.acc-table-format-8-2 > :nth-child(2){
+    width: 25%;
+}
+
+.acc-table-format-8-2 > :nth-child(3){
+    width: 25%;
+}
 /*-------------------------------------------FORMAT 格式 END---------------------------------------*/
 
