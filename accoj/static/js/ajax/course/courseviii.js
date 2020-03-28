@@ -1,27 +1,24 @@
-// 页面加载完成填充数据
+let new_balance_sheet_infos,
+    new_balance_sheet_confirmed,
+    new_balance_sheet_saved;
+let profit_statement_infos,
+    profit_statement_confirmed,
+    profit_statement_saved;
+let firstChange = true,
+    periodEndData = Object(),
+    periodLastData = Object();
+
 $(document).ready(function () {
-    bindControlViii();
-    get_new_balance_sheet_info(true);
-    get_profit_statement_info(true);
+    function init() {
+        viiiBind();
+        get_new_balance_sheet_info(true);
+        get_profit_statement_info(true);
+    }
+
+    init();
 });
 
 //======================================提交资产负债表信息======================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_new_balance_sheet() {
-    bind_confirm_info("confirm_new_balance_sheet_button", "submit_new_balance_sheet_info");
-}
-
-/**
- * 保存资产负债表信息
- */
-function save_new_balance_sheet() {
-    bind_save_info("save_new_balance_sheet_button", submit_new_balance_sheet_info);
-}
-
-
 /**
  * 提交资产负债表信息
  * @param submit_type confirm or save
@@ -40,10 +37,6 @@ function submit_new_balance_sheet_info(submit_type) {
 }
 
 //======================================获取资产负债表信息======================================//
-let new_balance_sheet_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    new_balance_sheet_confirmed,
-    new_balance_sheet_saved;
-
 /**
  * 从后端获取资产负债表信息
  */
@@ -53,7 +46,7 @@ function get_new_balance_sheet_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!new_balance_sheet_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若new_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
@@ -91,22 +84,6 @@ function map_new_balance_sheet_info(data) {
 }
 
 //============================================提交利润表信息============================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_profit_statement() {
-    bind_confirm_info("confirm_profit_statement_button", "submit_profit_statement_info");
-}
-
-/**
- * 保存利润表信息
- */
-function save_profit_statement() {
-    bind_save_info("save_profit_statement_button", submit_profit_statement_info);
-}
-
-
 /**
  * 提交利润表信息
  * @param submit_type confirm or save
@@ -125,10 +102,6 @@ function submit_profit_statement_info(submit_type) {
 }
 
 //============================================获取利润表信息============================================//
-let profit_statement_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    profit_statement_confirmed,
-    profit_statement_saved;
-
 /**
  * 从后端获取利润表信息
  */
@@ -139,7 +112,7 @@ function get_profit_statement_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!profit_statement_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若profit_statement_infos不为空且已经确认提交过，则不再发送数据请求
@@ -228,6 +201,30 @@ function viiiPaddingData(data, isFirst) {
 
 //===============================================事件控制===============================================//
 /**
+ * 事件绑定
+ */
+function viiiBind() {
+    bind_confirm_info("submit_new_balance_sheet_info", $("button[data-confirm-1]"));
+    bind_save_info(submit_new_balance_sheet_info, $("button[data-save-1]"));
+
+    bind_confirm_info("submit_profit_statement_info", $("button[data-confirm-2]"));
+    bind_save_info(submit_profit_statement_info, $("button[data-save-2]"));
+
+    bindAnswerSource($("button[data-answer-1]"));
+    bindAnswerSource($("button[data-answer-2]"));
+
+    let inputs1 = $("#viiiFirst").find("input"),
+        inputs2 = $("#viiiSecond").find("input");
+    bindRealNumber(inputs1);
+    bindRealNumber(inputs2);
+    $.each(inputs2, function (index, item) {
+        $(item).change(function () {
+            eventChangeViii(item);
+        });
+    });
+}
+
+/**
  * 资产负债表重置
  */
 function viii1ResetInfo() {
@@ -241,32 +238,16 @@ function viii2ResetInfo() {
     $("#viiiSecond").find("input").val("");
 }
 
-let firstChange = true,
-    periodEndData = Object(),
-    periodLastData = Object();
-
-/**
- * 将事件`处理函数`绑定
- */
-function bindControlViii() {
-    let inputs1 = $("#viiiFirst").find("input"),
-        inputs2 = $("#viiiSecond").find("input");
-
-    $.each(inputs1, function (index, item) {
-        $(item).attr("onchange", "RealNumber(this)");
-    });
-
-    $.each(inputs2, function (index, item) {
-        $(item).attr("onchange", "eventChangeViii(this)");
-    });
-}
-
 /**
  * 用户输入数据改变事件响应函数
- * @param obj
+ * @param selector
  */
-function eventChangeViii(obj) {
-    RealNumber(obj);
+function eventChangeViii(selector) {
+    let name = $(selector).attr("name"),
+        isEnd = name.endsWith("End"),
+        value = $(selector).val();
+    if (value === "格式错误") return;
+    value = parseFloat(value);
     if (firstChange) {
         let Data = viiiGetInput(false);
         Data = Data["profit_statement_infos"];
@@ -279,9 +260,6 @@ function eventChangeViii(obj) {
         firstChange = false;
     }
 
-    let name = $(obj).attr("name"),
-        isEnd = name.endsWith("End"),
-        value = parseFloat($(obj).val());
     name = name.replace(/End|Last/, "");
     if (isEnd) {
         periodEndData[name] = value;

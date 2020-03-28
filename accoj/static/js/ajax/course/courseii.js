@@ -1,30 +1,17 @@
-// 页面加载完成填充数据
+let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+    key_element_confirmed = Array(),
+    key_element_saved = Array();
 $(document).ready(function () {
-    pageSplitBind(function (business_no) {
-        businessLiControl(business_no);
-        get_key_element_info();
-    }, 20);
-    getBusinessList();
-    get_key_element_info(true);
+    function init() {
+        iiBind();
+        getBusinessList();
+        get_key_element_info(true);
+    }
+
+    init();
 });
 
 //==================================提交会计要素信息==================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_key_element() {
-    bind_confirm_info("confirm_key_element_button", "submit_key_element_info");
-}
-
-/**
- * 保存会计要素信息
- */
-function save_key_element() {
-    bind_save_info("save_key_element_button", submit_key_element_info);
-}
-
-
 /**
  * 提交会计要素信息
  * @param submit_type confirm or save
@@ -44,10 +31,6 @@ function submit_key_element_info(submit_type) {
 }
 
 //==================================获取会计要素信息==================================//
-let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
-    key_element_confirmed = Array(),
-    key_element_saved = Array();
-
 /**
  * 从后端获取会计要素信息
  */
@@ -62,7 +45,7 @@ function get_key_element_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!key_element_saved.length || key_element_saved.indexOf(nowBusinessNo - 1) === -1)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
 
@@ -175,6 +158,19 @@ function iiPaddingData(data) {
 }
 
 // ==================================事件控制==================================//
+/**
+ * 事件绑定
+ */
+function iiBind() {
+    bind_confirm_info("submit_key_element_info");
+    bind_save_info(submit_key_element_info);
+    bindAnswerSource();
+    bindRealNumber();
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_key_element_info();
+    }, 20);
+}
 
 /**
  * 清空会计要素信息

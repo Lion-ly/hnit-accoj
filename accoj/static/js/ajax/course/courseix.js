@@ -1,27 +1,24 @@
-// 页面加载完成填充数据
+let ixFirst_infos, // 保存本次课程全部信息，减少后端数据请求次数
+    ixFirst_confirmed,
+    ixFirst_saved;
+let firstChange = true,
+    periodEndData = Object(),
+    periodLastData = Object();
+let ixSecond_infos, // 保存本次课程全部信息，减少后端数据请求次数
+    ixSecond_confirmed,
+    ixSecond_saved;
+
 $(document).ready(function () {
-    bindControlIx();
-    get_ixFirst_info(true);
-    get_ixSecond_info(true);
+    function init() {
+        ixBind();
+        get_ixFirst_info(true);
+        get_ixSecond_info(true);
+    }
+
+    init();
 });
 
 //======================================提交资产负债表信息======================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_ixFirst() {
-    bind_confirm_info("confirm_ixFirst_button", "submit_ixFirst_info");
-}
-
-/**
- * 保存资产负债表信息
- */
-function save_ixFirst() {
-    bind_save_info("save_ixFirst_button", submit_ixFirst_info);
-}
-
-
 /**
  * 提交资产负债表信息
  * @param submit_type confirm or save
@@ -40,10 +37,6 @@ function submit_ixFirst_info(submit_type) {
 }
 
 //======================================获取资产负债表信息======================================//
-let ixFirst_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    ixFirst_confirmed,
-    ixFirst_saved;
-
 /**
  * 从后端获取资产负债表信息
  */
@@ -54,7 +47,7 @@ function get_ixFirst_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!ixFirst_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若ixFirst_infos不为空且已经确认提交过，则不再发送数据请求
@@ -91,22 +84,6 @@ function map_ixFirst_info(data) {
 }
 
 //============================================提交利润表信息============================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_ixSecond() {
-    bind_confirm_info("confirm_ixSecond_button", "submit_ixSecond_info");
-}
-
-/**
- * 保存利润表信息
- */
-function save_ixSecond() {
-    bind_save_info("save_ixSecond_button", submit_ixSecond_info);
-}
-
-
 /**
  * 提交利润表信息
  * @param submit_type confirm or save
@@ -125,10 +102,6 @@ function submit_ixSecond_info(submit_type) {
 }
 
 //============================================获取利润表信息============================================//
-let ixSecond_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    ixSecond_confirmed,
-    ixSecond_saved;
-
 /**
  * 从后端获取利润表信息
  */
@@ -138,7 +111,7 @@ function get_ixSecond_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!ixSecond_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若ixSecond_infos不为空且已经确认提交过，则不再发送数据请求
@@ -237,6 +210,42 @@ function IxPaddingData(data, isFirst) {
 
 //===============================================事件控制===============================================//
 /**
+ * 事件绑定
+ */
+function ixBind() {
+    bind_confirm_info("submit_ixFirst_info", $("button[data-confirm-1]"));
+    bind_save_info(submit_ixFirst_info, $("button[data-save-1]"));
+
+    bind_confirm_info("submit_ixSecond_info", $("button[data-confirm-2]"));
+    bind_save_info(submit_ixSecond_info, $("button[data-save-2]"));
+
+    bindAnswerSource($("button[data-answer-1]"));
+    bindAnswerSource($("button[data-answer-2]"));
+
+    let $inputs1 = $("#ixFirst").find("input"),
+        $inputs2 = $("#ixSecond").find("input"),
+        $conclusions = $("[id^=ix][id$=Conclusion]"),
+        flag = true;
+
+    $inputs1.each(function (index, item) {
+        if (flag) bindRealNumber($(item));
+        else bindLimitPercent($(item));
+        flag = !flag;
+    });
+    flag = true;
+    $inputs2.each(function (index, item) {
+        $(item).change(function () {
+            eventChangeIx(item);
+        });
+        if (flag) bindRealNumber($(item));
+        else bindLimitPercent($(item));
+        flag = !flag;
+    });
+
+    bindIllegalCharFilter($conclusions);
+}
+
+/**
  * 资产负债表重置
  */
 function ix1ResetInfo() {
@@ -250,46 +259,16 @@ function ix2ResetInfo() {
     $("#ixSecond").find("input").val("");
 }
 
-let firstChange = true,
-    periodEndData = Object(),
-    periodLastData = Object();
-
-/**
- * 将事件`处理函数`绑定
- */
-function bindControlIx() {
-    let inputs1 = $("#ixFirst").find("input"),
-        inputs2 = $("#ixSecond").find("input"),
-        conclusions = $("[id^=ix][id$=Conclusion]"),
-        flag = true;
-
-    $.each(inputs1, function (index, item) {
-        let limit = "LimitPercent(this)";
-        if (flag) limit = "RealNumber(this)";
-        $(item).attr("onchange", limit);
-        flag = !flag;
-    });
-    flag = true;
-    $.each(inputs2, function (index, item) {
-        $(item).attr("onchange", "eventChangeIx(this)");
-    });
-
-    $.each(conclusions, function (index, item) {
-        $(item).attr("onkeyup", "illegalCharFilter(this)");
-    });
-}
-
 /**
  * 用户输入数据改变事件响应函数
  * @param obj
  */
 function eventChangeIx(obj) {
     let name = $(obj).attr("name"),
-        isEnd = name.endsWith("End");
-
-    if (isEnd) RealNumber(obj);
-    else LimitPercent(obj);
-
+        isEnd = name.endsWith("End"),
+        value = $(obj).val();
+    if (value === "格式错误") return;
+    value = parseFloat(value);
     if (firstChange) {
         let Data = ixGetInput(false);
         Data = Data["ixSecond_infos"];
@@ -303,7 +282,6 @@ function eventChangeIx(obj) {
     }
 
 
-    let value = parseFloat($(obj).val());
     name = name.replace(/End|Last/, "");
     if (isEnd) {
         periodEndData[name] = value;

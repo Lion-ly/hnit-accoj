@@ -18,15 +18,15 @@
                 <div class="acc-pn-center">
                     <nav aria-label="Page navigation">
                         <ul data-page class="pagination">
-                            <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
-                            <li data-page-control class="active"><span class="no-select">1</span></li>
-                            <li data-page-control><span class="no-select">2</span></li>
-                            <li data-page-control><span class="no-select">3</span></li>
-                            <li data-page-control><span class="no-select">4</span></li>
-                            <li data-page-control><span class="no-select">5</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&laquo;</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&#139;</a></li>
+                            <li data-page-control class="active"><a href="#">1</a></li>
+                            <li data-page-control><a href="#">2</a></li>
+                            <li data-page-control><a href="#">3</a></li>
+                            <li data-page-control><a href="#">4</a></li>
+                            <li data-page-control><a href="#">5</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&#155;</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&raquo;</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -52,19 +52,18 @@
                                 <td class="acc-unedit"></td>
                                 <td>
                                     <label>
-                                        <input type="text" name="subject" onkeyup="illegalCharFilter(this)"
+                                        <input type="text" name="subject" data-illegal-char
                                                id="subject1" placeholder="科目">
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="text" name="money" id="money1" placeholder="金额"
-                                               onchange="RealNumber(this)">
+                                        <input type="text" name="money" id="money1" placeholder="0.0" data-real-number>
                                     </label>
                                 </td>
                                 <td>
                                     <div class="acc-plus">
-                                        <a type="button" class="btn" onclick="iv_AddRow('borrow')">
+                                        <a type="button" class="btn" data-iv-addRow-1 data-toggle="tooltip" data-placement="left" title="增加行">
                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                         </a>
                                     </div>
@@ -75,17 +74,17 @@
                                 <th class="acc-unedit">贷：</th>
                                 <td>
                                     <label>
-                                        <input type="text" name="subject" onkeyup="illegalCharFilter(this)" id="subject0" placeholder="科目">
+                                        <input type="text" name="subject" data-illegal-char id="subject0" placeholder="科目">
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="text" name="money" id="money0" placeholder="金额" onchange="RealNumber(this)">
+                                        <input type="text" name="money" id="money0" placeholder="0.0" data-real-number>
                                     </label>
                                 </td>
                                 <td>
                                     <div class="acc-plus">
-                                        <a type="button" class="btn" onclick="iv_AddRow('loan')">
+                                        <a type="button" class="btn" data-iv-addRow-2 data-toggle="tooltip" data-placement="left" title="增加行">
                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                         </a>
                                     </div>
@@ -100,13 +99,13 @@
                 <!--信息提示窗口-->
                 <div id="course_iv_message"></div>
                 <div class="acc-btn-left">
-                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                    <button type="button" class="btn btn-info" data-answer>查看答案</button>
                 </div>
                 <div class="acc-btn-right">
-                    <button type="button" class="btn btn-info" id="save_entry_button" onclick="save_entry()">
+                    <button class="btn btn-info" data-save type="button">
                         <span class="glyphicon"></span>&nbsp;保存
                     </button>
-                    <button type="button" class="btn btn-success" id="confirm_entry_button" onclick="confirm_entry()">
+                    <button class="btn btn-success" data-confirm type="button">
                         <span class="glyphicon"></span>&nbsp;提交
                     </button>
                 </div>

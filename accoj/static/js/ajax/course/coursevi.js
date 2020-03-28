@@ -1,29 +1,20 @@
-// 页面加载完成填充数据
+let acc_document_infos = Array(),
+    acc_document_confirmed = Array(),
+    acc_document_saved = Array(),
+    row_num = 2,
+    fileContent;
+
 $(document).ready(function () {
-    pageSplitBind(function (business_no) {
-        businessLiControl(business_no);
-        get_acc_document_info();
-    }, 20);
-    getBusinessList();
-    get_acc_document_info(true);
+    function init() {
+        viBind();
+        getBusinessList();
+        get_acc_document_info(true);
+    }
+
+    init();
 });
-let fileContent = "";
 
 //==================================提交会计凭证信息==================================//
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_acc_document() {
-    bind_confirm_info("confirm_acc_document_button", "submit_acc_document_info");
-}
-
-/**
- * 保存凭证信息
- */
-function save_acc_document() {
-    bind_save_info("save_acc_document_button", submit_acc_document_info);
-}
-
 /**
  * 提交会计凭证信息
  * @param submit_type confirm or save
@@ -40,10 +31,6 @@ function submit_acc_document_info(submit_type) {
 }
 
 //==================================获取会计凭证信息==================================//
-let acc_document_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
-    acc_document_confirmed = Array(),
-    acc_document_saved = Array();
-
 /**
  * 从后端获取会计凭证信息
  */
@@ -58,7 +45,7 @@ function get_acc_document_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
@@ -283,17 +270,41 @@ function vi_downloadFile() {
 
 // ==================================事件控制==================================//
 /**
+ * 事件绑定
+ */
+function viBind() {
+    bind_confirm_info("submit_acc_document_info");
+    bind_save_info(submit_acc_document_info);
+    bindAnswerSource();
+    bindIllegalCharFilter();
+    bindRealNumber();
+    bindLimitNumber();
+    $("a[data-vi-addRow]").click(function () {
+        vi_AddRow();
+    });
+    $("input[data-get-file]").change(function () {
+        getfileContents();
+    });
+    $("button[data-download-file]").change(function () {
+        vi_downloadFile();
+    });
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_acc_document_info();
+    }, 20);
+}
+
+/**
  * 重置凭证信息
  */
 function viResetInfo() {
+    row_num = 2;
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
     $("input").val("");
     $("#vi_downloadFile_button").hide();
     $("#vi_downloadSpan").text("");
     $("#submit_status_span").hide();
 }
-
-let row_num = 2;
 
 /*
  * @ # coursevi ? 表格增加行
@@ -327,12 +338,13 @@ function vi_AddRow() {
         + "<th class='acc-unborder'>"
         + "<div class='acc-minus'>"
         + "<a type='button' "
-        + "class='btn' onclick='vi_DeleteRow(this)'><span "
+        + "class='btn' onclick='vi_DeleteRow(this)' data-toggle='tooltip' data-placement='left' title='删除行'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
         + "</th>"
         + "</tr>"
     );
+    $("#" + "vi_row" + row_num).find("a[data-toggle]").tooltip();
     row_num++;
 }
 

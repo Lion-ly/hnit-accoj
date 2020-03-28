@@ -15,15 +15,15 @@
                 <div class="acc-pn-center">
                     <nav aria-label="Page navigation">
                         <ul data-page class="pagination">
-                            <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
-                            <li data-page-control class="active"><span class="no-select">1</span></li>
-                            <li data-page-control><span class="no-select">2</span></li>
-                            <li data-page-control><span class="no-select">3</span></li>
-                            <li data-page-control><span class="no-select">4</span></li>
-                            <li data-page-control><span class="no-select">5</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&laquo;</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&#139;</a></li>
+                            <li data-page-control class="active"><a href="#">1</a></li>
+                            <li data-page-control><a href="#">2</a></li>
+                            <li data-page-control><a href="#">3</a></li>
+                            <li data-page-control><a href="#">4</a></li>
+                            <li data-page-control><a href="#">5</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&#155;</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&raquo;</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -58,7 +58,7 @@
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="+资产" id="key_elem1"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem1">￥</label></div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="-资产" id="key_elem2"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem2">￥</label></div>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="+负债" id="key_elem3"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem3">￥</label></div>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="-负债" id="key_elem4"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem4">￥</label></div>
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="+收入" id="key_elem5"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem5">￥</label></div>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="-收入" id="key_elem6"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem6">￥</label></div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="+费用" id="key_elem7"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem7">￥</label></div>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="-费用" id="key_elem8"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem8">￥</label></div>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="+利润" id="key_elem9"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem9">￥</label></div>
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="-利润" id="key_elem10"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem10">￥</label></div>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="+所有者权益" id="key_elem11"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem11">￥</label></div>
                                 </div>
                             </div>
@@ -213,7 +213,7 @@
                                         <span class="glyphicon glyphicon-minus"></span>
                                     </div>
                                     <input type="text" class="form-control  input-sm" name="-所有者权益" id="key_elem12"
-                                           placeholder="0.0" onchange="RealNumber(this)">
+                                           placeholder="0.0" data-real-number>
                                     <div class="input-group-addon"><label for="key_elem12">￥</label></div>
                                 </div>
                             </div>
@@ -261,16 +261,14 @@
                     <div id="course_ii_message"></div>
                     <!--底部左侧-->
                     <div class="acc-btn-left">
-                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                        <button type="button" class="btn btn-info" data-answer>查看答案</button>
                     </div>
                     <!--底部右侧-->
                     <div class="acc-btn-right">
-                        <button type="button" class="btn btn-info" id="save_key_element_button"
-                                onclick="save_key_element()">
+                        <button type="button" class="btn btn-info" data-save>
                             <span class="glyphicon"></span>&nbsp;保存
                         </button>
-                        <button type="button" class="btn btn-success" id="confirm_key_element_button"
-                                onclick="confirm_key_element()">
+                        <button type="button" class="btn btn-success" data-confirm>
                             <span class="glyphicon"></span>&nbsp;提交
                         </button>
                     </div>

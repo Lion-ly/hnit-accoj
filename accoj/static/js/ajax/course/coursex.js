@@ -1,26 +1,16 @@
-// 页面加载完成填充数据
+let coursex_infos,
+    coursex_confirmed,
+    coursex_saved;
 $(document).ready(function () {
-    bindControlCoursex();
-    get_coursex_info(true);
+    function init() {
+        xBind();
+        get_coursex_info(true);
+    }
+
+    init();
 });
 
 //======================================提交杜邦分析法信息======================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_coursex() {
-    bind_confirm_info("confirm_coursex_button", "submit_coursex_info");
-}
-
-/**
- * 保存杜邦分析法信息
- */
-function save_coursex() {
-    bind_save_info("save_coursex_button", submit_coursex_info);
-}
-
-
 /**
  * 提交杜邦分析法信息
  * @param submit_type confirm or save
@@ -39,10 +29,6 @@ function submit_coursex_info(submit_type) {
 }
 
 //======================================获取杜邦分析法信息======================================//
-let coursex_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    coursex_confirmed,
-    coursex_saved;
-
 /**
  * 从后端获取杜邦分析法信息
  */
@@ -52,7 +38,7 @@ function get_coursex_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!coursex_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若coursex_infos不为空且已经确认提交过，则不再发送数据请求
@@ -132,24 +118,26 @@ function CoursexPaddingData(data) {
 
 //===============================================事件控制===============================================//
 /**
+ * 事件绑定
+ */
+function xBind() {
+    bind_confirm_info("submit_coursex_info");
+    bind_save_info(submit_coursex_info);
+    bindAnswerSource();
+
+    let $inputs = $("#coursexData").find("input"),
+        $conclusions = $("#coursexDataConclusion");
+    $inputs.each(function (index, item) {
+        let name = $(item).attr("name");
+        if (!name.match(/率$/)) bindRealNumber($(item));
+        else bindLimitPercent($(item));
+    });
+    bindIllegalCharFilter($conclusions);
+}
+
+/**
  * 重置信息
  */
 function xResetInfo() {
     $("#coursexData").find("input").val("");
-}
-
-/**
- * 将事件`处理函数`绑定
- */
-function bindControlCoursex() {
-    let inputs1 = $("#coursexData").find("input");
-
-    $.each(inputs1, function (index, item) {
-        let name = $(item).attr("name"),
-            limit = "LimitPercent(this)";
-        if (!name.match(/率$/)) limit = "RealNumber(this)";
-        $(item).attr("onchange", limit);
-    });
-
-    $("#coursexDataConclusion").attr("onkeyup", "illegalCharFilter(this)");
 }
