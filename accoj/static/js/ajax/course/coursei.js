@@ -177,9 +177,9 @@ function paddingBusiness(data) {
  */
 function iBind() {
     // 提交公司信息按钮绑定
-    bind_confirm_info($("#submit_company_info"), "submit_company_button");
+    bind_confirm_info($("submit_business_info"), $("#submit_company_button"));
     // 提交业务信息按钮绑定
-    bind_confirm_info(submit_business_info, "submit_business_button");
+    bind_confirm_info(submit_business_info, $("#submit_business_button"));
     $("#createBusiness").click(function () {
         create_business();
     });
