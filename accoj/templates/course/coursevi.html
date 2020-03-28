@@ -21,15 +21,15 @@
                 <div class="acc-pn-center">
                     <nav aria-label="Page navigation">
                         <ul data-page class="pagination">
-                            <li data-page-control><span class="no-select" aria-hidden="true">&laquo;</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&#139;</span></li>
-                            <li data-page-control class="active"><span class="no-select">1</span></li>
-                            <li data-page-control><span class="no-select">2</span></li>
-                            <li data-page-control><span class="no-select">3</span></li>
-                            <li data-page-control><span class="no-select">4</span></li>
-                            <li data-page-control><span class="no-select">5</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&#155;</span></li>
-                            <li data-page-control><span class="no-select" aria-hidden="true">&raquo;</span></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&laquo;</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&#139;</a></li>
+                            <li data-page-control class="active"><a href="#">1</a></li>
+                            <li data-page-control><a href="#">2</a></li>
+                            <li data-page-control><a href="#">3</a></li>
+                            <li data-page-control><a href="#">4</a></li>
+                            <li data-page-control><a href="#">5</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&#155;</a></li>
+                            <li data-page-control><a href="#" aria-hidden="true">&raquo;</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -55,10 +55,10 @@
                                 <label for="uploadFiles">
                                     <span class="glyphicon glyphicon-upload"></span> Upload files
                                 </label>
-                                <input type="file" id="uploadFiles" accept=".zip,.rar" onchange="getfileContents()">
+                                <input type="file" id="uploadFiles" accept=".zip,.rar" data-get-file>
                                 <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖。</p>
                                 <!--文件下载-->
-                                <button type="button" id="vi_downloadFile_button" onclick="vi_downloadFile()"
+                                <button type="button" id="vi_downloadFile_button" data-download-file
                                         style="display: none">下载附件
                                 </button>&nbsp;&nbsp;
                                 <span id="vi_downloadSpan"></span>
@@ -121,62 +121,62 @@
                                     <th>分</th>
                                     <th class="acc-unborder">
                                         <div class="acc-plus">
-                                            <a type="button" class="btn" onclick="vi_AddRow()">
+                                            <a type="button" class="btn" data-vi-addRow data-toggle="tooltip" data-placement="left" title="增加行">
                                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                             </a>
                                         </div>
                                     </th>
                                 </tr>
                                 <tr id="vi_row1">
-                                    <td><label><input name="summary" onkeyup="illegalCharFilter(this)"></label></td>
-                                    <td><label><input name="general_account" onkeyup="illegalCharFilter(this)"></label>
+                                    <td><label><input name="summary" data-illegal-char></label></td>
+                                    <td><label><input name="general_account" data-illegal-char></label>
                                     </td>
-                                    <td><label><input name="detail_account" onkeyup="illegalCharFilter(this)"></label>
+                                    <td><label><input name="detail_account" data-illegal-char></label>
                                     </td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
                                 </tr>
                                 <!-- 合计 -->
                                 <tr id="vi_rowLast">
                                     <th colspan="3" class="acc-unedit">合计</th>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
-                                    <td><label><input onkeyup="limit_number(this)"></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
+                                    <td><label><input data-limit-number></label></td>
                                 </tr>
                                 <tr class="acc-unedit">
                                     <th colspan="23" style="text-align: left">制表人：{{ username }}</th>
@@ -190,15 +190,13 @@
                 <!--信息提示窗口-->
                 <div id="course_vi_message"></div>
                 <div class="acc-btn-left">
-                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                    <button type="button" class="btn btn-info" data-answer>查看答案</button>
                 </div>
                 <div class="acc-btn-right">
-                    <button type="button" class="btn btn-info" id="save_acc_document_button"
-                            onclick="save_acc_document()">
+                    <button class="btn btn-info" data-save type="button">
                         <span class="glyphicon"></span>&nbsp;保存
                     </button>
-                    <button type="button" class="btn btn-success" id="confirm_acc_document_button"
-                            onclick="confirm_acc_document()">
+                    <button class="btn btn-success" data-confirm type="button">
                         <span class="glyphicon"></span>&nbsp;提交
                     </button>
                 </div>

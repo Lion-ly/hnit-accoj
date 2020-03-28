@@ -50,7 +50,7 @@
                 </p>
                 <!--期间切换-->
                 <span id="ledgerPeriod" class="acc-period-tip">当前期间：期间一</span>
-                <button type="button" class="btn btn-info btn-xs" onclick="changePeriod()">切换期间</button>
+                <button type="button" class="btn btn-info btn-xs" data-change-period>切换期间</button>
                 <hr class="simple">
                 <!-- 作业标签 -->
                 <ul class="nav nav-tabs">
@@ -61,13 +61,13 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li role="presentation">
-                                <a id="createNewTableLeft" href="javascript:void(0)"
-                                   onclick="v_createNewPage(this,'left')">新增：左T表
+                                <a id="createNewTableLeft" href="#">
+                                    新增：左T表
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a id="createNewTableRight" href="javascript:void(0)"
-                                   onclick="v_createNewPage(this,'right')">新增：右T表
+                                <a id="createNewTableRight" href="#">
+                                    新增：右T表
                                 </a>
                             </li>
                         </ul>
@@ -80,14 +80,13 @@
                 <!--信息提示窗口-->
                 <div id="course_v_message"></div>
                 <div class="acc-btn-left">
-                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                    <button type="button" class="btn btn-info" data-answer>查看答案</button>
                 </div>
                 <div class="acc-btn-right">
-                    <button type="button" class="btn btn-info" id="save_ledger_button" onclick="save_ledger()">
+                    <button type="button" class="btn btn-info" data-save>
                         <span class="glyphicon"></span>&nbsp;保存
                     </button>
-                    <button type="button" class="btn btn-success" id="confirm_ledger_button"
-                            onclick="confirm_ledger()">
+                    <button type="button" class="btn btn-success" data-confirm>
                         <span class="glyphicon"></span>&nbsp;提交
                     </button>
                 </div>

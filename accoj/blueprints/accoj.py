@@ -13,6 +13,7 @@ from accoj.extensions import mongo
 from accoj.deal_business import create_businesses
 
 accoj_bp = Blueprint('accoj', __name__)
+MAX_BUSINESS_NO = 20
 
 
 # 第一次课程----start-------------------------------------------------------------------------------

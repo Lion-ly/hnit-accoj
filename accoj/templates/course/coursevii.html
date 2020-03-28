@@ -51,7 +51,7 @@
                                                     <div class="acc-pn-center">
                                                         <label class="acc-label-select">
                                                             <select id="subjectSelect" class="form-control"
-                                                                    onchange="get_subsidiary_account_info()">
+                                                                    data-get-account-info>
                                                                 <option id="anchorOption"></option>
                                                             </select>
                                                         </label>
@@ -62,7 +62,7 @@
                                             <tr class="acc-year">
                                                 <td>
                                                     <label for="yearNow" hidden></label>
-                                                    <input id="yearNow" name="year" onkeyup="limit_number(this)">
+                                                    <input id="yearNow" name="year" data-limit-number>
                                                 </td>
                                                 <th>年</th>
                                                 <th class="acc-unedit" colspan="2">记账凭证</th>
@@ -111,19 +111,19 @@
                                             <tr id="period1Vii1Row1">
                                                 <td>
                                                     <label>
-                                                        <input name="month" title="月" onkeyup="limit_number(this)">
+                                                        <input name="month" title="月" data-limit-number>
                                                     </label>
                                                 <td>
                                                     <label>
-                                                        <input name="day" title="日" onkeyup="limit_number(this)">
+                                                        <input name="day" title="日" data-limit-number>
                                                     </label>
                                                 <td>
                                                     <label>
-                                                        <input name="word" title="字" onkeyup="illegalCharFilter(this)">
+                                                        <input name="word" title="字" data-illegal-char>
                                                     </label>
                                                 <td>
                                                     <label>
-                                                        <input name="no" title="号" onkeyup="limit_number(this)">
+                                                        <input name="no" title="号" data-limit-number>
                                                     </label>
                                                 <td class="acc-unedit">
                                                     <label>
@@ -131,44 +131,44 @@
                                                                value="期初余额">
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <td>
                                                     <label>
-                                                        <input name='orientation' onkeyup="limitJieDai(this)">
+                                                        <input name='orientation' data-limit-jiedai>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <th class="acc-unborder">
                                                     <div class="acc-plus">
-                                                        <a type="button" class="btn" onclick="vii1_AddRow(true)">
+                                                        <a type="button" class="btn" data-vii1-addRow-1 data-toggle="tooltip" data-placement="left" title="增加行">
                                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                                         </a>
                                                     </div>
@@ -177,84 +177,84 @@
                                             <tr id="period1Vii1Row2">
                                                 <td>
                                                     <label>
-                                                        <input name="month" title="月" onkeyup="limit_number(this)">
+                                                        <input name="month" title="月" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="day" title="日" onkeyup="limit_number(this)">
+                                                        <input name="day" title="日" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="word" title="字" onkeyup="illegalCharFilter(this)">
+                                                        <input name="word" title="字" data-illegal-char>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="no" title="号" onkeyup="limit_number(this)">
+                                                        <input name="no" title="号" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="summary" onkeyup="illegalCharFilter(this)">
+                                                        <input name="summary" data-illegal-char>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <td>
                                                     <label>
-                                                        <input name='orientation' onkeyup="limitJieDai(this)">
+                                                        <input name='orientation' data-limit-jiedai>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                             </tr>
                                             <tr id="period1Vii1RowLast">
                                                 <td>
                                                     <label>
-                                                        <input name="month" title="月" onkeyup="limit_number(this)">
+                                                        <input name="month" title="月" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="day" title="日" onkeyup="limit_number(this)">
+                                                        <input name="day" title="日" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="word" title="字" onkeyup="illegalCharFilter(this)">
+                                                        <input name="word" title="字" data-illegal-char>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="no" title="号" onkeyup="limit_number(this)">
+                                                        <input name="no" title="号" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td class="acc-unedit">
@@ -263,105 +263,105 @@
                                                                value="本期合计">
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <td>
                                                     <label>
-                                                        <input name='orientation' onkeyup="limitJieDai(this)">
+                                                        <input name='orientation' data-limit-jiedai>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                             </tr>
                                             <tr id="period2Vii1Row1">
                                                 <td>
                                                     <label>
-                                                        <input name="month" title="月" onkeyup="limit_number(this)">
+                                                        <input name="month" title="月" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="day" title="日" onkeyup="limit_number(this)">
+                                                        <input name="day" title="日" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="word" title="字" onkeyup="illegalCharFilter(this)">
+                                                        <input name="word" title="字" data-illegal-char>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="no" title="号" onkeyup="limit_number(this)">
+                                                        <input name="no" title="号" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <label><input name="summary" onkeyup="illegalCharFilter(this)">
+                                                    <label><input name="summary" data-illegal-char>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <td>
                                                     <label>
-                                                        <input name='orientation' onkeyup="limitJieDai(this)">
+                                                        <input name='orientation' data-limit-jiedai>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <th class="acc-unborder">
                                                     <div class="acc-plus">
-                                                        <a class="btn" onclick="vii1_AddRow(false)">
+                                                        <a class="btn" data-vii1-addRow-2 data-toggle="tooltip" data-placement="left" title="增加行">
                                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                                         </a>
                                                     </div>
@@ -370,22 +370,22 @@
                                             <tr id="period2Vii1RowLast">
                                                 <td>
                                                     <label>
-                                                        <input name="month" title="月" onkeyup="limit_number(this)">
+                                                        <input name="month" title="月" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="day" title="日" onkeyup="limit_number(this)">
+                                                        <input name="day" title="日" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="word" title="字" onkeyup="illegalCharFilter(this)">
+                                                        <input name="word" title="字" data-illegal-char>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="no" title="号" onkeyup="limit_number(this)">
+                                                        <input name="no" title="号" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td class="acc-unedit">
@@ -394,61 +394,61 @@
                                                                value="本期合计">
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <td>
                                                     <label>
-                                                        <input name='orientation' onkeyup="limitJieDai(this)">
+                                                        <input name='orientation' data-limit-jiedai>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                             </tr>
                                             <tr id="Vii1RowEnd">
                                                 <td>
                                                     <label>
-                                                        <input name="month" title="月" onkeyup="limit_number(this)">
+                                                        <input name="month" title="月" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="day" title="日" onkeyup="limit_number(this)">
+                                                        <input name="day" title="日" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="word" title="字" onkeyup="illegalCharFilter(this)">
+                                                        <input name="word" title="字" data-illegal-char>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label>
-                                                        <input name="no" title="号" onkeyup="limit_number(this)">
+                                                        <input name="no" title="号" data-limit-number>
                                                     </label>
                                                 </td>
                                                 <td class="acc-unedit">
@@ -457,41 +457,41 @@
                                                                name="summary">
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                                 <td>
                                                     <label>
-                                                        <input name='orientation' onkeyup="limitJieDai(this)">
+                                                        <input name='orientation' data-limit-jiedai>
                                                     </label>
                                                 </td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                <td><label><input onkeyup="limit_number(this)"></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -502,16 +502,14 @@
                             <!--信息提示窗口-->
                             <div id="course_vii1_message"></div>
                             <div class="acc-btn-left">
-                                <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
+                                <button type="button" class="btn btn-info" data-answer-1>查看答案
                                 </button>
                             </div>
                             <div class="acc-btn-right">
-                                <button type="button" class="btn btn-info" id="save_subsidiary_account_button"
-                                        onclick="save_subsidiary_account()">
+                                <button type="button" class="btn btn-info" data-save-1>
                                     <span class="glyphicon"></span>&nbsp;保存
                                 </button>
-                                <button type="button" class="btn btn-success" id="confirm_subsidiary_account_button"
-                                        onclick="confirm_subsidiary_account()">
+                                <button type="button" class="btn btn-success" data-confirm-1>
                                     <span class="glyphicon"></span>&nbsp;提交
                                 </button>
                             </div>
@@ -541,7 +539,7 @@
                                             <th class="acc-unedit">贷方</th>
                                             <td class="acc-unborder">
                                                 <div class="acc-plus">
-                                                    <a type="button" class="btn" onclick="vii2_AddRow()">
+                                                    <a type="button" class="btn" data-vii2-addRow data-toggle="tooltip" data-placement="left" title="增加行">
                                                         <span class="glyphicon glyphicon-plus-sign"></span>
                                                     </a>
                                                 </div>
@@ -550,37 +548,37 @@
                                         <tr id="vii2Row1">
                                             <td>
                                                 <label>
-                                                    <input name="subject" title="科目" onkeyup="illegalCharFilter(this)">
+                                                    <input name="subject" title="科目" data-illegal-char>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="borrow_1" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="borrow_1" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="lend_1" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="lend_1" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="borrow_2" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="borrow_2" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="lend_2" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="lend_2" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="borrow_3" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="borrow_3" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="lend_3" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="lend_3" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                         </tr>
@@ -588,32 +586,32 @@
                                             <th class="acc-unedit">合计</th>
                                             <td>
                                                 <label>
-                                                    <input name="borrow_1" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="borrow_1" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="lend_1" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="lend_1" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="borrow_2" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="borrow_2" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="lend_2" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="lend_2" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="borrow_3" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="borrow_3" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label>
-                                                    <input name="lend_3" title="金额￥" onkeyup="limit_number(this)">
+                                                    <input name="lend_3" title="金额￥" data-real-number>
                                                 </label>
                                             </td>
                                         </tr>
@@ -625,16 +623,14 @@
                             <!--信息提示窗口-->
                             <div id="course_vii2_message"></div>
                             <div class="acc-btn-left">
-                                <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
+                                <button type="button" class="btn btn-info" data-answer-2>查看答案
                                 </button>
                             </div>
                             <div class="acc-btn-right">
-                                <button type="button" class="btn btn-info" id="save_acc_balance_sheet_button"
-                                        onclick="save_acc_balance_sheet()">
+                                <button type="button" class="btn btn-info" data-save-2>
                                     <span class="glyphicon"></span>&nbsp;保存
                                 </button>
-                                <button type="button" class="btn btn-success" id="confirm_acc_balance_sheet_button"
-                                        onclick="confirm_acc_balance_sheet()">
+                                <button type="button" class="btn btn-success" data-confirm-2>
                                     <span class="glyphicon"></span>&nbsp;提交
                                 </button>
                             </div>

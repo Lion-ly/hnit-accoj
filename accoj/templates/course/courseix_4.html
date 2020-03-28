@@ -158,20 +158,21 @@
                         </tr>
                     </table>
                 </div>
+                <p class="acc-title">结论：</p>
+                <label for="Conclusion"></label>
+                <textarea id="Conclusion" class="form-control acc-unresize" rows="5"></textarea>
                 <hr class="simple"/>
                 <!--信息提示窗口-->
                 <div id="course_ix4_message">
                 </div>
                 <div class="acc-btn-left">
-                    <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                    <button type="button" class="btn btn-info" data-answer>查看答案</button>
                 </div>
                 <div class="acc-btn-right">
-                    <button type="button" class="btn btn-info" id="save_ix4_button"
-                            onclick="save_ix4()">
+                    <button type="button" class="btn btn-info" data-save>
                         <span class="glyphicon"></span>&nbsp;保存
                     </button>
-                    <button type="button" class="btn btn-success" id="confirm_ix4_button"
-                            onclick="confirm_ix4()">
+                    <button type="button" class="btn btn-success" data-confirm>
                         <span class="glyphicon"></span>&nbsp;提交
                     </button>
                 </div>

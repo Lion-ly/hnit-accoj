@@ -15,10 +15,10 @@
             <div class="panel-body">
                 <!-- 作业标签 -->
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active" onclick="get_new_balance_sheet_info()">
+                    <li role="presentation" class="active">
                         <a href="#viiiFirst" aria-controls="viiiFirst" role="tab" data-toggle="tab">资产负债表</a>
                     </li>
-                    <li role="presentation" onclick="get_profit_statement_info()">
+                    <li role="presentation">
                         <a href="#viiiSecond" aria-controls="viiiSecond" role="tab" data-toggle="tab">利润表</a>
                     </li>
                 </ul>
@@ -297,15 +297,13 @@
                         <!--信息提示窗口-->
                         <div id="course_viii1_message"></div>
                         <div class="acc-btn-left">
-                            <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                            <button type="button" class="btn btn-info" data-answer-1>查看答案</button>
                         </div>
                         <div class="acc-btn-right">
-                            <button type="button" class="btn btn-info" id="save_new_balance_sheet_button"
-                                    onclick="save_new_balance_sheet()">
+                            <button type="button" class="btn btn-info" data-save-1>
                                 <span class="glyphicon"></span>&nbsp;保存
                             </button>
-                            <button type="button" class="btn btn-success" id="confirm_new_balance_sheet_button"
-                                    onclick="confirm_new_balance_sheet()">
+                            <button type="button" class="btn btn-success" data-confirm-1>
                                 <span class="glyphicon"></span>&nbsp;提交
                             </button>
                         </div>
@@ -442,15 +440,13 @@
                         <hr class="simple"/>
                         <div id="course_viii2_message"></div>
                         <div class="acc-btn-left">
-                            <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
+                            <button type="button" class="btn btn-info" data-answer-2>查看答案</button>
                         </div>
                         <div class="acc-btn-right">
-                            <button type="button" class="btn btn-info" id="save_profit_statement_button"
-                                    onclick="save_profit_statement()">
+                            <button type="button" class="btn btn-info" data-save-2>
                                 <span class="glyphicon"></span>&nbsp;保存
                             </button>
-                            <button type="button" class="btn btn-success" id="confirm_profit_statement_button"
-                                    onclick="confirm_profit_statement()">
+                            <button type="button" class="btn btn-success" data-confirm-2>
                                 <span class="glyphicon"></span>&nbsp;提交
                             </button>
                         </div>

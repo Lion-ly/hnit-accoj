@@ -1,27 +1,24 @@
-// 页面加载完成填充数据
+let ix2First_infos,
+    ix2First_confirmed,
+    ix2First_saved;
+let ix2Second_infos, // 保存本次课程全部信息，减少后端数据请求次数
+    ix2Second_confirmed,
+    ix2Second_saved;
+let firstChange = true,
+    periodEndData = Object(),
+    periodLastData = Object();
+
 $(document).ready(function () {
-    bindControlIx2();
-    get_ix2First_info(true);
-    get_ix2Second_info(true);
+    function init() {
+        ix2Bind();
+        get_ix2First_info(true);
+        get_ix2Second_info(true);
+    }
+
+    init();
 });
 
 //======================================提交资产负债表信息======================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_ix2First() {
-    bind_confirm_info("confirm_ix2First_button", "submit_ix2First_info");
-}
-
-/**
- * 保存资产负债表信息
- */
-function save_ix2First() {
-    bind_save_info("save_ix2First_button", submit_ix2First_info);
-}
-
-
 /**
  * 提交资产负债表信息
  * @param submit_type confirm or save
@@ -40,10 +37,6 @@ function submit_ix2First_info(submit_type) {
 }
 
 //======================================获取资产负债表信息======================================//
-let ix2First_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    ix2First_confirmed,
-    ix2First_saved;
-
 /**
  * 从后端获取资产负债表信息
  */
@@ -91,22 +84,6 @@ function map_ix2First_info(data) {
 }
 
 //============================================提交利润表信息============================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_ix2Second() {
-    bind_confirm_info("confirm_ix2Second_button", "submit_ix2Second_info");
-}
-
-/**
- * 保存利润表信息
- */
-function save_ix2Second() {
-    bind_save_info("save_ix2Second_button", submit_ix2Second_info);
-}
-
-
 /**
  * 提交利润表信息
  * @param submit_type confirm or save
@@ -125,10 +102,6 @@ function submit_ix2Second_info(submit_type) {
 }
 
 //============================================获取利润表信息============================================//
-let ix2Second_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    ix2Second_confirmed,
-    ix2Second_saved;
-
 /**
  * 从后端获取利润表信息
  */
@@ -231,6 +204,33 @@ function Ix2PaddingData(data, isFirst) {
 
 //===============================================事件控制===============================================//
 /**
+ * 事件绑定
+ */
+function ix2Bind() {
+    bind_confirm_info("submit_ix2First_info", $("button[data-confirm-1]"));
+    bind_save_info(submit_ix2First_info, $("button[data-save-1]"));
+
+    bind_confirm_info("submit_ix2Second_info", $("button[data-confirm-2]"));
+    bind_save_info(submit_ix2Second_info, $("button[data-save-2]"));
+
+    bindAnswerSource($("button[data-answer-1]"));
+    bindAnswerSource($("button[data-answer-2]"));
+
+    let $inputs1 = $("#ix2First").find("input"),
+        $inputs2 = $("#ix2Second").find("input"),
+        $conclusions = $("[id^=ix2][id$=Conclusion]");
+
+    bindLimitPercent($inputs1);
+    bindLimitPercent($inputs2);
+    $inputs2.each(function (index, item) {
+        $(item).change(function () {
+            eventChangeIx2(item);
+        });
+    });
+    bindIllegalCharFilter($conclusions);
+}
+
+/**
  * 资产负债表重置
  */
 function ix21ResetInfo() {
@@ -244,37 +244,16 @@ function ix22ResetInfo() {
     $("#ix2Second").find("input").val("");
 }
 
-let firstChange = true,
-    periodEndData = Object(),
-    periodLastData = Object();
-
-/**
- * 将事件`处理函数`绑定
- */
-function bindControlIx2() {
-    let inputs1 = $("#ix2First").find("input"),
-        inputs2 = $("#ix2Second").find("input"),
-        conclusions = $("[id^=ix2][id$=Conclusion]"),
-        limit = "LimitPercent(this)";
-
-    $.each(inputs1, function (index, item) {
-        $(item).attr("onchange", limit);
-    });
-    $.each(inputs2, function (index, item) {
-        $(item).attr("onchange", "eventChangeIx2(this)");
-    });
-
-    $.each(conclusions, function (index, item) {
-        $(item).attr("onkeyup", "illegalCharFilter(this)");
-    });
-}
-
 /**
  * 用户输入数据改变事件响应函数
  * @param obj
  */
 function eventChangeIx2(obj) {
-    LimitPercent(obj);
+    let name = $(obj).attr("name"),
+        isEnd = name.endsWith("End"),
+        value = $(obj).val();
+    if (value === "格式错误") return;
+    value = parseFloat(value);
     if (firstChange) {
         let Data = ix2GetInput(false);
         Data = Data["ix2Second_infos"];
@@ -287,9 +266,6 @@ function eventChangeIx2(obj) {
         firstChange = false;
     }
 
-    let name = $(obj).attr("name"),
-        isEnd = name.endsWith("End"),
-        value = parseFloat($(obj).val());
     name = name.replace(/End|Last/, "");
     if (isEnd) {
         periodEndData[name] = value;
