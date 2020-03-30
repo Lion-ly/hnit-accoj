@@ -35,17 +35,18 @@ function submit_entry_info(submit_type) {
  * 从后端获取会计分录信息
  */
 function get_entry_info(isFromSubmit = false) {
-    // 先清空信息
-    ivResetInfo();
+
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1)
+        if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1) {
             //  若未保存，则不向后台请求数据
+            ivResetInfo();
             return;
+        }
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
@@ -68,6 +69,7 @@ function get_entry_info(isFromSubmit = false) {
  * @param data
  */
 function map_entry_info(data) {
+    ivResetInfo();
     data = data ? data : "";
     entry_infos = data ? data["entry_infos"] : entry_infos;
     entry_confirmed = data ? data["entry_confirmed"] : entry_confirmed;

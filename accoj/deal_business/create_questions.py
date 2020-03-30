@@ -35,7 +35,7 @@ def add_question(questions_no):
     question_exit_list = list()
     success_list = list()
     for row in range(1, sheet_rows):
-        question_no, content, business_type, affect_type, values, key_element_infos, subjects_infos \
+        question_no, content, business_type, affect_type, values, key_element_infos, subject_infos \
             = sheet_row_parsing(sheet1.row(row))
         print("question_no:{}/{} 检查成功".format(question_no, sheet_rows - 1), end='\r')
         question_exit = mongo.db.question.find_one({"questions_no": questions_no, "question_no": question_no})
@@ -49,7 +49,7 @@ def add_question(questions_no):
                         affect_type=affect_type,
                         values=values,
                         key_element_infos=key_element_infos,
-                        subjects_infos=subjects_infos)
+                        subject_infos=subject_infos)
         posts.append(document)
         success_list.append(question_no)
 
@@ -70,7 +70,7 @@ def sheet_row_parsing(sheet_row):
     """excel表结构解析"""
     values = list()
     key_element_infos = list()
-    subjects_infos = list()
+    subject_infos = list()
 
     question_no, content, business_type, affect_type, key_elements, subjects, _ = sheet_row
 
@@ -181,8 +181,8 @@ def sheet_row_parsing(sheet_row):
                 is_up = False
             else:
                 is_up = True
-            subjects_infos.append(dict(subject=subject,
-                                       value_index=value_index,
-                                       is_up=is_up))
+            subject_infos.append(dict(subject=subject,
+                                      value_index=value_index,
+                                      is_up=is_up))
 
-    return question_no, new_content, business_type, affect_type, values, key_element_infos, subjects_infos
+    return question_no, new_content, business_type, affect_type, values, key_element_infos, subject_infos

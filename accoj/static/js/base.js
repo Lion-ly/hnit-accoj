@@ -224,10 +224,11 @@ function hasError(selector, errorMessage) {
     if (errorMessage) $this.val(errorMessage);
     if ($thisPaTag === "DIV")
         $this.parent().addClass("has-error");
-    else if ($thisPaTag === "LABEL")
-        $this.css({"background": "rgb(242, 222, 222)"});
-    else if ($thisPaTag === "TD")
-        $this.css({"background": "rgb(242, 222, 222)"});
+    else if ($thisPaTag === "LABEL") {
+        $this.parent().css({"background": "rgb(242,182,182)"});
+        $this.css({"background": "rgb(242,182,182)"});
+    } else if ($thisPaTag === "TD")
+        $this.css({"background": "rgb(242,182,182)"});
     $this.css("color", "rgb(169, 68, 66)")
 }
 
@@ -242,6 +243,28 @@ function removeError(selector) {
         $this.css({"color": "#555", "background-color": "white"});
         $this.parent().removeClass("has-error");
     }
+}
+
+/**
+ * remove all input error
+ */
+function removeAllError() {
+    let $inputs = $("input");
+    $inputs.each(function (index, item) {
+        let $this = $(item),
+            $thisPaTag = $this.parent().prop("tagName");
+        if ($thisPaTag === "DIV" || $thisPaTag === "LABEL" || $thisPaTag === "TD") {
+            if ($thisPaTag === "DIV")
+                $this.parent().removeClass("has-error");
+            else if($thisPaTag === "LABEL")
+                $this.parent().css({"background": "white"});
+            if ($this.css("color") === "rgb(169, 68, 66)") {
+                $this.val("");
+                $this.css({"color": "#555", "background-color": "white"});
+                $this.parent().removeClass("has-error");
+            }
+        }
+    });
 }
 
 /**
@@ -451,7 +474,9 @@ function get_info(data, url, successFunc, messageDivID) {
             }
         },
         success: function (data) {
-            if (data["result"] === true) {
+            let result = data["result"];
+            data = data.hasOwnProperty("data") ? data["data"] : data;
+            if (result === true) {
                 successFunc(data);
             } else {
                 if (messageDivID)
@@ -678,22 +703,35 @@ function formatDate(date) {
 /**
  * 查看答案按钮的效果 具体功能实现需重构
  * @param selector
+ * @param mapInfo
+ * @param mapAnswer
  * @returns
  */
-function answerSource(selector) {
+function answerSource(selector, mapInfo, mapAnswer) {
+    mapInfo = mapInfo ? mapInfo : function () {
+    };
+    mapAnswer = mapAnswer ? mapAnswer : function () {
+    };
     let thisobj = $(selector);
-    thisobj.toggleClass("active");
     let text = thisobj.text();
+    if (text === "我的作答") mapInfo("", 1);
+    else if (text === "查看答案") mapAnswer();
+    thisobj.toggleClass("active");
     text = text === "查看答案" ? "我的作答" : "查看答案";
     thisobj.text(text);
+}
+
+function showAnswerButton(selector) {
+    selector = selector ? selector : $("button[data-answer]");
+    selector.parent().show();
 }
 
 /**
  * bind answerSource
  */
-function bindAnswerSource(selector) {
+function bindAnswerSource(selector, mapInfo, mapAnswer) {
     selector = selector ? selector : $("button[data-answer]");
     $(selector).click(function () {
-        answerSource(selector);
+        answerSource(selector, mapInfo, mapAnswer);
     });
 }

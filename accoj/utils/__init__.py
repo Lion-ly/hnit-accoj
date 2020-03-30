@@ -11,6 +11,7 @@ from flask import session, redirect, url_for, request, abort
 from accoj.extensions import mongo
 
 ALLOWED_EXTENSIONS = {'zip', 'rar'}
+MAX_BUSINESS_NO = 20
 
 
 def login_required(func):
@@ -113,16 +114,14 @@ def submit_infos1(infos, submit_type, infos_name):
                 mongo.db.company.update({"_id": _id},
                                         {"$set": {set_key1: infos,
                                                   set_key2: True,
-                                                  set_key3: True}}
-                                        )
+                                                  set_key3: True}})
                 return True, ""
 
             elif submit_type == "save":
                 # 提交类型为保存
                 mongo.db.company.update({"_id": _id},
                                         {"$set": {set_key1: infos,
-                                                  set_key3: True}}
-                                        )
+                                                  set_key3: True}})
                 return True, ""
 
         elif schedule_confirm.get("{}_confirm".format(infos_name)):
@@ -166,16 +165,14 @@ def submit_infos2(infos, submit_type, infos_name, is_first):
                 mongo.db.company.update({"_id": _id},
                                         {"$set": {set_key1: infos,
                                                   set_key2: True,
-                                                  set_key3: True}}
-                                        )
+                                                  set_key3: True}})
                 return True, ""
 
             elif submit_type == "save":
                 # 提交类型为保存
                 mongo.db.company.update({"_id": _id},
                                         {"$set": {set_key1: infos,
-                                                  set_key3: True}}
-                                        )
+                                                  set_key3: True}})
                 return True, ""
         elif schedule_confirm.get("{}_confirm".format(infos_name)).get("{}".format(times)):
             # 信息已提交确认
@@ -262,7 +259,7 @@ def submit_infos3(infos, submit_type, business_no, infos_name):
 
 def submit_infos4(infos, submit_type, subject, infos_name, ledger_period=False):
     """
-    提交信息（第四类，账户和明细账部分）
+    提交信息（第四类，`账户`和`明细账`部分）
     :param infos: submit infos
     :param submit_type: submit type
     :param subject: subject
@@ -327,44 +324,47 @@ def submit_infos4(infos, submit_type, subject, infos_name, ledger_period=False):
     return result, message
 
 
-def get_infos1(infos_name):
+def get_infos(infos_name, is_first=False, is_cp=False):
     """
-    获取信息（第一类，用于`非第九次课程一二部分`）
+    获取信息
     :param infos_name: infos name
-    :return: infos, confirmed, saved
-    """
-    infos_key = "{}_infos".format(infos_name)
-    company = mongo.db.company.find_one({"student_no": session.get("username")},
-                                        {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "_id": 0})
-
-    infos = company.get("{}_infos".format(infos_name))
-    schedule_confirm = company.get("schedule_confirm")
-    schedule_saved = company.get("schedule_saved")
-    confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
-    saved = schedule_saved.get("{}_saved".format(infos_name))
-    return infos, confirmed, saved
-
-
-def get_infos2(is_first, infos_name):
-    """
-    获取信息（第二类，用于第九次课程一二部分）
     :param is_first: boolean
-    :param infos_name: infos name
+    :param is_cp:  is from copy company
     :return: infos, confirmed, saved
     """
     infos_key = "{}_infos".format(infos_name)
-    company = mongo.db.company.find_one({"student_no": session.get("username")},
+    student_no = session.get("username")
+    if is_cp:
+        student_no = "{}_cp".format(student_no)
+    company = mongo.db.company.find_one({"student_no": student_no},
                                         {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "_id": 0})
-
-    times = "first" if is_first else "second"
     infos = company.get("{}_infos".format(infos_name))
     schedule_confirm = company.get("schedule_confirm")
     schedule_saved = company.get("schedule_saved")
     confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
-    confirmed = confirmed.get(times) if confirmed else False
     saved = schedule_saved.get("{}_saved".format(infos_name))
-    saved = saved.get(times) if saved else False
+    if is_first:
+        times = "first" if is_first == 1 else "second"
+        confirmed = confirmed.get(times) if confirmed else False
+        saved = saved.get(times) if saved else False
     return infos, confirmed, saved
+
+
+def get_data1(infos_name, info_keys):
+    """
+    数据封装（1.`二三四以及六的会计凭证部分`）
+    :param infos_name:
+    :param info_keys:
+    :return:
+    """
+    info_len = len(info_keys)
+    infos, confirmed, saved = get_infos(infos_name=infos_name)
+    answer_infos = None
+    if len(confirmed) == MAX_BUSINESS_NO:
+        answer_infos, t_confirmed, t_saved = get_infos(infos_name=infos_name, is_cp=True)
+    info_values = [infos, answer_infos, confirmed, saved]
+    data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
+    return data
 
 
 def is_number(s):

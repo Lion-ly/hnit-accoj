@@ -1,6 +1,7 @@
 let subject_infos = Array(),
     subject_confirmed = Array(),
-    subject_saved = Array();
+    subject_saved = Array(),
+    answer_infos = "";
 $(document).ready(function () {
     function init() {
         iiiBind();
@@ -37,17 +38,17 @@ function submit_subject_info(submit_type) {
  */
 function get_subject_info(isFromSubmit = false) {
 
-    // 清空信息
-    iiiResetInfo();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!subject_saved.length || subject_saved.indexOf(nowBusinessNo - 1) === -1)
+        if (!subject_saved.length || subject_saved.indexOf(nowBusinessNo - 1) === -1) {
             //  若未保存，则不向后台请求数据
+            iiiResetInfo();
             return;
+        }
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
@@ -70,18 +71,24 @@ function get_subject_info(isFromSubmit = false) {
  * @param data
  */
 function map_subject_info(data) {
+    iiiResetInfo();
     data = data ? data : "";
     subject_infos = data ? data["subject_infos"] : subject_infos;
     subject_confirmed = data ? data["subject_confirmed"] : subject_confirmed;
     subject_saved = data ? data["subject_saved"] : subject_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
         confirmed = subject_confirmed ? subject_confirmed.indexOf(business_index) !== -1 : false,
         saved = subject_saved ? subject_saved.indexOf(business_index) !== -1 : false;
 
-    if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
-
+    if (answer_infos) {
+        showAnswerButton();
+        confirmed = true;
+        saved = true;
+        $("button[data-answer]").text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
 
@@ -124,9 +131,9 @@ function iiiGetInput() {
  * @param data
  */
 function iiiPaddingData(data) {
-    if (!data["subject_info"]) return;
+    if (!data) return;
     // 填充会计科目信息
-    let subject_info = data["subject_info"],
+    let subject_info = data,
         rightbox_subject_array = Array(),
         leftbox_subject_array = Array();
     for (let i = 0; i < subject_info.length; i++) {
@@ -147,9 +154,16 @@ function iiiPaddingData(data) {
  * 事件绑定
  */
 function iiiBind() {
+    function map_answer() {
+        let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+            business_index = nowBusinessNo - 1;
+        spanStatusCtr(true, true, "submit_status_span");
+        iiiPaddingData(answer_infos[business_index]);
+    }
+
     bind_confirm_info("submit_subject_info");
     bind_save_info(submit_subject_info);
-    bindAnswerSource();
+    bindAnswerSource("", map_subject_info, map_answer);
     $("button[data-to-all-1]").click(function () {
         to_all('plusbox');
     });
@@ -164,7 +178,7 @@ function iiiBind() {
     });
     pageSplitBind(function (business_no) {
         businessLiControl(business_no);
-        get_key_element_info();
+        get_subject_info();
     }, 20);
 }
 
