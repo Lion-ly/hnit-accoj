@@ -35,18 +35,17 @@ function submit_acc_document_info(submit_type) {
  * 从后端获取会计凭证信息
  */
 function get_acc_document_info(isFromSubmit = false) {
-    //  清空信息
-    viResetInfo();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
-
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1)
+        if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1) {
             //  若未保存，则不向后台请求数据
+            viResetInfo();
             return;
+        }
     }
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
     if (acc_document_confirmed.length > 0 && acc_document_confirmed.indexOf(nowBusinessNo - 1) !== -1) {
@@ -66,6 +65,7 @@ function get_acc_document_info(isFromSubmit = false) {
  * @param data
  */
 function map_acc_document_info(data) {
+    viResetInfo();
     data = data ? data : "";
     acc_document_infos = data ? data["acc_document_infos"] : acc_document_infos;
     acc_document_confirmed = data ? data["acc_document_confirmed"] : acc_document_confirmed;

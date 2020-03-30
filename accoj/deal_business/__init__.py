@@ -44,11 +44,11 @@ def deal_business(company, questions_no):
     max_no = 20
     company.update(dict(business_num=0, com_assets=[],
                         businesses=[], key_element_infos=[],
-                        subjects_infos=[], entry_infos=[],
+                        subject_infos=[], entry_infos=[],
                         acc_document_infos=[]))
     username = company.get("student_no")
     no_pop = {"business_num", "com_assets", "businesses", "key_element_infos",
-              "subjects_infos", "com_shareholder", "com_regist_cap"}
+              "subject_infos", "com_shareholder", "com_regist_cap"}
     # 将无关信息pop出company
     for key in list(company.keys()):
         if key not in no_pop:
@@ -63,7 +63,7 @@ def deal_business(company, questions_no):
     # 副本公司存储答案
     mongo.db.company.update({"student_no": "{}_cp".format(username)},
                             {"$set": company})
-    [company.pop(key) for key in ["key_element_infos", "subjects_infos"]]
+    [company.pop(key) for key in ["key_element_infos", "subject_infos"]]
     # 用户公司写入业务
     mongo.db.company.update({"student_no": "{}".format(username)},
                             {"$set": company})
@@ -173,7 +173,7 @@ def deal_with_question_1(company, question_no, questions):
     :param questions: question cursor
     :returns
     """
-    question, businesses, com_key_element_infos, com_subjects_infos, com_assets, business_num, year, month, day = \
+    question, businesses, com_key_element_infos, com_subject_infos, com_assets, business_num, year, month, day = \
         _get_deal_question(company=company, question_no=question_no, questions=questions)
     if day != 1:
         day *= 2
@@ -182,8 +182,8 @@ def deal_with_question_1(company, question_no, questions):
         # 当前月份天数即当月最后一天
         day = (datetime(year, month + 1, 1) - datetime(year, month, 1)).days
     date = datetime(year, month, day)
-    my_keys = ["content", "business_type", "affect_type", "key_element_infos", "subjects_infos"]
-    content, business_type, affect_type, key_element_infos, subjects_infos = tuple([question[key] for key in my_keys])
+    my_keys = ["content", "business_type", "affect_type", "key_element_infos", "subject_infos"]
+    content, business_type, affect_type, key_element_infos, subject_infos = tuple([question[key] for key in my_keys])
 
     # deal values and content------------------------------------------------------------------------
     index_dict = _get_index_dict(businesses)
@@ -213,7 +213,7 @@ def deal_with_question_1(company, question_no, questions):
                 else:
                     value = value.split("/")[1]
                     # 收益为负
-                    subjects_infos[i]["is_up"] = False
+                    subject_infos[i]["is_up"] = False
             elif question_no == 23 and (i == 2 or i == 3):
                 # 问题23特判
                 index_tmp = index_dict.get("{}".format(20))
@@ -267,7 +267,7 @@ def deal_with_question_1(company, question_no, questions):
                     index_tmps = [index_dict.get("{}".format(k)) for k in [24, 25, 26, 27]]
                     value = 0
                     for index_tmp in index_tmps:
-                        value += com_subjects_infos[index_tmp][0].get("money")
+                        value += com_subject_infos[index_tmp][0].get("money")
                 elif question_no == 30:
                     # 问题30特判
                     if i == 2:
@@ -306,28 +306,28 @@ def deal_with_question_1(company, question_no, questions):
     key_element_infos = _deal_key_element_generic(key_element_infos=key_element_infos, values_list=values_list)
     # end---------------------------------------------------------------------------
 
-    # deal subjects_infos-----------------------------------------------------------
-    subjects_infos_len = len(subjects_infos)
-    for i in range(0, subjects_infos_len):
-        value_index = subjects_infos[i].get("value_index")
+    # deal subject_infos-----------------------------------------------------------
+    subject_infos_len = len(subject_infos)
+    for i in range(0, subject_infos_len):
+        value_index = subject_infos[i].get("value_index")
         if i and (question_no == 2 or question_no == 3):
             if question_no == 2:
                 # 问题2特判
-                subjects_infos = _deal_bank_loan_subject(content=content, subjects_infos=subjects_infos, index=i)
+                subject_infos = _deal_bank_loan_subject(content=content, subject_infos=subject_infos, index=i)
             else:
                 # 问题3特判
                 index_tmp = index_dict.get("{}".format(2))
-                subject_temp = com_subjects_infos[index_tmp]
-                subjects_infos[i]["subject"] = subject_temp[1]["subject"]
+                subject_temp = com_subject_infos[index_tmp]
+                subject_infos[i]["subject"] = subject_temp[1]["subject"]
 
         if question_no == 23:
             # 问题23特判
             index_tmp = index_dict.get("{}".format(20))
             debit_money = com_key_element_infos[index_tmp]["info"][0].get("money")
             happened_money = values_list[1]
-            money, subjects_infos = _deal_travel_subject(content=content, subjects_infos=subjects_infos,
-                                                         debit_money=debit_money, happened_money=happened_money,
-                                                         index=i)
+            money, subject_infos = _deal_travel_subject(content=content, subject_infos=subject_infos,
+                                                        debit_money=debit_money, happened_money=happened_money,
+                                                        index=i)
             if not money:
                 money = values_list[int(value_index) - 1]
         elif value_index[0] != "(":
@@ -336,8 +336,8 @@ def deal_with_question_1(company, question_no, questions):
             money = _deal_arithmetic(value_index=value_index, values_list=values_list)
 
         if money:
-            subjects_infos[i]["money"] = money
-        subjects_infos[i].pop("value_index")
+            subject_infos[i]["money"] = money
+        subject_infos[i].pop("value_index")
     # end---------------------------------------------------------------------------
 
     content = "{}年{}月{}日，".format(year, month, day) + content
@@ -346,7 +346,7 @@ def deal_with_question_1(company, question_no, questions):
     _update_company(company=company, affect_type=affect_type, key_element_infos=key_element_infos,
                     businesses=businesses, business=business,
                     com_key_element_infos=com_key_element_infos,
-                    com_subjects_infos=com_subjects_infos, subjects_infos=subjects_infos,
+                    com_subject_infos=com_subject_infos, subject_infos=subject_infos,
                     business_num=business_num, com_assets=com_assets)
     return company
 
@@ -486,7 +486,7 @@ def deal_with_question_2(company, question_no, questions):
     :param questions: question cursor
     :returns
     """
-    question, businesses, com_key_element_infos, com_subjects_infos, com_assets, business_num, year, month, day = \
+    question, businesses, com_key_element_infos, com_subject_infos, com_assets, business_num, year, month, day = \
         _get_deal_question(company=company, question_no=question_no, questions=questions)
 
     # deal date--------------------------------------------------------------------------------------
@@ -509,8 +509,8 @@ def deal_with_question_2(company, question_no, questions):
     date = datetime(year, month, day)
     # deal date end----------------------------------------------------------------------------------
 
-    my_keys = ["content", "business_type", "affect_type", "key_element_infos", "subjects_infos"]
-    content, business_type, affect_type, key_element_infos, subjects_infos = tuple([question[key] for key in my_keys])
+    my_keys = ["content", "business_type", "affect_type", "key_element_infos", "subject_infos"]
+    content, business_type, affect_type, key_element_infos, subject_infos = tuple([question[key] for key in my_keys])
 
     # deal values and content------------------------------------------------------------------------
     index_dict = _get_index_dict(businesses)  # 获取业务索引
@@ -528,8 +528,8 @@ def deal_with_question_2(company, question_no, questions):
                 # 问题13特判
                 now_m_value = values_list[1]
                 asset_name = values_list[0]
-                value, subjects_infos = _deal_sell_asset(value=value, com_assets=com_assets, now_m_value=now_m_value,
-                                                         subjects_infos=subjects_infos, asset_name=asset_name, index=i)
+                value, subject_infos = _deal_sell_asset(value=value, com_assets=com_assets, now_m_value=now_m_value,
+                                                        subject_infos=subject_infos, asset_name=asset_name, index=i)
             elif question_no == 24 and (i == 2 or i == 3):
                 # 问题24特判
                 index_tmp = index_dict.get("{}".format(21))
@@ -557,7 +557,7 @@ def deal_with_question_2(company, question_no, questions):
                     value = random.randint(low, high)
                 elif question_no == 3:
                     index_tmp = index_dict.get("{}".format(2))
-                    value = com_subjects_infos[index_tmp][0].get("money")
+                    value = com_subject_infos[index_tmp][0].get("money")
                     content_tmp = businesses[index_tmp].get("content")
                     rate_tmp = float(re.search(r"[\d.]+%", content_tmp).group(0).replace("%", ""))
                     value *= rate_tmp / 100 / 12  # b2；金额=b2贷款金额*年利率/12
@@ -608,7 +608,7 @@ def deal_with_question_2(company, question_no, questions):
                             index_tmp = index_dict.get("{}".format(q))
                             if not index_tmp:
                                 continue
-                            value_tmp = com_subjects_infos[index_tmp][0].get("money")
+                            value_tmp = com_subject_infos[index_tmp][0].get("money")
                             value_tmp = value_tmp if value_tmp else 0
                             value_tmp /= divisors[k]
                             value += value_tmp
@@ -630,7 +630,7 @@ def deal_with_question_2(company, question_no, questions):
                             index_tmp = index_dict.get("{}".format(q))
                             if not index_tmp:
                                 continue
-                            value_tmp = com_subjects_infos[index_tmp][0].get("money")
+                            value_tmp = com_subject_infos[index_tmp][0].get("money")
                             value_tmp = value_tmp if value_tmp else 0
                             value_tmp /= divisor
                             value += value_tmp
@@ -650,13 +650,13 @@ def deal_with_question_2(company, question_no, questions):
                         index_tmp = index_dict.get("{}".format(tmp))
                         if not index_tmp:
                             continue
-                        value_tmp = com_subjects_infos[index_tmp][0].get("money")
+                        value_tmp = com_subject_infos[index_tmp][0].get("money")
                         value += value_tmp if value_tmp else 0
                 elif question_no == 36:
                     # 问题36特判
                     index_tmp = index_dict.get("{}".format(26))
                     # print(index_dict)
-                    value = com_subjects_infos[index_tmp][3].get("money")
+                    value = com_subject_infos[index_tmp][3].get("money")
 
             elif value_type == "percent":
                 if is_random:
@@ -672,21 +672,21 @@ def deal_with_question_2(company, question_no, questions):
     key_element_infos = _deal_key_element_generic(key_element_infos=key_element_infos, values_list=values_list)
     # end---------------------------------------------------------------------------
 
-    # deal subjects_infos-----------------------------------------------------------
-    subjects_infos_len = len(subjects_infos)
-    for i in range(0, subjects_infos_len):
-        value_index = subjects_infos[i].get("value_index")
+    # deal subject_infos-----------------------------------------------------------
+    subject_infos_len = len(subject_infos)
+    for i in range(0, subject_infos_len):
+        value_index = subject_infos[i].get("value_index")
         if i and (question_no == 2):
             # 问题2特判
-            subjects_infos = _deal_bank_loan_subject(content=content, subjects_infos=subjects_infos, index=i)
+            subject_infos = _deal_bank_loan_subject(content=content, subject_infos=subject_infos, index=i)
         if question_no == 24:
             # 问题24特判
             index_tmp = index_dict.get("{}".format(21))
             debit_money = com_key_element_infos[index_tmp]["info"][0].get("money")
             happened_money = values_list[1]
-            money, subjects_infos = _deal_travel_subject(content=content, subjects_infos=subjects_infos,
-                                                         debit_money=debit_money, happened_money=happened_money,
-                                                         index=i)
+            money, subject_infos = _deal_travel_subject(content=content, subject_infos=subject_infos,
+                                                        debit_money=debit_money, happened_money=happened_money,
+                                                        index=i)
             if not money:
                 money = values_list[int(value_index) - 1]
         elif value_index[0] != "(":
@@ -695,8 +695,8 @@ def deal_with_question_2(company, question_no, questions):
             money = _deal_arithmetic(value_index=value_index, values_list=values_list)
 
         if money:
-            subjects_infos[i]["money"] = money
-        subjects_infos[i].pop("value_index")
+            subject_infos[i]["money"] = money
+        subject_infos[i].pop("value_index")
     # end---------------------------------------------------------------------------
 
     content = "{}年{}月{}日，".format(year, month, day) + content
@@ -705,7 +705,7 @@ def deal_with_question_2(company, question_no, questions):
     _update_company(company=company, affect_type=affect_type, key_element_infos=key_element_infos,
                     businesses=businesses, business=business,
                     com_key_element_infos=com_key_element_infos,
-                    com_subjects_infos=com_subjects_infos, subjects_infos=subjects_infos,
+                    com_subject_infos=com_subject_infos, subject_infos=subject_infos,
                     business_num=business_num, com_assets=com_assets)
     return company
 
@@ -713,8 +713,8 @@ def deal_with_question_2(company, question_no, questions):
 def _get_deal_question(company, question_no, questions):
     # 处理业务获取值
     question = questions[question_no - 1]
-    my_keys = ["businesses", "key_element_infos", "subjects_infos", "com_assets", "business_num"]
-    businesses, com_key_element_infos, com_subjects_infos, com_assets, business_num = tuple(
+    my_keys = ["businesses", "key_element_infos", "subject_infos", "com_assets", "business_num"]
+    businesses, com_key_element_infos, com_subject_infos, com_assets, business_num = tuple(
         [company[key] for key in my_keys])
 
     date = datetime.now()
@@ -731,7 +731,7 @@ def _get_deal_question(company, question_no, questions):
             year += 1
             month = 1
 
-    return question, businesses, com_key_element_infos, com_subjects_infos, com_assets, business_num, year, month, day
+    return question, businesses, com_key_element_infos, com_subject_infos, com_assets, business_num, year, month, day
 
 
 def _deal_first_question(content, company, question):
@@ -806,14 +806,14 @@ def _deal_key_element_generic(key_element_infos, values_list):
     return key_element_infos
 
 
-def _deal_bank_loan_subject(content, subjects_infos, index):
+def _deal_bank_loan_subject(content, subject_infos, index):
     # 银行贷款科目处理
     year_tmp = int(content[list(ii.start() for ii in re.finditer('年', content))[0] - 1])
     if year_tmp == 1:
-        subjects_infos[index]["subject"] = subjects_infos[index]["subject"].split("/")[0]
+        subject_infos[index]["subject"] = subject_infos[index]["subject"].split("/")[0]
     else:
-        subjects_infos[index]["subject"] = subjects_infos[index]["subject"].split("/")[1]
-    return subjects_infos
+        subject_infos[index]["subject"] = subject_infos[index]["subject"].split("/")[1]
+    return subject_infos
 
 
 def _deal_travel_expenses(content, value, debit_money, happened_money, index):
@@ -829,7 +829,7 @@ def _deal_travel_expenses(content, value, debit_money, happened_money, index):
     return content, value
 
 
-def _deal_travel_subject(content, subjects_infos, debit_money, happened_money, index):
+def _deal_travel_subject(content, subject_infos, debit_money, happened_money, index):
     # 差旅费科目处理 about value
     money = None
     if content.find("多于"):
@@ -838,20 +838,20 @@ def _deal_travel_subject(content, subjects_infos, debit_money, happened_money, i
         elif index == 1:
             money = happened_money
         else:
-            subjects_infos.append(dict(subject="银行存款", money=debit_money - happened_money, is_up=False))
+            subject_infos.append(dict(subject="银行存款", money=debit_money - happened_money, is_up=False))
     elif content.find("少于"):
         if index == 0:
             money = debit_money
         elif index == 1:
             money = debit_money
         else:
-            subjects_infos.append(dict(subject="银行存款",
-                                       money=abs(debit_money - happened_money),
-                                       is_up=False))
-    return money, subjects_infos
+            subject_infos.append(dict(subject="银行存款",
+                                      money=abs(debit_money - happened_money),
+                                      is_up=False))
+    return money, subject_infos
 
 
-def _deal_sell_asset(value, com_assets, now_m_value, subjects_infos, asset_name, index):
+def _deal_sell_asset(value, com_assets, now_m_value, subject_infos, asset_name, index):
     # 资产出售处理（收益/亏损 ）about value
     value_tmp = 0
     for asset in com_assets:
@@ -863,24 +863,24 @@ def _deal_sell_asset(value, com_assets, now_m_value, subjects_infos, asset_name,
     else:
         value = value.split("/")[1]
         # 收益为负
-        subjects_infos[index]["is_up"] = False
-    return value, subjects_infos
+        subject_infos[index]["is_up"] = False
+    return value, subject_infos
 
 
 def _update_company(company, affect_type, key_element_infos, businesses, business, com_key_element_infos,
-                    com_subjects_infos, subjects_infos, business_num, com_assets):
+                    com_subject_infos, subject_infos, business_num, com_assets):
     key_element_infos_dict = dict(affect_type=affect_type, info=key_element_infos)
 
     businesses.append(business)
     com_key_element_infos.append(key_element_infos_dict)
-    com_subjects_infos.append(subjects_infos)
+    com_subject_infos.append(subject_infos)
     business_num += 1
 
     company.update(dict(businesses=businesses,
                         com_assets=com_assets,
                         business_num=business_num,
                         key_element_infos=com_key_element_infos,
-                        subjects_infos=com_subjects_infos))
+                        subject_infos=com_subject_infos))
 
 
 def _remove(t_list, value):
