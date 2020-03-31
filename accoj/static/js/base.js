@@ -238,9 +238,9 @@ function hasError(selector, errorMessage) {
  */
 function removeError(selector) {
     let $this = $(selector);
-    if ($this.css("color") === "rgb(169, 68, 66)") {
+    if ($this.val() === "格式错误") {
         $this.val("");
-        $this.css({"color": "#555", "background-color": "white"});
+        $this.css({"color": "", "background-color": ""});
         $this.parent().removeClass("has-error");
     }
 }
@@ -257,10 +257,10 @@ function removeAllError() {
             if ($thisPaTag === "DIV")
                 $this.parent().removeClass("has-error");
             else if($thisPaTag === "LABEL")
-                $this.parent().css({"background": "white"});
+                $this.parent().css({"background": ""});
             if ($this.css("color") === "rgb(169, 68, 66)") {
                 $this.val("");
-                $this.css({"color": "#555", "background-color": "white"});
+                $this.css({"color": "", "background-color": ""});
                 $this.parent().removeClass("has-error");
             }
         }
