@@ -221,7 +221,10 @@ function iiPaddingData(data, isFromButton) {
     }
 
     if (!data && isFromButton) return;
-    if (isFromButton) removeAllError();
+    if (isFromButton) {
+        removeAllError();
+        iiDisabledInput();
+    }
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
     if (isFromButton === 1)
@@ -258,4 +261,17 @@ function iiResetInfo() {
     $("[id^=check]").prop("checked", false);
     $("#aer1").prop("checked", true);
     $("#submit_status_span").hide();
+}
+
+/**
+ * 禁用编辑
+ */
+function iiDisabledInput() {
+    let $aers = $("input[id^=aer]"),
+        $check_box = $("input[id^=check]"),
+        $key_elem = $("[id^=key_elem]");
+    $aers.prop("disabled", "true");
+    $check_box.prop("disabled", "true");
+    $key_elem.attr("readonly", "readonly");
+    $key_elem.addClass("acc-white-bg");
 }

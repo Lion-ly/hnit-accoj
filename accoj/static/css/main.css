@@ -247,6 +247,11 @@ dd {
     padding: 4px !important;
 }
 
+/*白色背景*/
+.acc-white-bg{
+    background-color: white !important;;
+}
+
 /*取消表格内的label内边距和外边距*/
 .acc-label-0pm label {
     padding: 0;

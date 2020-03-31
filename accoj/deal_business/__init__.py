@@ -576,8 +576,7 @@ def deal_with_question_2(company, question_no, questions):
                 elif question_no == 19:
                     # 问题19特判
                     index_tmp = index_dict.get("{}".format(18))
-                    high = com_key_element_infos[index_tmp]["info"][0].get("money")
-                    value = random.randrange(90000, high, 100)
+                    value = com_key_element_infos[index_tmp]["info"][0].get("money")
                 elif question_no == 21:
                     # 问题21特判
                     index_tmp = index_dict.get("{}".format(16))

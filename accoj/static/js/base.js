@@ -238,7 +238,7 @@ function hasError(selector, errorMessage) {
  */
 function removeError(selector) {
     let $this = $(selector);
-    if ($this.css("color") === "rgb(169, 68, 66)") {
+    if ($this.val() === "格式错误") {
         $this.val("");
         $this.css({"color": "#555", "background-color": "white"});
         $this.parent().removeClass("has-error");
