@@ -69,8 +69,9 @@ function get_subject_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  * @param data
+ * @param isFromButton
  */
-function map_subject_info(data) {
+function map_subject_info(data, isFromButton) {
     iiiResetInfo();
     data = data ? data : "";
     subject_infos = data ? data["subject_infos"] : subject_infos;
@@ -87,13 +88,18 @@ function map_subject_info(data) {
         showAnswerButton();
         confirmed = true;
         saved = true;
+        isFromButton = 1;
         $("button[data-answer]").text("查看答案");
+        let buttons = ["button[data-save]", "button[data-confirm]", "button[data-all-to-1]",
+            "button[data-all-to-2]", "button[data-to-all-1]", "button[data-to-all-2]"];
+        buttons = buttons.join();
+        $(buttons).prop("disabled", true);
     }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
 
     // 如果已保存
-    if (saved) iiiPaddingData(subject_infos[business_index]);
+    if (saved) iiiPaddingData(subject_infos, isFromButton);
 }
 
 // ===============================获取和填充数据===============================//
@@ -129,24 +135,75 @@ function iiiGetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function iiiPaddingData(data) {
-    if (!data) return;
-    // 填充会计科目信息
-    let subject_info = data,
-        rightbox_subject_array = Array(),
-        leftbox_subject_array = Array();
-    for (let i = 0; i < subject_info.length; i++) {
-        let subject = subject_info[i]["subject"],
-            is_up = subject_info[i]["is_up"];
-        if (is_up) {
-            rightbox_subject_array.push(subject);
-        } else {
-            leftbox_subject_array.push(subject);
+function iiiPaddingData(data, isFromButton) {
+    function padding() {
+        // 填充会计科目信息
+        let subject_info = data,
+            rightbox_subject_array = Array(),
+            leftbox_subject_array = Array(),
+            error_pos = Array(),
+            infoLen = subject_info.length,
+            flag = false, j = 0;
+        t_infoLen = isFromButton === 1 ? answer_info.length : t_infoLen;
+
+        for (let i = 0; i < infoLen; i++) {
+            let subject = subject_info[i]["subject"],
+                is_up = subject_info[i]["is_up"];
+            if (is_up) rightbox_subject_array.push(subject);
+            else leftbox_subject_array.push(subject);
+            if (isFromButton === 1) {
+                for (let i = 0; i < t_infoLen; i++) {
+                    let t_subject = answer_info[i]["subject"],
+                        t_is_up = answer_info[i]["is_up"];
+                    flag = false;
+                    if (subject === t_subject) {
+                        flag = is_up === t_is_up;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    let $subject = $("input[name=" + subject + "]");
+                    error_pos.push($subject);
+                }
+            }
+        }
+        input_moveTo_center("plusbox", rightbox_subject_array);
+        input_moveTo_center("minusbox", leftbox_subject_array);
+        if (isFromButton === 1) {
+            for (let i = 0; i < t_infoLen; i++) {
+                let t_subject = answer_info[i]["subject"],
+                    t_is_up = answer_info[i]["is_up"];
+
+                flag = false;
+                for (j = 0; j < infoLen; j++) {
+                    let subject = subject_info[j]["subject"],
+                        is_up = subject_info[j]["is_up"];
+
+                    if (subject === t_subject) {
+                        flag = is_up === t_is_up;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    let $subject = $("input[name=" + t_subject + "]");
+                    error_pos.push($subject);
+                }
+            }
+            // 标出错误位置
+            for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
         }
     }
-    input_moveTo_center("plusbox", rightbox_subject_array);
-    input_moveTo_center("minusbox", leftbox_subject_array);
+
+    if (!data) return;
+    if (isFromButton) removeAllError();
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
+    if (isFromButton === 1)
+        answer_info = answer_infos[index];
+    data = data[index];
+    padding(data);
 }
 
 // ==================================事件控制==================================//
@@ -155,10 +212,8 @@ function iiiPaddingData(data) {
  */
 function iiiBind() {
     function map_answer() {
-        let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
-            business_index = nowBusinessNo - 1;
         spanStatusCtr(true, true, "submit_status_span");
-        iiiPaddingData(answer_infos[business_index]);
+        iiiPaddingData(answer_infos, 2);
     }
 
     bind_confirm_info("submit_subject_info");
@@ -189,7 +244,7 @@ function iiiBind() {
  */
 function input_moveTo_center(box, subject_array) {
     for (let i = 0; i < subject_array.length; i++) {
-        let input_select = ":input[value=" + subject_array[i] + "]",
+        let input_select = ":input[name=" + subject_array[i] + "]",
             input_tmp = $(input_select);
         $(input_tmp).prop("checked", true);
     }

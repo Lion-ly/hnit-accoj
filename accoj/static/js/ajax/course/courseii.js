@@ -87,6 +87,7 @@ function map_key_element_info(data, isFromButton) {
         saved = true;
         isFromButton = 1;
         $("button[data-answer]").text("查看答案");
+        $("button[data-save], button[data-confirm]").prop("disabled", true);
     }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -196,31 +197,33 @@ function iiPaddingData(data, isFromButton) {
         if (isFromButton === 1) {
             for (let i = 0; i < t_infoLen; i++) {
                 let t_key_element = answer_info[i]["key_element"],
-                    t_is_up = answer_info[i]["is_up"],
-                    key_element_num = key_element_num_dict[t_key_element];
+                    t_is_up = answer_info[i]["is_up"];
 
-                if (!t_is_up) key_element_num = key_element_num_dict[t_key_element] + 1;
-                let key_element_id = "key_elem" + key_element_num,
-                    $key_element = $("#" + key_element_id);
 
                 flag = false;
                 for (j = 0; j < infoLen; j++) {
                     let key_element = key_element_info[j]["key_element"],
                         is_up = key_element_info[j]["is_up"];
 
-                    if (key_element === t_key_element && is_up === t_is_up) {
-                        flag = true;
+                    if (key_element === t_key_element) {
+                        flag = is_up === t_is_up;
                         break;
                     }
                 }
-                if (!flag) error_pos.push($key_element);
+                if (!flag) {
+                    let key_element_num = key_element_num_dict[t_key_element];
+                    if (!t_is_up) key_element_num = key_element_num_dict[t_key_element] + 1;
+                    let key_element_id = "key_elem" + key_element_num,
+                        $key_element = $("#" + key_element_id);
+                    error_pos.push($key_element);
+                }
             }
             // 标出错误位置
             for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
         }
     }
 
-    if (!data && isFromButton) return;
+    if (!data && !isFromButton) return;
     if (isFromButton) {
         removeAllError();
         iiDisabledInput();
