@@ -256,7 +256,7 @@ function removeAllError() {
         if ($thisPaTag === "DIV" || $thisPaTag === "LABEL" || $thisPaTag === "TD") {
             if ($thisPaTag === "DIV")
                 $this.parent().removeClass("has-error");
-            else if($thisPaTag === "LABEL")
+            else if ($thisPaTag === "LABEL")
                 $this.parent().css({"background": ""});
             if ($this.css("color") === "rgb(169, 68, 66)") {
                 $this.val("");
@@ -514,6 +514,43 @@ function spanStatusCtr(confirmed, saved, spanID) {
     } else {
         $span.hide();
     }
+}
+
+function showScoreEm(nowScore, nowTotalScore, totalScore, $nowSelectorNum, $totalSelectorNum) {
+    function t_reg(className) {
+        return (className.match(/(^|\s)acc-score-\S+/g) || []).join(' ');
+    }
+
+    let totalClass = "acc-score-",
+        nowClass = "acc-score-",
+        maxScore = 100,
+        $nowSelector = "em[data-now-score",
+        $totalSelector = "em[data-total-score";
+
+    $nowSelector = $nowSelectorNum ? $nowSelector + "-" + $nowSelectorNum : $nowSelector;
+    $totalSelector = $totalSelectorNum ? $totalSelector + "-" + $totalSelectorNum : $totalSelector;
+    console.log("$nowSelector" + $nowSelector);
+    console.log("$totalSelector" + $totalSelector);
+    $nowSelector = $($nowSelector + "]");
+    $totalSelector = $($totalSelector + "]");
+
+    if (totalScore) totalClass = totalScore === maxScore ? totalClass + "1" : totalClass + "2";
+    else totalClass = totalClass + "3";
+    if (nowScore) nowClass = nowScore === nowTotalScore ? nowClass + "1" : nowClass + "2";
+    else nowClass = nowClass + "3";
+
+    nowScore = nowScore.toFixed(2);
+    totalScore = totalScore.toFixed(2);
+    totalScore = "&nbsp;/&nbsp;" + totalScore;
+    $nowSelector.removeClass(function (index, className) {
+        return t_reg(className);
+    }).addClass(nowClass);
+    $totalSelector.removeClass(function (index, className) {
+        return t_reg(className);
+    }).addClass(totalClass);
+    $nowSelector.text(nowScore);
+    $totalSelector.html(totalScore);
+    if ($nowSelector.css("display") === "none") $("em[class*=acc-score]").css("display", "inline");
 }
 
 //==================================获取业务列表==================================//

@@ -178,6 +178,47 @@ dd {
     border-right: 0;
 }
 
+/*白色背景*/
+.acc-white-bg {
+    background-color: white !important;;
+}
+
+.acc-score-help {
+    float: right;
+    font-size: 15px;
+    font-weight: 400;
+    display: none;
+    color: #737373;
+}
+
+.acc-score-1 {
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(82, 196, 26);
+    display: none;
+}
+
+.acc-score-2 {
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(243, 156, 17);
+    display: none;
+}
+
+.acc-score-3{
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(231, 76, 60);
+    display: none;
+}
+
+.score-left{
+    float: left;
+}
+
 /*----------------------------------------------V END--------------------------------------------*/
 
 
@@ -245,11 +286,6 @@ dd {
 .acc-unedit {
     background-color: #f5f5f5;
     padding: 4px !important;
-}
-
-/*白色背景*/
-.acc-white-bg{
-    background-color: white !important;;
 }
 
 /*取消表格内的label内边距和外边距*/
@@ -347,41 +383,42 @@ dd {
 }
 
 /*acc-table-format-8-1*/
-.acc-table-format-8-1 > :nth-child(1){
+.acc-table-format-8-1 > :nth-child(1) {
     width: 16%;
 }
 
-.acc-table-format-8-1 > :nth-child(2){
+.acc-table-format-8-1 > :nth-child(2) {
     width: 17%;
 }
 
-.acc-table-format-8-1 > :nth-child(3){
+.acc-table-format-8-1 > :nth-child(3) {
     width: 17%;
 }
 
-.acc-table-format-8-1 > :nth-child(4){
+.acc-table-format-8-1 > :nth-child(4) {
     width: 16%;
 }
 
-.acc-table-format-8-1 > :nth-child(5){
+.acc-table-format-8-1 > :nth-child(5) {
     width: 17%;
 }
 
-.acc-table-format-8-1 > :nth-child(6){
+.acc-table-format-8-1 > :nth-child(6) {
     width: 17%;
 }
 
 /*acc-table-format-8-2*/
-.acc-table-format-8-2 > :nth-child(1){
+.acc-table-format-8-2 > :nth-child(1) {
     width: 50%;
 }
 
-.acc-table-format-8-2 > :nth-child(2){
+.acc-table-format-8-2 > :nth-child(2) {
     width: 25%;
 }
 
-.acc-table-format-8-2 > :nth-child(3){
+.acc-table-format-8-2 > :nth-child(3) {
     width: 25%;
 }
+
 /*-------------------------------------------FORMAT 格式 END---------------------------------------*/
 

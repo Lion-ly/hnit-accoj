@@ -157,10 +157,10 @@ function iiPaddingData(data, isFromButton) {
         // 填充影响类型
         $affect_type.prop("checked", true);
         if (isFromButton === 1) {
-            answer_info = answer_info["info"];
-            t_infoLen = answer_info.length;
             if (answer_info["affect_type"] !== affect_type)
                 hasError($affect_type);
+            answer_info = answer_info["info"];
+            t_infoLen = answer_info.length;
         }
         // 填充会计要素信息
         let infoLen = key_element_info.length,
@@ -197,16 +197,19 @@ function iiPaddingData(data, isFromButton) {
         if (isFromButton === 1) {
             for (let i = 0; i < t_infoLen; i++) {
                 let t_key_element = answer_info[i]["key_element"],
-                    t_is_up = answer_info[i]["is_up"];
+                    t_is_up = answer_info[i]["is_up"],
+                    t_money = answer_info[i]["money"];
 
 
                 flag = false;
                 for (j = 0; j < infoLen; j++) {
                     let key_element = key_element_info[j]["key_element"],
-                        is_up = key_element_info[j]["is_up"];
+                        is_up = key_element_info[j]["is_up"],
+                        money = key_element_info[j]["money"];
 
-                    if (key_element === t_key_element) {
-                        flag = is_up === t_is_up;
+                    if (key_element === t_key_element && t_is_up === is_up) {
+                        let t_money = answer_info[j]["money"];
+                        flag = money === t_money;
                         break;
                     }
                 }

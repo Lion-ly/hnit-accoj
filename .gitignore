@@ -133,3 +133,4 @@ accoj/utils/__pycache__/add_question.cpython-37.pyc
 *.png
 *.jpg
 .project
+/git
