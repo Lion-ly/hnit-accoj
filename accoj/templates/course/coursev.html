@@ -40,14 +40,16 @@
                     </nav>
                 </div>
                 <hr class="simple"/>
-                <p class="acc-title">1、设立账户，并登记发生额，结算余额</p>
                 <!--温馨提示-->
-                <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    2.<span class="acc-color-5cb85c">绿色</span>表示当前账户已确认提交。<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    3.<span class="acc-color-5bc0de">淡蓝色</span>表示当前账户已保存。<br/>
+                <p class="help-block">温馨提示：
+                    <span class="acc-color-5bc0de">淡蓝色</span>（<span class="acc-color-5cb85c">绿色</span>
+                    ）表示当前账户已保存（已确认提交）。
+                    <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                    <em class="acc-score-help">当前</em>
                 </p>
+                <em data-total-score></em>
+                <em data-now-score></em>
+                <p class="acc-title">1、设立账户，并登记发生额，结算余额</p>
                 <!--期间切换-->
                 <span id="ledgerPeriod" class="acc-period-tip">当前期间：期间一</span>
                 <button type="button" class="btn btn-info btn-xs" data-change-period>切换期间</button>

@@ -35,15 +35,20 @@
                                     <span id="subsidiary_account_submit_span"
                                           class="glyphicon glyphicon-ok acc-completed">已完成</span>
                                 </p>
-                                <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    2.<span class="acc-color-5cb85c">绿色</span>表示当前账户已确认提交。<br/>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    3.<span class="acc-color-5bc0de">淡蓝色</span>表示当前账户已保存。<br/>
-                                </p>
                                 <!--表单模块-->
                                 <div class="table-responsive">
                                     <div id="tablePanel">
+                                        <div class="help-block">
+                                            <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                                            <em class="acc-score-help">当前</em>
+                                        </div>
+                                        <!--温馨提示-->
+                                        <p class="help-block">温馨提示：
+                                            <span class="acc-color-5bc0de">淡蓝色</span>（<span class="acc-color-5cb85c">绿色</span>
+                                            ）表示当前账户已保存（已确认提交）。
+                                        </p>
+                                        <em data-total-score-1></em>
+                                        <em data-now-score-1></em>
                                         <table class="table table-bordered acc-container-tableformat acc-unborder">
                                             <tbody id="detailed">
                                             <tr>
@@ -497,31 +502,40 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="simple"/>
-                            <!--信息提示窗口-->
-                            <div id="course_vii1_message"></div>
-                            <div class="acc-btn-left">
-                                <button type="button" class="btn btn-info" data-answer-1>查看答案
-                                </button>
-                            </div>
-                            <div class="acc-btn-right">
-                                <button type="button" class="btn btn-info" data-save-1>
-                                    <span class="glyphicon"></span>&nbsp;保存
-                                </button>
-                                <button type="button" class="btn btn-success" data-confirm-1>
-                                    <span class="glyphicon"></span>&nbsp;提交
-                                </button>
+                                <hr class="simple"/>
+                                    <!--信息提示窗口-->
+                                    <div id="course_vii1_message"></div>
+                                    <div class="acc-btn-left">
+                                        <button type="button" class="btn btn-info" data-answer-1>查看答案
+                                        </button>
+                                    </div>
+                                    <div class="acc-btn-right">
+                                        <button type="button" class="btn btn-info" data-save-1>
+                                            <span class="glyphicon"></span>&nbsp;保存
+                                        </button>
+                                        <button type="button" class="btn btn-success" data-confirm-1>
+                                            <span class="glyphicon"></span>&nbsp;提交
+                                        </button>
+                                    </div>
                             </div>
                         </div>
                         <!-- 第二标签 -->
                         <div role="tabpanel" class="tab-pane fade" id="second">
                             <div>
+                                <!--温馨提示-->
                                 <p class="acc-title">2、登记科目余额表
                                     <span class="glyphicon glyphicon-ok acc-completed"
                                           id="acc_balance_sheet_submit_span">已完成</span>
                                 </p>
+                                <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。
+                                </p>
                                 <div class="container">
+                                    <p class="help-block">&nbsp;
+                                        <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                                        <em class="acc-score-help">当前</em>
+                                    </p>
+                                    <em data-total-score-2></em>
+                                    <em data-now-score-2></em>
                                     <table class="table table-bordered acc-container-tableformat acc-unborder">
                                         <tbody>
                                         <tr>
@@ -617,22 +631,22 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                    <hr class="simple"/>
+                                    <!--信息提示窗口-->
+                                    <div id="course_vii2_message"></div>
+                                    <div class="acc-btn-left">
+                                        <button type="button" class="btn btn-info" data-answer-2>查看答案
+                                        </button>
+                                    </div>
+                                    <div class="acc-btn-right">
+                                        <button type="button" class="btn btn-info" data-save-2>
+                                            <span class="glyphicon"></span>&nbsp;保存
+                                        </button>
+                                        <button type="button" class="btn btn-success" data-confirm-2>
+                                            <span class="glyphicon"></span>&nbsp;提交
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr class="simple"/>
-                            <!--信息提示窗口-->
-                            <div id="course_vii2_message"></div>
-                            <div class="acc-btn-left">
-                                <button type="button" class="btn btn-info" data-answer-2>查看答案
-                                </button>
-                            </div>
-                            <div class="acc-btn-right">
-                                <button type="button" class="btn btn-info" data-save-2>
-                                    <span class="glyphicon"></span>&nbsp;保存
-                                </button>
-                                <button type="button" class="btn btn-success" data-confirm-2>
-                                    <span class="glyphicon"></span>&nbsp;提交
-                                </button>
                             </div>
                         </div>
                     </div>
