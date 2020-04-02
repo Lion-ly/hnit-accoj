@@ -1,7 +1,9 @@
 let subject_infos = Array(),
     subject_confirmed = Array(),
     subject_saved = Array(),
-    answer_infos = "";
+    answer_infos = "",
+    scores = "";
+
 $(document).ready(function () {
     function init() {
         iiiBind();
@@ -78,6 +80,7 @@ function map_subject_info(data, isFromButton) {
     subject_confirmed = data ? data["subject_confirmed"] : subject_confirmed;
     subject_saved = data ? data["subject_saved"] : subject_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
@@ -120,12 +123,12 @@ function iiiGetInput() {
         is_up = true,
         data;
     for (let i = 0; i < right_inputLen; i++) {
-        let subject = $(right_input[i]).val();
+        let subject = $(right_input[i]).attr("name");
         subject_infos.push({"subject": subject, "is_up": is_up});
     }
     is_up = false;
     for (let i = 0; i < left_inputLen; i++) {
-        let subject = $(left_input[i]).val();
+        let subject = $(left_input[i]).attr("name");
         subject_infos.push({"subject": subject, "is_up": is_up});
     }
     data = {"subject_infos": subject_infos, "business_no": business_no};
@@ -200,8 +203,14 @@ function iiiPaddingData(data, isFromButton) {
     if (isFromButton) removeAllError();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
-    if (isFromButton === 1)
-        answer_info = answer_infos[index];
+    if (isFromButton) {
+        let nowScore = scores[index * 2],
+            nowTotalScore = scores[index * 2 + 1],
+            totalScore = scores[scores.length - 1];
+        showScoreEm(nowScore, nowTotalScore, totalScore);
+        if (isFromButton === 1)
+            answer_info = answer_infos[index];
+    }
     data = data[index];
     padding(data);
 }
@@ -270,9 +279,7 @@ function iiiResetInfo() {
     }
     to_all('plusbox');
     to_all('minusbox');
-    for (let i = 0; i < input_tmpLen; i++) {
-        $(input_tmp[i]).prop("checked", false);
-    }
+    $("#allbox").find("input").prop("checked", false);
     $("#submit_status_span").hide();
 }
 

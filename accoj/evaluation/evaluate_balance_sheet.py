@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2020/4/2 12:18
+# @Time    : 2020/4/2 12:13
 # @Author  : Coodyz
 # @Site    : https://github.com/coolbreeze2
-# @File    : evalute_subsidiary_account.py.py
+# @File    : evaluate_balance_sheet.py
 # @Software: PyCharm

@@ -9,6 +9,7 @@ from _datetime import datetime
 from flask import session
 from accoj.utils import is_number, allowed_file
 from accoj.extensions import mongo
+from accoj.evaluation import evaluate_key_element, evaluate_subject
 
 MAX_BUSINESS_NO = 20
 
@@ -246,10 +247,10 @@ def get_infos(infos_name, is_first=False, is_cp=False):
     """
     infos_key = "{}_infos".format(infos_name)
     student_no = session.get("username")
+    filter_dict = {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "evaluation": 1, "_id": 0}
     if is_cp:
         student_no = "{}_cp".format(student_no)
-    company = mongo.db.company.find_one({"student_no": student_no},
-                                        {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "_id": 0})
+    company = mongo.db.company.find_one({"student_no": student_no}, filter_dict)
     infos = company.get("{}_infos".format(infos_name))
     schedule_confirm = company.get("schedule_confirm")
     schedule_saved = company.get("schedule_saved")
@@ -259,6 +260,15 @@ def get_infos(infos_name, is_first=False, is_cp=False):
         times = "first" if is_first == 1 else "second"
         confirmed = confirmed.get(times) if confirmed else False
         saved = saved.get(times) if saved else False
+    if is_cp:
+        evaluation = company.get("evaluation")
+        if not evaluation or not evaluation.get("{}_score".format(infos_name)):
+            if infos_name == "subject":
+                evaluate_subject.evaluate_subject()
+            if infos_name == "key_element":
+                evaluate_key_element.evaluate_key_element()
+        scores = evaluation.get("{}_score".format(infos_name))
+        return infos, confirmed, saved, scores
     return infos, confirmed, saved
 
 
@@ -272,11 +282,13 @@ def get_data(type_num, infos_name, info_keys):
     """
     if type_num == 1:
         # （1.`二三四以及六的会计凭证部分`）
+        info_keys.append("scores")
         info_len = len(info_keys)
         infos, confirmed, saved = get_infos(infos_name=infos_name)
         answer_infos = None
+        scores = None
         if len(confirmed) == MAX_BUSINESS_NO:
-            answer_infos, t_confirmed, t_saved = get_infos(infos_name=infos_name, is_cp=True)
-        info_values = [infos, answer_infos, confirmed, saved]
+            answer_infos, t_confirmed, t_saved, scores = get_infos(infos_name=infos_name, is_cp=True)
+        info_values = [infos, answer_infos, confirmed, saved, scores]
         data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
         return data

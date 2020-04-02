@@ -266,7 +266,6 @@ def submit_key_element_info():
                                    submit_type=submit_type,
                                    infos_name=infos_name,
                                    business_no=business_no)
-
     return jsonify(result=result, message=message)
 
 
@@ -312,7 +311,6 @@ def submit_subject_info():
                                    infos_name=infos_name,
                                    business_no=business_no
                                    )
-
     return jsonify(result=result, message=message)
 
 

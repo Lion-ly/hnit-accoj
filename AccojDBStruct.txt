@@ -102,24 +102,23 @@ db.accoj.company.insert({"student_no": student_no,			# 用户ID
 											"dupont_analysis_saved":Boolean
 											},
 						 # 课程评分
-						 "evalution": {
-
-											"key_element_score": [double],			# 会计要素部分评分(数组最后一个元素用来存储'本次课程得分和'，后述亦同)
-											"subjects_score": [double],				# 会计科目部分评分
-											"entry_score": [double],				# 会计分录部分评分
-											"ledger_score": {"ledger1_score": {subjectName: double},# 会计账户部分评分(科目名为键，分数为值)
-															 "ledger2_score": {subjectName: double}},
-											"balance_sheet_score": double,			# 会计平衡表部分评分
-											"acc_document_score": [double],			# 会计凭证部分评分
-											"subsidiary_account_score": {subjectName: double},		# 会计明细账部分评分
-											"acc_balance_sheet_score": double,		# 科目余额表部分评分
-											"new_balance_sheet_score": double,		# 资产负债表部分评分
-											"profit_statement_score": double,		# 利润表部分评分
-											"trend_analysis_score":{"first": double, "second": double},
-											"common_ratio_analysis_score":{"first": double, "second": double},
-											"ratio_analysis_score":double,
-											"dupont_analysis_score":double
-											},
+						 "evaluation": {
+										"key_element_score": [double],			# 会计要素部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
+										"subjects_score": [double],				# 会计科目部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
+										"entry_score": [double],				# 会计分录部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
+										"ledger_score": {"ledger1_score": {subjectName: double},# 会计账户部分评分(科目名为键，分数为值)
+														 "ledger2_score": {subjectName: double}},
+										"balance_sheet_score": double,			# 会计平衡表部分评分
+										"acc_document_score": [double],			# 会计凭证部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
+										"subsidiary_account_score": {subjectName: double},		# 会计明细账部分评分
+										"acc_balance_sheet_score": double,		# 科目余额表部分评分
+										"new_balance_sheet_score": double,		# 资产负债表部分评分
+										"profit_statement_score": double,		# 利润表部分评分
+										"trend_analysis_score":{"first": double, "second": double},
+										"common_ratio_analysis_score":{"first": double, "second": double},
+										"ratio_analysis_score":double,
+										"dupont_analysis_score":double
+										},
 						 # 公司业务
 						 "businesses": [{"questions_no": int， 			# 题库号
 										 "question_no": int,			# 题目编号

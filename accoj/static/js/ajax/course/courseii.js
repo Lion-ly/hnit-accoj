@@ -1,7 +1,8 @@
 let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
     key_element_confirmed = Array(),
     key_element_saved = Array(),
-    answer_infos = "";
+    answer_infos = "",
+    scores = "";
 $(document).ready(function () {
     function init() {
         iiBind();
@@ -76,6 +77,7 @@ function map_key_element_info(data, isFromButton) {
     key_element_confirmed = data ? data["key_element_confirmed"] : key_element_confirmed;
     key_element_saved = data ? data["key_element_saved"] : key_element_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
@@ -197,8 +199,7 @@ function iiPaddingData(data, isFromButton) {
         if (isFromButton === 1) {
             for (let i = 0; i < t_infoLen; i++) {
                 let t_key_element = answer_info[i]["key_element"],
-                    t_is_up = answer_info[i]["is_up"],
-                    t_money = answer_info[i]["money"];
+                    t_is_up = answer_info[i]["is_up"];
 
 
                 flag = false;
@@ -233,8 +234,14 @@ function iiPaddingData(data, isFromButton) {
     }
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
-    if (isFromButton === 1)
-        answer_info = answer_infos[index];
+    if (isFromButton) {
+        let nowScore = scores[index * 2],
+            nowTotalScore = scores[index * 2 + 1],
+            totalScore = scores[scores.length - 1];
+        showScoreEm(nowScore, nowTotalScore, totalScore);
+        if (isFromButton === 1)
+            answer_info = answer_infos[index];
+    }
     data = data[index];
     padding(data);
 }
