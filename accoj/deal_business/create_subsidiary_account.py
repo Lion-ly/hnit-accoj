@@ -216,5 +216,5 @@ def cal_subsidiary_account(company):
             subsidiary_account_infos[involve_subject]  = infos
 
     _id = company.get("_id")
-    # 存入数据库
+    # 存入数据库中
     mongo.db.company.update({"_id": _id}, {"$set": {"subsidiary_account_infos": subsidiary_account_infos}})

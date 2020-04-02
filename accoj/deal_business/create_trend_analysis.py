@@ -30,7 +30,7 @@ def cal_balance_trend_analysis(company):
         new_balance_sheet_info = new_balance_sheet_infos[subject]
         period_end = new_balance_sheet_info.get("period_end")
         period_last = new_balance_sheet_info.get("period_last")
-        # 如果本期为0 None 不存在
+        # 如果本期为0  None 不存在
         if period_end == 0:
             new_balance_sheet_infos_in[subject] = {"period_end": None, "period_last":None}
         else:

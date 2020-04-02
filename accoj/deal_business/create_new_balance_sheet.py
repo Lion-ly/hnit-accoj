@@ -108,7 +108,7 @@ def cal_new_balance_sheet(company):
     # 计算非流动资产
     non_current_assets_last_sum = 0
     non_current_assets_end_sum = 0
-    # 将 持有至到期投资 长期待摊费用 在建工程 记 0
+    # 将 持有至到期投资 长期待摊费用 在建工程记 0
     new_balance_sheet_infos["持有至到期投资"] = {"period_end": 0, "period_last": 0}
     new_balance_sheet_infos["长期待摊费用"] = {"period_end": 0, "period_last": 0}
     new_balance_sheet_infos["在建工程"] = {"period_end": 0, "period_last": 0}

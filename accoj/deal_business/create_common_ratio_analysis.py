@@ -41,7 +41,7 @@ def cal_new_balance_sheet_infos(company):
     new_balance_sheet_infos = company.get("new_balance_sheet_infos")
     assets_sum = new_balance_sheet_infos.get("资产总计")
     debt_owners_sum = new_balance_sheet_infos.get("负债及所有者权益总计")
-    # 获取本期或者上期相关资金
+    # 获取本期或者上期相关的资金
     assets_sum_last = float(assets_sum.get("period_last"))
     assets_sum_end = float(assets_sum.get("period_end"))
     debt_owners_sum_last = float(debt_owners_sum.get("period_last"))

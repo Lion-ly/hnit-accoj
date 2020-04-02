@@ -98,7 +98,7 @@ def cal_profit_statement(company):
     profit_statement_infos["营业利润"]["period_last"] = operate_profit_last
     profit_statement_infos["营业利润"]["period_end"] = operate_profit_end
 
-    # 计算营业外收入和支出
+    # 计算营业外收入 和 支出
     C_list = ["营业外收入"]
     out_income_last = cal_formula(balance_sheet_infos_1, C_list, len_sheet_1, period="period_last", borrow_lend=False)
     out_income_end  = cal_formula(balance_sheet_infos_2, C_list, len_sheet_2, period="period_end", borrow_lend=False)

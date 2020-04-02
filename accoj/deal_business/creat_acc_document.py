@@ -50,6 +50,6 @@ def cal_acc_document(company):
                                  "cr_money": round(cr_sum, 2)})
         acc_document_infos.append({"document_no": document_no, "filename": None, "doc_no": None, "date":None, "doc_nums": None,
                                    "contents": contents})
-    # 将所有的科目凭证加入数据库
+    # 将所有的科目凭证加入数据库中
     mongo.db.company.update({"_id": _id}, {"$set": {"acc_document_infos": acc_document_infos}})
     print("acc_documents have been saved!")

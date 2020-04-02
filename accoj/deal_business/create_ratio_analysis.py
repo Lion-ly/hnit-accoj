@@ -73,7 +73,7 @@ def cal_ratio_analysis(company):
     owners_sum_end, owners_sum_last = get_subject_last_end("所有者权益合计")
 
 
-    # 计算流动比率= 流动资产/流动负债
+    # 计算流动比率 = 流动资产/流动负债
     cal_rate(current_assset_last, current_debts_last, "流动比率", "period_last")
     cal_rate(current_assset_end, current_debts_end, "流动比率", "period_end")
 

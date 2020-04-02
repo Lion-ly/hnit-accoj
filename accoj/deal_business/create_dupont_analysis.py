@@ -63,7 +63,7 @@ def cal_dupont_analysis(company):
     dupont_analysis_infos["非流动资产合计"] = long_term_assets
 
     _id = company.get("_id")
-    # 存入数据库
+    # 存入数据库中
     mongo.db.company.update({"_id": _id}, {"$set": {"dupont_analysis_infos": dupont_analysis_infos}})
 
 

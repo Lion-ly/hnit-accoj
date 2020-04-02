@@ -69,7 +69,7 @@ def cal_entry_end(company, start, end, entry_index):
         for entry_info in entrys_info:
             subject = entry_info.get("subject")
             money = entry_info.get("money")
-            # 如果在损益科目中，颠倒借贷方向，加入会计分录
+            # 如果在损益科目中，颠倒借贷方向，加入会计分录中
             flag = False
             if subject in loss:
                 money_cr += money

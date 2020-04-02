@@ -51,7 +51,7 @@ def cal_ledger_1(company):
                 is_left = True
             elif subject in A_type:
                 is_left = False
-            # 如果该科目不存在, 判断借贷方向，如果第二期 读取上一期的期末余额=期初
+            # 如果该科目不存在, 判断借贷方向，如果第二期 读取上一期的期末余额 =期初
             if subject not in involve_subjects:
                 opening_balance = 0
                 # 创建该科目，判断借贷
