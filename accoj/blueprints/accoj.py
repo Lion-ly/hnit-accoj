@@ -7,7 +7,7 @@
 # @Software: PyCharm
 from flask import Blueprint, render_template, request, jsonify, session
 from accoj.utils import login_required, complete_required1
-from accoj.utils import submit_infos1, submit_infos2, submit_infos3, submit_infos4, get_infos, get_data1
+from accoj.blueprints import submit_infos, get_data, get_infos
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo
 from accoj.deal_business import create_businesses
@@ -48,6 +48,27 @@ def submit_company_info():
     提交公司创立信息表单
     :return:
     """
+
+    def get_schedule_dict(schedule_type):
+        def format_key(t_key):
+            return "{}_{}".format(t_key, schedule_type)
+
+        return {format_key("business")             : False,
+                format_key("key_element")          : [],
+                format_key("subject")              : [],
+                format_key("entry")                : [],
+                format_key("ledger")               : {format_key("ledger1"): [], format_key("ledger2"): []},
+                format_key("balance_sheet")        : False,
+                format_key("acc_document")         : [],
+                format_key("subsidiary_account")   : [],
+                format_key("acc_balance_sheet")    : False,
+                format_key("new_balance_sheet")    : False,
+                format_key("profit_statement")     : False,
+                format_key("trend_analysis")       : {"first": False, "second": False},
+                format_key("common_ratio_analysis"): {"first": False, "second": False},
+                format_key("ratio_analysis")       : False,
+                format_key("dupont_analysis")      : False, }
+
     company = mongo.db.company.find_one({"student_no": session.get("username")})
     if company is not None:
         return jsonify(result=False, message="已经创立过公司！")
@@ -108,23 +129,9 @@ def submit_company_info():
                 data_dict[key] = float(data_dict[key])
         data_dict["com_bank_savings"] = data_dict["com_regist_cap"] * 10000
         data_dict.update(dict(com_cash=0, business_num=0))
-        schedule_confirm = dict(business_confirm=False, key_element_confirm=[], subject_confirm=[],
-                                entry_confirm=[], ledger_confirm={"ledger1_confirm": [], "ledger2_confirm": []},
-                                balance_sheet_confirm=False, acc_document_confirm=[], subsidiary_account_confirm=[],
-                                acc_balance_sheet_confirm=False, new_balance_sheet_confirm=False,
-                                profit_statement_confirm=False,
-                                trend_analysis_confirm={"first": False, "second": False},
-                                common_ratio_analysis_confirm={"first": False, "second": False},
-                                ratio_analysis_confirm=False, dupont_analysis_confirm=False)
 
-        schedule_saved = dict(key_element_saved=[], subject_saved=[], entry_saved=[],
-                              ledger_saved={"ledger1_saved": [], "ledger2_saved": []},
-                              balance_sheet_svaed=False, acc_document_saved=[], subsidiary_account_saved=[],
-                              acc_balance_sheet_saved=False, new_balance_sheet_saved=False,
-                              profit_statement_saved=False,
-                              trend_analysis_saved={"first": False, "second": False},
-                              common_ratio_analysis_saved={"first": False, "second": False},
-                              ratio_analysis_saved=False, dupont_analysis_saved=False)
+        schedule_confirm = get_schedule_dict("confirm")
+        schedule_saved = get_schedule_dict("saved")
 
         data_dict.update(dict(schedule_confirm=schedule_confirm,
                               schedule_saved=schedule_saved,
@@ -172,8 +179,8 @@ def submit_business_info():
 
         subjects_tmp1 = set(subjects_tmp1)
         subjects_tmp2 = set(subjects_tmp2)
-        subjects_tmp1.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
-        subjects_tmp2.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
+        # subjects_tmp1.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
+        # subjects_tmp2.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
         involve_subjects = dict(involve_subjects_1=list(subjects_tmp1), involve_subjects_2=list(subjects_tmp2))
 
         mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
@@ -216,13 +223,11 @@ def create_business():
     """
     result, message = False, "公司未创立！"
     username = session.get("username")
-    company = mongo.db.company.find_one({"student_no": "{}".format(username)})
-
+    company = mongo.db.company.find_one({"student_no": "{}".format(username)}, dict(schedule_confirm=1))
     if not company:
         return jsonify(result=result, message=message)
+
     schedule_confirm = company.get("schedule_confirm")
-    if not schedule_confirm:
-        return jsonify(result=result, message=message)
     business_confirm = schedule_confirm.get("business_confirm")
     if business_confirm:
         message = "已经确认提交过"
@@ -257,10 +262,10 @@ def submit_key_element_info():
     submit_type = json_data.get("submit_type")
 
     infos_name = "key_element"
-    result, message = submit_infos3(infos=infos,
-                                    submit_type=submit_type,
-                                    business_no=business_no,
-                                    infos_name=infos_name)
+    result, message = submit_infos(type_num=3, infos=infos,
+                                   submit_type=submit_type,
+                                   infos_name=infos_name,
+                                   business_no=business_no)
 
     return jsonify(result=result, message=message)
 
@@ -273,7 +278,7 @@ def get_key_element_info():
     """
     infos_name = "key_element"
     info_keys = ["key_element_infos", "answer_infos", "key_element_confirmed", "key_element_saved"]
-    data = get_data1(infos_name=infos_name, info_keys=info_keys)
+    data = get_data(type_num=1, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -302,10 +307,11 @@ def submit_subject_info():
     submit_type = json_data.get("submit_type")
 
     infos_name = "subject"
-    result, message = submit_infos3(infos=infos,
-                                    submit_type=submit_type,
-                                    business_no=business_no,
-                                    infos_name=infos_name)
+    result, message = submit_infos(type_num=3, infos=infos,
+                                   submit_type=submit_type,
+                                   infos_name=infos_name,
+                                   business_no=business_no
+                                   )
 
     return jsonify(result=result, message=message)
 
@@ -318,7 +324,7 @@ def get_subject_info():
     """
     infos_name = "subject"
     info_keys = ["subject_infos", "answer_infos", "subject_confirmed", "subject_saved"]
-    data = get_data1(infos_name=infos_name, info_keys=info_keys)
+    data = get_data(type_num=1, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -347,10 +353,10 @@ def submit_entry_info():
     submit_type = json_data.get("submit_type")
 
     infos_name = "entry"
-    result, message = submit_infos3(infos=infos,
-                                    submit_type=submit_type,
-                                    business_no=business_no,
-                                    infos_name=infos_name)
+    result, message = submit_infos(type_num=3, infos=infos,
+                                   submit_type=submit_type,
+                                   infos_name=infos_name,
+                                   business_no=business_no)
 
     return jsonify(result=result, message=message)
 
@@ -363,7 +369,7 @@ def get_entry_info():
     """
     infos_name = "entry"
     info_keys = ["entry_infos", "answer_infos", "entry_confirmed", "entry_saved"]
-    data = get_data1(infos_name=infos_name, info_keys=info_keys)
+    data = get_data(type_num=1, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -397,8 +403,8 @@ def submit_ledger_info():
         return jsonify(result=False, message="信息为空")
     infos_name = "ledger"
 
-    result, message = submit_infos4(infos=infos, submit_type=submit_type, subject=subject,
-                                    infos_name=infos_name, ledger_period=ledger_period)
+    result, message = submit_infos(type_num=4, infos=infos, submit_type=submit_type, infos_name=infos_name,
+                                   subject=subject, ledger_period=ledger_period)
     return jsonify(result=result, message=message)
 
 
@@ -478,7 +484,7 @@ def submit_balance_sheet_info():
     submit_type = json_data.get("submit_type")
     infos_name = "balance_sheet"
 
-    result, message = submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
+    result, message = submit_infos(type_num=1, infos=infos, submit_type=submit_type, infos_name=infos_name)
     return jsonify(result=result, message=message)
 
 
@@ -521,10 +527,10 @@ def submit_acc_document_info():
     business_no = json_data.get("business_no")
 
     infos_name = "acc_document"
-    result, message = submit_infos3(infos=infos,
-                                    submit_type=submit_type,
-                                    business_no=business_no,
-                                    infos_name=infos_name)
+    result, message = submit_infos(type_num=3, infos=infos,
+                                   submit_type=submit_type,
+                                   infos_name=infos_name,
+                                   business_no=business_no)
 
     return jsonify(result=result, message=message)
 
@@ -537,7 +543,7 @@ def get_acc_document_info():
     """
     infos_name = "acc_document"
     info_keys = ["acc_document_infos", "answer_infos", "acc_document_confirmed", "acc_document_saved"]
-    data = get_data1(infos_name=infos_name, info_keys=info_keys)
+    data = get_data(type_num=1, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -589,7 +595,8 @@ def submit_subsidiary_account_info():
 
     infos_name = "subsidiary_account"
 
-    result, message = submit_infos4(infos=infos, submit_type=submit_type, subject=subject, infos_name=infos_name)
+    result, message = submit_infos(type_num=4, infos=infos, submit_type=submit_type, infos_name=infos_name,
+                                   subject=subject)
     return jsonify(result=result, message=message)
 
 
@@ -617,7 +624,7 @@ def submit_acc_balance_sheet_info():
     submit_type = json_data.get("submit_type")
     infos_name = "acc_balance_sheet"
 
-    result, message = submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
+    result, message = submit_infos(type_num=1, infos=infos, submit_type=submit_type, infos_name=infos_name)
     return jsonify(result=result, message=message)
 
 
@@ -659,7 +666,7 @@ def submit_new_balance_sheet_info():
     submit_type = json_data.get("submit_type")
     infos_name = "new_balance_sheet"
 
-    result, message = submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
+    result, message = submit_infos(type_num=1, infos=infos, submit_type=submit_type, infos_name=infos_name)
     return jsonify(result=result, message=message)
 
 
@@ -688,7 +695,7 @@ def submit_profit_statement_info():
     submit_type = json_data.get("submit_type")
     infos_name = "profit_statement"
 
-    result, message = submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
+    result, message = submit_infos(type_num=1, infos=infos, submit_type=submit_type, infos_name=infos_name)
     return jsonify(result=result, message=message)
 
 
@@ -731,7 +738,8 @@ def submit_ix_first_info():
     submit_type = json_data.get("submit_type")
     infos_name = "trend_analysis"
 
-    result, message = submit_infos2(infos=infos, submit_type=submit_type, infos_name=infos_name, is_first=True)
+    result, message = submit_infos(type_num=2, infos=infos, submit_type=submit_type,
+                                   infos_name=infos_name, is_first=True)
     return jsonify(result=result, message=message)
 
 
@@ -760,7 +768,8 @@ def submit_ix_second_info():
     submit_type = json_data.get("submit_type")
     infos_name = "trend_analysis"
 
-    result, message = submit_infos2(infos=infos, submit_type=submit_type, infos_name=infos_name, is_first=False)
+    result, message = submit_infos(type_num=2, infos=infos, submit_type=submit_type,
+                                   infos_name=infos_name, is_first=False)
     return jsonify(result=result, message=message)
 
 
@@ -799,7 +808,8 @@ def submit_ix2_first_info():
     submit_type = json_data.get("submit_type")
     infos_name = "common_ratio_analysis"
 
-    result, message = submit_infos2(infos=infos, submit_type=submit_type, infos_name=infos_name, is_first=True)
+    result, message = submit_infos(type_num=2, infos=infos, submit_type=submit_type,
+                                   infos_name=infos_name, is_first=True)
     return jsonify(result=result, message=message)
 
 
@@ -827,7 +837,8 @@ def submit_ix2_second_info():
     submit_type = json_data.get("submit_type")
     infos_name = "common_ratio_analysis"
 
-    result, message = submit_infos2(infos=infos, submit_type=submit_type, infos_name=infos_name, is_first=False)
+    result, message = submit_infos(type_num=2, infos=infos, submit_type=submit_type, infos_name=infos_name,
+                                   is_first=False)
     return jsonify(result=result, message=message)
 
 
@@ -875,7 +886,7 @@ def submit_ix4_info():
     submit_type = json_data.get("submit_type")
     infos_name = "ratio_analysis"
 
-    result, message = submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
+    result, message = submit_infos(type_num=1, infos=infos, submit_type=submit_type, infos_name=infos_name)
     return jsonify(result=result, message=message)
 
 
@@ -917,7 +928,7 @@ def submit_coursex_info():
     submit_type = json_data.get("submit_type")
     infos_name = "dupont_analysis"
 
-    result, message = submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
+    result, message = submit_infos(type_num=1, infos=infos, submit_type=submit_type, infos_name=infos_name)
     return jsonify(result=result, message=message)
 
 

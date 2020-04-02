@@ -10,6 +10,7 @@ from urllib import parse
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
+MAX_BUSINESS_NO = 20
 username = parse.quote_plus("accojOwner")
 password = parse.quote_plus("Love199805#")
 
