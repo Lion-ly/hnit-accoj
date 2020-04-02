@@ -529,14 +529,12 @@ function showScoreEm(nowScore, nowTotalScore, totalScore, $nowSelectorNum, $tota
 
     $nowSelector = $nowSelectorNum ? $nowSelector + "-" + $nowSelectorNum : $nowSelector;
     $totalSelector = $totalSelectorNum ? $totalSelector + "-" + $totalSelectorNum : $totalSelector;
-    console.log("$nowSelector" + $nowSelector);
-    console.log("$totalSelector" + $totalSelector);
     $nowSelector = $($nowSelector + "]");
     $totalSelector = $($totalSelector + "]");
 
     if (totalScore) totalClass = totalScore === maxScore ? totalClass + "1" : totalClass + "2";
     else totalClass = totalClass + "3";
-    if (nowScore) nowClass = nowScore === nowTotalScore ? nowClass + "1" : nowClass + "2";
+    if (nowScore || nowScore === nowTotalScore) nowClass = nowScore === nowTotalScore ? nowClass + "1" : nowClass + "2";
     else nowClass = nowClass + "3";
 
     nowScore = nowScore.toFixed(2);
