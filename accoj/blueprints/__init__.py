@@ -261,7 +261,7 @@ def get_infos(infos_name, is_first=False):
         return t_company, t_company_cp
 
     infos_key = "{}_infos".format(infos_name)
-    filter_dict = {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "evaluation": 1, "_id": 0}
+    filter_dict = {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "evaluation": 1}
 
     company, company_cp = get_company(infos_name)
     infos = company.get("{}_infos".format(infos_name))
@@ -287,15 +287,11 @@ def get_data(type_num, infos_name, info_keys):
     """
     info_keys.append("scores")
     info_len = len(info_keys)
-    infos, answer_infos, confirmed, saved, company, company_cp = get_infos(infos_name=infos_name)
-    answer_infos = None
     scores = None
-    is_cp = False
+    infos, answer_infos, confirmed, saved, company, company_cp = get_infos(infos_name=infos_name)
     if type_num == 1:
         # （1.`二三四以及六的会计凭证部分`）
         if len(confirmed) == MAX_BUSINESS_NO:
-            is_cp = True
-        if is_cp:
             evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 if infos_name == "key_element":
@@ -305,6 +301,8 @@ def get_data(type_num, infos_name, info_keys):
                 elif infos_name == "entry":
                     evaluate_entry.evaluate_entry(company, company_cp)
             scores = evaluation.get("{}_score".format(infos_name))
+        else:
+            answer_infos = None
         info_values = [infos, answer_infos, confirmed, saved, scores]
         data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
         return data

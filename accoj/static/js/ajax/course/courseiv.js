@@ -1,6 +1,9 @@
 let entry_infos = Array(),
     entry_confirmed = Array(),
-    entry_saved = Array();
+    entry_saved = Array(),
+    answer_infos = "",
+    scores = "",
+    rowNumIv = 1;
 $(document).ready(function () {
     function init() {
         ivBind();
@@ -37,9 +40,7 @@ function submit_entry_info(submit_type) {
 function get_entry_info(isFromSubmit = false) {
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
-    if (nowBusinessNo < 0 || nowBusinessNo > 20) {
-        return;
-    }
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1) {
@@ -67,24 +68,34 @@ function get_entry_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  * @param data
+ * @param isFromButton
  */
-function map_entry_info(data) {
+function map_entry_info(data, isFromButton) {
     ivResetInfo();
     data = data ? data : "";
     entry_infos = data ? data["entry_infos"] : entry_infos;
     entry_confirmed = data ? data["entry_confirmed"] : entry_confirmed;
     entry_saved = data ? data["entry_saved"] : entry_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
         confirmed = entry_confirmed ? entry_confirmed.indexOf(business_index) !== -1 : false,
         saved = entry_saved ? entry_saved.indexOf(business_index) !== -1 : false;
-
+    if (answer_infos) {
+        showAnswerButton();
+        confirmed = true;
+        saved = true;
+        isFromButton = 1;
+        $("button[data-answer]").text("查看答案");
+        $("button[data-save], button[data-confirm]").prop("disabled", true);
+    }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
 
     // 如果已保存
-    if (saved) ivPaddingData(entry_infos[business_index]);
+    if (saved) ivPaddingData(entry_infos, isFromButton);
 }
 
 // ===============================获取和填充数据===============================//
@@ -122,38 +133,115 @@ function ivGetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function ivPaddingData(data) {
-    if (!data["entry_info"]) return;
-
-    let entry_info = data["entry_info"],
-        borrow_first = true,    // 借记第一行标记
-        loan_first = true;      // 贷记第一行标记
-    for (let i = 0; i < entry_info.length; i++) {
-        let subject = entry_info[i]["subject"],
-            money = entry_info[i]["money"],
-            is_dr = entry_info[i]["is_dr"];
-        if (is_dr) {
-            // 若果是借记
-            if (borrow_first) {
-                // 借记第一行
-                $("#subject1").val(subject);
-                $("#money1").val(money);
-                borrow_first = false;
-                continue;
-            }
-            iv_AddRow("borrow", subject, money)
-        } else {
-            if (loan_first) {
-                // 贷记第一行
-                $("#subject0").val(subject);
-                $("#money0").val(money);
-                loan_first = false;
-                continue;
-            }
-            iv_AddRow("loan", subject, money)
+function ivPaddingData(data, isFromButton) {
+    function padding() {
+        function push_err_pos(sub, fl, isDR) {
+            isDR = isDR ? 1 : 0;
+            if (fl === 0 || !sub) return;
+            let $subject = $("input[value=" + sub + "][id$=" + isDR + "]"),
+                $money = $subject.parent().parent().next().find("input");
+            if (!$subject.length || !$money.length) return;
+            if (fl) error_pos.push($money);
+            else error_pos.push($money, $subject);
+            console.log("fl: " + fl);
+            console.log("isDR: " + isDR);
         }
+
+        let entry_info = data,
+            borrow_first = true,    // 借记第一行标记
+            loan_first = true,      // 贷记第一行标记
+            error_pos = Array(),
+            infoLen = entry_info.length,
+            flag = false, j = 0, isDr = "";
+        t_infoLen = isFromButton === 1 ? answer_info.length : t_infoLen;
+
+        for (let i = 0; i < entry_info.length; i++) {
+            let subject = entry_info[i]["subject"],
+                money = entry_info[i]["money"],
+                is_dr = entry_info[i]["is_dr"];
+            if (is_dr) {
+                // 若果是借记
+                if (borrow_first) {
+                    // 借记第一行
+                    $("#subject1").attr("value", subject);
+                    $("#subject1").val(subject);
+                    $("#money1").attr("value", money);
+                    $("#money1").val(money);
+                    borrow_first = false;
+                } else iv_AddRow("borrow", subject, money)
+            } else {
+                if (loan_first) {
+                    // 贷记第一行
+                    $("#subject0").attr("value", subject);
+                    $("#subject0").val(subject);
+                    $("#money0").attr("value", money);
+                    $("#money0").val(money);
+                    loan_first = false;
+                } else iv_AddRow("loan", subject, money)
+            }
+            if (isFromButton === 1) {
+                flag = false;
+                for (let i = 0; i < t_infoLen; i++) {
+                    let t_subject = answer_info[i]["subject"],
+                        t_is_dr = answer_info[i]["is_dr"],
+                        t_money = answer_info[i]["money"];
+                    if (subject === t_subject && is_dr === t_is_dr) {
+                        flag = t_money == money;
+                        flag = flag ? 0 : 1;
+                        break;
+                    }
+                }
+                push_err_pos(subject, flag, is_dr);
+            }
+        }
+        console.log(error_pos.length);
+        if (isFromButton === 1) {
+            for (let i = 0; i < t_infoLen; i++) {
+                let t_subject = answer_info[i]["subject"],
+                    t_is_dr = answer_info[i]["is_dr"],
+                    t_money = answer_info[i]["money"];
+
+                flag = false;
+                for (j = 0; j < infoLen; j++) {
+                    let subject = entry_info[j]["subject"],
+                        is_dr = entry_info[j]["is_dr"],
+                        money = answer_info[i]["money"];
+
+                    if (subject === t_subject && is_dr === t_is_dr) {
+                        flag = t_money == money;
+                        flag = flag ? 0 : 1;
+                        isDr = is_dr ? 1 : 0;
+                        break;
+                    }
+                }
+                push_err_pos(t_subject, flag, isDr);
+            }
+            // 标出错误位置
+            for (let i = 0; i < error_pos.length; i++) {
+                console.log(error_pos[i]);
+                hasError(error_pos[i]);
+            }
+        }
+        console.log(error_pos.length);
+        ivDisabledInput();
     }
+
+    if (!data) return;
+    if (isFromButton) removeAllError();
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
+    if (isFromButton) {
+        let nowScore = scores[index * 2],
+            nowTotalScore = scores[index * 2 + 1],
+            totalScore = scores[scores.length - 1];
+        showScoreEm(nowScore, nowTotalScore, totalScore);
+        if (isFromButton === 1) answer_info = answer_infos[index];
+        if (isFromButton === 2) ivResetInfo();
+    }
+    data = data[index];
+    padding();
 }
 
 // ==================================事件控制==================================//
@@ -161,9 +249,14 @@ function ivPaddingData(data) {
  * 事件绑定
  */
 function ivBind() {
+    function map_answer() {
+        spanStatusCtr(true, true, "submit_status_span");
+        ivPaddingData(answer_infos, 2);
+    }
+
     bind_confirm_info("submit_entry_info");
     bind_save_info(submit_entry_info);
-    bindAnswerSource();
+    bindAnswerSource("", map_entry_info, map_answer);
     bindIllegalCharFilter();
     bindRealNumber();
     $("a[data-iv-addRow-1]").click(function () {
@@ -182,6 +275,8 @@ function ivBind() {
  * 重置分录信息
  */
 function ivResetInfo() {
+    if (!answer_infos) $("#submit_status_span").hide();
+    rowNumIv = 1;
     // 清空第一栏借贷信息
     $("#subject1").val("");
     $("#subject0").val("");
@@ -191,17 +286,13 @@ function ivResetInfo() {
     let removeRows = $("[id^=subject1_], [id^=subject0_]"),
         removeRowsLen = removeRows.length;
     if (!removeRowsLen) return;
-    for (let i = 0; i < removeRowsLen; i++) {
+    for (let i = 0; i < removeRowsLen; i++)
         $(removeRows[i]).parent().parent().remove();
-    }
-    $("#submit_status_span").hide();
 }
 
 /*
  * @ # courseiv ? 表格增加行
  */
-let rowNumIv = 1;
-
 function iv_AddRow(flag, subject = "", money = "") {
     let type = "0",
         anchorName = "loanRowAfter";
@@ -234,4 +325,15 @@ function iv_AddRow(flag, subject = "", money = "") {
 function iv_DeleteRow(obj) {
     $(obj).parent().parent().parent().remove();
     rowNumIv -= 1;
+}
+
+/**
+ * 禁用编辑
+ */
+function ivDisabledInput() {
+    let $inputs = $("input[id^=subject], input[id^=money]"),
+        $aLabels = $("a[type=button][data-toggle]");
+    $inputs.attr("readonly", "readonly");
+    $aLabels.attr({"disabled": true, "onclick": ""});
+    $aLabels.unbind("click");
 }

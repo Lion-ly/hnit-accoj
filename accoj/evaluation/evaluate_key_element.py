@@ -58,4 +58,3 @@ def evaluate_key_element(company, company_cp):
     scores = round(scores) / 2
     key_element_score.append(scores)
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.key_element_score": key_element_score}})
-    return key_element_score
