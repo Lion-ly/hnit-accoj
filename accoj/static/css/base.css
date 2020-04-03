@@ -156,24 +156,14 @@ body {
 
 /*湖南工学院简介*/
 .acc-intro-hnit {
-    margin-top: 120px;
-    margin-bottom: 60px;
+    margin-top: 60px;
+    margin-bottom: 30px;
 }
 
 .acc-intro-hnit p {
     font-size: 14px;
     font-family: 楷体, serif;
     text-indent: 2em;
-}
-
-/*设置文字不可选*/
-.no-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 /*巨幕背景*/

@@ -1,29 +1,20 @@
-// 页面加载完成填充数据
+let acc_document_infos = Array(),
+    acc_document_confirmed = Array(),
+    acc_document_saved = Array(),
+    row_num = 2,
+    fileContent;
+
 $(document).ready(function () {
-    pageSplitBind(function (business_no) {
-        businessLiControl(business_no);
-        get_acc_document_info();
-    }, 20);
-    getBusinessList();
-    get_acc_document_info(true);
+    function init() {
+        viBind();
+        getBusinessList();
+        get_acc_document_info(true);
+    }
+
+    init();
 });
-let fileContent = "";
 
 //==================================提交会计凭证信息==================================//
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_acc_document() {
-    bind_confirm_info("confirm_acc_document_button", "submit_acc_document_info");
-}
-
-/**
- * 保存凭证信息
- */
-function save_acc_document() {
-    bind_save_info("save_acc_document_button", submit_acc_document_info);
-}
-
 /**
  * 提交会计凭证信息
  * @param submit_type confirm or save
@@ -40,26 +31,21 @@ function submit_acc_document_info(submit_type) {
 }
 
 //==================================获取会计凭证信息==================================//
-let acc_document_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
-    acc_document_confirmed = Array(),
-    acc_document_saved = Array();
-
 /**
  * 从后端获取会计凭证信息
  */
 function get_acc_document_info(isFromSubmit = false) {
-    //  清空信息
-    viResetInfo();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
-
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1)
-        //  若未保存，则不向后台请求数据
+        if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1) {
+            //  若未保存，则不向后台请求数据
+            viResetInfo();
             return;
+        }
     }
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
     if (acc_document_confirmed.length > 0 && acc_document_confirmed.indexOf(nowBusinessNo - 1) !== -1) {
@@ -79,6 +65,7 @@ function get_acc_document_info(isFromSubmit = false) {
  * @param data
  */
 function map_acc_document_info(data) {
+    viResetInfo();
     data = data ? data : "";
     acc_document_infos = data ? data["acc_document_infos"] : acc_document_infos;
     acc_document_confirmed = data ? data["acc_document_confirmed"] : acc_document_confirmed;
@@ -283,9 +270,35 @@ function vi_downloadFile() {
 
 // ==================================事件控制==================================//
 /**
+ * 事件绑定
+ */
+function viBind() {
+    bind_confirm_info("submit_acc_document_info");
+    bind_save_info(submit_acc_document_info);
+    bindAnswerSource();
+    bindIllegalCharFilter();
+    bindRealNumber();
+    bindLimitNumber();
+    $("a[data-vi-addRow]").click(function () {
+        vi_AddRow();
+    });
+    $("input[data-get-file]").change(function () {
+        getfileContents();
+    });
+    $("button[data-download-file]").change(function () {
+        vi_downloadFile();
+    });
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_acc_document_info();
+    }, 20);
+}
+
+/**
  * 重置凭证信息
  */
 function viResetInfo() {
+    row_num = 2;
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
     $("input").val("");
     $("#vi_downloadFile_button").hide();
@@ -293,15 +306,13 @@ function viResetInfo() {
     $("#submit_status_span").hide();
 }
 
-let row_num = 2;
-
 /*
  * @ # coursevi ? 表格增加行
  */
 function vi_AddRow() {
     $("#vi_rowLast").before(
-        "<tr id='vi_row" + row_num + "'>"
-        + "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<tr id='vi_row" + row_num + "'>" +
+        "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='general_account' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='detail_account' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input onkeyup='limit_number(this)'></label></td>" +
@@ -324,15 +335,16 @@ function vi_AddRow() {
         "<td><label><input onkeyup='limit_number(this)'></label></td>" +
         "<td><label><input onkeyup='limit_number(this)'></label></td>" +
         "<td><label><input onkeyup='limit_number(this)'></label></td>"
-        + "<th style='width: 4%; border: 0; background: #ffffff;padding: 4px'>"
-        + "<div style='text-align: center'>"
-        + "<a style='color: red; padding: 0 0' type='button' "
-        + "class='btn' onclick='vi_DeleteRow(this)'><span "
+        + "<th class='acc-unborder'>"
+        + "<div class='acc-minus'>"
+        + "<a type='button' "
+        + "class='btn' onclick='vi_DeleteRow(this)' data-toggle='tooltip' data-placement='left' title='删除行'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
         + "</th>"
         + "</tr>"
     );
+    $("#" + "vi_row" + row_num).find("a[data-toggle]").tooltip();
     row_num++;
 }
 

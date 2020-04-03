@@ -1,173 +1,266 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-    <link href="{{ url_for('static', filename='css/course/coursev_2.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/ajax/course/coursev_2.js') }}" charset="UTF-8"></script>
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-				<span>1、掌握账户及其格式。<br/> 2、掌握本期发生额和期末余额的计算。<br/>
+<link href="{{ url_for('static', filename='css/course/coursev_2.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='js/ajax/course/coursev_2.js') }}" charset="UTF-8"></script>
+<!--第五次课程-->
+<div class="courseBody">
+    <!-- 习题主体 -->
+    <div class="container">
+        <div class="panel panel-default">
+            <!--作业要求-->
+            <div class="panel-heading">
+				<span>
+                    1、掌握账户及其格式。
+                    <br/>
+                    2、掌握本期发生额和期末余额的计算。
+                    <br/>
 					3、理解试算平衡的过程和应用。
 				</span>
+            </div>
+            <div class="panel-body">
+                <!--页码-->
+                <div class="acc-pn-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('accoj.coursev') }}">设立账户</a>
+                            </li>
+                            <li class="active">
+                                <a href="{{ url_for('accoj.coursev_2') }}">平衡表</a>
+                            </li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
-                <div class="panel-body">
-
-                    <div style="text-align: center">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination pagination-sm">
-                                <li><a href="#" aria-label="Previous"> <span
-                                        aria-hidden="true">&laquo;</span>
-                                </a></li>
-                                <li><a href="{{ url_for('accoj.coursev') }}">设立账户</a></li>
-                                <li class="active"><a href="{{ url_for('accoj.coursev_2') }}">平衡表</a></li>
-                                <li><a href="#" aria-label="Next"> <span
-                                        aria-hidden="true">&raquo;</span>
-                                </a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <hr class="simple" style="color:#6f5499"/>
-                    <span id="balance_sheet_submit_span" class="glyphicon glyphicon-ok"
-                          style="color: #5cb85c;font-size: medium;display:none;">
-                                已完成</span>
-                    <p class="acc-title">2、第1个会计期间的试算平衡表：</p>
-                    <table id="table_period_1" class="table table-bordered acc-container-tableformat"
-                           style="border: 0 ">
-                        <tbody>
-                        <tr>
-                            <th rowspan="2" class="acc-unedit">会计科目</th>
-                            <th colspan="2" class="acc-unedit">期初余额</th>
-                            <th colspan="2" class="acc-unedit">本期发生额</th>
-                            <th colspan="2" class="acc-unedit">期末余额</th>
-                        </tr>
-                        <tr>
-                            <th class="acc-unedit">借方</th>
-                            <th class="acc-unedit">贷方</th>
-                            <th class="acc-unedit">借方</th>
-                            <th class="acc-unedit">贷方</th>
-                            <th class="acc-unedit">借方</th>
-                            <th class="acc-unedit">贷方</th>
-                            <td style="padding: 0; border: 0; width: 5%">
-                                <div style="text-align: center;">
-                                    <a style="color: green;padding: 0;" type="button" class="btn"
-                                       onclick="v2_AddRow('period1')"><span
-                                            class="glyphicon glyphicon-plus-sign"></span></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr id="period1_row_1">
-                            <td><label><input name="subject" title="科目" onkeyup="illegalCharFilter(this)"></label></td>
-                            <td><label><input name="borrow_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                        </tr>
-                        <tr id="period1_last">
-                            <th class="acc-unedit">合计</th>
-                            <td><label><input name="borrow_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <p class="acc-title">3、第2个会计期间的试算平衡表：</p>
-                    <table id="table_period_2" class="table table-bordered acc-container-tableformat"
-                           style="border: 0">
-                        <tbody>
-                        <tr>
-                            <th rowspan="2" class="acc-unedit">会计科目</th>
-                            <th colspan="2" class="acc-unedit">期初余额</th>
-                            <th colspan="2" class="acc-unedit">本期发生额</th>
-                            <th colspan="2" class="acc-unedit">期末余额</th>
-
-                        </tr>
-                        <tr>
-                            <th class="acc-unedit">借方</th>
-                            <th class="acc-unedit">贷方</th>
-                            <th class="acc-unedit">借方</th>
-                            <th class="acc-unedit">贷方</th>
-                            <th class="acc-unedit">借方</th>
-                            <th class="acc-unedit">贷方</th>
-                            <td style="padding: 0; border: 0; width: 5%">
-                                <div style="text-align: center">
-                                    <a style="color: green;padding: 0;" type="button" class="btn"
-                                       onclick="v2_AddRow('period2')"><span
-                                            class="glyphicon glyphicon-plus-sign"></span></a>
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr id="period2_row_1">
-                            <td><label><input name="subject" title="科目" onkeyup="illegalCharFilter(this)"></label></td>
-                            <td><label><input name="borrow_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                        </tr>
-                        <tr id="period2_last">
-                            <th class="acc-unedit">合计</th>
-                            <td><label><input name="borrow_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_1" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_2" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="borrow_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                            <td><label><input name="lend_3" title="金额￥"
-                                              onchange="RealNumber(this)"></label></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <hr class="simple" style="clear: both; color:#6f5499"/>
-                    <div id="course_v_2_message"></div>
-                    <div style="float: left;">
-                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
-                    </div>
-                    <div style="float: right;">
-                        <button type="button" class="btn btn-info" id="save_balance_sheet_button"
-                                onclick="save_balance_sheet()">
-                            <span class="glyphicon"></span>&nbsp;保存
-                        </button>
-                        <button type="button" class="btn btn-success" id="confirm_balance_sheet_button"
-                                onclick="confirm_balance_sheet()">
-                            <span class="glyphicon"></span>&nbsp;提交
-                        </button>
-                    </div>
+                <hr class="simple"/>
+                <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。
+                    <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                    <em class="acc-score-help">当前</em>
+                </p>
+                <em data-total-score></em>
+                <em data-now-score></em>
+                <span id="balance_sheet_submit_span" class="glyphicon glyphicon-ok acc-completed">已完成</span>
+                <p class="acc-title">2、第1个会计期间的试算平衡表：</p>
+                <table id="table_period_1" class="table table-bordered acc-container-tableformat acc-unborder">
+                    <tbody>
+                    <tr>
+                        <th rowspan="2" class="acc-unedit">会计科目</th>
+                        <th colspan="2" class="acc-unedit">期初余额</th>
+                        <th colspan="2" class="acc-unedit">本期发生额</th>
+                        <th colspan="2" class="acc-unedit">期末余额</th>
+                    </tr>
+                    <tr>
+                        <th class="acc-unedit">借方</th>
+                        <th class="acc-unedit">贷方</th>
+                        <th class="acc-unedit">借方</th>
+                        <th class="acc-unedit">贷方</th>
+                        <th class="acc-unedit">借方</th>
+                        <th class="acc-unedit">贷方</th>
+                        <td class="acc-unborder">
+                            <div class="acc-plus">
+                                <a type="button" class="btn" data-v2-addRow-1 data-toggle="tooltip" data-placement="left" title="新增行">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="period1_row_1">
+                        <td>
+                            <label>
+                                <input name="subject" title="科目" data-illegal-char>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr id="period1_last">
+                        <th class="acc-unedit">合计</th>
+                        <td>
+                            <label>
+                                <input name="borrow_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="acc-title">3、第2个会计期间的试算平衡表：</p>
+                <table id="table_period_2" class="table table-bordered acc-container-tableformat acc-unborder">
+                    <tbody>
+                    <tr>
+                        <th rowspan="2" class="acc-unedit">会计科目</th>
+                        <th colspan="2" class="acc-unedit">期初余额</th>
+                        <th colspan="2" class="acc-unedit">本期发生额</th>
+                        <th colspan="2" class="acc-unedit">期末余额</th>
+                    </tr>
+                    <tr>
+                        <th class="acc-unedit">借方</th>
+                        <th class="acc-unedit">贷方</th>
+                        <th class="acc-unedit">借方</th>
+                        <th class="acc-unedit">贷方</th>
+                        <th class="acc-unedit">借方</th>
+                        <th class="acc-unedit">贷方</th>
+                        <td class="acc-unborder">
+                            <div class="acc-plus">
+                                <a class="btn" data-v2-addRow-2 data-toggle="tooltip" data-placement="left" title="新增行">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="period2_row_1">
+                        <td>
+                            <label>
+                                <input name="subject" title="科目" data-illegal-char>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr id="period2_last">
+                        <th class="acc-unedit">合计</th>
+                        <td>
+                            <label>
+                                <input name="borrow_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_1" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_2" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="borrow_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input name="lend_3" title="金额￥" data-real-number>
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr class="simple"/>
+                <!--信息提示窗口-->
+                <div id="course_v_2_message"></div>
+                <div class="acc-btn-left">
+                    <button type="button" class="btn btn-info" data-answer>查看答案</button>
+                </div>
+                <div class="acc-btn-right">
+                    <button type="button" class="btn btn-info" data-save>
+                        <span class="glyphicon"></span>&nbsp;保存
+                    </button>
+                    <button type="button" class="btn btn-success" data-confirm>
+                        <span class="glyphicon"></span>&nbsp;提交
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 防尾前移 -->
-    <div class="acc-container-separate"></div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

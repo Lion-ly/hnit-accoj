@@ -11,6 +11,10 @@ from flask import current_app
 from flask_mail import Message
 from datetime import datetime
 from threading import Thread
+from accoj.extensions import mongo
+from xpinyin import Pinyin
+import requests
+import json
 
 
 def send_async_mail(app, msg):
@@ -18,52 +22,87 @@ def send_async_mail(app, msg):
         mail.send(msg)
 
 
-
-def send_mail(to, mail_random, flag,send_password):
+def send_mail(to, mail_random, flag, send_password):
     """
 
     :param to: 收件人
     :param mail_random: 收件人的验证码
     :param flag: 0.表示是注册 1.表示发送找回密码
+    :param send_password:
     :return:
     """
     app = current_app._get_current_object()
     msg = Message(subject='验证码', sender=current_app.config['MAIL_USERNAME'], recipients=[to])
     msg.html = ''''''
     if flag:
-        msg.html = '''
-                <h1>
-                    亲爱的 {nickname},
-                </h1>
-                <h3>
-                    欢迎来到 <b>会计实训系统</b>!
-                </h3>
-                <p>
-                    您的密码已重置为 &nbsp;&nbsp; <b>{send_password}</b> &nbsp;&nbsp; 赶快去个人信息界面去修改密码吧！！！
-                </p>
-            
-                <p>感谢您的支持和理解</p>
-                <p>来自：会计实训系统 </p>
-                <p><small>{time}</small></p>
-                '''.format(nickname='同学', send_password=send_password, time=datetime.now())
+        msg.html = '''<p><font size='3' face='arial'>【HNIT ACCOJ】新密码为：
+                                <font size='3' face='arial' color='0033ff'>{send_password}</font></font></p>
+                                <font size='3' face='arial'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;及时修改</font>
+                                <p><font size='1' face='arial'>&nbsp;&nbsp;&nbsp;{time}</font></p>
+                                '''.format(send_password=send_password, time=datetime.now().replace(microsecond=0))
+
     else:
         msg.html = '''
-        <h1>
-            亲爱的 {nickname},
-        </h1>
-        <h3>
-            欢迎来到 <b>会计实训系统</b>!
-        </h3>
-        <p>
-            您的验证码为 &nbsp;&nbsp; <b>{mailcode}</b> &nbsp;&nbsp; 赶快去填写验证码吧！！！
-        </p>
-        <h4>
-                <b>验证码有效时间为2分钟，<b>
-        </h4>
-        <p>感谢您的支持和理解</p>
-        <p>来自：会计实训系统 </p>
-        <p><small>{time}</small></p>
-        '''.format(nickname='同学', mailcode=mail_random, time=datetime.now())
+                        <p><font size='3' face='arial'>【HNIT ACCOJ】你本次的验证码为：
+                        <font size='3' face='arial' color='0033ff'>{mailcode}</font></font></p>
+                        <font size='3' face='arial'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两分钟内有效</font>
+                        <p><font size='1' face='arial'>&nbsp;&nbsp;&nbsp;{time}</font></p>
+                        '''.format(mailcode=mail_random, time=datetime.now().replace(microsecond=0))
     thr = Thread(target=send_async_mail, args=[app, msg])
     thr.start()
     return thr
+
+
+def gain_access_token():
+    """
+    获取access_token
+    :return:
+    """
+    corpid = 'ww0022c7e541c2e11b'
+    corpsecret = 'EvOPZQNU1KI21hAksiCWv15BvA2kf_A8YhpEVaQqdsM'
+    url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={}&corpsecret={}'.format(corpid, corpsecret)
+    response = requests.get(url)
+    result = response.json()
+    if result['errcode'] is 0:
+        return result['access_token']
+    else:
+        return 0
+
+
+def assign_email():
+    """
+    分配邮箱账号并把邮箱账号写入到数据库
+    :return:
+    """
+    access_token = gain_access_token()
+    p = Pinyin()
+    add_url = 'https://qyapi.weixin.qq.com/cgi-bin/user/create?access_token={}'.format(access_token)
+    if access_token is not 0:
+        for result in mongo.db.user.find():
+            if result:
+                name = result['student_name']
+                userid = p.get_pinyin(name, '')
+                name = userid
+                mobile = result['student_phone']
+                department = [3]
+                position = 'Hunan'
+                body_value = {
+                    "userid"    : userid,
+                    "name"      : name,
+                    "mobile"    : mobile,
+                    "department": department,
+                    "position"  : position
+                }
+                body = json.dumps(body_value)
+                add_response = requests.post(add_url, date=body)
+                create_result = add_response.json()
+                if create_result['errcode'] is 0:
+                    get_url = 'https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token={ACCESS_TOKEN}&userid={USERID}'.format(
+                        ACCESS_TOKEN=access_token, USERID=userid)
+                    get_response = requests.get(get_url)
+                    get_result = get_response.json()
+                    if get_result['errcode'] is 0:
+                        mongo.db.user.update_one({"student_no": result["student_no"]},
+                                                 {"$set": {"email": get_result["email"]}})
+            else:
+                break

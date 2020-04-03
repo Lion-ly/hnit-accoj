@@ -1,8 +1,20 @@
-// 正确答案中包含的所有科目列表
-let involve_subjects = Array();
-// 页面加载完成填充数据
+let subsidiary_account_infos = "",
+    subsidiary_account_confirmed = Array(),
+    subsidiary_account_saved = Array(),
+    involve_subjects = Array(),
+    period1Vii1Row = 3,
+    period2Vii1Row = 3,
+    acc_balance_sheet_infos = "",
+    acc_balance_sheet_confirmed = "",
+    acc_balance_sheet_saved = "",
+    vii2Row = 2;
 $(document).ready(function () {
-    get_involve_subjects();
+    function init() {
+        viiBind();
+        get_involve_subjects();
+    }
+
+    init();
 });
 
 /**
@@ -28,20 +40,6 @@ function get_involve_subjects() {
     get_info({}, "/get_business_list", successFunc, "");
 }
 
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_subsidiary_account() {
-    bind_confirm_info("confirm_subsidiary_account_button", "submit_subsidiary_account_info");
-}
-
-/**
- * 保存明细账信息
- */
-function save_subsidiary_account() {
-    bind_save_info("save_subsidiary_account_button", submit_subsidiary_account_info);
-}
-
 //==================================提交会计明细账信息==================================//
 /**
  * 提交会计明细账信息
@@ -60,10 +58,6 @@ function submit_subsidiary_account_info(submit_type) {
 }
 
 //==================================获取会计明细账信息==================================//
-let subsidiary_account_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
-    subsidiary_account_confirmed = Array(),
-    subsidiary_account_saved = Array();
-
 /**
  * 从后端获取会计明细账信息
  */
@@ -75,7 +69,7 @@ function get_subsidiary_account_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!subsidiary_account_saved.length || subsidiary_account_saved.indexOf(subject) === -1)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若请求的科目已经确认提交过，则不再发送数据请求
@@ -93,9 +87,6 @@ function get_subsidiary_account_info(isFromSubmit = false) {
 }
 
 //==================================将会计明细账信息映射到前端==================================//
-let period1Vii1Row = 3,
-    period2Vii1Row = 3;
-
 /**
  * 将数据映射到前端
  */
@@ -151,22 +142,6 @@ function map_subsidiary_account_info(data) {
 }
 
 //==================================提交科目余额表信息==================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_acc_balance_sheet() {
-    bind_confirm_info("confirm_acc_balance_sheet_button", "submit_acc_balance_sheet_info");
-}
-
-/**
- * 保存科目余额表信息
- */
-function save_acc_balance_sheet() {
-    bind_save_info("save_acc_balance_sheet_button", submit_acc_balance_sheet_info);
-}
-
-
 /**
  * 提交科目余额表信息
  * @param submit_type confirm or save
@@ -185,10 +160,6 @@ function submit_acc_balance_sheet_info(submit_type) {
 }
 
 //==================================获取科目余额表信息==================================//
-let acc_balance_sheet_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
-    acc_balance_sheet_confirmed = "",
-    acc_balance_sheet_saved = "";
-
 /**
  * 从后端获取科目余额表信息
  */
@@ -199,7 +170,7 @@ function get_acc_balance_sheet_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!acc_balance_sheet_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若acc_balance_sheet_infos不为空且已经确认提交过，则不再发送数据请求
@@ -445,6 +416,33 @@ function vii2PaddingData(data) {
 
 // ==================================事件控制==================================//
 /**
+ * 事件绑定
+ */
+function viiBind() {
+    bind_confirm_info("submit_subsidiary_account_info", $("button[data-confirm-1]"));
+    bind_save_info(submit_acc_balance_sheet_info, $("button[data-save-1]"));
+
+    bind_confirm_info("submit_acc_balance_sheet_info", $("button[data-confirm-2]"));
+    bind_save_info(submit_acc_balance_sheet_info, $("button[data-save-2]"));
+
+    bindAnswerSource($("button[data-answer-1]"));
+    bindAnswerSource($("button[data-answer-2]"));
+    bindIllegalCharFilter();
+    bindRealNumber();
+    bindLimitNumber();
+    bindLimitJieDai();
+    $("a[data-vii1-addRow-1]").click(function () {
+        vii1_AddRow(true);
+    });
+    $("a[data-vii1-addRow-2]").click(function () {
+        vii1_AddRow(false);
+    });
+    $("a[data-vii2-addRow]").click(function () {
+        vii2_AddRow();
+    });
+}
+
+/**
  * 重置明细账信息
  */
 function vii1ResetInfo() {
@@ -466,6 +464,7 @@ function vii1ResetInfo() {
  * 重置科目余额表信息
  */
 function vii2ResetInfo() {
+    vii2Row = 2;
     $("[id^=vii2Row][id!=vii2Row1][id!=vii2RowLast]").remove();
     $("#second").find("input").val("");
 }
@@ -487,12 +486,11 @@ function vii1_AddRow(flag) {
     let now_id = idPrefix + vii1Row;
     $("#" + obj).before(
         "<tr id='" + now_id + "'>"
-        + "<td><label><input name='month' title='月' onkeyup='limit_number(this)'></label>"
-        + "<td><label><input name='day' title='日' onkeyup='limit_number(this)'></label>"
-        + "<td><label><input name='word' title='字' onkeyup='limit_number(this)'></label>"
-        + "<td><label><input name='no' title='号' onkeyup='limit_number(this)'></label>"
+        + "<td><label><input name='month' title='月' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='day' title='日' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='word' title='字' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='no' title='号' onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>"
-
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
@@ -503,7 +501,6 @@ function vii1_AddRow(flag) {
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
-
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
@@ -514,9 +511,7 @@ function vii1_AddRow(flag) {
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
-
         + "<td><label><input name='orientation' onkeyup='limitJieDai(this)'></label></td>"
-
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
@@ -528,15 +523,17 @@ function vii1_AddRow(flag) {
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input onkeyup='limit_number(this)'></label></td>"
 
-        + "<td style='width: 1%; border: 0; background: #ffffff'>"
-        + "<div style='text-align: center'>"
-        + "<a style='color: red; padding:0' type='button' "
-        + "class='btn' onclick='vii1_DeleteRow(this)'><span "
+        + "<td class='acc-unborder'>"
+        + "<div class='acc-minus'>"
+        + "<a type='button' "
+        + "class='btn' onclick='vii1_DeleteRow(this)' data-toggle='tooltip' data-placement='left' title='删除行'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
         + "</td>"
         + "</tr>"
     );
+    $nowid = $("#" + now_id);
+    $nowid.find("a[data-toggle]").tooltip();
 }
 
 
@@ -547,35 +544,37 @@ function vii1_DeleteRow(obj) {
     $(obj).parent().parent().parent().remove();
 }
 
-let vii2Row = 2;
-
 /*
  * @ # coursevii2 -> 科目余额表 ? 表格增加行
  */
 function vii2_AddRow() {
     let now_id = "vii2Row" + vii2Row;
     $("#vii2RowLast").before(
-        "<tr id='" + now_id + "'>"
-        + "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
-        "<td><label><input name='borrow_1' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='lend_1' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='borrow_2' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='lend_2' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='borrow_3' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input name='lend_3' title='金额￥'" +
-        "                                              onkeyup='limit_number(this)'></label></td>"
-        + "<td style='padding: 0; border: 0'>"
-        + "<div style='text-align: center'> "
-        + "<a style='color: red;padding: 0;' type='button' class='btn' onclick='vii2_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+        "<tr id='" + now_id + "'>" +
+        "<td><label><input name='subject' title='科目' onkeyup='illegalCharFilter(this)'></label></td>" +
+        "<td><label><input name='borrow_1' title='金额￥' " +
+        "></label></td>" +
+        "<td><label><input name='lend_1' title='金额￥' " +
+        "></label></td>" +
+        "<td><label><input name='borrow_2' title='金额￥' " +
+        "></label></td>" +
+        "<td><label><input name='lend_2' title='金额￥' " +
+        "></label></td>" +
+        "<td><label><input name='borrow_3' title='金额￥' " +
+        "></label></td>" +
+        "<td><label><input name='lend_3' title='金额￥' " +
+        "></label></td>"
+        + "<td class='acc-unborder'>"
+        + "<div class='acc-minus'> "
+        + "<a type='button' class='btn' onclick='vii2_DeleteRow(this)' data-toggle='tooltip' data-placement='left' title='删除行'>"
+        + "<span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div> "
         + "</td> "
         + "</tr>"
     );
+    $nowid = $("#" + now_id);
+    bindRealNumber($nowid.find("input[name!=subject]"));
+    $nowid.find("a[data-toggle]").tooltip();
     vii2Row++;
 }
 

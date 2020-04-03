@@ -10,7 +10,12 @@ let involve_subjects = Object(),  // 正确答案中包含的所有科目列表
 
 // 页面加载完成填充数据
 $(document).ready(function () {
-    get_involve_subjects();
+    function init() {
+        vBind();
+        get_involve_subjects();
+    }
+
+    init();
 });
 
 
@@ -28,20 +33,6 @@ function get_involve_subjects() {
 }
 
 //==================================提交会计账户信息==================================//
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_ledger() {
-    bind_confirm_info("confirm_ledger_button", "submit_ledger_info");
-}
-
-/**
- * 保存账户信息
- */
-function save_ledger() {
-    bind_save_info("save_ledger_button", submit_ledger_info);
-}
-
 /**
  * 提交会计账户信息
  * @param submit_type confirm or save
@@ -77,7 +68,7 @@ function get_ledger_info(isFromSubmit = false, subject = "") {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!ledger_saved_tmp || ledger_saved_tmp.indexOf(subject) === -1)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若请求的账户已经确认提交过，则不再发送数据请求
@@ -256,6 +247,26 @@ function vPaddingData(data) {
 
 //==================================事件控制==================================//
 /**
+ * 事件绑定
+ */
+function vBind() {
+    bind_confirm_info("submit_ledger_info");
+    bind_save_info(submit_ledger_info);
+    bindAnswerSource();
+    let $creatId1 = $("#createNewTableLeft"),
+        $creatId2 = $("#createNewTableRight");
+    $creatId1.click(function () {
+        v_createNewPage($creatId1, "left");
+    });
+    $creatId2.click(function () {
+        v_createNewPage($creatId2, "right");
+    });
+    $("button[data-change-period]").click(function () {
+        changePeriod();
+    });
+}
+
+/**
  * 科目改变事件
  * @param obj
  */
@@ -424,13 +435,13 @@ function v_AddLeftRow(obj, pm, business_no = "", money = "") {
     }
     $(obj).parent().parent().parent().after(
         "<tr><td><div style='text-align: left'>"
-        + "<a style='color: red; padding: 0 0' type='button' "
+        + "<a style='color: red; padding: 0' type='button' "
         + "class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>"
         + "<td><input style='text-align: left' title='业务编号' onkeyup='limit_number(this)' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
-        + "<td><input style='text-align: left' title='金额 ' onchange='RealNumber(this)' name='" + is_dr + "' value='" + money + "'"
+        + "<td><input style='text-align: left' title='金额 ' onchange='RealNumber(this)' onfocus='removeError(this)' name='" + is_dr + "' value='" + money + "'"
         + " placeholder='0'></td></tr>");
 }
 
@@ -443,10 +454,10 @@ function v_AddRightRow(obj, pm, business_no = "", money = "") {
         "<tr>"
         + "<td><input style='text-align: right' onkeyup='limit_number(this)' title='业务编号' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
-        + "<td><input style='text-align: right' onchange='RealNumber(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
+        + "<td><input style='text-align: right' onchange='RealNumber(this)' onfocus='removeError(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
         + " name='" + is_dr + "' id='' placeholder='0'></td>"
         + "<td style='width: 40%;'>" + "<div style='text-align: right'>"
-        + "<a style='color: red; padding: 0 0' "
+        + "<a style='color: red; padding: 0' "
         + "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>" + "</tr>");
@@ -465,7 +476,7 @@ function tTableAppendLeft() {
         '<div role="form" class="" id="ttableLeft">' +
         '        <div style="text-align:right;">' +
         '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
-        '               class="btn" title="删除当前账户信息"  onclick="deleteTableV(this)"><span class="glyphicon glyphicon-remove"></span></button>' +
+        '               class="btn" onclick="deleteTableV(this)" data-toggle="tooltip" data-placement="left" title="删除账户"><span class="glyphicon glyphicon-remove"></span></button>' +
         '        </div>' +
         '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
         '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
@@ -499,7 +510,7 @@ function tTableAppendLeft() {
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
         '                                    </td>' +
         '                                    <th>期初余额</th>' +
-        '                                    <td><input name="opening_balance" placeholder="0"></td>' +
+        '                                    <td><input name="opening_balance" placeholder="0" onchange="RealNumber(this)" onfocus="removeError(this)"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -532,12 +543,12 @@ function tTableAppendLeft() {
         '                                <tr>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" name="current_amount_dr"  placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" name="current_amount_dr"  placeholder="0"></td>' +
         '                                </tr>' +
         '                                <tr>' +
         '                                    <td></td>' +
         '                                    <th>期末余额</th>' +
-        '                                    <td><input onchange="RealNumber(this)" name="ending_balance" placeholder="0"></td>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" name="ending_balance" placeholder="0"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -549,7 +560,7 @@ function tTableAppendLeft() {
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;text-align: right">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
@@ -562,6 +573,7 @@ function tTableAppendLeft() {
         '        </div>' +
         '    </div>';
     $('#TTablePage').append(content);
+    $("#ttableLeft").find("button[data-toggle]").tooltip();
 }
 
 /**
@@ -572,7 +584,7 @@ function tTableAppendRight() {
         '    <div role="tabpanel" class="" id="ttableRight">' +
         '        <div style="text-align:right;">' +
         '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
-        '               class="btn" title="删除当前账户信息" onclick="deleteTableV(this)"><span class="glyphicon glyphicon-remove"></span></button>' +
+        '               class="btn" onclick="deleteTableV(this)" data-toggle="tooltip" data-placement="left" title="删除账户"><span class="glyphicon glyphicon-remove"></span></button>' +
         '        </div>' +
         '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
         '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
@@ -617,7 +629,7 @@ function tTableAppendRight() {
         '                                </tr>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;text-align: right">期初余额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" style="text-align: right" name="opening_balance" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="opening_balance" placeholder="0"></td>' +
         '                                    <td style="width: 40%;">' +
         '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
         '                                                              class="btn"' +
@@ -638,7 +650,7 @@ function tTableAppendRight() {
         '                                <tr>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" name="current_amount_dr" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" name="current_amount_dr" placeholder="0"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -650,12 +662,12 @@ function tTableAppendRight() {
         '                                <tbody>' +
         '                                <tr>' +
         '                                    <th style="width: 30%;text-align: right">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
+        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
         '                                    <td style="width: 40%;"></td>' +
         '                                </tr>' +
         '                                <tr>' +
         '                                    <th style="text-align: right">期末余额</th>' +
-        '                                    <td><input onchange="RealNumber(this)" style="text-align: right" name="ending_balance"  placeholder="0"></td>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="ending_balance"  placeholder="0"></td>' +
         '                                    <td></td>' +
         '                                </tr>' +
         '                                </tbody>' +
@@ -668,6 +680,7 @@ function tTableAppendRight() {
         '        </div>' +
         '    </div>';
     $('#TTablePage').append(content);
+    $("#ttableRight").find("button[data-toggle]").tooltip();
 }
 
 function v_createNewPage(obj, lcr) {

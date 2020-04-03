@@ -1,28 +1,17 @@
-// 页面加载完成填充数据
+let entry_infos = Array(),
+    entry_confirmed = Array(),
+    entry_saved = Array();
 $(document).ready(function () {
-    pageSplitBind(function (business_no) {
-        businessLiControl(business_no);
-        get_entry_info();
-    }, 20);
-    getBusinessList();
-    get_entry_info(true);
+    function init() {
+        ivBind();
+        getBusinessList();
+        get_entry_info(true);
+    }
+
+    init();
 });
 
 //==================================提交会计分录信息==================================//
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_entry() {
-    bind_confirm_info("confirm_entry_button", "submit_entry_info");
-}
-
-/**
- * 保存分录信息
- */
-function save_entry() {
-    bind_save_info("save_entry_button", submit_entry_info);
-}
-
 /**
  * 提交会计分录信息
  * @param submit_type confirm or save
@@ -42,25 +31,22 @@ function submit_entry_info(submit_type) {
 }
 
 //==================================获取会计分录信息==================================//
-let entry_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
-    entry_confirmed = Array(),
-    entry_saved = Array();
-
 /**
  * 从后端获取会计分录信息
  */
 function get_entry_info(isFromSubmit = false) {
-    // 先清空信息
-    ivResetInfo();
+
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1)
-        //  若未保存，则不向后台请求数据
+        if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1) {
+            //  若未保存，则不向后台请求数据
+            ivResetInfo();
             return;
+        }
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
@@ -83,6 +69,7 @@ function get_entry_info(isFromSubmit = false) {
  * @param data
  */
 function map_entry_info(data) {
+    ivResetInfo();
     data = data ? data : "";
     entry_infos = data ? data["entry_infos"] : entry_infos;
     entry_confirmed = data ? data["entry_confirmed"] : entry_confirmed;
@@ -171,6 +158,27 @@ function ivPaddingData(data) {
 
 // ==================================事件控制==================================//
 /**
+ * 事件绑定
+ */
+function ivBind() {
+    bind_confirm_info("submit_entry_info");
+    bind_save_info(submit_entry_info);
+    bindAnswerSource();
+    bindIllegalCharFilter();
+    bindRealNumber();
+    $("a[data-iv-addRow-1]").click(function () {
+        iv_AddRow(true);
+    });
+    $("a[data-iv-addRow-2]").click(function () {
+        iv_AddRow(false);
+    });
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_entry_info();
+    }, 20);
+}
+
+/**
  * 重置分录信息
  */
 function ivResetInfo() {
@@ -194,24 +202,28 @@ function ivResetInfo() {
  */
 let rowNumIv = 1;
 
-function iv_AddRow(obj, subject = "", money = "") {
-    let type = "0";
-    if (obj === "borrow") {
+function iv_AddRow(flag, subject = "", money = "") {
+    let type = "0",
+        anchorName = "loanRowAfter";
+    if (flag) {
         type = "1";
+        anchorName = "borrowRowAfter";
     }
-    $("#" + obj + "RowAfter").before(
-        "<tr>"
-        + "<td class='acc-unedit' style='border-right: 0;padding: 4px'></td>"
-        + "<td class='acc-unedit' style='border-left: 0;4px'></td>"
-        + "<td><input type='text' id='subject" + type + "_" + rowNumIv + "' name='subject' placeholder='科目' value='" + subject + "' onchange='RealNumber(this)'></td>"
-        + "<td><input type='text' id='money" + type + "_" + rowNumIv + "' name='money' placeholder='金额' value='" + money + "' onchange='RealNumber(this)'></td>"
-        + "<td style='padding:4px;border:0'>"
-        + "<div style='text-align: center'>"
-        + "<a style='color: red;padding: 0' type='button' class='btn' onclick='iv_DeleteRow(this)'><span class='glyphicon glyphicon-minus-sign'></span></a>"
+    $("#" + anchorName).before(
+        "<tr class='acc-table-format-4-1'>"
+        + "<td class='acc-unedit'></td>"
+        + "<td class='acc-unedit'></td>"
+        + "<td><input type='text' id='subject" + type + "_" + rowNumIv + "' name='subject' placeholder='科目' value='" + subject + "' onkeyup='illegalCharFilter(this)'></td>"
+        + "<td><input type='text' id='money" + type + "_" + rowNumIv + "' name='money' placeholder='0.0' value='" + money + "' onchange='RealNumber(this)' onfocus='removeError(this)'></td>"
+        + "<td>"
+        + "<div class='acc-minus'>"
+        + "<a type='button' class='btn' onclick='iv_DeleteRow(this)' data-toggle='tooltip' data-placement='left' title='删除行'><span class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>"
         + "</td>"
         + "</tr>"
     );
+    let $delete = $("#" + "money" + type + "_" + rowNumIv).parent().next().find("a");
+    $delete.tooltip();
     rowNumIv += 1;
 }
 

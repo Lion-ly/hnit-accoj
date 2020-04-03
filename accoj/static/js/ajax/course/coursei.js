@@ -1,30 +1,24 @@
 let businesses = "",
     business_confirmed = "";
 //==================================新增公司==================================//
-// 页面加载完成填充数据
 $(document).ready(function () {
-    $("#menu").children().children().each(function (index, item) {
-        if (index) $(item).children().attr("data-original-title", "未开放");
-    });
-    get_company_info();
-    get_business_info();
-    pageSplitBind(function () {
+    function init() {
+        iBind();
+        $("#menu").children().children().each(function (index, item) {
+            if (index) $(item).children().attr("data-original-title", "未开放");
+        });
+        get_company_info();
         get_business_info();
-    }, 2);
-});
+    }
 
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_company() {
-    bind_confirm_info("submit_company_button", "submit_company_info");
-}
+    init();
+});
 
 /**
  * 提交公司信息
  */
 function submit_company_info(submit_type) {
-    function successFunc(data) {
+    function successFunc() {
         $(":text").css({"border-style": "none"});
         $("#com_business_scope").css({"border-style": "none"});
         get_company_info();
@@ -36,7 +30,7 @@ function submit_company_info(submit_type) {
             let data_err_pos = data["err_pos"];
             for (let x = 0; x < data_err_pos.length; x++) {
                 let err_pos = data_err_pos[x]["err_pos"];
-                $("#" + err_pos).css({"border-style": "solid"});
+                hasError($("#" + err_pos), "格式错误");
             }
         }
     }
@@ -116,26 +110,13 @@ function create_business() {
 }
 
 /**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_business() {
-    bind_confirm_info("submit_company_button", "submit_business_info");
-}
-
-/**
  * 提交业务信息，提交成功后不可更改
  */
 function submit_business_info(submit_type) {
-    function successFunc() {
-        $("#menu").children().children().each(function (index, item) {
-            $(item).children().attr("data-original-title", "已开放");
-        });
-        get_key_element_info();
-    }
-
     let url = "/submit_business_info",
         data = {},
-        messageDivID = "submit_confirm_message";
+        messageDivID = "submit_confirm_message",
+        successFunc = get_business_info;
     submit_info(submit_type, url, data, messageDivID, successFunc);
 }
 
@@ -144,6 +125,9 @@ function submit_business_info(submit_type) {
  */
 function get_business_info() {
     if (business_confirmed) {
+        $("#menu").children().children().each(function (index, item) {
+            $(item).children().attr("data-original-title", "已开放");
+        });
         paddingBusiness();
         return;
     }
@@ -189,6 +173,28 @@ function paddingBusiness(data) {
 
 // ==================================事件控制==================================//
 /**
+ * 事件绑定
+ */
+function iBind() {
+    // 提交公司信息按钮绑定
+    bind_confirm_info("submit_company_info", $("#submit_company_button"));
+    // 提交业务信息按钮绑定
+    bind_confirm_info("submit_business_info", $("#submit_business_button"));
+    $("#createBusiness").click(function () {
+        create_business();
+    });
+    $("#company_form").find("input").each(function (index, item) {
+        $(item).focus(function () {
+            removeError(item);
+        });
+    });
+    // 分页绑定
+    pageSplitBind(function () {
+        get_business_info();
+    }, 2);
+}
+
+/**
  * 增加业务行
  * @param labelType
  * @param content
@@ -208,16 +214,15 @@ function body_text_append(labelType, content, businessNo) {
             break;
     }
     $("#body-text").append(
-        "<tr>"
-        + "<th style='background-color: " + bg + ";width: 4%'>"
+        "<tr class='acc-table-format-1-2'>"
+        + "<th style='background-color: " + bg + ";'>"
         + labelType
         + "</th>"
-        + "<td style='text-align: left;vertical-align: middle;'>"
+        + "<td>"
         + "<strong style='color: " + bg + "'>" + businessNo + ".&nbsp;&nbsp;</strong>"
         + content
         + "</td>"
-        +
-        +"</tr>"
+        + "</tr>"
     );
 }
 

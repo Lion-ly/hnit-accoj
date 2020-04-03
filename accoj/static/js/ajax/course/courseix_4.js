@@ -1,26 +1,17 @@
-// 页面加载完成填充数据
+let ix4_infos,
+    ix4_confirmed,
+    ix4_saved;
+
 $(document).ready(function () {
-    bindControlIx4();
-    get_ix4_info(true);
+    function init() {
+        ix4Bind();
+        get_ix4_info(true);
+    }
+
+    init();
 });
 
 //======================================提交比率分析法信息======================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_ix4() {
-    bind_confirm_info("confirm_ix4_button", "submit_ix4_info");
-}
-
-/**
- * 保存比率分析法信息
- */
-function save_ix4() {
-    bind_save_info("save_ix4_button", submit_ix4_info);
-}
-
-
 /**
  * 提交比率分析法信息
  * @param submit_type confirm or save
@@ -39,10 +30,6 @@ function submit_ix4_info(submit_type) {
 }
 
 //======================================获取比率分析法信息======================================//
-let ix4_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    ix4_confirmed,
-    ix4_saved;
-
 /**
  * 从后端获取比率分析法信息
  */
@@ -52,7 +39,7 @@ function get_ix4_info(isFromSubmit = false) {
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!ix4_saved)
-        //  若未保存，则不向后台请求数据
+            //  若未保存，则不向后台请求数据
             return;
     }
     // 若ix4_infos不为空且已经确认提交过，则不再发送数据请求
@@ -86,7 +73,7 @@ function map_ix4_info(data) {
 
     if (!ix4_infos) return;
     // 填充数据
-    if(ix4_saved) Ix4PaddingData(ix4_infos);
+    if (ix4_saved) Ix4PaddingData(ix4_infos);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -135,21 +122,22 @@ function Ix4PaddingData(data) {
 
 //===============================================事件控制===============================================//
 /**
+ * 事件绑定
+ */
+function ix4Bind() {
+    bind_confirm_info("submit_ix4_info");
+    bind_save_info(submit_ix4_info);
+    bindAnswerSource();
+
+    let $inputs = $("#ix4").find("input"),
+        $conclusions = $("#Conclusion");
+    bindLimitPercent($inputs);
+    bindIllegalCharFilter($conclusions);
+}
+
+/**
  * 重置信息
  */
 function ix4ResetInfo() {
     $("#ix4").find("input").val("");
-}
-
-/**
- * 将事件`处理函数`绑定
- */
-function bindControlIx4() {
-    let inputs1 = $("#ix4").find("input"),
-        limit = "LimitPercent(this)";
-
-    $.each(inputs1, function (index, item) {
-        $(item).attr("onchange", limit);
-    });
-
 }

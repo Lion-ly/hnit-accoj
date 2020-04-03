@@ -1,30 +1,19 @@
-// 页面加载完成填充数据
+let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
+    key_element_confirmed = Array(),
+    key_element_saved = Array(),
+    answer_infos = "",
+    scores = "";
 $(document).ready(function () {
-    pageSplitBind(function (business_no) {
-        businessLiControl(business_no);
-        get_key_element_info();
-    }, 20);
-    getBusinessList();
-    get_key_element_info(true);
+    function init() {
+        iiBind();
+        getBusinessList();
+        get_key_element_info(true);
+    }
+
+    init();
 });
 
 //==================================提交会计要素信息==================================//
-
-/**
- * 将处理函数绑定到模态框的确认提交按钮
- */
-function confirm_key_element() {
-    bind_confirm_info("confirm_key_element_button", "submit_key_element_info");
-}
-
-/**
- * 保存会计要素信息
- */
-function save_key_element() {
-    bind_save_info("save_key_element_button", submit_key_element_info);
-}
-
-
 /**
  * 提交会计要素信息
  * @param submit_type confirm or save
@@ -44,26 +33,22 @@ function submit_key_element_info(submit_type) {
 }
 
 //==================================获取会计要素信息==================================//
-let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
-    key_element_confirmed = Array(),
-    key_element_saved = Array();
-
 /**
  * 从后端获取会计要素信息
  */
 function get_key_element_info(isFromSubmit = false) {
 
-    // 清空信息
-    iiResetInfo();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
-        if (!key_element_saved.length || key_element_saved.indexOf(nowBusinessNo - 1) === -1)
-        //  若未保存，则不向后台请求数据
+        if (!key_element_saved.length || key_element_saved.indexOf(nowBusinessNo - 1) === -1) {
+            //  若未保存，则不向后台请求数, 清空信息
+            iiResetInfo();
             return;
+        }
     }
 
     // 若请求的业务编号已经确认提交过，则不再发送数据请求
@@ -77,29 +62,40 @@ function get_key_element_info(isFromSubmit = false) {
         successFunc = map_key_element_info,
         messageDivID = "course_ii_message";
     get_info(data, url, successFunc, messageDivID);
-
 }
 
 /**
  * 将数据映射到前端
  * @param data
+ * @param isFromButton
  */
-function map_key_element_info(data) {
+function map_key_element_info(data, isFromButton) {
+    // 清空信息
+    iiResetInfo();
     data = data ? data : "";
     key_element_infos = data ? data["key_element_infos"] : key_element_infos;
     key_element_confirmed = data ? data["key_element_confirmed"] : key_element_confirmed;
     key_element_saved = data ? data["key_element_saved"] : key_element_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
         confirmed = key_element_confirmed ? key_element_confirmed.indexOf(business_index) !== -1 : false,
         saved = key_element_saved ? key_element_saved.indexOf(business_index) !== -1 : false;
-
+    if (answer_infos) {
+        showAnswerButton();
+        confirmed = true;
+        saved = true;
+        isFromButton = 1;
+        $("button[data-answer]").text("查看答案");
+        $("button[data-save], button[data-confirm]").prop("disabled", true);
+    }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
 
     // 如果已保存
-    if (saved) iiPaddingData(key_element_infos[business_index]);
+    if (saved) iiPaddingData(key_element_infos, isFromButton);
 }
 
 
@@ -151,30 +147,124 @@ function iiGetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function iiPaddingData(data) {
-    if (!data) return;
-    let affect_type = data["affect_type"],
-        key_element_info = data["info"],
-        key_element_num_dict = {"资产": 1, "负债": 3, "收入": 5, "费用": 7, "利润": 9, "所有者权益": 11},
-        affect_type_id = "aer" + affect_type;
-    // 填充影响类型
-    $("#" + affect_type_id).prop("checked", true);
-    // 填充会计要素信息
-    for (let i = 0; i < key_element_info.length; i++) {
-        let key_element = key_element_info[i]["key_element"],
-            money = key_element_info[i]["money"],
-            is_up = key_element_info[i]["is_up"],
-            key_element_num = key_element_num_dict[key_element];
-        if (!is_up) key_element_num = key_element_num_dict[key_element] + 1;
-        let key_element_id = "key_elem" + key_element_num,
-            check_id = "check" + key_element_num;
-        $("#" + check_id).prop("checked", true);
-        $("#" + key_element_id).val(money);
+function iiPaddingData(data, isFromButton) {
+    function padding(t_data) {
+        let affect_type = t_data["affect_type"],
+            key_element_info = t_data["info"],
+            key_element_num_dict = {"资产": 1, "负债": 3, "收入": 5, "费用": 7, "利润": 9, "所有者权益": 11},
+            $affect_type = $("#" + "aer" + affect_type),
+            error_pos = Array();
+        // 填充影响类型
+        $affect_type.prop("checked", true);
+        if (isFromButton === 1) {
+            if (answer_info["affect_type"] !== affect_type)
+                hasError($affect_type);
+            answer_info = answer_info["info"];
+            t_infoLen = answer_info.length;
+        }
+        // 填充会计要素信息
+        let infoLen = key_element_info.length,
+            j = 0, flag = false;
+        for (let i = 0; i < infoLen; i++) {
+            let key_element = key_element_info[i]["key_element"],
+                money = key_element_info[i]["money"],
+                is_up = key_element_info[i]["is_up"],
+                key_element_num = key_element_num_dict[key_element];
+
+            if (!is_up) key_element_num = key_element_num_dict[key_element] + 1;
+            let key_element_id = "key_elem" + key_element_num,
+                check_id = "check" + key_element_num;
+            let $checkbox = $("#" + check_id),
+                $key_element = $("#" + key_element_id);
+            $checkbox.prop("checked", true);
+            $key_element.val(money);
+
+            if (isFromButton === 1) {
+                // 标出错误位置
+                for (j = 0; j < t_infoLen; j++) {
+                    let t_key_element = answer_info[j]["key_element"];
+                    let t_is_up = answer_info[j]["is_up"];
+
+                    if (t_key_element === key_element && t_is_up === is_up) {
+                        let t_money = answer_info[j]["money"];
+                        flag = money === t_money;
+                        break;
+                    }
+                }
+                if (!flag) error_pos.push($key_element);
+            }
+        }
+        if (isFromButton === 1) {
+            for (let i = 0; i < t_infoLen; i++) {
+                let t_key_element = answer_info[i]["key_element"],
+                    t_is_up = answer_info[i]["is_up"];
+
+
+                flag = false;
+                for (j = 0; j < infoLen; j++) {
+                    let key_element = key_element_info[j]["key_element"],
+                        is_up = key_element_info[j]["is_up"],
+                        money = key_element_info[j]["money"];
+
+                    if (key_element === t_key_element && t_is_up === is_up) {
+                        let t_money = answer_info[j]["money"];
+                        flag = money === t_money;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    let key_element_num = key_element_num_dict[t_key_element];
+                    if (!t_is_up) key_element_num = key_element_num_dict[t_key_element] + 1;
+                    let key_element_id = "key_elem" + key_element_num,
+                        $key_element = $("#" + key_element_id);
+                    error_pos.push($key_element);
+                }
+            }
+            // 标出错误位置
+            for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
+        }
     }
+
+    if (!data && !isFromButton) return;
+    if (isFromButton) {
+        removeAllError();
+        iiDisabledInput();
+    }
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
+    if (isFromButton) {
+        let nowScore = scores[index * 2],
+            nowTotalScore = scores[index * 2 + 1],
+            totalScore = scores[scores.length - 1];
+        showScoreEm(nowScore, nowTotalScore, totalScore);
+        if (isFromButton === 1)
+            answer_info = answer_infos[index];
+    }
+    data = data[index];
+    padding(data);
 }
 
 // ==================================事件控制==================================//
+/**
+ * 事件绑定
+ */
+function iiBind() {
+    function map_answer() {
+        spanStatusCtr(true, true, "submit_status_span");
+        iiPaddingData(answer_infos, 2);
+    }
+
+    bind_confirm_info("submit_key_element_info");
+    bind_save_info(submit_key_element_info);
+    bindAnswerSource("", map_key_element_info, map_answer);
+    bindRealNumber();
+    pageSplitBind(function (business_no) {
+        businessLiControl(business_no);
+        get_key_element_info();
+    }, 20);
+}
 
 /**
  * 清空会计要素信息
@@ -184,4 +274,17 @@ function iiResetInfo() {
     $("[id^=check]").prop("checked", false);
     $("#aer1").prop("checked", true);
     $("#submit_status_span").hide();
+}
+
+/**
+ * 禁用编辑
+ */
+function iiDisabledInput() {
+    let $aers = $("input[id^=aer]"),
+        $check_box = $("input[id^=check]"),
+        $key_elem = $("[id^=key_elem]");
+    $aers.prop("disabled", "true");
+    $check_box.prop("disabled", "true");
+    $key_elem.attr("readonly", "readonly");
+    $key_elem.addClass("acc-white-bg");
 }

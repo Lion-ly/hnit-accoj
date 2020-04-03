@@ -1,544 +1,648 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-    <link href="{{ url_for('static', filename='css/course/coursevii.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/ajax/course/coursevii.js') }}" charset="UTF-8"></script>
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <div class="container-fluid">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-				<span>1、理解会计账簿的分类；<br/>2、掌握明细账的登记方法。
+<link href="{{ url_for('static', filename='css/course/coursevii.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='js/ajax/course/coursevii.js') }}" charset="UTF-8"></script>
+<!--第七次课程-->
+<div class="courseBody">
+    <!-- 习题主体 -->
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <!--作业要求-->
+            <div class="panel-heading">
+				<span>
+                    1、理解会计账簿的分类。
+                    <br/>
+                    2、掌握明细账的登记方法。
 				</span>
-                </div>
-                <div class="panel-body">
-                    <!-- 业务一 -->
-                    <div>
-                        <div class="acc-container-answer">
-                            <!-- 作业标签 -->
-                            <ul class="nav nav-tabs">
-                                <li role="presentation" class="active"><a
-                                        href="#first"
-                                        aria-controls="first" role="tab"
-                                        data-toggle="tab">登记各账户明细账</a></li>
-                                <li role="presentation"><a href="#second"
-                                                           aria-controls="second"
-                                                           role="tab"
-                                                           data-toggle="tab">登记科目余额表</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <!-- 第一标签 -->
-                                <div role="tabpanel" class="tab-pane active in fade" id="first">
-                                    <div>
-                                        <p class="acc-title">1、登记各账户明细账
-                                            <span id="subsidiary_account_submit_span"
-                                                  class="glyphicon glyphicon-ok"
-                                                  style="color: #5cb85c;font-size: medium;display: none">已完成</span>
-                                        </p>
-                                        <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            3.<span style="color: #5bc0de">淡蓝色</span>表示当前账户已保存。<br/>
-                                        </p>
-                                        <div class="table-responsive">
-                                            <div id="tablePanel">
-
-                                                <table class="table table-bordered acc-container-tableformat"
-                                                       style="border: 0;">
-                                                    <tbody id="detailed">
-                                                    <tr>
-                                                        <td colspan="37" style="border: 0">
-                                                            <div style="text-align: center">
-                                                                <label style="display: inline;">
-                                                                    <select id="subjectSelect" class="form-control"
-                                                                            style="width: auto; display: inline-block;"
-                                                                            onchange="get_subsidiary_account_info()">
-                                                                        <option id="anchorOption"
-                                                                                style="display: none"></option>
-                                                                    </select>
-                                                                </label>
-                                                                <p style="font-size: 24px; display: inline;">明&nbsp;细&nbsp;账</p>
-
-
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="border-right: 0;padding: 4px;width: auto;height: auto">
-                                                            <label><input id="yearNow"
-                                                                          style="width: 40px;height: 100%;border-bottom-style: solid;border-bottom-color: #0f0f0f"
-                                                                          name="year" onkeyup="limit_number(this)">
-                                                            </label>
-                                                        </td>
-                                                        <th style="border-left: 0; ">年</th>
-                                                        <th class="acc-unedit" colspan="2">记账凭证</th>
-                                                        <th class="acc-unedit" rowspan="2">摘要</th>
-                                                        <th class="acc-unedit" colspan="10">借方</th>
-                                                        <th class="acc-unedit" colspan="10">贷方</th>
-                                                        <th class="acc-unedit" rowspan="2">方向</th>
-                                                        <th class="acc-unedit" colspan="10">余额</th>
-                                                    </tr>
-                                                    <tr class="acc-unedit">
-                                                        <th>月</th>
-                                                        <th>日</th>
-                                                        <th>字</th>
-                                                        <th>号</th>
-
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>万</th>
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>元</th>
-                                                        <th>角</th>
-                                                        <th>分</th>
-
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>万</th>
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>元</th>
-                                                        <th>角</th>
-                                                        <th>分</th>
-
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>万</th>
-                                                        <th>千</th>
-                                                        <th>百</th>
-                                                        <th>十</th>
-                                                        <th>元</th>
-                                                        <th>角</th>
-                                                        <th>分</th>
-                                                    </tr>
-                                                    <tr id="period1Vii1Row1">
-                                                        <td><label><input name="month" title="月"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="day" title="日"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="word" title="字"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        <td><label><input name="no" title="号"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td style="background-color: #f5f5f5; height:auto;padding: 4px;width: 200px">
-                                                            <label><input
-                                                                    style="background-color: #f5f5f5;"
-                                                                    disabled="disabled" name="summary"
-                                                                    value="期初余额"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input name='orientation'
-                                                                          onkeyup="limitJieDai(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <th style="width: 1%;height: auto; border: 0; background: #ffffff;padding: 4px">
-                                                            <div style="text-align: center">
-                                                                <a style="color: green;padding: 0;" type="button"
-                                                                   class="btn" onclick="vii1_AddRow(true)"><span
-                                                                        class="glyphicon glyphicon-plus-sign"></span></a>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                    <tr id="period1Vii1Row2">
-                                                        <td><label><input name="month" title="月"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="day" title="日"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="word" title="字"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        <td><label><input name="no" title="号"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="summary"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        </td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input name='orientation'
-                                                                          onkeyup="limitJieDai(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                    </tr>
-                                                    <tr id="period1Vii1RowLast">
-                                                        <td><label><input name="month" title="月"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="day" title="日"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="word" title="字"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        <td><label><input name="no" title="号"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td style="background-color: #f5f5f5; padding: 4px">
-                                                            <label><input
-                                                                    style="background-color: #f5f5f5;"
-                                                                    disabled="disabled" name="summary"
-                                                                    value="本期合计"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input name='orientation'
-                                                                          onkeyup="limitJieDai(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                    </tr>
-                                                    <tr id="period2Vii1Row1">
-                                                        <td><label><input name="month" title="月"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="day" title="日"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="word" title="字"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        <td><label><input name="no" title="号"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="summary"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        </td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input name='orientation'
-                                                                          onkeyup="limitJieDai(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <th style="width: 1%;height: auto;border: 0;background: #ffffff;padding: 4px">
-                                                            <div style="text-align: center">
-                                                                <a style="color: green; padding: 0 0" type="button"
-                                                                   class="btn" onclick="vii1_AddRow(false)"><span
-                                                                        class="glyphicon glyphicon-plus-sign"></span></a>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                    <tr id="period2Vii1RowLast">
-                                                        <td><label><input name="month" title="月"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="day" title="日"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="word" title="字"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        <td><label><input name="no" title="号"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td style="background-color: #f5f5f5;"><label><input
-                                                                name="summary"
-                                                                style="background-color: #f5f5f5;" disabled="disabled"
-                                                                value="本期合计"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input name='orientation'
-                                                                          onkeyup="limitJieDai(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                    </tr>
-                                                    <tr id="Vii1RowEnd">
-                                                        <td><label><input name="month" title="月"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="day" title="日"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td><label><input name="word" title="字"
-                                                                          onkeyup="illegalCharFilter(this)"></label>
-                                                        <td><label><input name="no" title="号"
-                                                                          onkeyup="limit_number(this)"></label>
-                                                        <td style="background-color: #f5f5f5;"><label><input
-                                                                style="background-color: #f5f5f5;" disabled="disabled"
-                                                                value="本年累计" name="summary"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-
-                                                        <td><label><input name='orientation'
-                                                                          onkeyup="limitJieDai(this)"></label></td>
-
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                        <td><label><input onkeyup="limit_number(this)"></label></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+            </div>
+            <div class="panel-body">
+                <!-- 业务一 -->
+                <div>
+                    <!-- 作业标签 -->
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active">
+                            <a href="#first" aria-controls="first" role="tab" data-toggle="tab">登记各账户明细账</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#second" aria-controls="second" role="tab" data-toggle="tab">登记科目余额表</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- 第一标签 -->
+                        <div role="tabpanel" class="tab-pane active in fade" id="first">
+                            <div>
+                                <p class="acc-title">1、登记各账户明细账
+                                    <span id="subsidiary_account_submit_span"
+                                          class="glyphicon glyphicon-ok acc-completed">已完成</span>
+                                </p>
+                                <!--表单模块-->
+                                <div class="table-responsive">
+                                    <div id="tablePanel">
+                                        <div class="help-block">
+                                            <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                                            <em class="acc-score-help">当前</em>
                                         </div>
-
+                                        <!--温馨提示-->
+                                        <p class="help-block">温馨提示：
+                                            <span class="acc-color-5bc0de">淡蓝色</span>（<span class="acc-color-5cb85c">绿色</span>
+                                            ）表示当前账户已保存（已确认提交）。
+                                        </p>
+                                        <em data-total-score-1></em>
+                                        <em data-now-score-1></em>
+                                        <table class="table table-bordered acc-container-tableformat acc-unborder">
+                                            <tbody id="detailed">
+                                            <tr>
+                                                <td colspan="37" class="acc-unborder">
+                                                    <div class="acc-pn-center">
+                                                        <label class="acc-label-select">
+                                                            <select id="subjectSelect" class="form-control"
+                                                                    data-get-account-info>
+                                                                <option id="anchorOption"></option>
+                                                            </select>
+                                                        </label>
+                                                        <p>明&nbsp;细&nbsp;账</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="acc-year">
+                                                <td>
+                                                    <label for="yearNow" hidden></label>
+                                                    <input id="yearNow" name="year" data-limit-number>
+                                                </td>
+                                                <th>年</th>
+                                                <th class="acc-unedit" colspan="2">记账凭证</th>
+                                                <th class="acc-unedit" rowspan="2" style="width: 200px">摘要</th>
+                                                <th class="acc-unedit" colspan="10">借方</th>
+                                                <th class="acc-unedit" colspan="10">贷方</th>
+                                                <th class="acc-unedit" rowspan="2">方向</th>
+                                                <th class="acc-unedit" colspan="10">余额</th>
+                                            </tr>
+                                            <tr class="acc-unedit">
+                                                <th>月</th>
+                                                <th>日</th>
+                                                <th>字</th>
+                                                <th>号</th>
+                                                <th>千</th>
+                                                <th>百</th>
+                                                <th>十</th>
+                                                <th>万</th>
+                                                <th>千</th>
+                                                <th>百</th>
+                                                <th>十</th>
+                                                <th>元</th>
+                                                <th>角</th>
+                                                <th>分</th>
+                                                <th>千</th>
+                                                <th>百</th>
+                                                <th>十</th>
+                                                <th>万</th>
+                                                <th>千</th>
+                                                <th>百</th>
+                                                <th>十</th>
+                                                <th>元</th>
+                                                <th>角</th>
+                                                <th>分</th>
+                                                <th>千</th>
+                                                <th>百</th>
+                                                <th>十</th>
+                                                <th>万</th>
+                                                <th>千</th>
+                                                <th>百</th>
+                                                <th>十</th>
+                                                <th>元</th>
+                                                <th>角</th>
+                                                <th>分</th>
+                                            </tr>
+                                            <tr id="period1Vii1Row1">
+                                                <td>
+                                                    <label>
+                                                        <input name="month" title="月" data-limit-number>
+                                                    </label>
+                                                <td>
+                                                    <label>
+                                                        <input name="day" title="日" data-limit-number>
+                                                    </label>
+                                                <td>
+                                                    <label>
+                                                        <input name="word" title="字" data-illegal-char>
+                                                    </label>
+                                                <td>
+                                                    <label>
+                                                        <input name="no" title="号" data-limit-number>
+                                                    </label>
+                                                <td class="acc-unedit">
+                                                    <label>
+                                                        <input class="acc-unedit" disabled="disabled" name="summary"
+                                                               value="期初余额">
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td>
+                                                    <label>
+                                                        <input name='orientation' data-limit-jiedai>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <th class="acc-unborder">
+                                                    <div class="acc-plus">
+                                                        <a type="button" class="btn" data-vii1-addRow-1 data-toggle="tooltip" data-placement="left" title="增加行">
+                                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                                        </a>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr id="period1Vii1Row2">
+                                                <td>
+                                                    <label>
+                                                        <input name="month" title="月" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="day" title="日" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="word" title="字" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="no" title="号" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="summary" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td>
+                                                    <label>
+                                                        <input name='orientation' data-limit-jiedai>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                            </tr>
+                                            <tr id="period1Vii1RowLast">
+                                                <td>
+                                                    <label>
+                                                        <input name="month" title="月" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="day" title="日" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="word" title="字" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="no" title="号" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td class="acc-unedit">
+                                                    <label>
+                                                        <input class="acc-unedit" disabled="disabled" name="summary"
+                                                               value="本期合计">
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td>
+                                                    <label>
+                                                        <input name='orientation' data-limit-jiedai>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                            </tr>
+                                            <tr id="period2Vii1Row1">
+                                                <td>
+                                                    <label>
+                                                        <input name="month" title="月" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="day" title="日" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="word" title="字" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="no" title="号" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label><input name="summary" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td>
+                                                    <label>
+                                                        <input name='orientation' data-limit-jiedai>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <th class="acc-unborder">
+                                                    <div class="acc-plus">
+                                                        <a class="btn" data-vii1-addRow-2 data-toggle="tooltip" data-placement="left" title="增加行">
+                                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                                        </a>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr id="period2Vii1RowLast">
+                                                <td>
+                                                    <label>
+                                                        <input name="month" title="月" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="day" title="日" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="word" title="字" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="no" title="号" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td class="acc-unedit">
+                                                    <label>
+                                                        <input name="summary" class="acc-unedit" disabled="disabled"
+                                                               value="本期合计">
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td>
+                                                    <label>
+                                                        <input name='orientation' data-limit-jiedai>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                            </tr>
+                                            <tr id="Vii1RowEnd">
+                                                <td>
+                                                    <label>
+                                                        <input name="month" title="月" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="day" title="日" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="word" title="字" data-illegal-char>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        <input name="no" title="号" data-limit-number>
+                                                    </label>
+                                                </td>
+                                                <td class="acc-unedit">
+                                                    <label>
+                                                        <input class="acc-unedit" disabled="disabled" value="本年累计"
+                                                               name="summary">
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td>
+                                                    <label>
+                                                        <input name='orientation' data-limit-jiedai>
+                                                    </label>
+                                                </td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                                <td><label><input data-limit-number></label></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <hr class="simple" style="clear: both;color: #6f5499"/>
+                                </div>
+                                <hr class="simple"/>
+                                    <!--信息提示窗口-->
                                     <div id="course_vii1_message"></div>
-                                    <div style="float: left;">
-                                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
+                                    <div class="acc-btn-left">
+                                        <button type="button" class="btn btn-info" data-answer-1>查看答案
                                         </button>
                                     </div>
-                                    <div style="float: right;">
-                                        <button type="button" class="btn btn-info" id="save_subsidiary_account_button"
-                                                onclick="save_subsidiary_account()">
+                                    <div class="acc-btn-right">
+                                        <button type="button" class="btn btn-info" data-save-1>
                                             <span class="glyphicon"></span>&nbsp;保存
                                         </button>
-                                        <button type="button" class="btn btn-success"
-                                                id="confirm_subsidiary_account_button"
-                                                onclick="confirm_subsidiary_account()">
+                                        <button type="button" class="btn btn-success" data-confirm-1>
                                             <span class="glyphicon"></span>&nbsp;提交
                                         </button>
                                     </div>
-                                </div>
-                                <!-- 第二标签 -->
-                                <div role="tabpanel" class="tab-pane fade" id="second">
-                                    <div>
-                                        <p class="acc-title">2、登记科目余额表<span class="glyphicon glyphicon-ok"
-                                                                            id="acc_balance_sheet_submit_span"
-                                                                            style="color: #5cb85c;font-size: medium;display:none;">
-                                    已完成</span></p>
-
-                                        <div class="container">
-                                            <table class="table table-bordered acc-container-tableformat"
-                                                   style="border: 0">
-                                                <tbody>
-                                                <tr>
-                                                    <th rowspan="2" class="acc-unedit">会计科目</th>
-                                                    <th colspan="2" class="acc-unedit">期初余额</th>
-                                                    <th colspan="2" class="acc-unedit">本期发生额</th>
-                                                    <th colspan="2" class="acc-unedit">期末余额</th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="acc-unedit">借方</th>
-                                                    <th class="acc-unedit">贷方</th>
-                                                    <th class="acc-unedit">借方</th>
-                                                    <th class="acc-unedit">贷方</th>
-                                                    <th class="acc-unedit">借方</th>
-                                                    <th class="acc-unedit">贷方</th>
-                                                    <td style="padding: 4px; border: 0; width: 5%">
-                                                        <div style="text-align: center">
-                                                            <a style="color: green;padding: 0;" type="button"
-                                                               class="btn"
-                                                               onclick="vii2_AddRow()"><span
-                                                                    class="glyphicon glyphicon-plus-sign"></span></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr id="vii2Row1">
-                                                    <td><label><input name="subject" title="科目"
-                                                                      onkeyup="illegalCharFilter(this)"></label></td>
-                                                    <td><label><input name="borrow_1" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="lend_1" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="borrow_2" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="lend_2" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="borrow_3" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="lend_3" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                </tr>
-                                                <tr id="vii2RowLast">
-                                                    <th class="acc-unedit">合计</th>
-                                                    <td><label><input name="borrow_1" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="lend_1" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="borrow_2" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="lend_2" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="borrow_3" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                    <td><label><input name="lend_3" title="金额￥"
-                                                                      onkeyup="limit_number(this)"></label></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <hr class="simple" style="clear: both;color: #6f5499"/>
+                            </div>
+                        </div>
+                        <!-- 第二标签 -->
+                        <div role="tabpanel" class="tab-pane fade" id="second">
+                            <div>
+                                <!--温馨提示-->
+                                <p class="acc-title">2、登记科目余额表
+                                    <span class="glyphicon glyphicon-ok acc-completed"
+                                          id="acc_balance_sheet_submit_span">已完成</span>
+                                </p>
+                                <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。
+                                </p>
+                                <div class="container">
+                                    <p class="help-block">&nbsp;
+                                        <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                                        <em class="acc-score-help">当前</em>
+                                    </p>
+                                    <em data-total-score-2></em>
+                                    <em data-now-score-2></em>
+                                    <table class="table table-bordered acc-container-tableformat acc-unborder">
+                                        <tbody>
+                                        <tr>
+                                            <th rowspan="2" class="acc-unedit">会计科目</th>
+                                            <th colspan="2" class="acc-unedit">期初余额</th>
+                                            <th colspan="2" class="acc-unedit">本期发生额</th>
+                                            <th colspan="2" class="acc-unedit">期末余额</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="acc-unedit">借方</th>
+                                            <th class="acc-unedit">贷方</th>
+                                            <th class="acc-unedit">借方</th>
+                                            <th class="acc-unedit">贷方</th>
+                                            <th class="acc-unedit">借方</th>
+                                            <th class="acc-unedit">贷方</th>
+                                            <td class="acc-unborder">
+                                                <div class="acc-plus">
+                                                    <a type="button" class="btn" data-vii2-addRow data-toggle="tooltip" data-placement="left" title="增加行">
+                                                        <span class="glyphicon glyphicon-plus-sign"></span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr id="vii2Row1">
+                                            <td>
+                                                <label>
+                                                    <input name="subject" title="科目" data-illegal-char>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="borrow_1" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="lend_1" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="borrow_2" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="lend_2" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="borrow_3" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="lend_3" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr id="vii2RowLast">
+                                            <th class="acc-unedit">合计</th>
+                                            <td>
+                                                <label>
+                                                    <input name="borrow_1" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="lend_1" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="borrow_2" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="lend_2" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="borrow_3" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="lend_3" title="金额￥" data-real-number>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <hr class="simple"/>
+                                    <!--信息提示窗口-->
                                     <div id="course_vii2_message"></div>
-                                    <div style="float: left;">
-                                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案
+                                    <div class="acc-btn-left">
+                                        <button type="button" class="btn btn-info" data-answer-2>查看答案
                                         </button>
                                     </div>
-                                    <div style="float: right;">
-                                        <button type="button" class="btn btn-info" id="save_acc_balance_sheet_button"
-                                                onclick="save_acc_balance_sheet()">
+                                    <div class="acc-btn-right">
+                                        <button type="button" class="btn btn-info" data-save-2>
                                             <span class="glyphicon"></span>&nbsp;保存
                                         </button>
-                                        <button type="button" class="btn btn-success"
-                                                id="confirm_acc_balance_sheet_button"
-                                                onclick="confirm_acc_balance_sheet()">
+                                        <button type="button" class="btn btn-success" data-confirm-2>
                                             <span class="glyphicon"></span>&nbsp;提交
                                         </button>
                                     </div>
@@ -550,8 +654,9 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 防尾前移 -->
-    <div class="acc-container-separate"></div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
 
 {% endblock courseBody %}

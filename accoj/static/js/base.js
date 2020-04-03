@@ -150,40 +150,54 @@ function show_submit_confirm(submit_deal_fun) {
 
 /**
  * 确认提交事件绑定
- * @param buttonID
+ * @param selector
  * @param submit_infoName String
  */
-function bind_confirm_info(buttonID, submit_infoName) {
-    show_submit_confirm(submit_infoName + "('confirm')");
-    let confirm_button = $("#" + buttonID);
-    confirm_button.attr("disabled", true);
-    confirm_button.text("提交 2s");
-    setTimeout(function () {
-        confirm_button.text("提交 1s");
-    }, 1000);
-    setTimeout(function () {
-        confirm_button.attr("disabled", false);
-        confirm_button.text("提交");
-    }, 2000);
+function bind_confirm_info(submit_infoName, selector) {
+    function confirmInfo() {
+        show_submit_confirm(submit_infoName + "('confirm')");
+        let confirm_button = selector;
+        confirm_button.attr("disabled", true);
+        confirm_button.text("提交 2s");
+        setTimeout(function () {
+            confirm_button.text("提交 1s");
+        }, 1000);
+        setTimeout(function () {
+            confirm_button.attr("disabled", false);
+            confirm_button.text("提交");
+        }, 2000);
+    }
+
+    selector = selector ? selector : $("button[data-confirm]");
+    selector.click(function () {
+        confirmInfo();
+    });
 }
 
 /**
  * 保存信息事件绑定
- * @param buttonID
- * @param submit_info function
+ * @param selector
+ * @param submitFunc function
  */
-function bind_save_info(buttonID, submit_info) {
-    submit_info("save");
-    let save_button = $("#" + buttonID);
-    save_button.attr("disabled", true);
-    save_button.text("保存 2s");
-    setTimeout(function () {
-        save_button.text("保存 1s");
-    }, 1000);
-    setTimeout(function () {
-        save_button.attr("disabled", false);
-        save_button.text("保存");
-    }, 2000);
+function bind_save_info(submitFunc, selector) {
+    function saveInfo() {
+        submitFunc("save");
+        let save_button = selector;
+        save_button.attr("disabled", true);
+        save_button.text("保存 2s");
+        setTimeout(function () {
+            save_button.text("保存 1s");
+        }, 1000);
+        setTimeout(function () {
+            save_button.attr("disabled", false);
+            save_button.text("保存");
+        }, 2000);
+    }
+
+    selector = selector ? selector : $("button[data-save]");
+    selector.click(function () {
+        saveInfo();
+    });
 }
 
 /**
@@ -198,56 +212,177 @@ function submit_confirm_clicked() {
 }
 
 //==================================正则表达式限制输入==================================//
+/**
+ * input has error
+ * @param selector
+ * @param errorMessage
+ */
+function hasError(selector, errorMessage) {
+    let $this = $(selector),
+        $thisPaTag = $this.parent().prop("tagName");
+
+    if (errorMessage) $this.val(errorMessage);
+    if ($thisPaTag === "DIV")
+        $this.parent().addClass("has-error");
+    else if ($thisPaTag === "LABEL") {
+        $this.parent().css({"background": "rgb(242,182,182)"});
+        $this.css({"background": "rgb(242,182,182)"});
+    } else if ($thisPaTag === "TD")
+        $this.css({"background": "rgb(242,182,182)"});
+    $this.css("color", "rgb(169, 68, 66)")
+}
+
+/**
+ * remove input error
+ * @param selector
+ */
+function removeError(selector) {
+    let $this = $(selector);
+    if ($this.val() === "格式错误") {
+        $this.val("");
+        $this.css({"color": "", "background-color": ""});
+        $this.parent().removeClass("has-error");
+    }
+}
+
+/**
+ * remove all input error
+ */
+function removeAllError() {
+    let $inputs = $("input");
+    $inputs.each(function (index, item) {
+        let $this = $(item),
+            $thisPaTag = $this.parent().prop("tagName");
+        if ($thisPaTag === "DIV" || $thisPaTag === "LABEL" || $thisPaTag === "TD") {
+            if ($thisPaTag === "DIV")
+                $this.parent().removeClass("has-error");
+            else if ($thisPaTag === "LABEL")
+                $this.parent().css({"background": ""});
+            if ($this.css("color") === "rgb(169, 68, 66)") {
+                $this.val("");
+                $this.css({"color": "", "background-color": ""});
+                $this.parent().removeClass("has-error");
+            }
+        }
+    });
+}
+
+/**
+ * bind RealNumber
+ */
+function bindRealNumber(selector) {
+    selector = selector ? selector : $("input[data-real-number]");
+    selector.each(function (index, item) {
+        $(item).change(function () {
+            RealNumber(item);
+        });
+        $(item).focus(function () {
+            removeError(item);
+        })
+    });
+}
+
+/**
+ * bind illegalCharFilter
+ */
+function bindIllegalCharFilter(selector) {
+    selector = selector ? selector : $("input[data-illegal-char]");
+    selector.each(function (index, item) {
+        $(item).keyup(function () {
+            illegalCharFilter(item);
+        });
+    });
+}
+
+/**
+ * bind limit_number
+ */
+function bindLimitNumber(selector) {
+    selector = selector ? selector : $("input[data-limit-number]");
+    selector.each(function (index, item) {
+        $(item).keyup(function () {
+            limit_number(item);
+        });
+    });
+}
+
+/**
+ * bind limitJieDai
+ */
+function bindLimitJieDai(selector) {
+    selector = selector ? selector : $("input[data-limit-jiedai]");
+    selector.each(function (index, item) {
+        $(item).keyup(function () {
+            limitJieDai(item);
+        });
+    });
+}
+
+/**
+ * bind LimitPercent
+ */
+function bindLimitPercent(selector) {
+    selector = selector ? selector : $("input[data-limit-percent]");
+    selector.each(function (index, item) {
+        $(item).change(function () {
+            LimitPercent(item);
+        });
+        $(item).focus(function () {
+            removeError(item);
+        })
+    });
+}
 
 /**
  * 限制输入只能为正整数
- * @param obj
+ * @param selector
  */
-function limit_number(obj) {
+function limit_number(selector) {
     let reg = /\D/g;
-    $(obj).val($(obj).val().replace(reg, ""));
+    $(selector).val($(selector).val().replace(reg, ""));
 }
 
 /**
  * 限制输入只能为实数
- * @param obj
+ * @param selector
  */
-function RealNumber(obj) {
+function RealNumber(selector) {
     let reg = /^([-+])?\d+(\.\d+)?$/,
-        thisValue = $(obj).val();
-    if (thisValue && !thisValue.match(reg))
-        $(obj).val(0);
+        $this = $(selector),
+        thisValue = $this.val();
+    if (thisValue && !thisValue.match(reg)) hasError(selector, "格式错误");
 }
 
 /**
  * 限制输入只能为百分比
- * @param obj
+ * @param selector
  */
-function LimitPercent(obj) {
+function LimitPercent(selector) {
     let reg = /^-?(100|[1-9]\d|\d)(.\d{1,2})?%$/,
-        thisValue = $(obj).val();
-    if (thisValue && !thisValue.match(reg))
-        $(obj).val("0%");
+        $this = $(selector),
+        thisValue = $this.val();
+    if (thisValue && !thisValue.match(reg)) hasError(selector, "格式错误");
 }
 
 /**
  * 非法字符过滤
- * @param obj
+ * @param selector
  */
-function illegalCharFilter(obj) {
+function illegalCharFilter(selector) {
     let reg = /[${}().@%]/g;
-    $(obj).val($(obj).val().replace(reg, ""))
+    $(selector).val($(selector).val().replace(reg, ""))
 }
 
 /**
  * 限制只能输入`借`,`贷`,`平`
- * @param obj
+ * @param selector
  */
-function limitJieDai(obj) {
-    let reg = /[借贷平]/g;
-    let thisValue = $(obj).val();
+function limitJieDai(selector) {
+    let reg = /[借贷平]/g,
+        $this = $(selector),
+        thisValue = $this.val();
     if ((thisValue && !thisValue.match(reg)) || thisValue.length > 1)
-        $(obj).val("");
+        $this.val("");
 }
 
 //==================================提交信息==================================//
@@ -261,7 +396,8 @@ function limitJieDai(obj) {
  * @param failedFunc    success function if post failed
  */
 function submit_info(submit_type, url, data, messageDivID, successFunc, failedFunc) {
-    failedFunc = failedFunc ? failedFunc : function(data){};
+    failedFunc = failedFunc ? failedFunc : function (data) {
+    };
     let type_flag = null;
     if (submit_type === "confirm") {
         type_flag = true;
@@ -338,7 +474,9 @@ function get_info(data, url, successFunc, messageDivID) {
             }
         },
         success: function (data) {
-            if (data["result"] === true) {
+            let result = data["result"];
+            data = data.hasOwnProperty("data") ? data["data"] : data;
+            if (result === true) {
                 successFunc(data);
             } else {
                 if (messageDivID)
@@ -376,6 +514,41 @@ function spanStatusCtr(confirmed, saved, spanID) {
     } else {
         $span.hide();
     }
+}
+
+function showScoreEm(nowScore, nowTotalScore, totalScore, $nowSelectorNum, $totalSelectorNum) {
+    function t_reg(className) {
+        return (className.match(/(^|\s)acc-score-\S+/g) || []).join(' ');
+    }
+
+    let totalClass = "acc-score-",
+        nowClass = "acc-score-",
+        maxScore = 100,
+        $nowSelector = "em[data-now-score",
+        $totalSelector = "em[data-total-score";
+
+    $nowSelector = $nowSelectorNum ? $nowSelector + "-" + $nowSelectorNum : $nowSelector;
+    $totalSelector = $totalSelectorNum ? $totalSelector + "-" + $totalSelectorNum : $totalSelector;
+    $nowSelector = $($nowSelector + "]");
+    $totalSelector = $($totalSelector + "]");
+
+    if (totalScore) totalClass = totalScore === maxScore ? totalClass + "1" : totalClass + "2";
+    else totalClass = totalClass + "3";
+    if (nowScore || nowScore === nowTotalScore) nowClass = nowScore === nowTotalScore ? nowClass + "1" : nowClass + "2";
+    else nowClass = nowClass + "3";
+
+    nowScore = nowScore.toFixed(2);
+    totalScore = totalScore.toFixed(2);
+    totalScore = "&nbsp;/&nbsp;" + totalScore;
+    $nowSelector.removeClass(function (index, className) {
+        return t_reg(className);
+    }).addClass(nowClass);
+    $totalSelector.removeClass(function (index, className) {
+        return t_reg(className);
+    }).addClass(totalClass);
+    $nowSelector.text(nowScore);
+    $totalSelector.html(totalScore);
+    if ($nowSelector.css("display") === "none") $("em[class*=acc-score]").css("display", "inline");
 }
 
 //==================================获取业务列表==================================//
@@ -442,12 +615,12 @@ function pageSplitBind(callbackFuc, maxPage = 20) {
                 if (index > 1 && index < maxLen + 2) {
                     let thisNo = parseInt($(item).children().text());
                     if (isPrev) {
-                        let textValue = "";
+                        let textValue;
                         if (isFirstPage) textValue = firstArray[index - 2];
                         else textValue = thisNo - minus;
                         $(item).children().text(textValue);
                     } else {
-                        let textValue = "";
+                        let textValue;
                         if (isLastPage) textValue = lastArray[index - 2];
                         else textValue = thisNo + minus;
                         $(item).children().text(textValue);
@@ -564,13 +737,36 @@ function formatDate(date) {
 
 /**
  * 查看答案按钮的效果 具体功能实现需重构
- * @param obj
+ * @param selector
+ * @param mapInfo
+ * @param mapAnswer
  * @returns
  */
-function answer_source(obj) {
-    let thisobj = $(obj);
-    thisobj.toggleClass("active");
+function answerSource(selector, mapInfo, mapAnswer) {
+    mapInfo = mapInfo ? mapInfo : function () {
+    };
+    mapAnswer = mapAnswer ? mapAnswer : function () {
+    };
+    let thisobj = $(selector);
     let text = thisobj.text();
+    if (text === "我的作答") mapInfo("", 1);
+    else if (text === "查看答案") mapAnswer();
+    thisobj.toggleClass("active");
     text = text === "查看答案" ? "我的作答" : "查看答案";
     thisobj.text(text);
+}
+
+function showAnswerButton(selector) {
+    selector = selector ? selector : $("button[data-answer]");
+    selector.parent().show();
+}
+
+/**
+ * bind answerSource
+ */
+function bindAnswerSource(selector, mapInfo, mapAnswer) {
+    selector = selector ? selector : $("button[data-answer]");
+    $(selector).click(function () {
+        answerSource(selector, mapInfo, mapAnswer);
+    });
 }

@@ -19,8 +19,7 @@ def create_acc_document(company):
     acc_document_infos.clear()
     cal_acc_document(company)
 
-
-
+    
 def cal_acc_document(company):
     _id = company.get("_id")
     student_no = company.get("student_no")

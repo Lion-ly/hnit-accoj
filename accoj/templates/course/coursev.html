@@ -1,79 +1,103 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-    <script src="{{ url_for('static', filename='js/ajax/course/coursev.js') }}" charset="UTF-8"></script>
-    <div class="courseBody">
-        <!-- 习题主体 -->
-        <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-				<span>1、掌握账户及其格式。<br/> 2、掌握本期发生额和期末余额的计算。<br/>
+<script src="{{ url_for('static', filename='js/ajax/course/coursev.js') }}" charset="UTF-8"></script>
+<!--第五次课程-->
+<div class="courseBody">
+    <!-- 习题主体 -->
+    <div class="container">
+        <div class="panel panel-default">
+            <!--作业要求-->
+            <div class="panel-heading">
+				<span>
+                    1、掌握账户及其格式。
+                    <br/>
+                    2、掌握本期发生额和期末余额的计算。
+                    <br/>
 					3、理解试算平衡的过程和应用。
 				</span>
+            </div>
+            <div class="panel-body">
+                <div class="acc-pn-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="{{ url_for('accoj.coursev') }}">设立账户</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('accoj.coursev_2') }}">平衡表</a>
+                            </li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
-                <div class="panel-body">
-
-                    <div style="text-align: center">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination pagination-sm">
-                                <li><a href="#" aria-label="Previous"> <span
-                                        aria-hidden="true">&laquo;</span>
-                                </a></li>
-                                <li class="active"><a href="{{ url_for('accoj.coursev') }}">设立账户</a></li>
-                                <li><a href="{{ url_for('accoj.coursev_2') }}">平衡表</a></li>
-                                <li><a href="#" aria-label="Next"> <span
-                                        aria-hidden="true">&raquo;</span>
-                                </a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <hr class="simple" style="color: #6f5499"/>
-                    <p class="acc-title">1、设立账户，并登记发生额，结算余额</p>
-                    <p class="help-block">温馨提示：1.填写完当前账户信息后应手动保存，防止信息丢失。<br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        2.<span style="color: #5cb85c">绿色</span>表示当前账户已确认提交。<br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        3.<span style="color: #5bc0de">淡蓝色</span>表示当前账户已保存。<br/>
-                    </p>
-                    <span id="ledgerPeriod" style="font-weight: 600;font-size: 15px;color: #737373">当前期间：期间一</span>
-                    <button type="button" class="btn btn-info btn-xs" onclick="changePeriod()">切换期间</button>
-                    <hr>
-                    <!-- 作业标签 -->
-                    <ul class="nav nav-tabs">
-                        <li id="coursev_li_new" role="presentation" class="dropdown"><a
-                                class="dropdown-toggle" data-toggle="dropdown" href="#"
-                                role="button" aria-haspopup="true" aria-expanded="false"> 新增<span
-                                class="caret"></span>
+                <hr class="simple"/>
+                <!--温馨提示-->
+                <p class="help-block">温馨提示：
+                    <span class="acc-color-5bc0de">淡蓝色</span>（<span class="acc-color-5cb85c">绿色</span>
+                    ）表示当前账户已保存（已确认提交）。
+                    <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                    <em class="acc-score-help">当前</em>
+                </p>
+                <em data-total-score></em>
+                <em data-now-score></em>
+                <p class="acc-title">1、设立账户，并登记发生额，结算余额</p>
+                <!--期间切换-->
+                <span id="ledgerPeriod" class="acc-period-tip">当前期间：期间一</span>
+                <button type="button" class="btn btn-info btn-xs" data-change-period>切换期间</button>
+                <hr class="simple">
+                <!-- 作业标签 -->
+                <ul class="nav nav-tabs">
+                    <li id="coursev_li_new" role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                           aria-expanded="false">新增
+                            <span class="caret"></span>
                         </a>
-                            <ul class="dropdown-menu">
-                                <li role="presentation"><a id="createNewTableLeft" href="javascript:void(0)"
-                                                           onclick="v_createNewPage(this,'left')">新增：左T表</a></li>
-                                <li role="presentation"><a id="createNewTableRight" href="javascript:void(0)"
-                                                           onclick="v_createNewPage(this,'right')">新增：右T表</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="TTablePage">
-                    </div>
-                    <hr class="simple" style="clear: both;color: #6f5499"/>
-                    <div id="course_v_message"></div>
-                    <div style="float: left;">
-                        <button type="button" class="btn btn-info" onclick="answer_source(this)">查看答案</button>
-                    </div>
-                    <div style="float: right;">
-                        <button type="button" class="btn btn-info" id="save_ledger_button" onclick="save_ledger()">
-                            <span class="glyphicon"></span>&nbsp;保存
-                        </button>
-                        <button type="button" class="btn btn-success" id="confirm_ledger_button"
-                                onclick="confirm_ledger()">
-                            <span class="glyphicon"></span>&nbsp;提交
-                        </button>
-                    </div>
+                        <ul class="dropdown-menu">
+                            <li role="presentation">
+                                <a id="createNewTableLeft" href="#">
+                                    新增：左T表
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a id="createNewTableRight" href="#">
+                                    新增：右T表
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!--作业活页区-->
+                <div class="tab-content" id="TTablePage">
+                </div>
+                <hr class="simple"/>
+                <!--信息提示窗口-->
+                <div id="course_v_message"></div>
+                <div class="acc-btn-left">
+                    <button type="button" class="btn btn-info" data-answer>查看答案</button>
+                </div>
+                <div class="acc-btn-right">
+                    <button type="button" class="btn btn-info" data-save>
+                        <span class="glyphicon"></span>&nbsp;保存
+                    </button>
+                    <button type="button" class="btn btn-success" data-confirm>
+                        <span class="glyphicon"></span>&nbsp;提交
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 防尾前移 -->
-    <div class="acc-container-separate"></div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
 
 {% endblock courseBody %}
