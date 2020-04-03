@@ -20,8 +20,7 @@ def create_balance_sheet(company):
     print("balance sheets have been saved!")
 
 
-
-def cal_balance_sheet(company, ledger_name ,period):
+def cal_balance_sheet(company, ledger_name, period):
     _id = company.get("_id")
     balance_sheet_info = list()
     borrow_sum_1 = 0
@@ -54,15 +53,15 @@ def cal_balance_sheet(company, ledger_name ,period):
         # 计算期末合计余额
         borrow_sum_1 = round(borrow_sum_1 + borrow_1, 2)
         borrow_sum_2 = round(borrow_sum_2 + borrow_2, 2)
-        borrow_sum_3 = round(borrow_sum_3 +borrow_3, 2)
+        borrow_sum_3 = round(borrow_sum_3 + borrow_3, 2)
         lend_sum_1 = round(lend_sum_1 + lend_1, 2)
         lend_sum_2 = round(lend_sum_2 + lend_2, 2)
         lend_sum_3 = round(lend_sum_3 + lend_3, 2)
         # 将该账户信息加入list
-        balance_sheet_info.append({"subject":subject, "borrow_1":borrow_1, "lend_1":lend_1, "borrow_2":borrow_2,
-                                   "lend_2":lend_2, "borrow_3":borrow_3, "lend_3":lend_3})
+        balance_sheet_info.append({"subject": subject, "borrow_1": borrow_1, "lend_1": lend_1, "borrow_2": borrow_2,
+                                   "lend_2" : lend_2, "borrow_3": borrow_3, "lend_3": lend_3})
     # 最终将平衡表余额加入中
-    balance_sheet_info.append({"subject": "期末余额", "borrow_1": borrow_sum_1, "lend_1": lend_sum_1,
+    balance_sheet_info.append({"subject" : "期末余额", "borrow_1": borrow_sum_1, "lend_1": lend_sum_1,
                                "borrow_2": borrow_sum_2, "lend_2": lend_sum_2,
                                "borrow_3": borrow_sum_3, "lend_3": lend_sum_3})
     if period == 1:

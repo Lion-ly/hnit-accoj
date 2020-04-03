@@ -28,6 +28,7 @@ def left_size_formula(sheet_infos, len_sheets, cal_list):
             end += acc_balance_sheet_info["borrow_3"]
     return round(last, 2), round(end, 2)
 
+
 def right_size_formula(sheet_infos, len_sheets, cal_list):
     last = 0
     end = 0
@@ -55,28 +56,31 @@ def cal_new_balance_sheet(company):
     new_balance_sheet_infos = dict()
     # 获取第二期
     # 计算流动资产，并保存,将流动资产期初期末值合计
-    current_assets_last_sum =0
+    current_assets_last_sum = 0
     current_assets_end_sum = 0
     # 计算货币资金
     bank_and_cash_list = ["库存现金", "银行存款", "其他货币资金"]
-    bank_and_cash_last, bank_and_cash_end = left_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len, bank_and_cash_list)
-    new_balance_sheet_infos["货币资金"] = {"period_end":bank_and_cash_end, "period_last":bank_and_cash_last}
+    bank_and_cash_last, bank_and_cash_end = left_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len,
+                                                              bank_and_cash_list)
+    new_balance_sheet_infos["货币资金"] = {"period_end": bank_and_cash_end, "period_last": bank_and_cash_last}
     current_assets_last_sum += bank_and_cash_last
     current_assets_end_sum += bank_and_cash_end
 
     # 计算预付账款
     advance_list = ["预付账款", "应付账款"]
-    advance_money_last, advance_money_end = left_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len, advance_list)
-    new_balance_sheet_infos["预付账款"] = {"period_end":advance_money_end, "period_last":advance_money_last}
+    advance_money_last, advance_money_end = left_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len,
+                                                              advance_list)
+    new_balance_sheet_infos["预付账款"] = {"period_end": advance_money_end, "period_last": advance_money_last}
     current_assets_last_sum += advance_money_last
     current_assets_end_sum += advance_money_end
 
     # 计算存货  未考虑减值准备
-    Inventory_list = ["原材料", "周转材料", "生产成本", "库存商品"]
-    Inventory_last, Inventory_end = left_size_formula(acc_balance_sheet_infos,acc_balance_sheet_infos_len, Inventory_list)
-    new_balance_sheet_infos["存货"] = {"period_end":Inventory_end, "period_last":Inventory_last}
-    current_assets_last_sum += Inventory_last
-    current_assets_end_sum += Inventory_end
+    inventory_list = ["原材料", "周转材料", "生产成本", "库存商品"]
+    inventory_last, inventory_end = left_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len,
+                                                      inventory_list)
+    new_balance_sheet_infos["存货"] = {"period_end": inventory_end, "period_last": inventory_last}
+    current_assets_last_sum += inventory_last
+    current_assets_end_sum += inventory_end
 
     # 一年内到期非流动资产  持有至到期投资 暂时未计算
     new_balance_sheet_infos["一年内到期的非流动资产"] = {"period_end": 0, "period_last": 0}
@@ -103,7 +107,6 @@ def cal_new_balance_sheet(company):
     current_assets_end_sum = round(current_assets_end_sum, 2)
     current_assets_last_sum = round(current_assets_last_sum, 2)
     new_balance_sheet_infos["流动资产合计"] = {"period_end": current_assets_end_sum, "period_last": current_assets_last_sum}
-
 
     # 计算非流动资产
     non_current_assets_last_sum = 0
@@ -148,7 +151,7 @@ def cal_new_balance_sheet(company):
     new_balance_sheet_infos["无形资产"] = {"period_end": intangible_assets_end, "period_last": intangible_assets_last}
 
     # 通用计算
-    non_current_assets_cp  = list(non_current_assets.copy())
+    non_current_assets_cp = list(non_current_assets.copy())
     for i in range(0, acc_balance_sheet_infos_len):
         acc_balance_sheet_info = acc_balance_sheet_infos[i]
         subject = acc_balance_sheet_info["subject"]
@@ -169,14 +172,15 @@ def cal_new_balance_sheet(company):
     # 非流动资产合计
     non_current_assets_end_sum = round(non_current_assets_end_sum, 2)
     non_current_assets_last_sum = round(non_current_assets_last_sum, 2)
-    new_balance_sheet_infos["非流动资产合计"] = {"period_end": non_current_assets_end_sum, "period_last": non_current_assets_last_sum}
+    new_balance_sheet_infos["非流动资产合计"] = {"period_end" : non_current_assets_end_sum,
+                                          "period_last": non_current_assets_last_sum}
 
     # 资产合计
     assets_sum_last = round(current_assets_last_sum + non_current_assets_last_sum, 2)
     assets_sum_end = round(current_assets_end_sum + non_current_assets_end_sum, 2)
     new_balance_sheet_infos["资产总计"] = {"period_end": assets_sum_end, "period_last": assets_sum_last}
 
-# --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     # 计算负债与所有者权益部分
     # 流动负债
@@ -185,13 +189,16 @@ def cal_new_balance_sheet(company):
 
     # 计算应付和预收
     account_payable_list = ["应付账款", "预付账款"]
-    account_payable_last, account_payable_end =  right_size_formula(acc_balance_sheet_infos,acc_balance_sheet_infos_len, account_payable_list)
+    account_payable_last, account_payable_end = right_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len,
+                                                                   account_payable_list)
     new_balance_sheet_infos["应付账款"] = {"period_end": account_payable_end, "period_last": account_payable_last}
     current_liabilities_last_sum += account_payable_last
     current_liabilities_end_sum += account_payable_end
 
     advance_from_customer_list = ["预收账款", "应收账款"]
-    advance_customer_last, advance_customer_end = right_size_formula(acc_balance_sheet_infos, acc_balance_sheet_infos_len, advance_from_customer_list)
+    advance_customer_last, advance_customer_end = right_size_formula(acc_balance_sheet_infos,
+                                                                     acc_balance_sheet_infos_len,
+                                                                     advance_from_customer_list)
     new_balance_sheet_infos["预收账款"] = {"period_end": advance_customer_end, "period_last": advance_customer_last}
     current_liabilities_last_sum += advance_money_last
     current_liabilities_end_sum += advance_customer_end
@@ -211,7 +218,7 @@ def cal_new_balance_sheet(company):
             new_balance_sheet_infos[subject] = {"period_end": end, "period_last": last}
             current_liabilities_cp.remove(subject)
     # 未在明细表中的将其值定0
-    len_current_liabilities_cp  = len(current_liabilities_cp)
+    len_current_liabilities_cp = len(current_liabilities_cp)
     if len_current_assets_cp > 0:
         for j in range(0, len_current_liabilities_cp):
             subject_left = current_liabilities_cp[j]
@@ -220,7 +227,8 @@ def cal_new_balance_sheet(company):
     # 存入流动负债的值
     current_liabilities_end_sum = round(current_liabilities_end_sum, 2)
     current_liabilities_last_sum = round(current_liabilities_last_sum, 2)
-    new_balance_sheet_infos["流动负债合计"] = {"period_end": current_liabilities_end_sum, "period_last": current_liabilities_last_sum}
+    new_balance_sheet_infos["流动负债合计"] = {"period_end" : current_liabilities_end_sum,
+                                         "period_last": current_liabilities_last_sum}
 
     # 计算非流动负债部分 ，忽略长期借款到期问题
     non_current_liabilities_last_sum = 0
@@ -247,11 +255,11 @@ def cal_new_balance_sheet(company):
     # 将非流动负债和负债合计加入
     non_current_liabilities_end_sum = round(non_current_liabilities_end_sum, 2)
     non_current_liabilities_last_sum = round(non_current_liabilities_last_sum, 2)
-    new_balance_sheet_infos["非流动负债合计"] = {"period_end": non_current_liabilities_end_sum, "period_last": non_current_liabilities_last_sum}
+    new_balance_sheet_infos["非流动负债合计"] = {"period_end" : non_current_liabilities_end_sum,
+                                          "period_last": non_current_liabilities_last_sum}
     liabilities_last_sum = round(current_liabilities_last_sum + non_current_liabilities_last_sum, 2)
     liabilities_end_sum = round(current_liabilities_end_sum + non_current_liabilities_end_sum, 2)
     new_balance_sheet_infos["负债合计"] = {"period_end": liabilities_end_sum, "period_last": liabilities_last_sum}
-
 
     # 计算所有者权益
     owners_equities_last_sum = 0
@@ -282,12 +290,14 @@ def cal_new_balance_sheet(company):
     # 将所有者权益合计加入
     owners_equities_end_sum = round(owners_equities_end_sum, 2)
     owners_equities_last_sum = round(owners_equities_last_sum, 2)
-    new_balance_sheet_infos["所有者权益合计"] = {"period_end": owners_equities_end_sum, "period_last": owners_equities_last_sum}
+    new_balance_sheet_infos["所有者权益合计"] = {"period_end" : owners_equities_end_sum,
+                                          "period_last": owners_equities_last_sum}
 
     # 将负债与所有者权益合计加入
     liability_and_equility_last_sum = round(owners_equities_last_sum + liabilities_last_sum, 2)
     liability_and_equility_end_sum = round(owners_equities_end_sum + liabilities_end_sum, 2)
-    new_balance_sheet_infos["负债及所有者权益总计"] = {"period_end": liability_and_equility_end_sum, "period_last": liability_and_equility_last_sum}
+    new_balance_sheet_infos["负债及所有者权益总计"] = {"period_end" : liability_and_equility_end_sum,
+                                             "period_last": liability_and_equility_last_sum}
 
     # 将所有结果存入数据库
     mongo.db.company.update({"_id": _id}, {"$set": {"new_balance_sheet_infos": new_balance_sheet_infos}})
