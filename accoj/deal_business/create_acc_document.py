@@ -3,7 +3,7 @@
 # @Time    : 2020/3/16 11:07
 # @Author  : Coodyz
 # @Site    : https://github.com/coolbreeze2
-# @File    : creat_acc_document.py
+# @File    : create_acc_document.py
 # @Software: PyCharm
 from accoj.extensions import mongo
 
