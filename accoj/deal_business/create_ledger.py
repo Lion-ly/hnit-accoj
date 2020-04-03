@@ -1,5 +1,5 @@
 # from flask import jsonify
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 # 表示贷方增加
 A_type = {"短期借款", "应付票据", "应付账款", "预收账款", "应付职工薪酬", "应交税费", "应付利息", "应付股利", "其他应付款",
@@ -32,7 +32,7 @@ def create_ledger(company):
 
 
 def cal_ledger_1(company):
-    _id = company.get("_id")
+    # _id = company.get("_id")
     entrys_infos = company.get("entry_infos")
     involve_subjects = set()
     # 对每期的10个会计业务进行记账
@@ -115,7 +115,8 @@ def cal_ledger_1(company):
                     ledger_infors_1[subject]["cr"] = cr
                     ledger_infors_1[subject]["current_amount_cr"] = current_amount_cr
                     ledger_infors_1[subject]["ending_balance"] = ending_balance
-    mongo.db.company.update({"_id": _id}, {"$set": {"ledger_infos.ledger_infos_1": ledger_infors_1}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"ledger_infos.ledger_infos_1": ledger_infors_1}})
+    company.update({"ledger_infos": {"ledger_infos_1": ledger_infors_1}})
 
 
 def cal_ledger_2(company):
@@ -154,8 +155,8 @@ def cal_ledger_2(company):
             if subject not in involve_subjects:
                 opening_balance = 0
                 # 创建该科目，判断借贷
-                current_amount_dr = money
                 if is_dr:
+                    current_amount_dr = money
                     if is_left:
                         ending_balance = opening_balance + current_amount_dr - 0
                     else:
@@ -172,9 +173,9 @@ def cal_ledger_2(company):
                 else:
                     current_amount_cr = money
                     if is_left:
-                        ending_balance = opening_balance + current_amount_dr - current_amount_cr
+                        ending_balance = opening_balance + 0 - current_amount_cr
                     else:
-                        ending_balance = opening_balance + current_amount_cr - current_amount_dr
+                        ending_balance = opening_balance + current_amount_cr - 0
                     ledger_infors_2[subject] = {
                         "subject"          : subject,
                         "opening_balance"  : opening_balance,
@@ -216,4 +217,5 @@ def cal_ledger_2(company):
                     ledger_infors_2[subject]["cr"] = cr
                     ledger_infors_2[subject]["current_amount_cr"] = current_amount_cr
                     ledger_infors_2[subject]["ending_balance"] = ending_balance
-    mongo.db.company.update({"_id": _id}, {"$set": {"ledger_infos.ledger_infos_2": ledger_infors_2}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"ledger_infos.ledger_infos_2": ledger_infors_2}})
+    company["ledger_infos"]["ledger_infos_2"] = ledger_infors_2

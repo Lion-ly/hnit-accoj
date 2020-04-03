@@ -6,11 +6,10 @@
 # @File    : evaluate_subject.py
 # @Software: PyCharm
 from accoj.extensions import mongo
-from accoj.evaluation import get_company, get_question_no, TotalScore
+from accoj.evaluation import get_question_no, TotalScore
 
 
-def evaluate_subject():
-    company, company_cp = get_company("subject")
+def evaluate_subject(company, company_cp):
     scores = 0
     subject_score = []
     _id = company_cp.get("_id")

@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_acc_balance_sheet.py
 # @Software: PyCharm
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 
 def create_acc_balance_sheet(company):
@@ -19,7 +19,7 @@ def create_acc_balance_sheet(company):
 
 # 第二期的余额表
 def cal_acc_balance(company, ledger_name, period):
-    _id = company.get("_id")
+    # _id = company.get("_id")
     balance_sheet_info = list()
     borrow_sum_1 = 0
     borrow_sum_2 = 0
@@ -63,4 +63,5 @@ def cal_acc_balance(company, ledger_name, period):
                                "borrow_2": borrow_sum_2, "lend_2": lend_sum_2,
                                "borrow_3": borrow_sum_3, "lend_3": lend_sum_3})
 
-    mongo.db.company.update({"_id": _id}, {"$set": {"acc_balance_sheet_infos": balance_sheet_info}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"acc_balance_sheet_infos": balance_sheet_info}})
+    company.update({"acc_balance_sheet_infos": balance_sheet_info})

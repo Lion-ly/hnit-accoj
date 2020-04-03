@@ -5,8 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_balance_sheet.py
 # @Software: PyCharm
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 
 def create_balance_sheet(company):
@@ -21,7 +20,7 @@ def create_balance_sheet(company):
 
 
 def cal_balance_sheet(company, ledger_name, period):
-    _id = company.get("_id")
+    # _id = company.get("_id")
     balance_sheet_info = list()
     borrow_sum_1 = 0
     borrow_sum_2 = 0
@@ -65,6 +64,8 @@ def cal_balance_sheet(company, ledger_name, period):
                                "borrow_2": borrow_sum_2, "lend_2": lend_sum_2,
                                "borrow_3": borrow_sum_3, "lend_3": lend_sum_3})
     if period == 1:
-        mongo.db.company.update({"_id": _id}, {"$set": {"balance_sheet_infos.accounting_period_1": balance_sheet_info}})
+        # mongo.db.company.update({"_id": _id}, {"$set": {"balance_sheet_infos.accounting_period_1": balance_sheet_info}})
+        company.update({"balance_sheet_infos": {"accounting_period_1": balance_sheet_info}})
     else:
-        mongo.db.company.update({"_id": _id}, {"$set": {"balance_sheet_infos.accounting_period_2": balance_sheet_info}})
+        # mongo.db.company.update({"_id": _id}, {"$set": {"balance_sheet_infos.accounting_period_2": balance_sheet_info}})
+        company["balance_sheet_infos"]["accounting_period_2"] = balance_sheet_info

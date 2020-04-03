@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_trend_analysis.py
 # @Software: PyCharm
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 new_balance_sheet_infos_in = dict()
 profit_statement_infos_in = dict()
@@ -68,6 +68,7 @@ def cal_profit_trend_analysis(company):
 
     trend_analysis_infos = {"new_balance_sheet_infos": new_balance_sheet_infos_in,
                             "profit_statement_infos" : profit_statement_infos_in}
-    _id = company.get("_id")
+    # _id = company.get("_id")
     # 存入数据库
-    mongo.db.company.update({"_id": _id}, {"$set": {"trend_analysis_infos": trend_analysis_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"trend_analysis_infos": trend_analysis_infos}})
+    company.update({"trend_analysis_infos": trend_analysis_infos})

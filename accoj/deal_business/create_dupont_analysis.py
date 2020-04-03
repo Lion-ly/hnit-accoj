@@ -5,8 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_dupont_analysis.py
 # @Software: PyCharm
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 dupont_analysis_infos = dict()
 
@@ -63,6 +62,7 @@ def cal_dupont_analysis(company):
     dupont_analysis_infos["流动资产合计"] = current_assets
     dupont_analysis_infos["非流动资产合计"] = long_term_assets
 
-    _id = company.get("_id")
+    # _id = company.get("_id")
     # 存入数据库中
-    mongo.db.company.update({"_id": _id}, {"$set": {"dupont_analysis_infos": dupont_analysis_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"dupont_analysis_infos": dupont_analysis_infos}})
+    company.update({"dupont_analysis_infos": dupont_analysis_infos})

@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_acc_document.py
 # @Software: PyCharm
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 # 创建会计凭证列表,在副本公司中创建答案
 acc_document_infos = list()
@@ -21,7 +21,7 @@ def create_acc_document(company):
 
 
 def cal_acc_document(company):
-    _id = company.get("_id")
+    # _id = company.get("_id")
     student_no = company.get("student_no")
     entrys_infos = company.get("entry_infos")
     entry_len = len(entrys_infos)
@@ -53,5 +53,6 @@ def cal_acc_document(company):
             {"document_no": document_no, "filename": None, "doc_no": None, "date": None, "doc_nums": None,
              "contents"   : contents})
     # 将所有的科目凭证加入数据库中
-    mongo.db.company.update({"_id": _id}, {"$set": {"acc_document_infos": acc_document_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"acc_document_infos": acc_document_infos}})
+    company.update({"acc_document_infos": acc_document_infos})
     print("acc_documents have been saved!")
