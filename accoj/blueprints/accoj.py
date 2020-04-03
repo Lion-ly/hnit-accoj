@@ -10,7 +10,8 @@ from accoj.utils import login_required, complete_required1
 from accoj.blueprints import submit_infos, get_data, get_infos
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo
-from accoj.deal_business import create_businesses
+from accoj.deal_business.create_businesses import create_businesses
+from accoj.deal_business import cal_answer
 
 accoj_bp = Blueprint('accoj', __name__)
 MAX_BUSINESS_NO = 20
@@ -179,18 +180,17 @@ def submit_business_info():
 
         subjects_tmp1 = set(subjects_tmp1)
         subjects_tmp2 = set(subjects_tmp2)
-        # subjects_tmp1.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
-        # subjects_tmp2.update(["资本公积", "盈余公积", "本年利润", "利润分配"])
+        subjects_tmp1.add(["本年利润"])
+        subjects_tmp2.add(["本年利润"])
         involve_subjects = dict(involve_subjects_1=list(subjects_tmp1), involve_subjects_2=list(subjects_tmp2))
 
         mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
                                 {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : involve_subjects}}
-                                )
+                                          "involve_subjects"                 : involve_subjects}})
         mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
                                 {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : involve_subjects}}
-                                )
+                                          "involve_subjects"                 : involve_subjects}})
+        cal_answer()
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")

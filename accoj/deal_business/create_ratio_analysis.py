@@ -5,8 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_ratio_analysis.py
 # @Software: PyCharm
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 ratio_analysis_infos = dict()
 
@@ -194,6 +193,7 @@ def cal_ratio_analysis(company):
     # 计算销售净利率 销售净利率=(净利润/销售收入)×100%
     cal_rate(net_profit_end, operate_income_end, "销售净利率", "period_end")
 
-    _id = company.get("_id")
+    # _id = company.get("_id")
     # 存入数据库
-    mongo.db.company.update({"_id": _id}, {"$set": {"ratio_analysis_infos": ratio_analysis_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"ratio_analysis_infos": ratio_analysis_infos}})
+    company.update({"ratio_analysis_infos": ratio_analysis_infos})

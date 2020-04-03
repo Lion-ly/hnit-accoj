@@ -5,8 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_subsidiary_account.py
 # @Software: PyCharm
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 subsidiary_account_infos = dict()
 
@@ -215,6 +214,7 @@ def cal_subsidiary_account(company):
                  "cr_money": current_amount_cr_2, "orientation": orientation_last, "balance_money": balance_money_last})
             subsidiary_account_infos[involve_subject] = infos
 
-    _id = company.get("_id")
+    # _id = company.get("_id")
     # 存入数据库中
-    mongo.db.company.update({"_id": _id}, {"$set": {"subsidiary_account_infos": subsidiary_account_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"subsidiary_account_infos": subsidiary_account_infos}})
+    company.update({"subsidiary_account_infos": subsidiary_account_infos})

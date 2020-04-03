@@ -5,8 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_common_ratio_analysis.py
 # @Software: PyCharm
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 assets = {"货币资金", "交易性金融资产", "应收票据", "应收账款", "预付账款", "应收利息", "应收股利", "其他应收款",
           "存货", "一年内到期的非流动资产", "其他流动资产", "流动资产合计", "可供售出金融资产", "持有至到期投资",
@@ -84,6 +83,7 @@ def cal_profit_statement_infos(company):
     profit_statement_infos_in["conclusion"] = None
     common_ratio_analysis_infos = {"new_balance_sheet_infos": new_balance_sheet_infos_in,
                                    "profit_statement_infos" : profit_statement_infos_in}
-    _id = company.get("_id")
+    # _id = company.get("_id")
     # 存入数据库
-    mongo.db.company.update({"_id": _id}, {"$set": {"common_ratio_analysis_infos": common_ratio_analysis_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"common_ratio_analysis_infos": common_ratio_analysis_infos}})
+    company.update({"common_ratio_analysis_infos": common_ratio_analysis_infos})

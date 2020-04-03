@@ -1,5 +1,5 @@
-from flask import jsonify
-from accoj.extensions import mongo
+# from flask import jsonify
+# from accoj.extensions import mongo
 
 # 表示贷方增加
 A_type = {"短期借款", "应付票据", "应付账款", "预收账款", "应付职工薪酬", "应交税费", "应付利息", "应付股利", "其他应付款",
@@ -27,7 +27,8 @@ def cal_entry_infos(company):
     # 获取会计科目信息
     subjects_infos = company.get("subject_infos")
     if not subjects_infos:
-        return jsonify(False, "科目信息不存在！")
+        print("科目信息不存在！")
+        return False
     subjects_len = len(subjects_infos)
     for i in range(0, subjects_len):
         if i != 9 or i != 19:
@@ -52,7 +53,7 @@ def cal_entry_infos(company):
 # 计算期末的会计分录
 def cal_entry_end(company, start, end, entry_index):
     turn_over_temp = dict()
-    _id = company.get("_id")
+    # _id = company.get("_id")
     subjects_infos = company.get("subject_infos")
     subjects_len = len(subjects_infos)
     if subjects_len != 20:
@@ -98,7 +99,7 @@ def cal_entry_end(company, start, end, entry_index):
         subject = "本年利润"
         entrys_infos[entry_index].append({"subject": subject, "money": abs(money_sum), "is_dr": is_dr})
     # 将所有分录存入数据库
-    mongo.db.company.update({"_id": _id}, {"$set": {"entry_infos": entrys_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"entry_infos": entrys_infos}})
 
 
 def create_entry(company):
@@ -113,4 +114,5 @@ def create_entry(company):
     cal_entry_infos(company)
     cal_entry_end(company, 0, 9, 9)
     cal_entry_end(company, 10, 19, 19)
+    company.update({"entry_infos": entrys_infos})
     print("entry_infos have been saved! ")

@@ -5,8 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_profit_statement.py
 # @Software: PyCharm
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 profit_statement_infos = dict()
 
@@ -61,7 +60,7 @@ def cal_formula(sheet_infos, list_infos, sheets_len, period, borrow_lend):
 
 
 def cal_profit_statement(company):
-    _id = company.get("_id")
+    # _id = company.get("_id")
     # 计算营业收入  主营业务收入 其他业务收入
     balance_sheet_infos = company.get("balance_sheet_infos")
     balance_sheet_infos_1 = balance_sheet_infos.get("accounting_period_1")
@@ -125,4 +124,5 @@ def cal_profit_statement(company):
     profit_statement_infos["净利润"]["period_end"] = net_profit_end
 
     # 存入数据库
-    mongo.db.company.update({"_id": _id}, {"$set": {"profit_statement_infos": profit_statement_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"profit_statement_infos": profit_statement_infos}})
+    company.update({"profit_statement_infos": profit_statement_infos})

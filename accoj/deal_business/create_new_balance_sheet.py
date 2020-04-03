@@ -5,9 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : create_new_balance_sheet.py
 # @Software: PyCharm
-
-
-from accoj.extensions import mongo
+# from accoj.extensions import mongo
 
 # 以下是直接从科目余额汇总表填写，其余进行特判
 current_assets = {"交易性金融资产", "应收利息", "应收股利", "其他应收款", "其他流动资产", "应收票据", "应收账款", "长期待摊费用"}
@@ -50,7 +48,7 @@ def create_new_balance_sheet(company):
 
 
 def cal_new_balance_sheet(company):
-    _id = company.get("_id")
+    # _id = company.get("_id")
     acc_balance_sheet_infos = company.get("acc_balance_sheet_infos")
     acc_balance_sheet_infos_len = len(acc_balance_sheet_infos)
     new_balance_sheet_infos = dict()
@@ -300,4 +298,5 @@ def cal_new_balance_sheet(company):
                                              "period_last": liability_and_equility_last_sum}
 
     # 将所有结果存入数据库
-    mongo.db.company.update({"_id": _id}, {"$set": {"new_balance_sheet_infos": new_balance_sheet_infos}})
+    # mongo.db.company.update({"_id": _id}, {"$set": {"new_balance_sheet_infos": new_balance_sheet_infos}})
+    company.update({"new_balance_sheet_infos": new_balance_sheet_infos})
