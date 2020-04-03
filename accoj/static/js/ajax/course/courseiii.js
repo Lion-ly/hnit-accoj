@@ -208,8 +208,8 @@ function iiiPaddingData(data, isFromButton) {
             nowTotalScore = scores[index * 2 + 1],
             totalScore = scores[scores.length - 1];
         showScoreEm(nowScore, nowTotalScore, totalScore);
-        if (isFromButton === 1)
-            answer_info = answer_infos[index];
+        if (isFromButton === 1) answer_info = answer_infos[index];
+        else if (isFromButton === 2) iiiResetInfo();
     }
     data = data[index];
     padding(data);
@@ -272,6 +272,7 @@ function input_moveTo_center(box, subject_array) {
  * 清空两个box
  */
 function iiiResetInfo() {
+    if (!answer_infos) $("#submit_status_span").hide();
     let input_tmp = $("#minusbox, #plusbox").children().children(":input"),
         input_tmpLen = input_tmp.length;
     for (let i = 0; i < input_tmpLen; i++) {
@@ -280,7 +281,6 @@ function iiiResetInfo() {
     to_all('plusbox');
     to_all('minusbox');
     $("#allbox").find("input").prop("checked", false);
-    $("#submit_status_span").hide();
 }
 
 /**

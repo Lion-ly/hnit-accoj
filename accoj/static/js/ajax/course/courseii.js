@@ -182,7 +182,6 @@ function iiPaddingData(data, isFromButton) {
             $key_element.val(money);
 
             if (isFromButton === 1) {
-                // 标出错误位置
                 for (j = 0; j < t_infoLen; j++) {
                     let t_key_element = answer_info[j]["key_element"];
                     let t_is_up = answer_info[j]["is_up"];
@@ -239,8 +238,8 @@ function iiPaddingData(data, isFromButton) {
             nowTotalScore = scores[index * 2 + 1],
             totalScore = scores[scores.length - 1];
         showScoreEm(nowScore, nowTotalScore, totalScore);
-        if (isFromButton === 1)
-            answer_info = answer_infos[index];
+        if (isFromButton === 1) answer_info = answer_infos[index];
+        else if (isFromButton === 2) iiResetInfo();
     }
     data = data[index];
     padding(data);
@@ -270,10 +269,10 @@ function iiBind() {
  * 清空会计要素信息
  */
 function iiResetInfo() {
+    if (!answer_infos) $("#submit_status_span").hide();
     $("[id^=key_elem]").val("");
     $("[id^=check]").prop("checked", false);
     $("#aer1").prop("checked", true);
-    $("#submit_status_span").hide();
 }
 
 /**
