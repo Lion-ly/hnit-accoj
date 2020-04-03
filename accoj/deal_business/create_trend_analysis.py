@@ -21,7 +21,6 @@ def create_trend_analysis(company):
     print("trend analysis has been created!")
 
 
-
 # 计算资产趋势分析
 def cal_balance_trend_analysis(company):
     new_balance_sheet_infos = company.get("new_balance_sheet_infos")
@@ -32,13 +31,13 @@ def cal_balance_trend_analysis(company):
         period_last = new_balance_sheet_info.get("period_last")
         # 如果本期为0  None 不存在
         if period_end == 0:
-            new_balance_sheet_infos_in[subject] = {"period_end": None, "period_last":None}
+            new_balance_sheet_infos_in[subject] = {"period_end": None, "period_last": None}
         else:
             mount_money = round(period_end - period_last, 2)
             if period_last <= 0:
                 new_balance_sheet_infos_in[subject] = {"period_end": mount_money, "period_last": None}
             else:
-                mount_rate = '{:.2%}'.format(mount_money/period_last)
+                mount_rate = '{:.2%}'.format(mount_money / period_last)
                 new_balance_sheet_infos_in[subject] = {"period_end": mount_money, "period_last": mount_rate}
 
     new_balance_sheet_infos_in["conclusion"] = {}
@@ -53,13 +52,13 @@ def cal_profit_trend_analysis(company):
         period_end = profit_statement_info.get("period_end")
         period_last = profit_statement_info.get("period_last")
         if period_end == 0:
-            profit_statement_infos_in[subject] = {"period_end": None,  "period_last": None}
+            profit_statement_infos_in[subject] = {"period_end": None, "period_last": None}
         else:
             mount_money = round(period_end - period_last, 2)
             if period_last <= 0:
                 profit_statement_infos_in[subject] = {"period_end": mount_money, "period_last": None}
             else:
-                mount_rate = '{:.2%}'.format(mount_money/period_last)
+                mount_rate = '{:.2%}'.format(mount_money / period_last)
                 profit_statement_infos_in[subject] = {"period_end": mount_money, "period_last": mount_rate}
     other_lists = ["其他综合收益的税后净额", "以后不能重分类净损益的其他综合收益", "以后将重分类净损益的其他综合收益",
                    "综合收益总额", "每股收益", "基本每股收益", "稀释每股收益"]
@@ -67,7 +66,8 @@ def cal_profit_trend_analysis(company):
         profit_statement_infos_in[subject_None] = {"period_end": 0, "period_last": 0}
     profit_statement_infos_in["conclusion"] = {}
 
-    trend_analysis_infos = {"new_balance_sheet_infos": new_balance_sheet_infos_in, "profit_statement_infos": profit_statement_infos_in}
+    trend_analysis_infos = {"new_balance_sheet_infos": new_balance_sheet_infos_in,
+                            "profit_statement_infos" : profit_statement_infos_in}
     _id = company.get("_id")
     # 存入数据库
     mongo.db.company.update({"_id": _id}, {"$set": {"trend_analysis_infos": trend_analysis_infos}})

@@ -1,28 +1,26 @@
 from flask import jsonify
 from accoj.extensions import mongo
-import time
 
 # 表示贷方增加
 A_type = {"短期借款", "应付票据", "应付账款", "预收账款", "应付职工薪酬", "应交税费", "应付利息", "应付股利", "其他应付款",
           "长期借款", "应付债券", "长期应付款", "专项应付款", "预计负债", "递延所得税负债", "实收资本", "资本公积", "盈余公积",
           "本年利润", "利润分配", "累计折旧", "累计摊销", "存货跌价准备", "坏账准备", "持有至到期投资减值准备",
-          "长期股权投资减值准备", "无形资产减值准备",  "主营业务收入", "其他业务收入", "公允价值变动损益", "投资收益", "营业外收入"}
+          "长期股权投资减值准备", "无形资产减值准备", "主营业务收入", "其他业务收入", "公允价值变动损益", "投资收益", "营业外收入"}
 
 # 表示借方增加
 B_type = {"库存现金", "银行存款", "其他货币资金", "交易性金融资产", "应收票据", "应收账款", "预付账款", "应收股利",
           "应收利息", "其他应收款", "材料采购", "在途物资", "原材料", "材料成本差异", "库存商品", "发出商品",
-          "商品进销差价", "委托加工物资", "持有至到期投资", "可供出售金融资产","长期股权投资", "投资性房地产", "长期应收款",
-          "固定资产",  "固定资产减值准备", "在建工程", "工程物资", "固定资产清理", "无形资产", "商誉", "递延所得税资产",
+          "商品进销差价", "委托加工物资", "持有至到期投资", "可供出售金融资产", "长期股权投资", "投资性房地产", "长期应收款",
+          "固定资产", "固定资产减值准备", "在建工程", "工程物资", "固定资产清理", "无形资产", "商誉", "递延所得税资产",
           "待处理财产损溢", "生产成本", "制造费用", "劳务成本", "研发支出", "主营业务成本", "其他业务成本", "税金及附加",
           "销售费用", "财务费用", "资产减值损失", "营业外支出", "所得税费用", "以前年度损益调整", "管理费用"}
 
-
-profit = { "主营业务收入", "其他业务收入", "公允价值变动损益", "投资收益", "营业外收入"}
-loss = {"主营业务成本", "其他业务成本", "税金及附加",  "销售费用", "财务费用", "资产减值损失", "营业外支出", "所得税费用",
+profit = {"主营业务收入", "其他业务收入", "公允价值变动损益", "投资收益", "营业外收入"}
+loss = {"主营业务成本", "其他业务成本", "税金及附加", "销售费用", "财务费用", "资产减值损失", "营业外支出", "所得税费用",
         "以前年度损益调整", "管理费用"}
 
-
 entrys_infos = []
+
 
 # 从会计分录开始   1-9 11-19（期末特判）
 def cal_entry_infos(company):
@@ -47,6 +45,7 @@ def cal_entry_infos(company):
                 else:
                     print("科目不存在" + subject)
                     print(i)
+                    continue
                 entrys_infos[i].append({"subject": subject, "money": money, "is_dr": is_dr})
 
 
@@ -61,7 +60,6 @@ def cal_entry_end(company, start, end, entry_index):
     # 对第每个会计区间进行结转
     money_dr = 0
     money_cr = 0
-    money_sum = 0
     for i in range(start, end):
         entrys_info = entrys_infos[i]
         if not entrys_info:
@@ -100,8 +98,7 @@ def cal_entry_end(company, start, end, entry_index):
         subject = "本年利润"
         entrys_infos[entry_index].append({"subject": subject, "money": abs(money_sum), "is_dr": is_dr})
     # 将所有分录存入数据库
-    mongo.db.company.update({"_id":_id},  {"$set": {"entry_infos": entrys_infos}})
-
+    mongo.db.company.update({"_id": _id}, {"$set": {"entry_infos": entrys_infos}})
 
 
 def create_entry(company):
@@ -117,5 +114,3 @@ def create_entry(company):
     cal_entry_end(company, 0, 9, 9)
     cal_entry_end(company, 10, 19, 19)
     print("entry_infos have been saved! ")
-
-

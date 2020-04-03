@@ -10,6 +10,7 @@ from accoj.extensions import mongo
 
 subsidiary_account_infos = dict()
 
+
 def create_subsidiary_account(company):
     """
     创建会计明细账答案
@@ -27,7 +28,7 @@ def cal_subsidiary_account(company):
     # 各期涉及的及所有
     involve_subjects_1 = set(ledger_infos_1.keys())
     involve_subjects_2 = set(ledger_infos_2.keys())
-    excepet_list= involve_subjects_1 - involve_subjects_2
+    excepet_list = involve_subjects_1 - involve_subjects_2
 
     # 读取第一期信息
     for involve_subject in involve_subjects_1:
@@ -42,7 +43,7 @@ def cal_subsidiary_account(company):
         is_left = ledger_info_1.get("is_left")
         balance = opening_balance_1
         # 期初余额
-        infos.append({"date": 1, "word": None, "no": None, "summmary": "期初余额", "dr_money": 0, "cr_money": 0,
+        infos.append({"date"       : 1, "word": None, "no": None, "summmary": "期初余额", "dr_money": 0, "cr_money": 0,
                       "orientation": "平", "balance_money": opening_balance_1})
         # 读取借贷信息
         for dr in dr_1:
@@ -50,36 +51,36 @@ def cal_subsidiary_account(company):
             if is_left:
                 balance += money
                 infos.append(
-                    {"date": 1, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
+                    {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                      "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
             else:
                 balance -= money
                 infos.append(
-                    {"date": 1, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
+                    {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                      "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
         for cr in cr_1:
             money = cr.get("money")
             if is_left:
                 balance -= money
                 infos.append(
-                    {"date": 1, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
+                    {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                      "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
             else:
                 balance += money
                 infos.append(
-                    {"date": 1, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
+                    {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                      "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
 
         # 将本期合计加入
         if is_left:
             infos.append(
-                {"date": 1, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_1,
-                 "cr_money": current_amount_cr_1, "orientation": "借" if ending_balance_1 > 0 else "贷",
+                {"date"         : 1, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_1,
+                 "cr_money"     : current_amount_cr_1, "orientation": "借" if ending_balance_1 > 0 else "贷",
                  "balance_money": abs(ending_balance_1)})
         else:
             infos.append(
-                {"date": 1, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_1,
-                 "cr_money": current_amount_cr_1, "orientation": "贷" if ending_balance_1 > 0 else "借",
+                {"date"         : 1, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_1,
+                 "cr_money"     : current_amount_cr_1, "orientation": "贷" if ending_balance_1 > 0 else "借",
                  "balance_money": abs(ending_balance_1)})
         # 如果只在第一期有，加入本年累计
         if involve_subject in excepet_list:
@@ -87,10 +88,9 @@ def cal_subsidiary_account(company):
             orientation = infos_last["orientation"]
             balance_money = infos_last["balance_money"]
             infos.append(
-                {"date": 1, "word": None, "no": None, "summmary": "本年累计", "dr_money": current_amount_dr_1,
+                {"date"    : 1, "word": None, "no": None, "summmary": "本年累计", "dr_money": current_amount_dr_1,
                  "cr_money": current_amount_cr_1, "orientation": orientation, "balance_money": balance_money})
         subsidiary_account_infos[involve_subject] = infos
-
 
     # 读取第二期
     for involve_subject in involve_subjects_2:
@@ -117,36 +117,36 @@ def cal_subsidiary_account(company):
                 if is_left:
                     balance += money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
                     balance -= money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
             for cr in cr_2:
                 money = cr.get("money")
                 if is_left:
                     balance -= money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
                     balance += money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
 
             # 将本期合计加入
             if is_left:
                 infos.append(
-                    {"date": 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
-                     "cr_money": current_amount_cr_2, "orientation": "借" if ending_balance_2 > 0 else "贷",
+                    {"date"         : 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
+                     "cr_money"     : current_amount_cr_2, "orientation": "借" if ending_balance_2 > 0 else "贷",
                      "balance_money": abs(ending_balance_2)})
             else:
                 infos.append(
-                    {"date": 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
-                     "cr_money": current_amount_cr_2, "orientation": "贷" if ending_balance_2 > 0 else "借",
+                    {"date"         : 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
+                     "cr_money"     : current_amount_cr_2, "orientation": "贷" if ending_balance_2 > 0 else "借",
                      "balance_money": abs(ending_balance_2)})
             # 将本年合计也同时加入
             infos_end = infos[-1]
@@ -157,7 +157,7 @@ def cal_subsidiary_account(company):
             dr_sum = dr_last + dr_end
             cr_sum = cr_last + cr_end
             infos.append(
-                {"date": 2, "word": None, "no": None, "summmary": "本年累计", "dr_money": dr_sum,
+                {"date"    : 2, "word": None, "no": None, "summmary": "本年累计", "dr_money": dr_sum,
                  "cr_money": cr_sum, "orientation": orientation_end, "balance_money": balance_money_end})
             subsidiary_account_infos[involve_subject] = infos
 
@@ -165,7 +165,7 @@ def cal_subsidiary_account(company):
             # 如果是第二期出现的账户
             infos = list()
             # 期初余额
-            infos.append({"date": 2, "word": None, "no": None, "summmary": "期初余额", "dr_money": 0, "cr_money": 0,
+            infos.append({"date"       : 2, "word": None, "no": None, "summmary": "期初余额", "dr_money": 0, "cr_money": 0,
                           "orientation": "平", "balance_money": opening_balance_2})
 
             # 读取借贷信息
@@ -174,36 +174,36 @@ def cal_subsidiary_account(company):
                 if is_left:
                     balance += money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
                     balance -= money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
             for cr in cr_2:
                 money = cr.get("money")
                 if is_left:
                     balance -= money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
                     balance += money
                     infos.append(
-                        {"date": 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
+                        {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
 
             # 将本期合计加入
             if is_left:
                 infos.append(
-                    {"date": 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
-                     "cr_money": current_amount_cr_2, "orientation": "借" if ending_balance_2 > 0 else "贷",
+                    {"date"         : 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
+                     "cr_money"     : current_amount_cr_2, "orientation": "借" if ending_balance_2 > 0 else "贷",
                      "balance_money": abs(ending_balance_2)})
             else:
                 infos.append(
-                    {"date": 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
-                     "cr_money": current_amount_cr_2, "orientation": "贷" if ending_balance_2 > 0 else "借",
+                    {"date"         : 2, "word": None, "no": None, "summmary": "本期合计", "dr_money": current_amount_dr_2,
+                     "cr_money"     : current_amount_cr_2, "orientation": "贷" if ending_balance_2 > 0 else "借",
                      "balance_money": abs(ending_balance_2)})
 
             # 将本年累计加入
@@ -211,9 +211,9 @@ def cal_subsidiary_account(company):
             balance_money_last = infos_last["balance_money"]
             orientation_last = infos_last["orientation"]
             infos.append(
-                {"date": 2, "word": None, "no": None, "summmary": "本年累计", "dr_money": current_amount_dr_2,
+                {"date"    : 2, "word": None, "no": None, "summmary": "本年累计", "dr_money": current_amount_dr_2,
                  "cr_money": current_amount_cr_2, "orientation": orientation_last, "balance_money": balance_money_last})
-            subsidiary_account_infos[involve_subject]  = infos
+            subsidiary_account_infos[involve_subject] = infos
 
     _id = company.get("_id")
     # 存入数据库中

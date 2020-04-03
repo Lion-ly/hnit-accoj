@@ -8,7 +8,6 @@
 from accoj.extensions import mongo
 
 
-
 def create_acc_balance_sheet(company):
     """
     创建第二期科目余额表答案
@@ -19,7 +18,7 @@ def create_acc_balance_sheet(company):
 
 
 # 第二期的余额表
-def cal_acc_balance(company,  ledger_name ,period):
+def cal_acc_balance(company, ledger_name, period):
     _id = company.get("_id")
     balance_sheet_info = list()
     borrow_sum_1 = 0
@@ -58,9 +57,9 @@ def cal_acc_balance(company,  ledger_name ,period):
         lend_sum_3 = round(lend_sum_3 + lend_3, 2)
         # 将该账户信息加入list
         balance_sheet_info.append({"subject": subject, "borrow_1": borrow_1, "lend_1": lend_1, "borrow_2": borrow_2,
-                                   "lend_2": lend_2, "borrow_3": borrow_3, "lend_3": lend_3})
+                                   "lend_2" : lend_2, "borrow_3": borrow_3, "lend_3": lend_3})
     # 最终将平衡表余额加入
-    balance_sheet_info.append({"subject": "期末余额", "borrow_1": borrow_sum_1, "lend_1": lend_sum_1,
+    balance_sheet_info.append({"subject" : "期末余额", "borrow_1": borrow_sum_1, "lend_1": lend_sum_1,
                                "borrow_2": borrow_sum_2, "lend_2": lend_sum_2,
                                "borrow_3": borrow_sum_3, "lend_3": lend_sum_3})
 

@@ -10,6 +10,7 @@ from accoj.extensions import mongo
 
 dupont_analysis_infos = dict()
 
+
 def create_dupont_analysis(company):
     """
     创建杜邦分析法答案
@@ -17,6 +18,7 @@ def create_dupont_analysis(company):
     """
     cal_dupont_analysis(company)
     print("dupont_analysis_infos has been created!")
+
 
 def cal_dupont_analysis(company):
     # 获取资产负债表 和 利润表 比率分析表
@@ -44,7 +46,6 @@ def cal_dupont_analysis(company):
     all_cost = operate_income - operate_profit
     other_profit = operate_profit - profit_sum
 
-
     dupont_analysis_infos["净资产收益率"] = net_asset_income_rate
     dupont_analysis_infos["总资产净利率"] = total_asset_net_interest_rate
     dupont_analysis_infos["权益乘数"] = equity_multiplier
@@ -65,10 +66,3 @@ def cal_dupont_analysis(company):
     _id = company.get("_id")
     # 存入数据库中
     mongo.db.company.update({"_id": _id}, {"$set": {"dupont_analysis_infos": dupont_analysis_infos}})
-
-
-
-
-
-
-
