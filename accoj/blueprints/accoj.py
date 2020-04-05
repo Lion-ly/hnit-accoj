@@ -180,8 +180,8 @@ def submit_business_info():
 
         subjects_tmp1 = set(subjects_tmp1)
         subjects_tmp2 = set(subjects_tmp2)
-        subjects_tmp1.add(["本年利润"])
-        subjects_tmp2.add(["本年利润"])
+        subjects_tmp1.add("本年利润")
+        subjects_tmp2.add("本年利润")
         involve_subjects = dict(involve_subjects_1=list(subjects_tmp1), involve_subjects_2=list(subjects_tmp2))
 
         mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
@@ -223,7 +223,7 @@ def create_business():
     """
     result, message = False, "公司未创立！"
     username = session.get("username")
-    company = mongo.db.company.find_one({"student_no": "{}".format(username)}, dict(schedule_confirm=1))
+    company = mongo.db.company.find_one({"student_no": "{}".format(username)})
     if not company:
         return jsonify(result=result, message=message)
 

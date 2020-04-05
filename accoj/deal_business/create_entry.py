@@ -84,6 +84,7 @@ def cal_entry_end(company, start, end, entry_index):
                 else:
                     turn_over_temp[subject] = money
     for key, value in turn_over_temp.items():
+        value = round(value, 2)
         if key in loss:
             entrys_infos[entry_index].append({"subject": key, "money": value, "is_dr": False})
         else:

@@ -48,24 +48,24 @@ def cal_subsidiary_account(company):
         for dr in dr_1:
             money = dr.get("money")
             if is_left:
-                balance += money
+                balance = round(balance + money, 2)
                 infos.append(
                     {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                      "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
             else:
-                balance -= money
+                balance = round(balance - money, 2)
                 infos.append(
                     {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                      "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
         for cr in cr_1:
             money = cr.get("money")
             if is_left:
-                balance -= money
+                balance = round(balance - money, 2)
                 infos.append(
                     {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                      "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
             else:
-                balance += money
+                balance = round(balance + money, 2)
                 infos.append(
                     {"date"       : 1, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                      "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
@@ -114,24 +114,24 @@ def cal_subsidiary_account(company):
             for dr in dr_2:
                 money = dr.get("money")
                 if is_left:
-                    balance += money
+                    balance = round(balance + money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
-                    balance -= money
+                    balance = round(balance - money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
             for cr in cr_2:
                 money = cr.get("money")
                 if is_left:
-                    balance -= money
+                    balance = round(balance - money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
-                    balance += money
+                    balance = round(balance + money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
@@ -153,8 +153,8 @@ def cal_subsidiary_account(company):
             orientation_end = infos_end["orientation"]
             dr_end = infos_end["dr_money"]
             cr_end = infos_end["cr_money"]
-            dr_sum = dr_last + dr_end
-            cr_sum = cr_last + cr_end
+            dr_sum = round(dr_last + dr_end, 2)
+            cr_sum = round(cr_last + cr_end, 2)
             infos.append(
                 {"date"    : 2, "word": None, "no": None, "summmary": "本年累计", "dr_money": dr_sum,
                  "cr_money": cr_sum, "orientation": orientation_end, "balance_money": balance_money_end})
@@ -171,24 +171,24 @@ def cal_subsidiary_account(company):
             for dr in dr_2:
                 money = dr.get("money")
                 if is_left:
-                    balance += money
+                    balance = round(balance + money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
-                    balance -= money
+                    balance = round(balance - money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": money, "cr_money": 0,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
             for cr in cr_2:
                 money = cr.get("money")
                 if is_left:
-                    balance -= money
+                    balance = round(balance - money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "借" if balance > 0 else "贷", "balance_money": balance})
                 else:
-                    balance += money
+                    balance = round(balance + money, 2)
                     infos.append(
                         {"date"       : 2, "word": None, "no": None, "summmary": None, "dr_money": 0, "cr_money": money,
                          "orientation": "贷" if balance > 0 else "借", "balance_money": balance})
