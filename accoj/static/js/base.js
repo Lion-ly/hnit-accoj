@@ -208,7 +208,7 @@ function submit_confirm_clicked() {
     // 定时自动关闭
     setTimeout(function () {
         $("#submit_confirm").modal('hide');
-    }, 3000)
+    }, 2000)
 }
 
 //==================================正则表达式限制输入==================================//
@@ -218,11 +218,12 @@ function submit_confirm_clicked() {
  * @param errorMessage
  */
 function hasError(selector, errorMessage) {
-    let $this = $(selector),
+    let $this = selector,
+        $thisTag = $this.prop("tagName"),
         $thisPaTag = $this.parent().prop("tagName");
-
     if (errorMessage) $this.val(errorMessage);
-    if ($thisPaTag === "DIV")
+    if ($thisTag === "TR") $this.addClass("danger");
+    else if ($thisPaTag === "DIV")
         $this.parent().addClass("has-error");
     else if ($thisPaTag === "LABEL") {
         $this.parent().css({"background": "rgb(242,182,182)"});
@@ -249,7 +250,10 @@ function removeError(selector) {
  * remove all input error
  */
 function removeAllError() {
-    let $inputs = $("input");
+    let $inputs = $("div[class=courseBody]").find("input"),
+        $trs = $("div[class=courseBody]").find("tr");
+    $trs.removeClass("danger");
+    $trs.css("color", "");
     $inputs.each(function (index, item) {
         let $this = $(item),
             $thisPaTag = $this.parent().prop("tagName");
@@ -769,4 +773,13 @@ function bindAnswerSource(selector, mapInfo, mapAnswer) {
     $(selector).click(function () {
         answerSource(selector, mapInfo, mapAnswer);
     });
+}
+
+/*
+ 保存和提交按钮解除禁用
+ */
+function DisableButton(flag) {
+    let $button = $("button[data-save], button[data-confirm]");
+    flag = flag ? flag : false;
+    $button.prop("disabled", flag);
 }

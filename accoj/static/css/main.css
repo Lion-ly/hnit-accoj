@@ -111,6 +111,17 @@ dd {
     color: #ffffff;
 }
 
+/*a标签设置手型且不可选*/
+ul a {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /*------------------------------------------------I END----------------------------------------------*/
 
 
@@ -207,7 +218,7 @@ dd {
     display: none;
 }
 
-.acc-score-3{
+.acc-score-3 {
     float: right;
     font-size: 18px;
     font-weight: bold;
@@ -215,7 +226,7 @@ dd {
     display: none;
 }
 
-.score-left{
+.score-left {
     float: left;
 }
 

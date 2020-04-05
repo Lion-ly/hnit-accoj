@@ -164,14 +164,15 @@ def submit_business_info():
     business_confirm = schedule_confirm.get("business_confirm")
 
     if not business_confirm:
+        cal_answer()  # 计算答案
         subjects_tmp1 = list()
         subjects_tmp2 = list()
         company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
-                                               dict(subject_infos=1, _id=0))
-        subject_infos = company_cp.get("subject_infos")
+                                               dict(entry_infos=1, _id=0))
+        entry_infos = company_cp.get("entry_infos")
         i = 0
-        for subjects_info in subject_infos:
-            for info in subjects_info:
+        for entry_info in entry_infos:
+            for info in entry_info:
                 subject = info.get("subject")
                 if i < period_num:
                     subjects_tmp1.append(subject)
@@ -180,8 +181,6 @@ def submit_business_info():
 
         subjects_tmp1 = set(subjects_tmp1)
         subjects_tmp2 = set(subjects_tmp2)
-        subjects_tmp1.add("本年利润")
-        subjects_tmp2.add("本年利润")
         involve_subjects = dict(involve_subjects_1=list(subjects_tmp1), involve_subjects_2=list(subjects_tmp2))
 
         mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
@@ -190,7 +189,6 @@ def submit_business_info():
         mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
                                 {"$set": {"schedule_confirm.business_confirm": True,
                                           "involve_subjects"                 : involve_subjects}})
-        cal_answer()
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")

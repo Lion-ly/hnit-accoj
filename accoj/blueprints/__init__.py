@@ -9,7 +9,7 @@ from _datetime import datetime
 from flask import session
 from accoj.utils import is_number, allowed_file
 from accoj.extensions import mongo
-from accoj.evaluation import evaluate_key_element, evaluate_subject, evaluate_entry
+from accoj.evaluation import evaluate_key_element, evaluate_subject, evaluate_entry, evaluate_acc_document
 
 MAX_BUSINESS_NO = 20
 
@@ -300,6 +300,8 @@ def get_data(type_num, infos_name, info_keys):
                     evaluate_subject.evaluate_subject(company, company_cp)
                 elif infos_name == "entry":
                     evaluate_entry.evaluate_entry(company, company_cp)
+                elif infos_name == "acc_document":
+                    evaluate_acc_document.evaluate_acc_document(company, company_cp)
             scores = evaluation.get("{}_score".format(infos_name))
         else:
             answer_infos = None

@@ -30,18 +30,18 @@ def cal_answer():
                                         dict(subject_infos=1, student_no=1))
     if not company:
         return False
-    create_entry(company)  # 1.分录
+    create_entry(company)   # 1.分录
     create_ledger(company)  # 2.账户
-    create_balance_sheet(company)  # 3.平衡表
-    create_acc_document(company)  # 4.会计凭证
+    create_balance_sheet(company)   # 3.平衡表
+    create_acc_document(company)    # 4.会计凭证
     create_subsidiary_account(company)  # 5.明细账
-    create_acc_balance_sheet(company)  # 6.科目余额表
-    create_new_balance_sheet(company)  # 7.资产负债表
-    create_profit_statement(company)  # 8.利润表
-    create_trend_analysis(company)  # 9.趋势分析法
-    create_common_ratio_analysis(company)  # 10.共同比分析法
-    create_ratio_analysis(company)  # 11.比率分析法
-    create_dupont_analysis(company)  # 12.杜邦分析法
+    create_acc_balance_sheet(company)   # 6.科目余额表
+    create_new_balance_sheet(company)   # 7.资产负债表
+    create_profit_statement(company)    # 8.利润表
+    create_trend_analysis(company)      # 9.趋势分析法
+    create_common_ratio_analysis(company)   # 10.共同比分析法
+    create_ratio_analysis(company)          # 11.比率分析法
+    create_dupont_analysis(company)         # 12.杜邦分析法
 
     _id = company.get("_id")
     company.pop("_id")

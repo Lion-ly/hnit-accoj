@@ -38,7 +38,7 @@ function submit_entry_info(submit_type) {
  * 从后端获取会计分录信息
  */
 function get_entry_info(isFromSubmit = false) {
-
+    DisableButton(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
     if (!isFromSubmit) {
@@ -83,13 +83,13 @@ function map_entry_info(data, isFromButton) {
         business_index = nowBusinessNo - 1,
         confirmed = entry_confirmed ? entry_confirmed.indexOf(business_index) !== -1 : false,
         saved = entry_saved ? entry_saved.indexOf(business_index) !== -1 : false;
+    if (confirmed) DisableButton(true);
     if (answer_infos) {
         showAnswerButton();
         confirmed = true;
         saved = true;
         isFromButton = 1;
         $("button[data-answer]").text("查看答案");
-        $("button[data-save], button[data-confirm]").prop("disabled", true);
     }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -145,16 +145,13 @@ function ivPaddingData(data, isFromButton) {
             if (!$subject.length || !$money.length) return;
             if (fl) error_pos.push($money);
             else error_pos.push($money, $subject);
-            console.log("fl: " + fl);
-            console.log("isDR: " + isDR);
         }
 
         let entry_info = data,
             borrow_first = true,    // 借记第一行标记
             loan_first = true,      // 贷记第一行标记
             error_pos = Array(),
-            infoLen = entry_info.length,
-            flag = false, j = 0, isDr = "";
+            flag = false;
         t_infoLen = isFromButton === 1 ? answer_info.length : t_infoLen;
 
         for (let i = 0; i < entry_info.length; i++) {
@@ -196,36 +193,8 @@ function ivPaddingData(data, isFromButton) {
                 push_err_pos(subject, flag, is_dr);
             }
         }
-        console.log(error_pos.length);
-        if (isFromButton === 1) {
-            for (let i = 0; i < t_infoLen; i++) {
-                let t_subject = answer_info[i]["subject"],
-                    t_is_dr = answer_info[i]["is_dr"],
-                    t_money = answer_info[i]["money"];
-
-                flag = false;
-                for (j = 0; j < infoLen; j++) {
-                    let subject = entry_info[j]["subject"],
-                        is_dr = entry_info[j]["is_dr"],
-                        money = answer_info[i]["money"];
-
-                    if (subject === t_subject && is_dr === t_is_dr) {
-                        flag = t_money == money;
-                        flag = flag ? 0 : 1;
-                        isDr = is_dr ? 1 : 0;
-                        break;
-                    }
-                }
-                push_err_pos(t_subject, flag, isDr);
-            }
-            // 标出错误位置
-            for (let i = 0; i < error_pos.length; i++) {
-                console.log(error_pos[i]);
-                hasError(error_pos[i]);
-            }
-        }
-        console.log(error_pos.length);
-        ivDisabledInput();
+        if (isFromButton) ivDisabledInput();
+        if (isFromButton === 1) for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
     }
 
     if (!data) return;
@@ -332,7 +301,9 @@ function iv_DeleteRow(obj) {
  */
 function ivDisabledInput() {
     let $inputs = $("input[id^=subject], input[id^=money]"),
-        $aLabels = $("a[type=button][data-toggle]");
+        $aLabels = $("a[type=button][data-toggle]"),
+        $button = $("button[data-save], button[data-confirm]");
+    $button.prop("disabled", true);
     $inputs.attr("readonly", "readonly");
     $aLabels.attr({"disabled": true, "onclick": ""});
     $aLabels.unbind("click");

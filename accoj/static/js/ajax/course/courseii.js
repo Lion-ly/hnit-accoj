@@ -37,7 +37,7 @@ function submit_key_element_info(submit_type) {
  * 从后端获取会计要素信息
  */
 function get_key_element_info(isFromSubmit = false) {
-
+    iiDisabledInput(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
@@ -89,7 +89,6 @@ function map_key_element_info(data, isFromButton) {
         saved = true;
         isFromButton = 1;
         $("button[data-answer]").text("查看答案");
-        $("button[data-save], button[data-confirm]").prop("disabled", true);
     }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -159,7 +158,7 @@ function iiPaddingData(data, isFromButton) {
         // 填充影响类型
         $affect_type.prop("checked", true);
         if (isFromButton === 1) {
-            if (answer_info["affect_type"] !== affect_type)
+            if (answer_info["affect_type"] !== affect_type &&  answer_info["affect_type"])
                 hasError($affect_type);
             answer_info = answer_info["info"];
             t_infoLen = answer_info.length;
@@ -224,13 +223,11 @@ function iiPaddingData(data, isFromButton) {
             // 标出错误位置
             for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
         }
+        if (key_element_confirmed.indexOf(index) !== -1) iiDisabledInput(true);
     }
 
     if (!data && !isFromButton) return;
-    if (isFromButton) {
-        removeAllError();
-        iiDisabledInput();
-    }
+    if (isFromButton) removeAllError();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
     if (isFromButton) {
@@ -278,12 +275,16 @@ function iiResetInfo() {
 /**
  * 禁用编辑
  */
-function iiDisabledInput() {
+function iiDisabledInput(flag) {
     let $aers = $("input[id^=aer]"),
         $check_box = $("input[id^=check]"),
-        $key_elem = $("[id^=key_elem]");
-    $aers.prop("disabled", "true");
-    $check_box.prop("disabled", "true");
-    $key_elem.attr("readonly", "readonly");
+        $key_elem = $("[id^=key_elem]"),
+        $button = $("button[data-save], button[data-confirm]");
+    flag = flag ? flag : false;
+    let readonly = flag ? "readonly" : "";
+    $button.prop("disabled", flag);
+    $aers.prop("disabled", flag);
+    $check_box.prop("disabled", flag);
+    $key_elem.attr("readonly", readonly);
     $key_elem.addClass("acc-white-bg");
 }

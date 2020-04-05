@@ -1,6 +1,8 @@
 let acc_document_infos = Array(),
     acc_document_confirmed = Array(),
     acc_document_saved = Array(),
+    answer_infos = "",
+    scores = "",
     row_num = 2,
     fileContent;
 
@@ -35,10 +37,9 @@ function submit_acc_document_info(submit_type) {
  * 从后端获取会计凭证信息
  */
 function get_acc_document_info(isFromSubmit = false) {
+    DisableButton(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
-    if (nowBusinessNo < 0 || nowBusinessNo > 20) {
-        return;
-    }
+    if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1) {
@@ -63,24 +64,34 @@ function get_acc_document_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  * @param data
+ * @param isFromButton
  */
-function map_acc_document_info(data) {
+function map_acc_document_info(data, isFromButton) {
     viResetInfo();
     data = data ? data : "";
     acc_document_infos = data ? data["acc_document_infos"] : acc_document_infos;
     acc_document_confirmed = data ? data["acc_document_confirmed"] : acc_document_confirmed;
     acc_document_saved = data ? data["acc_document_saved"] : acc_document_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
         confirmed = acc_document_confirmed ? acc_document_confirmed.indexOf(business_index) !== -1 : false,
         saved = acc_document_saved ? acc_document_saved.indexOf(business_index) !== -1 : false;
-
+    if (confirmed) DisableButton(true);
+    if (answer_infos) {
+        showAnswerButton();
+        confirmed = true;
+        saved = true;
+        isFromButton = 1;
+        $("button[data-answer]").text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
 
     // 如果已保存
-    if (saved) viPaddingData(acc_document_infos[business_index]);
+    if (saved) viPaddingData(acc_document_infos, isFromButton);
 }
 
 // ===============================获取和填充数据===============================//
@@ -159,90 +170,136 @@ function viGetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function viPaddingData(data) {
-    if (!data["acc_document_info"]) return;
-    let acc_document_info = data["acc_document_info"],
-        doc_no = acc_document_info["doc_no"],
-        date = acc_document_info["date"],
-        doc_nums = acc_document_info["doc_nums"],
-        contents = acc_document_info["contents"];
-
-    if (acc_document_info) {
-        let filename = acc_document_info["filename"];
-        if (filename) {
-            $("#vi_downloadFile_button").show();
-            $("#vi_downloadSpan").text(filename);
+function viPaddingData(data, isFromButton) {
+    function padding(t_data) {
+        function push_err_pos(iD, fl) {
+            if (fl) return;
+            let $iD = $("#" + iD);
+            error_pos.push($iD);
         }
-    } else {
-        $("#vi_downloadFile_button").hide();
-        $("#vi_downloadSpan").text("")
-    }
 
-    date = formatDate(date);
-    $("input[name=doc_no]").val(doc_no);
-    $("input[name=date]").val(date);
-    $("input[name=doc_nums]").val(doc_nums);
+        let acc_document_info = t_data,
+            doc_no = acc_document_info["doc_no"],
+            date = acc_document_info["date"],
+            doc_nums = acc_document_info["doc_nums"],
+            contents = acc_document_info["contents"],
+            error_pos = Array(),
+            flag = false;
+        t_contentLen = isFromButton === 1 ? contents_cp.length : t_contentLen;
 
-    // 添加行
-    for (let i = 1; i < contents.length - 1; i++) {
-        vi_AddRow();
-    }
-
-    let contents_index = 0;
-    $("tr[id^=vi_row]").each(function () {
-            let summary = contents[contents_index]["summary"],                      //摘要
-                general_account = contents[contents_index]["general_account"],      //总账科目
-                detail_account = contents[contents_index]["detail_account"],        //明细科目
-                dr_money = contents[contents_index]["dr_money"],                    //借方金额
-                cr_money = contents[contents_index]["cr_money"],                    //贷方金额
-                thisId = $(this).attr("id"),
-                thisInput = $(this).find("input"),
-                prefix = "0000000000";
-            dr_money = dr_money ? dr_money * 100 : dr_money;
-            cr_money = cr_money ? cr_money * 100 : cr_money;
-            dr_money = dr_money ? dr_money.toString() : dr_money;
-            cr_money = cr_money ? cr_money.toString() : cr_money;
-            dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
-            cr_money = cr_money ? prefix.substring(0, 10 - cr_money.length) + cr_money : cr_money;
-            let money = dr_money ? dr_money : "";
-            money += cr_money ? cr_money : "";
-            let firstNum = true;
-            if (thisId === "vi_rowLast") {
-                for (let i = 0; i < 20; i++) {
-                    if (money) {
-                        if (i === 10) {
-                            firstNum = true;
-                        }
-                        if (firstNum && money[i] !== "0") {
-                            $(thisInput[i]).val(money[i]);
-                            firstNum = false;
-                        }
-                        if (!firstNum && i < money.length)
-                            $(thisInput[i]).val(money[i]);
-                    }
-                }
-            } else {
-                $(thisInput[0]).val(summary);
-                $(thisInput[1]).val(general_account);
-                $(thisInput[2]).val(detail_account);
-                for (let i = 3; i < 23; i++) {
-                    if (money) {
-                        if (i === 13) {
-                            firstNum = true;
-                        }
-                        if (firstNum && money[i - 3] !== "0") {
-                            $(thisInput[i]).val(money[i - 3]);
-                            firstNum = false;
-                        }
-                        if (!firstNum && i < money.length + 3)
-                            $(thisInput[i]).val(money[i - 3]);
-                    }
-                }
+        if (acc_document_info) {
+            let filename = acc_document_info["filename"];
+            if (filename) {
+                $("#vi_downloadFile_button").show();
+                $("#vi_downloadSpan").text(filename);
             }
-            contents_index++;
+        } else {
+            $("#vi_downloadFile_button").hide();
+            $("#vi_downloadSpan").text("")
         }
-    );
+
+        date = date ? formatDate(date) : date;
+        $("input[name=doc_no]").val(doc_no);
+        $("input[name=date]").val(date);
+        $("input[name=doc_nums]").val(doc_nums);
+
+        // 添加行
+        for (let i = 1; i < contents.length - 1; i++) vi_AddRow();
+
+        let contents_index = 0;
+        $("tr[id^=vi_row]").each(function () {
+                let summary = contents[contents_index]["summary"],                      //摘要
+                    general_account = contents[contents_index]["general_account"],      //总账科目
+                    detail_account = contents[contents_index]["detail_account"],        //明细科目
+                    dr_money = contents[contents_index]["dr_money"],                    //借方金额
+                    cr_money = contents[contents_index]["cr_money"],                    //贷方金额
+                    thisId = $(this).attr("id"),
+                    thisInput = $(this).find("input"),
+                    prefix = "0000000000";
+
+                if (isFromButton === 1) {
+                    //flag = 0;
+                    flag = false;
+                    for (let i = 0; i < t_contentLen; i++) {
+                        let t_general_account = contents_cp[i]["general_account"],
+                            t_dr_money = contents_cp[i]["dr_money"],
+                            t_cr_money = contents_cp[i]["cr_money"];
+                        if (general_account === t_general_account) {
+                            // if (dr_money != t_dr_money) flag += 1;
+                            // if (cr_money != t_cr_money) flag += 2;
+                            if (dr_money == t_dr_money && cr_money == t_cr_money) flag = true;
+                            break;
+                        }
+                    }
+                    push_err_pos(thisId, flag);
+                }
+
+                dr_money = dr_money ? dr_money * 100 : dr_money;
+                cr_money = cr_money ? cr_money * 100 : cr_money;
+                dr_money = dr_money ? parseInt(dr_money).toString() : dr_money;
+                cr_money = cr_money ? parseInt(cr_money).toString() : cr_money;
+                dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
+                cr_money = cr_money ? prefix.substring(0, 10 - cr_money.length) + cr_money : cr_money;
+                let money = dr_money ? dr_money : prefix;
+                money += cr_money ? cr_money : "";
+                let firstNum = true;
+                if (thisId === "vi_rowLast") {
+                    for (let i = 0; i < 20; i++) {
+                        if (money) {
+                            if (i === 10) {
+                                firstNum = true;
+                            }
+                            if (firstNum && money[i] !== "0") {
+                                $(thisInput[i]).val(money[i]);
+                                firstNum = false;
+                            }
+                            if (!firstNum && i < money.length)
+                                $(thisInput[i]).val(money[i]);
+                        }
+                    }
+                } else {
+                    $(thisInput[0]).val(summary);
+                    $(thisInput[1]).val(general_account);
+                    $(thisInput[2]).val(detail_account);
+                    for (let i = 3; i < 23; i++) {
+                        if (money) {
+                            if (i === 13) {
+                                firstNum = true;
+                            }
+                            if (firstNum && money[i - 3] !== "0") {
+                                $(thisInput[i]).val(money[i - 3]);
+                                firstNum = false;
+                            }
+                            if (!firstNum && i < money.length + 3)
+                                $(thisInput[i]).val(money[i - 3]);
+                        }
+                    }
+                }
+                contents_index++;
+            }
+        );
+        if (isFromButton) viDisabledInput();
+        if (isFromButton === 1) for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
+    }
+
+    if (!data && !isFromButton) return;
+    if (isFromButton) removeAllError();
+    let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
+        index = nowBusinessNo - 1, t_contentLen = 0, answer_info = "", contents_cp = "";
+    if (isFromButton) {
+        let nowScore = scores[index * 2],
+            nowTotalScore = scores[index * 2 + 1],
+            totalScore = scores[scores.length - 1];
+        showScoreEm(nowScore, nowTotalScore, totalScore);
+        if (isFromButton === 1) {
+            answer_info = answer_infos[index];
+            contents_cp = answer_info["contents"];
+        } else if (isFromButton === 2) viResetInfo();
+    }
+    data = data[index];
+    padding(data);
 }
 
 /**
@@ -273,9 +330,14 @@ function vi_downloadFile() {
  * 事件绑定
  */
 function viBind() {
+    function map_answer() {
+        spanStatusCtr(true, true, "submit_status_span");
+        viPaddingData(answer_infos, 2);
+    }
+
     bind_confirm_info("submit_acc_document_info");
     bind_save_info(submit_acc_document_info);
-    bindAnswerSource();
+    bindAnswerSource("", map_acc_document_info, map_answer);
     bindIllegalCharFilter();
     bindRealNumber();
     bindLimitNumber();
@@ -299,11 +361,24 @@ function viBind() {
  */
 function viResetInfo() {
     row_num = 2;
+    if (!answer_infos) $("#submit_status_span").hide();
     $("tr[id^=vi_row][id!=vi_row1][id!=vi_rowLast]").remove();
     $("input").val("");
     $("#vi_downloadFile_button").hide();
     $("#vi_downloadSpan").text("");
-    $("#submit_status_span").hide();
+}
+
+/**
+ * 禁用编辑
+ */
+function viDisabledInput() {
+    let $inputs = $("div[class=courseBody]").find("input"),
+        $aLabels = $("a[type=button][data-toggle]"),
+        $button = $("button[data-save], button[data-confirm]");
+    $button.prop("disabled", true);
+    $inputs.attr("readonly", "readonly");
+    $aLabels.attr({"disabled": true, "onclick": ""});
+    $aLabels.unbind("click");
 }
 
 /*
@@ -373,7 +448,5 @@ function getfileContents() {
         }
     }
 
-    for (let i = 0; i < files.length; i++) {
-        setupReader(files[i]);
-    }
+    for (let i = 0; i < files.length; i++) setupReader(files[i]);
 }
