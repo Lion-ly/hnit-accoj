@@ -39,7 +39,7 @@ function submit_subject_info(submit_type) {
  * 从后端获取会计要素信息
  */
 function get_subject_info(isFromSubmit = false) {
-
+    iiiDisabledInput(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
@@ -74,7 +74,6 @@ function get_subject_info(isFromSubmit = false) {
  * @param isFromButton
  */
 function map_subject_info(data, isFromButton) {
-    iiiResetInfo();
     data = data ? data : "";
     subject_infos = data ? data["subject_infos"] : subject_infos;
     subject_confirmed = data ? data["subject_confirmed"] : subject_confirmed;
@@ -86,17 +85,12 @@ function map_subject_info(data, isFromButton) {
         business_index = nowBusinessNo - 1,
         confirmed = subject_confirmed ? subject_confirmed.indexOf(business_index) !== -1 : false,
         saved = subject_saved ? subject_saved.indexOf(business_index) !== -1 : false;
-
     if (answer_infos) {
         showAnswerButton();
         confirmed = true;
         saved = true;
         isFromButton = 1;
         $("button[data-answer]").text("查看答案");
-        let buttons = ["button[data-save]", "button[data-confirm]", "button[data-all-to-1]",
-            "button[data-all-to-2]", "button[data-to-all-1]", "button[data-to-all-2]"];
-        buttons = buttons.join();
-        $(buttons).prop("disabled", true);
     }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "submit_status_span");
@@ -197,6 +191,7 @@ function iiiPaddingData(data, isFromButton) {
             // 标出错误位置
             for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
         }
+        if (subject_confirmed.indexOf(index) !== -1) iiiDisabledInput(true);
     }
 
     if (!data) return;
@@ -305,4 +300,13 @@ function to_all(obj) {
             $($objboxChecked[i]).parent()
         );
     }
+}
+
+function iiiDisabledInput(flag) {
+    let buttons = ["button[data-save]", "button[data-confirm]", "button[data-all-to-1]",
+        "button[data-all-to-2]", "button[data-to-all-1]", "button[data-to-all-2]"];
+    buttons = buttons.join();
+    flag = flag ? flag : false;
+    $(buttons).prop("disabled", flag);
+    $(buttons).prop("disabled", flag);
 }
