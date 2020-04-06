@@ -10,6 +10,24 @@
     color: #5bc0de;
 }
 
+/*靠左*/
+.acc-left {
+    text-align: left;
+    vertical-align: middle;
+}
+
+/*靠右*/
+.acc-right {
+    text-align: right;
+    vertical-align: middle;
+}
+
+/*居中*/
+.acc-center {
+    text-align: center;
+    vertical-align: middle;
+}
+
 /*table标题垂直居中*/
 .table tbody tr th {
     vertical-align: middle;
@@ -230,6 +248,13 @@ ul a {
     float: left;
 }
 
+.acc-btn-delete {
+    color: red;
+    font-size: 20px;
+    padding: 0;
+    background-color: #ffffff;
+}
+
 /*----------------------------------------------V END--------------------------------------------*/
 
 
@@ -379,6 +404,49 @@ ul a {
 .acc-table-format-4-1 > :nth-child(5) {
     width: 4%;
     border: 0;
+}
+
+/*acc-table-format-5-1*/
+.acc-table-format-5-1 > :nth-child(1) {
+    width: 25%
+}
+
+.acc-table-format-5-1 > :nth-child(2) {
+    width: 50%
+}
+
+.acc-table-format-5-1 > :nth-child(3) {
+    width: 25%
+}
+
+/*acc-table-format-5-2*/
+.acc-table-format-5-2 > :nth-child(1) {
+    width: 5%
+}
+
+.acc-table-format-5-2 > :nth-child(2) {
+    width: 50%;
+    text-align: left;
+}
+
+.acc-table-format-5-2 > :nth-child(3) {
+    width: 45%;
+    text-align: left;
+}
+
+/*acc-table-format-5-3*/
+.acc-table-format-5-3 > :nth-child(1) {
+    width: 50%;
+    text-align: right;
+}
+
+.acc-table-format-5-3 > :nth-child(2) {
+    width: 45%;
+    text-align: right;
+}
+
+.acc-table-format-5-3 > :nth-child(3) {
+    width: 5%
 }
 
 /*acc-table-format-6-1*/

@@ -434,14 +434,14 @@ function v_AddLeftRow(obj, pm, business_no = "", money = "") {
         is_dr = "cr";
     }
     $(obj).parent().parent().parent().after(
-        "<tr><td><div style='text-align: left'>"
-        + "<a style='color: red; padding: 0' type='button' "
+        "<tr><td><div class='acc-minus'>"
+        + "<a type='button' "
         + "class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>"
-        + "<td><input style='text-align: left' title='业务编号' onkeyup='limit_number(this)' name='business_no' value='" + business_no
+        + "<td><input class='acc-left' title='业务编号' onkeyup='limit_number(this)' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
-        + "<td><input style='text-align: left' title='金额 ' onchange='RealNumber(this)' onfocus='removeError(this)' name='" + is_dr + "' value='" + money + "'"
+        + "<td><input class='acc-left' title='金额 ' onchange='RealNumber(this)' onfocus='removeError(this)' name='" + is_dr + "' value='" + money + "'"
         + " placeholder='0'></td></tr>");
 }
 
@@ -452,12 +452,12 @@ function v_AddRightRow(obj, pm, business_no = "", money = "") {
     }
     $(obj).parent().parent().parent().after(
         "<tr>"
-        + "<td><input style='text-align: right' onkeyup='limit_number(this)' title='业务编号' name='business_no' value='" + business_no
+        + "<td><input class='acc-right' onkeyup='limit_number(this)' title='业务编号' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
-        + "<td><input style='text-align: right' onchange='RealNumber(this)' onfocus='removeError(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
+        + "<td><input class='acc-right' onchange='RealNumber(this)' onfocus='removeError(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
         + " name='" + is_dr + "' id='' placeholder='0'></td>"
-        + "<td style='width: 40%;'>" + "<div style='text-align: right'>"
-        + "<a style='color: red; padding: 0' "
+        + "<td>" + "<div class='acc-minus'>"
+        + "<a "
         + "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
         + "class='glyphicon glyphicon-minus-sign'></span></a>"
         + "</div>" + "</td>" + "</tr>");
@@ -474,37 +474,37 @@ function v_DeleteRowT(obj) {
 function tTableAppendLeft() {
     let content = '' +
         '<div role="form" class="" id="ttableLeft">' +
-        '        <div style="text-align:right;">' +
-        '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
-        '               class="btn" onclick="deleteTableV(this)" data-toggle="tooltip" data-placement="left" title="删除账户"><span class="glyphicon glyphicon-remove"></span></button>' +
+        '        <div class="acc-right">' +
+        '           <button type="button"' +
+        '               class="btn acc-btn-delete" onclick="deleteTableV(this)" data-toggle="tooltip" data-placement="left" title="删除账户"><span class="glyphicon glyphicon-remove"></span></button>' +
         '        </div>' +
-        '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
+        '        <div align="center">' +
+        '            <table class="table table-bordered acc-unborder">' +
         '                <tbody>' +
-        '                <tr>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
-        '                    <th style="border: 0; width: 33%">' +
+        '                <tr class="acc-table-format-5-1">' +
+        '                    <th class="acc-center acc-unborder">借方</th>' +
+        '                    <th class="acc-center acc-unborder">' +
         '                    <select id="coursev_select" class="form-control pull-right" onchange="subject_change(this)">' +
         '                    </select></th>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
+        '                    <th class="acc-center acc-unborder">贷方</th>' +
         '                </tr>' +
         '                </tbody>' +
         '            </table>' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%;">' +
+        '            <table class="table table-bordered acc-unborder">' +
         '                <tbody>' +
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0">' +
-        '                        <div style="text-align: right">' +
+        '                        <div class="acc-right">' +
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                    <td style="width: 30%;text-align: left">业务编号</td>' +
-        '                                    <td style="width: 30%;text-align: left">金额</td>' +
+        '                                <tr class="acc-table-format-5-2">' +
+        '                                    <td></td>' +
+        '                                    <td>业务编号</td>' +
+        '                                    <td>金额</td>' +
         '                                </tr>' +
-        '                                <tr>' +
+        '                                <tr class="acc-table-format-5-2">' +
         '                                    <td>' +
-        '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
+        '                                        <div class="acc-plus"><a id="v_AddRowDr" type="button"' +
         '                                                             class="btn"' +
         '                                                             onclick="v_AddLeftRow(this, true)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
@@ -517,14 +517,14 @@ function tTableAppendLeft() {
         '                        </div>' +
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0">' +
-        '                        <div style="text-align: left">' +
+        '                        <div class="acc-left">' +
         '                            <table id="ttable-01" class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 30%;text-align: right">业务编号</td>' +
-        '                                    <td style="width: 30%;text-align: right">金额</td>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
+        '                                <tr class="acc-table-format-5-3">' +
+        '                                    <td>业务编号</td>' +
+        '                                    <td>金额</td>' +
+        '                                    <td>' +
+        '                                        <div class="acc-plus"><a id="v_AddRowCr" type="button"' +
         '                                                              class="btn"' +
         '                                                              onclick="v_AddRightRow(this,false)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
@@ -537,15 +537,15 @@ function tTableAppendLeft() {
         '                </tr>' +
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
-        '                        <div style="text-align: right">' +
+        '                        <div class="acc-right">' +
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" name="current_amount_dr"  placeholder="0"></td>' +
+        '                                <tr class="acc-table-format-5-2">' +
+        '                                    <td></td>' +
+        '                                    <th>本期发生额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" name="current_amount_dr"  placeholder="0"></td>' +
         '                                </tr>' +
-        '                                <tr>' +
+        '                                <tr class="acc-table-format-5-2">' +
         '                                    <td></td>' +
         '                                    <th>期末余额</th>' +
         '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" name="ending_balance" placeholder="0"></td>' +
@@ -555,13 +555,13 @@ function tTableAppendLeft() {
         '                        </div>' +
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
-        '                        <div style="text-align: left">' +
+        '                        <div class="acc-left">' +
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;text-align: right">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
-        '                                    <td style="width: 40%;"></td>' +
+        '                                <tr class="acc-table-format-5-3">' +
+        '                                    <th>本期发生额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" class="acc-right" name="current_amount_cr" placeholder="0"></td>' +
+        '                                    <td></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
@@ -582,56 +582,56 @@ function tTableAppendLeft() {
 function tTableAppendRight() {
     let content = '' +
         '    <div role="tabpanel" class="" id="ttableRight">' +
-        '        <div style="text-align:right;">' +
-        '           <button style="color: red; font-size: 18px; margin-right: 6px; padding: 0; background-color: #ffffff" type="button"' +
-        '               class="btn" onclick="deleteTableV(this)" data-toggle="tooltip" data-placement="left" title="删除账户"><span class="glyphicon glyphicon-remove"></span></button>' +
+        '        <div class="acc-right">' +
+        '           <button type="button"' +
+        '               class="btn acc-btn-delete" onclick="deleteTableV(this)" data-toggle="tooltip" data-placement="left" title="删除账户"><span class="glyphicon glyphicon-remove"></span></button>' +
         '        </div>' +
-        '        <div align="center" style="margin-top: 80px;margin-bottom: 100px">' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%; margin-bottom: 0">' +
+        '        <div align="center">' +
+        '            <table class="table table-bordered acc-unborder">' +
         '                <tbody>' +
-        '                <tr>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">借方</th>' +
-        '                    <th style="border: 0; width: 33%"><select id="coursev_select" class="form-control pull-right"' +
+        '                <tr class="acc-table-format-5-1">' +
+        '                    <th class="acc-center acc-unborder">借方</th>' +
+        '                    <th class="acc-center acc-unborder"><select id="coursev_select" class="form-control pull-right"' +
         '                                                              onchange="subject_change(this)">' +
         '                    </select></th>' +
-        '                    <th style="text-align: center; vertical-align: middle; border: 0; width: 33%">贷方</th>' +
+        '                    <th class="acc-center acc-unborder">贷方</th>' +
         '                </tr>' +
         '                </tbody>' +
         '            </table>' +
-        '            <table class="table table-bordered" style="border: 0; width: 50%">' +
+        '            <table class="table table-bordered acc-unborder">' +
         '                <tbody>' +
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0">' +
-        '                        <div style="text-align: right">' +
+        '                        <div class="acc-right">' +
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: left"><a id="v_AddRowDr" style="color: green; padding: 0 0" type="button"' +
+        '                                <tr class="acc-table-format-5-2">' +
+        '                                    <td>' +
+        '                                        <div class="acc-plus"><a id="v_AddRowDr" type="button"' +
         '                                                             class="btn" onclick="v_AddLeftRow(this,false)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
         '                                    </td>' +
-        '                                    <td style="width: 30%;text-align: left">业务编号</td>' +
-        '                                    <td style="width: 30%;text-align: left">金额</td>' +
+        '                                    <td>业务编号</td>' +
+        '                                    <td>金额</td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
         '                        </div>' +
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0">' +
-        '                        <div style="text-align: left">' +
+        '                        <div class="acc-left">' +
         '                            <table id="ttable-01" class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 30%;text-align: right">业务编号</td>' +
-        '                                    <td style="width: 30%;text-align: right">金额</td>' +
-        '                                    <td style="width: 40%;"></td>' +
+        '                                <tr class="acc-table-format-5-3">' +
+        '                                    <td>业务编号</td>' +
+        '                                    <td>金额</td>' +
+        '                                    <td></td>' +
         '                                </tr>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;text-align: right">期初余额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="opening_balance" placeholder="0"></td>' +
-        '                                    <td style="width: 40%;">' +
-        '                                        <div style="text-align: right"><a id="v_AddRowCr" style="color: green; padding: 0 0" type="button"' +
+        '                                <tr class="acc-table-format-5-3">' +
+        '                                    <th>期初余额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" class="acc-right" name="opening_balance" placeholder="0"></td>' +
+        '                                    <td>' +
+        '                                        <div class="acc-plus"><a id="v_AddRowCr" type="button"' +
         '                                                              class="btn"' +
         '                                                              onclick="v_AddRightRow(this,true)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
@@ -644,30 +644,30 @@ function tTableAppendRight() {
         '                </tr>' +
         '                <tr>' +
         '                    <td style="width: 50%; border-left: 0; border-bottom: 0">' +
-        '                        <div style="text-align: right">' +
+        '                        <div class="acc-right">' +
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <td style="width: 40%;"></td>' +
-        '                                    <th style="width: 30%;">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" name="current_amount_dr" placeholder="0"></td>' +
+        '                                <tr class="acc-table-format-5-2">' +
+        '                                    <td></td>' +
+        '                                    <th>本期发生额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" name="current_amount_dr" placeholder="0"></td>' +
         '                                </tr>' +
         '                                </tbody>' +
         '                            </table>' +
         '                        </div>' +
         '                    </td>' +
         '                    <td style="width: 50%; border-right: 0; border-bottom: 0">' +
-        '                        <div style="text-align: left">' +
+        '                        <divclass="acc-left">' +
         '                            <table class="acc-ttable">' +
         '                                <tbody>' +
-        '                                <tr>' +
-        '                                    <th style="width: 30%;text-align: right">本期发生额</th>' +
-        '                                    <td style="width: 30%;"><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="current_amount_cr" placeholder="0"></td>' +
-        '                                    <td style="width: 40%;"></td>' +
+        '                                <tr class="acc-table-format-5-3">' +
+        '                                    <th>本期发生额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" class="acc-right" name="current_amount_cr" placeholder="0"></td>' +
+        '                                    <td></td>' +
         '                                </tr>' +
-        '                                <tr>' +
-        '                                    <th style="text-align: right">期末余额</th>' +
-        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" style="text-align: right" name="ending_balance"  placeholder="0"></td>' +
+        '                                <tr class="acc-table-format-5-3">' +
+        '                                    <th>期末余额</th>' +
+        '                                    <td><input onchange="RealNumber(this)" onfocus="removeError(this)" class="acc-right" name="ending_balance"  placeholder="0"></td>' +
         '                                    <td></td>' +
         '                                </tr>' +
         '                                </tbody>' +
