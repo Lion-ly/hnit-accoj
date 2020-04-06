@@ -34,13 +34,15 @@
 }
 
 /*水平滚动条内的表格*/
-.acc-table-sm{
+.acc-table-sm {
     min-width: 768px;
 }
-.acc-table-md{
+
+.acc-table-md {
     min-width: 992px;
 }
-.acc-table-lg{
+
+.acc-table-lg {
     min-width: 1200px;
 }
 
@@ -157,8 +159,8 @@ ul a {
 /*--------------------------------------------III START--------------------------------------------*/
 /*三色 默认盒子*/
 .acc-tricolor-default {
-    float: left;
-    width: 45%;
+
+    width: 100%;
     height: 600px;
 }
 
@@ -167,7 +169,7 @@ ul a {
 }
 
 /*三色 增加/减少/撤销按钮*/
-.acc-tricolor-btn {
+/*.acc-tricolor-btn {
     float: left;
     width: 10%;
     height: 600px;
@@ -181,15 +183,15 @@ ul a {
 
 .acc-tricolor-btn button {
     margin: 5px auto;
-}
+}*/
 
 /*三色 浅绿/浅红盒子*/
 .acc-tricolor-scsAndDg {
-    float: left;
-    width: 45%;
+
+    width: 100%;
 }
 
-.acc-tricolor-scsAndDg > div {
+.acc-tricolor-scsAndDg > div > div {
     height: 288px;
 }
 

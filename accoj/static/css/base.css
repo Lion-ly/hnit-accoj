@@ -75,9 +75,20 @@ body {
         display: block !important;
     }
 
+    #menu > ul {
+        margin: 0;
+    }
+
     #menu > ul > li {
         width: 100%;
     }
+
+    /*装饰分割条*/
+    .acc-decorate-line {
+        height: 200px !important;
+        background: no-repeat center;
+    }
+
 }
 
 @media (min-width: 992px) {
