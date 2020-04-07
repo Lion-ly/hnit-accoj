@@ -9,7 +9,11 @@ from _datetime import datetime
 from flask import session
 from accoj.utils import is_number, allowed_file
 from accoj.extensions import mongo
-from accoj.evaluation import evaluate_key_element, evaluate_subject, evaluate_entry, evaluate_acc_document
+from accoj.evaluation.evaluate_key_element import evaluate_key_element
+from accoj.evaluation.evaluate_subject import evaluate_subject
+from accoj.evaluation.evaluate_entry import evaluate_entry
+from accoj.evaluation.evaluate_acc_document import evaluate_acc_document
+from accoj.evaluation.evaluate_balance_sheet import evaluate_balance_sheet
 
 MAX_BUSINESS_NO = 20
 
@@ -51,13 +55,13 @@ def _submit_infos1(infos, submit_type, infos_name):
         _id = company.get("_id")
         schedule_confirm = company.get("schedule_confirm")
 
-        set_key1 = "{}".format(infos_name)
+        set_key1 = "{}_infos".format(infos_name)
         set_key2 = "schedule_confirm.{}_confirm".format(infos_name)
         set_key3 = "schedule_saved.{}_saved".format(infos_name)
         if not schedule_confirm.get("{}_confirm".format(infos_name)):
             return _deal_update(submit_type=submit_type,
                                 find_dict=dict(_id=_id),
-                                update_confirm={"$set": {"$set": {set_key1: infos, set_key2: True, set_key3: True}}},
+                                update_confirm={"$set": {set_key1: infos, set_key2: True, set_key3: True}},
                                 update_save={"$set": {set_key1: infos, set_key3: True}})
         elif schedule_confirm.get("{}_confirm".format(infos_name)):
             # 信息已提交确认
@@ -288,23 +292,39 @@ def get_data(type_num, infos_name, info_keys):
     info_keys.append("scores")
     info_len = len(info_keys)
     scores = None
+    confirm_flag = True
     infos, answer_infos, confirmed, saved, company, company_cp = get_infos(infos_name=infos_name)
     if type_num == 1:
-        # （1.`二三四以及六的会计凭证部分`）
+        # （1.“二三四以及六的会计凭证部分”）
         if len(confirmed) == MAX_BUSINESS_NO:
             evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 if infos_name == "key_element":
-                    evaluate_key_element.evaluate_key_element(company, company_cp)
+                    scores = evaluate_key_element(company, company_cp)
                 elif infos_name == "subject":
-                    evaluate_subject.evaluate_subject(company, company_cp)
+                    scores = evaluate_subject(company, company_cp)
                 elif infos_name == "entry":
-                    evaluate_entry.evaluate_entry(company, company_cp)
+                    scores = evaluate_entry(company, company_cp)
                 elif infos_name == "acc_document":
-                    evaluate_acc_document.evaluate_acc_document(company, company_cp)
-            scores = evaluation.get("{}_score".format(infos_name))
+                    scores = evaluate_acc_document(company, company_cp)
+            else:
+                scores = evaluation.get("{}_score".format(infos_name))
         else:
-            answer_infos = None
-        info_values = [infos, answer_infos, confirmed, saved, scores]
-        data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
-        return data
+            confirm_flag = False
+    elif type_num == 2:
+        # （2.“ ”）
+        if confirmed:
+            evaluation = company_cp.get("evaluation")
+            if not evaluation or not evaluation.get("{}_score".format(infos_name)):
+                if infos_name == "balance_sheet":
+                    scores = evaluate_balance_sheet(company, company_cp)
+            else:
+                scores = evaluation.get("{}_score".format(infos_name))
+        else:
+            confirm_flag = False
+
+    if not confirm_flag:
+        answer_infos = None
+    info_values = [infos, answer_infos, confirmed, saved, scores]
+    data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
+    return data

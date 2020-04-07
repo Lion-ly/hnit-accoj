@@ -60,7 +60,7 @@ def cal_balance_sheet(company, ledger_name, period):
         balance_sheet_info.append({"subject": subject, "borrow_1": borrow_1, "lend_1": lend_1, "borrow_2": borrow_2,
                                    "lend_2" : lend_2, "borrow_3": borrow_3, "lend_3": lend_3})
     # 最终将平衡表余额加入中
-    balance_sheet_info.append({"subject" : "期末余额", "borrow_1": borrow_sum_1, "lend_1": lend_sum_1,
+    balance_sheet_info.append({"subject" : "sum", "borrow_1": borrow_sum_1, "lend_1": lend_sum_1,
                                "borrow_2": borrow_sum_2, "lend_2": lend_sum_2,
                                "borrow_3": borrow_sum_3, "lend_3": lend_sum_3})
     if period == 1:

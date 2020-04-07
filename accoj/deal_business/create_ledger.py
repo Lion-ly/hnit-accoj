@@ -62,7 +62,7 @@ def cal_ledger_1(company):
                     ending_balance = round(ending_balance, 2)
                     ledger_infors_1[subject] = {"subject"          : subject,
                                                 "opening_balance"  : opening_balance,
-                                                "dr"               : [{"business_no": i, "money": money}],
+                                                "dr"               : [{"business_no": i + 1, "money": money}],
                                                 "cr"               : [],
                                                 "current_amount_dr": money,
                                                 "current_amount_cr": 0,
@@ -80,7 +80,7 @@ def cal_ledger_1(company):
                         "subject"          : subject,
                         "opening_balance"  : opening_balance,
                         "dr"               : [],
-                        "cr"               : [{"business_no": i, "money": money}],
+                        "cr"               : [{"business_no": i + 1, "money": money}],
                         "current_amount_dr": 0,
                         "current_amount_cr": current_amount_cr,
                         "ending_balance"   : ending_balance,
@@ -108,13 +108,13 @@ def cal_ledger_1(company):
                 ending_balance = round(ending_balance, 2)
                 if is_dr:
                     dr = ledger_infors_1[subject]["dr"]
-                    dr.append({"business_no": i, "money": money})
+                    dr.append({"business_no": i + 1, "money": money})
                     ledger_infors_1[subject]["dr"] = dr
                     ledger_infors_1[subject]["current_amount_dr"] = current_amount_dr
                     ledger_infors_1[subject]["ending_balance"] = ending_balance
                 else:
                     cr = ledger_infors_1[subject]["cr"]
-                    cr.append({"business_no": i, "money": money})
+                    cr.append({"business_no": i + 1, "money": money})
                     ledger_infors_1[subject]["cr"] = cr
                     ledger_infors_1[subject]["current_amount_cr"] = current_amount_cr
                     ledger_infors_1[subject]["ending_balance"] = ending_balance
@@ -166,7 +166,7 @@ def cal_ledger_2(company):
                         ending_balance = opening_balance + 0 - current_amount_dr
                     ledger_infors_2[subject] = {"subject"          : subject,
                                                 "opening_balance"  : opening_balance,
-                                                "dr"               : [{"business_no": i, "money": money}],
+                                                "dr"               : [{"business_no": i + 1, "money": money}],
                                                 "cr"               : [],
                                                 "current_amount_dr": money,
                                                 "current_amount_cr": 0,
@@ -183,7 +183,7 @@ def cal_ledger_2(company):
                         "subject"          : subject,
                         "opening_balance"  : opening_balance,
                         "dr"               : [],
-                        "cr"               : [{"business_no": i, "money": money}],
+                        "cr"               : [{"business_no": i + 1, "money": money}],
                         "current_amount_dr": 0,
                         "current_amount_cr": current_amount_cr,
                         "ending_balance"   : ending_balance,
@@ -210,13 +210,13 @@ def cal_ledger_2(company):
                     ending_balance = opening_balance + current_amount_cr - current_amount_dr
                 if is_dr:
                     dr = ledger_infors_2[subject]["dr"]
-                    dr.append({"business_no": i, "money": money})
+                    dr.append({"business_no": i + 1, "money": money})
                     ledger_infors_2[subject]["dr"] = dr
                     ledger_infors_2[subject]["current_amount_dr"] = current_amount_dr
                     ledger_infors_2[subject]["ending_balance"] = ending_balance
                 else:
                     cr = ledger_infors_2[subject]["cr"]
-                    cr.append({"business_no": i, "money": money})
+                    cr.append({"business_no": i + 1, "money": money})
                     ledger_infors_2[subject]["cr"] = cr
                     ledger_infors_2[subject]["current_amount_cr"] = current_amount_cr
                     ledger_infors_2[subject]["ending_balance"] = ending_balance

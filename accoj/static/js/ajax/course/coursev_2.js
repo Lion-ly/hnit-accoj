@@ -1,8 +1,10 @@
-let balance_sheet_infos = "", // 保存本次课程全部信息，减少后端数据请求次数
+let balance_sheet_infos = "",
     balance_sheet_confirmed = "",
     balance_sheet_saved = "",
     period1_row = 2,
-    period2_row = 2;
+    period2_row = 2,
+    answer_infos = "",
+    scores = "";
 
 $(document).ready(function () {
     function init() {
@@ -37,7 +39,7 @@ function submit_balance_sheet_info(submit_type) {
  * 从后端获取会计平衡表信息
  */
 function get_balance_sheet_info(isFromSubmit = false) {
-
+    DisableButton(false);
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!balance_sheet_saved || balance_sheet_saved)
@@ -63,26 +65,33 @@ function get_balance_sheet_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_balance_sheet_info(data) {
+function map_balance_sheet_info(data, isFromButton) {
+    // 先清空数据
+    v2Reset();
     data = data ? data : "";
     balance_sheet_infos = data ? data["balance_sheet_infos"] : balance_sheet_infos;
     balance_sheet_confirmed = data ? data["balance_sheet_confirmed"] : balance_sheet_confirmed;
     balance_sheet_saved = data ? data["balance_sheet_saved"] : balance_sheet_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     if (!balance_sheet_infos) return;
-    // 先清空数据
-    period1_row = 2;
-    period2_row = 2;
-    $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period2_row_1]").remove();
-    $("input").val("");
+
     // 如果已保存过则显示标签为保存状态，已提交过则更改标签为已提交标签
     let confirmed = balance_sheet_confirmed,
         saved = balance_sheet_saved;
-
+    if (confirmed) DisableButton(true);
+    if (answer_infos) {
+        showAnswerButton();
+        confirmed = true;
+        saved = true;
+        isFromButton = 1;
+        // $("button[data-answer]").text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "balance_sheet_submit_span");
 
-    v2PaddingData(balance_sheet_infos);
+    v2PaddingData(balance_sheet_infos, isFromButton);
 }
 
 // ===============================获取和填充数据===============================//
@@ -96,26 +105,21 @@ function v2GetInput() {
         data;
 
     $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
-        let thisInputs = $(this).find("input"),
-            inputIndex = 0,
-            subject = $(this).attr("id").endsWith("last") ? "sum" : $(thisInputs[0]).val();
-        if (subject !== "sum") inputIndex = 1;
-        let borrow_1 = $(thisInputs[inputIndex]).val(),
-            lend_1 = $(thisInputs[inputIndex + 1]).val(),
-            borrow_2 = $(thisInputs[inputIndex + 2]).val(),
-            lend_2 = $(thisInputs[inputIndex + 3]).val(),
-            borrow_3 = $(thisInputs[inputIndex + 4]).val(),
-            lend_3 = $(thisInputs[inputIndex + 5]).val();
-        let content = {
-            "subject": subject,
-            "borrow_1": borrow_1,
-            "lend_1": lend_1,
-            "borrow_2": borrow_2,
-            "lend_2": lend_2,
-            "borrow_3": borrow_3,
-            "lend_3": lend_3,
-        };
-        if ($(this).attr("id").startsWith("period1"))
+        let $this = $(this),
+            $thisInputs = $this.find("input"),
+            subject = $this.attr("id").endsWith("last") ? "sum" : $($thisInputs[0]).val(),
+            keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"],
+            content = Object(),
+            index = 0;
+        content["subject"] = subject;
+        $thisInputs.each(function (t_index, item) {
+            if (subject !== "sum" || t_index != 0) {
+                content[keys[index]] = $(item).val();
+                if (t_index !== 0) index++;
+            } else content[keys[index++]] = $(item).val();
+        });
+
+        if ($this.attr("id").startsWith("period1"))
             accounting_period_1.push(content);
         else accounting_period_2.push(content);
     });
@@ -129,46 +133,50 @@ function v2GetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function v2PaddingData(data) {
-    let accounting_period_1 = data["accounting_period_1"],
-        accounting_period_2 = data["accounting_period_2"];
-    // 创建行
-    for (let i = 0; i < accounting_period_1.length - 2; i++) {
-        v2_AddRow("period1");
-    }
-    for (let i = 0; i < accounting_period_2.length - 2; i++) {
-        v2_AddRow("period2");
-    }
-    // 填充数据
-    let accounting_period = accounting_period_1;
-    let index = 0;
-    $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
-        let thisInputs = $(this).find("input");
-        if ($(this).attr("id") === "period2_row_1") {
-            accounting_period = accounting_period_2;
+function v2PaddingData(data, isFromButton) {
+    function padding() {
+        let accounting_period_1 = data["accounting_period_1"],
+            accounting_period_2 = data["accounting_period_2"];
+        // 创建行
+        for (let i = 0; i < accounting_period_1.length - 2; i++) v2_AddRow(true);
+        for (let i = 0; i < accounting_period_2.length - 2; i++) v2_AddRow(false);
+
+        // 填充数据
+        let accounting_period = accounting_period_1,
             index = 0;
-        }
-        let subject = accounting_period[index]["subject"],
-            borrow_1 = accounting_period[index]["borrow_1"],
-            lend_1 = accounting_period[index]["lend_1"],
-            borrow_2 = accounting_period[index]["borrow_2"],
-            lend_2 = accounting_period[index]["lend_2"],
-            borrow_3 = accounting_period[index]["borrow_3"],
-            lend_3 = accounting_period[index]["lend_3"],
-            inputIndex = 0;
-        if (subject !== "sum") {
-            $(thisInputs[inputIndex]).val(subject);
-            inputIndex = 1;
-        }
-        $(thisInputs[inputIndex]).val(borrow_1);
-        $(thisInputs[inputIndex + 1]).val(lend_1);
-        $(thisInputs[inputIndex + 2]).val(borrow_2);
-        $(thisInputs[inputIndex + 3]).val(lend_2);
-        $(thisInputs[inputIndex + 4]).val(borrow_3);
-        $(thisInputs[inputIndex + 5]).val(lend_3);
-        index++;
-    });
+        $("[id^=period1_row], [id=period1_last], [id^=period2_row], [id=period2_last]").each(function () {
+            let $this = $(this);
+            if ($this.attr("id") === "period2_row_1") {
+                accounting_period = accounting_period_2;
+                index = 0;
+            }
+            let $thisInputs = $this.find("input"),
+                keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"],
+                subject = accounting_period[index]["subject"],
+                inputIndex = 0;
+
+            if (subject !== "sum") $($thisInputs[0]).val(subject);
+
+            $thisInputs.each(function (t_index, item) {
+                if (subject === "sum" && t_index === 0) {
+                    $(item).val(accounting_period[index][keys[inputIndex++]]);
+                } else if (t_index !== 0) $(item).val(accounting_period[index][keys[inputIndex++]]);
+            });
+            index++;
+        });
+    }
+
+    if (!data) return;
+    if (isFromButton) removeAllError();
+    if (isFromButton) {
+        let nowTotalScore = 40,
+            totalScore = 40;
+        showScoreEm(scores, nowTotalScore, totalScore);
+        if (isFromButton === 2) v2Reset();
+    }
+    padding();
 }
 
 // ==================================事件控制==================================//
@@ -176,9 +184,13 @@ function v2PaddingData(data) {
  * 事件绑定
  */
 function v2Bind() {
+    function map_answer() {
+        spanStatusCtr(true, true, "submit_status_span");
+        v2PaddingData(answer_infos, 2);
+    }
     bind_confirm_info("submit_balance_sheet_info");
     bind_save_info(submit_balance_sheet_info);
-    bindAnswerSource();
+    bindAnswerSource("", map_balance_sheet_info, map_answer);
     bindIllegalCharFilter();
     bindRealNumber();
     $("a[data-v2-addRow-1]").click(function () {
@@ -187,6 +199,16 @@ function v2Bind() {
     $("a[data-v2-addRow-2]").click(function () {
         v2_AddRow(false);
     });
+}
+
+/**
+ * 重置信息
+ */
+function v2Reset() {
+    period1_row = 2;
+    period2_row = 2;
+    $("[id^=period1_row][id!=period1_row_1], [id^=period2_row][id!=period2_row_1]").remove();
+    $("input").val("");
 }
 
 /*

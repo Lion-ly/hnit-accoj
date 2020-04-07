@@ -490,11 +490,10 @@ def get_balance_sheet_info():
     获取平衡表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="balance_sheet")
-    return jsonify(result=True,
-                   balance_sheet_infos=infos,
-                   balance_sheet_confirmed=confirmed,
-                   balance_sheet_saved=saved)
+    infos_name = "balance_sheet"
+    info_keys = ["balance_sheet_infos", "answer_infos", "balance_sheet_confirmed", "balance_sheet_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 # 第五次课程----end---------------------------------------------------------------------------------

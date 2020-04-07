@@ -57,3 +57,5 @@ def evaluate_acc_document(company, company_cp):
     scores = round(scores) / 2
     acc_document_score.append(scores)
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.acc_document_score": acc_document_score}})
+
+    return acc_document_score

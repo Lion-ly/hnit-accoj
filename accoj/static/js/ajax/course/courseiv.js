@@ -241,7 +241,7 @@ function ivBind() {
 }
 
 /**
- * 重置分录信息
+ * 重置信息
  */
 function ivResetInfo() {
     if (!answer_infos) $("#submit_status_span").hide();
