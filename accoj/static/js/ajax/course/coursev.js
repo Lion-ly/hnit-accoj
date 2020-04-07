@@ -177,8 +177,6 @@ function vGetInput() {
  * @param data
  */
 function vPaddingData(data) {
-
-
     let confirmed_key = "ledger" + now_period + "_confirm",
         saved_key = "ledger" + now_period + "_saved",
         ledger_confirmed_tmp = ledger_confirmed[confirmed_key],
@@ -205,12 +203,10 @@ function vPaddingData(data) {
     // 填充科目
     $("#coursev_select").append("<option name='coursev_option'>" + now_subject + "</option>");
     // 增加行
-    for (let i = 0; i < dr_array.length; i++) {
+    for (let i = 0; i < dr_array.length; i++)
         $("#v_addRowDr").click();
-    }
-    for (let i = 0; i < cr_array.length; i++) {
+    for (let i = 0; i < cr_array.length; i++)
         $("#v_addRowCr").click();
-    }
     // 填充会计账户信息
     $("input[name=opening_balance]").val(opening_balance);
     $("input[name=current_amount_dr]").val(current_amount_dr);

@@ -354,7 +354,7 @@ function RealNumber(selector) {
     let reg = /^([-+])?\d+(\.\d+)?$/,
         $this = $(selector),
         thisValue = $this.val();
-    if (thisValue && !thisValue.match(reg)) hasError(selector, "格式错误");
+    if (thisValue && !thisValue.match(reg)) hasError($this, "格式错误");
 }
 
 /**
@@ -365,7 +365,7 @@ function LimitPercent(selector) {
     let reg = /^-?(100|[1-9]\d|\d)(.\d{1,2})?%$/,
         $this = $(selector),
         thisValue = $this.val();
-    if (thisValue && !thisValue.match(reg)) hasError(selector, "格式错误");
+    if (thisValue && !thisValue.match(reg)) hasError($this, "格式错误");
 }
 
 /**

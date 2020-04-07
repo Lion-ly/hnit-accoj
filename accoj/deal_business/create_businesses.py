@@ -561,11 +561,11 @@ def deal_with_question_2(company, question_no, questions):
                     content_tmp = businesses[index_tmp].get("content")
                     rate_tmp = float(re.search(r"[\d.]+%", content_tmp).group(0).replace("%", ""))
                     value *= rate_tmp / 100 / 12  # b2；金额=b2贷款金额*年利率/12
-                elif question_no == 13 and i == 2:
+                elif question_no == 13 and i == 3:
                     # 问题13特判
                     for asset in com_assets:
                         if asset.get("asset_name") == values_list[0]:
-                            value = abs(values_list[1] - asset.get("market_value"))
+                            value = abs(values_list[2] - asset.get("market_value"))
                             break
                 elif question_no == 14:
                     # 问题14特判
@@ -639,6 +639,7 @@ def deal_with_question_2(company, question_no, questions):
                             value = values_list[0] / 3
                         else:
                             value = values_list[0] - values_list[1] - values_list[2]
+                        value = round(value, 2)
                 elif question_no == 31:
                     # 问题31特判
                     content = content.replace("+", "")
