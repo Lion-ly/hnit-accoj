@@ -50,7 +50,8 @@
                 <em data-now-score></em>
                 <span id="balance_sheet_submit_span" class="glyphicon glyphicon-ok acc-completed">已完成</span>
                 <p class="acc-title">2、第1个会计期间的试算平衡表：</p>
-                <table id="table_period_1" class="table table-bordered acc-container-tableformat acc-unborder">
+                <div class="table-responsive">
+                <table id="table_period_1" class="table table-bordered acc-container-tableformat acc-unborder acc-table-sm">
                     <tbody>
                     <tr>
                         <th rowspan="2" class="acc-unedit">会计科目</th>
@@ -145,8 +146,10 @@
                     </tr>
                     </tbody>
                 </table>
+                </div>
                 <p class="acc-title">3、第2个会计期间的试算平衡表：</p>
-                <table id="table_period_2" class="table table-bordered acc-container-tableformat acc-unborder">
+                <div class="table-responsive">
+                <table id="table_period_2" class="table table-bordered acc-container-tableformat acc-unborder acc-table-sm">
                     <tbody>
                     <tr>
                         <th rowspan="2" class="acc-unedit">会计科目</th>
@@ -241,6 +244,7 @@
                     </tr>
                     </tbody>
                 </table>
+                </div>
                 <hr class="simple"/>
                 <!--信息提示窗口-->
                 <div id="course_v_2_message"></div>
@@ -249,10 +253,10 @@
                 </div>
                 <div class="acc-btn-right">
                     <button type="button" class="btn btn-info" data-save>
-                        <span class="glyphicon"></span>&nbsp;保存
+                        <span class="glyphicon"></span>保存
                     </button>
                     <button type="button" class="btn btn-success" data-confirm>
-                        <span class="glyphicon"></span>&nbsp;提交
+                        <span class="glyphicon"></span>提交
                     </button>
                 </div>
             </div>
