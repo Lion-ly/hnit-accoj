@@ -14,6 +14,8 @@ from accoj.evaluation.evaluate_subject import evaluate_subject
 from accoj.evaluation.evaluate_entry import evaluate_entry
 from accoj.evaluation.evaluate_acc_document import evaluate_acc_document
 from accoj.evaluation.evaluate_balance_sheet import evaluate_balance_sheet
+from accoj.evaluation.evaluate_subsidiary_account import evaluate_subsidiary_account
+from accoj.evaluation.evaluate_acc_balance_sheet import evaluate_acc_balance_sheet
 
 MAX_BUSINESS_NO = 20
 
@@ -241,7 +243,7 @@ def _deal_update(submit_type, find_dict, update_confirm, update_save):
     return True, ""
 
 
-def get_infos(infos_name, is_first=False):
+def _get_infos(infos_name, is_first=False):
     """
     获取信息
     :param infos_name: infos name
@@ -281,21 +283,22 @@ def get_infos(infos_name, is_first=False):
     return infos, answer_infos, confirmed, saved, company, company_cp
 
 
-def get_data(type_num, infos_name, info_keys):
+def get_data(type_num, infos_name, info_keys, is_first=False):
     """
-    数据封装
+    获取信息，数据封装
     :param type_num:
     :param infos_name:
     :param info_keys:
+    :param is_first:
     :return:
     """
     info_keys.append("scores")
     info_len = len(info_keys)
     scores = None
-    confirm_flag = True
-    infos, answer_infos, confirmed, saved, company, company_cp = get_infos(infos_name=infos_name)
+    confirm_flag = False
+    infos, answer_infos, confirmed, saved, company, company_cp = _get_infos(infos_name=infos_name, is_first=is_first)
     if type_num == 1:
-        # （1.“二三四以及六的会计凭证部分”）
+        # 1.“二三四”以及“六的会计凭证部分”
         if len(confirmed) == MAX_BUSINESS_NO:
             evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
@@ -309,20 +312,22 @@ def get_data(type_num, infos_name, info_keys):
                     scores = evaluate_acc_document(company, company_cp)
             else:
                 scores = evaluation.get("{}_score".format(infos_name))
-        else:
-            confirm_flag = False
+            confirm_flag = True
     elif type_num == 2:
-        # （2.“ ”）
+        # 2.非“二三四以及六的会计凭证部分 ”以及“账户和明细账部分”
         if confirmed:
             evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 if infos_name == "balance_sheet":
                     scores = evaluate_balance_sheet(company, company_cp)
+                elif infos_name == "acc_balance_sheet":
+                    scores = evaluate_acc_balance_sheet(company, company_cp)
             else:
                 scores = evaluation.get("{}_score".format(infos_name))
-        else:
-            confirm_flag = False
-
+            confirm_flag = True
+    elif type_num == 3:
+        # 3.“账户和明细账部分”
+        pass
     if not confirm_flag:
         answer_infos = None
     info_values = [infos, answer_infos, confirmed, saved, scores]

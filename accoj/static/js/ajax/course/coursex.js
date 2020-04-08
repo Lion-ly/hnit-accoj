@@ -109,7 +109,7 @@ function CoursexPaddingData(data) {
         let name = $(item).attr("name"),
             value = data[name] ? data[name] : "";
 
-        value = name.match(/率$/) ? (value ? value + "%" : "") : value;
+        value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
         $(item).val(value);
     });
     let conclusion = data["conclusion"];
@@ -129,7 +129,7 @@ function xBind() {
         $conclusions = $("#coursexDataConclusion");
     $inputs.each(function (index, item) {
         let name = $(item).attr("name");
-        if (!name.match(/率$/)) bindRealNumber($(item));
+        if (!name.match(/[率数]$/)) bindRealNumber($(item));
         else bindLimitPercent($(item));
     });
     bindIllegalCharFilter($conclusions);

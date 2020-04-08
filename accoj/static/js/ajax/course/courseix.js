@@ -1,12 +1,13 @@
 let ixFirst_infos, // 保存本次课程全部信息，减少后端数据请求次数
     ixFirst_confirmed,
-    ixFirst_saved;
-let firstChange = true,
+    ixFirst_saved,
+    ixSecond_infos,
+    ixSecond_confirmed,
+    ixSecond_saved,
+    firstChange = true,
     periodEndData = Object(),
     periodLastData = Object();
-let ixSecond_infos, // 保存本次课程全部信息，减少后端数据请求次数
-    ixSecond_confirmed,
-    ixSecond_saved;
+
 
 $(document).ready(function () {
     function init() {
@@ -165,8 +166,9 @@ function ixGetInput(isFirst) {
         inputs = $("#" + divId).find("input");
 
     $.each(inputs, function (index, item) {
-        let project = $(item).attr("name").replace(/End|Last/, ""),
-            value = $(item).val(),
+        let $item = $(item),
+            project = $item.attr("name").replace(/End|Last/, ""),
+            value = $item.val(),
             period = "period_end";
 
         if (!flag) period = "period_last";

@@ -7,7 +7,7 @@
 # @Software: PyCharm
 from flask import Blueprint, render_template, request, jsonify, session
 from accoj.utils import login_required, complete_required1
-from accoj.blueprints import submit_infos, get_data, get_infos
+from accoj.blueprints import submit_infos, get_data
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo
 from accoj.deal_business.create_businesses import create_businesses
@@ -410,11 +410,10 @@ def get_ledger_info():
     获取会计账户信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="ledger")
-    return jsonify(result=True,
-                   ledger_infos=infos,
-                   ledger_confirmed=confirmed,
-                   ledger_saved=saved)
+    infos_name = "ledger"
+    info_keys = ["ledger_infos", "answer_infos", "ledger_confirmed", "ledger_saved"]
+    data = get_data(type_num=3, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/delete_ledger_info', methods=['POST'])
@@ -601,11 +600,10 @@ def get_subsidiary_account_info():
     获取会计明细账信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="subsidiary_account")
-    return jsonify(result=True,
-                   subsidiary_account_infos=infos,
-                   subsidiary_account_confirmed=confirmed,
-                   subsidiary_account_saved=saved)
+    infos_name = "subsidiary_account"
+    info_keys = ["subsidiary_account_infos", "answer_infos", "subsidiary_account_confirmed", "subsidiary_account_saved"]
+    data = get_data(type_num=3, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/submit_acc_balance_sheet_info', methods=['POST'])
@@ -629,11 +627,10 @@ def get_acc_balance_sheet_info():
     获取科目余额表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="acc_balance_sheet")
-    return jsonify(result=True,
-                   acc_balance_sheet_infos=infos,
-                   acc_balance_sheet_confirmed=confirmed,
-                   acc_balance_sheet_saved=saved)
+    infos_name = "acc_balance_sheet"
+    info_keys = ["acc_balance_sheet_infos", "answer_infos", "acc_balance_sheet_confirmed", "acc_balance_sheet_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 # 第七次课程----end---------------------------------------------------------------------------------
@@ -671,12 +668,10 @@ def get_new_balance_sheet_info():
     获取资产负债表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="new_balance_sheet")
-
-    return jsonify(result=True,
-                   new_balance_sheet_infos=infos,
-                   new_balance_sheet_confirmed=confirmed,
-                   new_balance_sheet_saved=saved)
+    infos_name = "new_balance_sheet"
+    info_keys = ["new_balance_sheet_infos", "answer_infos", "new_balance_sheet_confirmed", "new_balance_sheet_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/submit_profit_statement_info', methods=['POST'])
@@ -700,12 +695,10 @@ def get_profit_statement_info():
     获取利润表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="profit_statement")
-
-    return jsonify(result=True,
-                   profit_statement_infos=infos,
-                   profit_statement_confirmed=confirmed,
-                   profit_statement_saved=saved)
+    infos_name = "profit_statement"
+    info_keys = ["profit_statement_infos", "answer_infos", "profit_statement_confirmed", "profit_statement_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 # 第八次课程----end---------------------------------------------------------------------------------
@@ -744,12 +737,10 @@ def get_ix_first_info():
     趋势分析法 获取资产负债表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="trend_analysis", is_first=1)
-
-    return jsonify(result=True,
-                   ixFirst_infos=infos,
-                   ixFirst_confirmed=confirmed,
-                   ixFirst_saved=saved)
+    infos_name = "trend_analysis"
+    info_keys = ["ixFirst_infos", "answer_infos", "ixFirst_confirmed", "ixFirst_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=1)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/submit_ix_second_info', methods=['POST'])
@@ -774,12 +765,10 @@ def get_ix_second_info():
     趋势分析法 获取利润表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="trend_analysis", is_first=2)
-
-    return jsonify(result=True,
-                   ixSecond_infos=infos,
-                   ixSecond_confirmed=confirmed,
-                   ixSecond_saved=saved)
+    infos_name = "trend_analysis"
+    info_keys = ["ixSecond_infos", "answer_infos", "ixSecond_confirmed", "ixSecond_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=2)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/courseix_2', methods=['GET'])
@@ -814,11 +803,10 @@ def get_ix2_first_info():
     共同比分析法 获取资产负债表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="common_ratio_analysis", is_first=1)
-    return jsonify(result=True,
-                   ix2First_infos=infos,
-                   ix2First_confirmed=confirmed,
-                   ix2First_saved=saved)
+    infos_name = "common_ratio_analysis"
+    info_keys = ["ix2First_infos", "answer_infos", "ix2First_confirmed", "ix2First_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=1)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/submit_ix2_second_info', methods=['POST'])
@@ -843,11 +831,10 @@ def get_ix2_second_info():
     共同比分析法 获取利润表信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="common_ratio_analysis", is_first=2)
-    return jsonify(result=True,
-                   ix2Second_infos=infos,
-                   ix2Second_confirmed=confirmed,
-                   ix2Second_saved=saved)
+    infos_name = "common_ratio_analysis"
+    info_keys = ["ix2Second_infos", "answer_infos", "ix2Second_confirmed", "ix2Second_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=2)
+    return jsonify(result=True, data=data)
 
 
 @accoj_bp.route('/courseix_3', methods=['GET'])
@@ -891,11 +878,10 @@ def get_ix4_info():
     获取比率分析法信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="ratio_analysis")
-    return jsonify(result=True,
-                   ix4_infos=infos,
-                   ix4_confirmed=confirmed,
-                   ix4_saved=saved)
+    infos_name = "ratio_analysis"
+    info_keys = ["ix4_infos", "answer_infos", "ix4_confirmed", "ix4_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 # 第九次课程----end---------------------------------------------------------------------------------
@@ -933,11 +919,10 @@ def get_coursex_info():
     获取杜邦分析法信息
     :return:
     """
-    infos, confirmed, saved = get_infos(infos_name="dupont_analysis")
-    return jsonify(result=True,
-                   coursex_infos=infos,
-                   coursex_confirmed=confirmed,
-                   coursex_saved=saved)
+    infos_name = "dupont_analysis"
+    info_keys = ["coursex_infos", "answer_infos", "coursex_confirmed", "coursex_saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
+    return jsonify(result=True, data=data)
 
 
 # 第十次课程----end---------------------------------------------------------------------------------

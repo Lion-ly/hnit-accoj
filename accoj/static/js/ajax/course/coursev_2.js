@@ -113,10 +113,12 @@ function v2GetInput() {
             index = 0;
         content["subject"] = subject;
         $thisInputs.each(function (t_index, item) {
+            let $item = $(item),
+                value = $item.val();
             if (subject !== "sum" || t_index != 0) {
-                content[keys[index]] = $(item).val();
+                content[keys[index]] = parseFloat(value);
                 if (t_index !== 0) index++;
-            } else content[keys[index++]] = $(item).val();
+            } else content[keys[index++]] = parseFloat(value);
         });
 
         if ($this.attr("id").startsWith("period1"))
@@ -180,25 +182,21 @@ function v2PaddingData(data, isFromButton) {
             }
 
             $thisInputs.each(function (t_index, item) {
-                let $item = $(item);
+                let $item = $(item),
+                    value = info[index][keys[inputIndex]],
+                    value_cp = "";
                 if (subject === "sum" && t_index === 0) {
-                    let value = info[index][keys[inputIndex]],
-                        value_cp = "";
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex];
+                        value_cp = t_info_cp[inputIndex++];
                         if (value_cp != value) error_pos.push($item);
                     }
-                    inputIndex++;
                 } else if (t_index !== 0) {
-                    let value = info[index][keys[inputIndex]],
-                        value_cp = "";
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex];
+                        value_cp = t_info_cp[inputIndex++];
                         if (value_cp != value) error_pos.push($item);
                     } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
-                    inputIndex++;
                 }
             });
             index++;
