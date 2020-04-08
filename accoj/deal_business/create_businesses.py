@@ -37,6 +37,10 @@ def deal_business(company, questions_no):
     :param questions_no: questions_no
     :return:
     """
+    question_no_list = []
+    # test 将此变量取消注释并将列表长度填至20，可生成固定题号题目
+    # question_no_list = [1, 8, 7, 25, 20, 27, 26, 31, 28, 37, 11, 32, 10, 36, 33, 27, 28, 31, 26, 37]
+
     questions = mongo.db.question.find(dict(questions_no=questions_no))
     max_question_no = questions.count()
     deal_function_list = [deal_business_1, deal_business_2]
@@ -53,13 +57,18 @@ def deal_business(company, questions_no):
     for key in list(company.keys()):
         if key not in no_pop:
             company.pop(key)
-    # 生成业务
-    for i in range(0, max_no):
-        flag, company = deal_function_list[func_index](company=company, questions=questions,
-                                                       max_question_no=max_question_no)
-        if not flag:
-            return False
-
+    if not question_no_list:  # test
+        # 生成业务
+        for i in range(0, max_no):
+            flag, company = deal_function_list[func_index](company=company, questions=questions,
+                                                           max_question_no=max_question_no)
+            if not flag:
+                return False
+    else:  # test
+        for i in range(0, max_no):
+            flag, company = deal_function_list[func_index](company=company, questions=questions,
+                                                           max_question_no=max_question_no,
+                                                           question_no=question_no_list[i])
     # 副本公司存储答案
     mongo.db.company.update({"student_no": "{}_cp".format(username)},
                             {"$set": company})
@@ -351,7 +360,7 @@ def deal_with_question_1(company, question_no, questions):
     return company
 
 
-def deal_business_2(company, questions, max_question_no):
+def deal_business_2(company, questions, max_question_no, question_no=False):
     """
     题库2的处理
     第一个月:
@@ -360,6 +369,7 @@ def deal_business_2(company, questions, max_question_no):
     第二个月:
     ` rd  rd   rd  f15  rd     15-25   last       last    # 日期`
     ` rd1 rd2  rd3 36 (33/34)    27  [26,28,31]   [37]    # 题号`
+    :param question_no:
     :param company: company document
     :param questions: question cursor
     :param max_question_no: max question no
@@ -367,6 +377,10 @@ def deal_business_2(company, questions, max_question_no):
     """
     com_businesses = company["businesses"]
     business_num = company["business_num"]
+
+    if question_no:  # test
+        company = deal_with_question_2(company=company, question_no=question_no, questions=questions)
+        return True, company
 
     question_set = set()  # 公司已有的业务
     question_list = list()
