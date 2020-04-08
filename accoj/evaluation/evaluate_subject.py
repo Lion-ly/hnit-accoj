@@ -46,7 +46,7 @@ def evaluate_subject(company, company_cp):
         scores += score
         subject_score.extend([score, total_score])
 
-    scores = round(scores) / 2
+    scores = round(scores / 2, 2)
     subject_score.append(scores)
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.subject_score": subject_score}})
 

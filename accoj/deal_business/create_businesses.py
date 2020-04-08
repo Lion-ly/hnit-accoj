@@ -9,6 +9,7 @@ import random
 import re
 from accoj.extensions import mongo
 from _datetime import datetime
+from accoj.utils import is_number
 
 PERIOD_NUM = 10
 
@@ -39,7 +40,7 @@ def deal_business(company, questions_no):
     """
     question_no_list = []
     # test 将此变量取消注释并将列表长度填至20，可生成固定题号题目
-    # question_no_list = [1, 8, 7, 25, 20, 27, 26, 31, 28, 37, 11, 32, 10, 36, 33, 27, 28, 31, 26, 37]
+    question_no_list = [1, 8, 7, 25, 20, 27, 26, 31, 28, 37, 11, 32, 10, 36, 33, 27, 28, 31, 26, 37]
 
     questions = mongo.db.question.find(dict(questions_no=questions_no))
     max_question_no = questions.count()
@@ -604,9 +605,13 @@ def deal_with_question_2(company, question_no, questions):
                 elif (question_no == 26 or question_no == 27) and (i == 0 or i == 3):
                     # 问题26和27特判
                     if i == 3:
-                        values_list.append(value)
+                        values_list.append(round(value, 2))
                         t_sum = sum([values_list[index] for index in [0, 1, 2]])
+                        t_sum = round(t_sum, 2)
                         values_list.insert(0, t_sum)
+                        #print("value: {}".format(value))
+                        #print("t_sum: {}".format(t_sum))
+                        print("values_list: {}".format(values_list))
                         content = content.replace("v{}".format(1), str(t_sum))
                         content = content.replace("v{}".format(4), str(value))
                     continue
@@ -626,13 +631,11 @@ def deal_with_question_2(company, question_no, questions):
                             value_tmp /= divisors[k]
                             value += value_tmp
                             k += 1
-                        value = round(value, 2)
                     elif i > 0:
                         if i < 3:
                             value = values_list[0] / 3
                         else:
                             value = values_list[0] - values_list[1] - values_list[2]
-                        value = round(value, 2)
                 elif question_no == 29:
                     # 问题29特判
                     if i == 0:
@@ -647,13 +650,11 @@ def deal_with_question_2(company, question_no, questions):
                             value_tmp = value_tmp if value_tmp else 0
                             value_tmp /= divisor
                             value += value_tmp
-                        value = round(value, 2)
                     elif i > 0:
                         if i < 3:
                             value = values_list[0] / 3
                         else:
                             value = values_list[0] - values_list[1] - values_list[2]
-                        value = round(value, 2)
                 elif question_no == 31:
                     # 问题31特判
                     content = content.replace("+", "")
@@ -671,7 +672,8 @@ def deal_with_question_2(company, question_no, questions):
                     index_tmp = index_dict.get("{}".format(26))
                     # print(index_dict)
                     value = com_subject_infos[index_tmp][3].get("money")
-
+                value = float(value) if isinstance(value, int) else value
+                value = round(value, 2) if isinstance(value, float) else value
             elif value_type == "percent":
                 if is_random:
                     value = random.randint(low, high)

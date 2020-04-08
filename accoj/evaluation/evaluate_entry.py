@@ -50,7 +50,7 @@ def evaluate_entry(company, company_cp):
         scores += score
         entry_score.extend([score, total_score])
 
-    scores = round(scores) / 2
+    scores = round(scores / 2, 2)
     entry_score.append(scores)
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.entry_score": entry_score}})
 
