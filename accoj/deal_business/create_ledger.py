@@ -164,6 +164,7 @@ def cal_ledger_2(company):
                         ending_balance = opening_balance + current_amount_dr - 0
                     else:
                         ending_balance = opening_balance + 0 - current_amount_dr
+                    ending_balance = round(ending_balance, 2)
                     ledger_infors_2[subject] = {"subject"          : subject,
                                                 "opening_balance"  : opening_balance,
                                                 "dr"               : [{"business_no": i + 1, "money": money}],
@@ -179,6 +180,7 @@ def cal_ledger_2(company):
                         ending_balance = opening_balance + 0 - current_amount_cr
                     else:
                         ending_balance = opening_balance + current_amount_cr - 0
+                    ending_balance = round(ending_balance, 2)
                     ledger_infors_2[subject] = {
                         "subject"          : subject,
                         "opening_balance"  : opening_balance,
@@ -200,14 +202,15 @@ def cal_ledger_2(company):
                 opening_balance = subject_ledger["opening_balance"]
                 # 更新借贷的值及账户相关余额
                 if is_dr:
-                    current_amount_dr += money
-                # cr类
+                    current_amount_dr  = round(current_amount_dr + money, 2)
+                # cr 类
                 else:
-                    current_amount_cr += money
+                    current_amount_cr  = round(current_amount_cr + money, 2)
                 if is_left:
                     ending_balance = opening_balance + current_amount_dr - current_amount_cr
                 else:
                     ending_balance = opening_balance + current_amount_cr - current_amount_dr
+                ending_balance = round(ending_balance, 2)
                 if is_dr:
                     dr = ledger_infors_2[subject]["dr"]
                     dr.append({"business_no": i + 1, "money": money})
