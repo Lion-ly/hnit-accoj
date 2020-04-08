@@ -46,12 +46,12 @@ def cal_new_balance_sheet_infos(company):
         money_last = new_balance_sheet_info.get("period_last")
         money_end = new_balance_sheet_info.get("period_end")
         if subject in assets:
-            rate_last = '{:.2%}'.format(money_last / assets_sum_last)
-            rate_end = '{:.2%}'.format(money_end / assets_sum_end)
+            rate_last = round((money_last / assets_sum_last)*100, 2)
+            rate_end = round((money_end / assets_sum_end)*100, 2)
             new_balance_sheet_infos_in[subject] = {"period_end": rate_end, "period_last": rate_last}
         elif subject in liabilities_owners_equities:
-            rate_last = '{:.2%}'.format(money_last / debt_owners_sum_last)
-            rate_end = '{:.2%}'.format(money_end / debt_owners_sum_end)
+            rate_last = round((money_last / debt_owners_sum_last)*100, 2)
+            rate_end = round((money_end / debt_owners_sum_end)*100, 2)
             new_balance_sheet_infos_in[subject] = {"period_end": rate_end, "period_last": rate_last}
         else:
             pass
@@ -74,11 +74,11 @@ def cal_profit_statement_infos(company):
         if income_sum_end == 0:
             rate_end = None
         else:
-            rate_end = '{:.2%}'.format(money_end / income_sum_end)
+            rate_end = round((money_end / income_sum_end)*100, 2)
         if income_sum_last == 0:
             rate_last = None
         else:
-            rate_last = '{:.2%}'.format(money_last / income_sum_last)
+            rate_last = round((money_last / income_sum_last)*100, 2)
         profit_statement_infos_in[subject] = {"period_end": rate_end, "period_last": rate_last}
     profit_statement_infos_in["conclusion"] = None
     common_ratio_analysis_infos = {"new_balance_sheet_infos": new_balance_sheet_infos_in,
