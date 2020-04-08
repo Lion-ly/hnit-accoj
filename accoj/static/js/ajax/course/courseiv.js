@@ -118,12 +118,14 @@ function ivGetInput() {
     for (let i = 0; i < crSubjectsLen; i++) {
         let subject = $(crSubjects[i]).val();
         let money = $(crMoneys[i]).val();
+        money = parseFloat(money);
         entry_infos.push({"subject": subject, "money": money, "is_dr": is_dr});
     }
     is_dr = false;
     for (let i = 0; i < drSubjectsLen; i++) {
         let subject = $(drSubjects[i]).val();
         let money = $(drMoneys[i]).val();
+        money = parseFloat(money);
         entry_infos.push({"subject": subject, "money": money, "is_dr": is_dr});
     }
     data = {"entry_infos": entry_infos, "business_no": business_no};
