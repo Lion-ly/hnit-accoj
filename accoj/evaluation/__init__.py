@@ -215,25 +215,6 @@ def evaluate_balance_sheet(company, company_cp):
     :param company_cp:
     :return:
     """
-
-    def cal_fun(info, info_cp, t_score_point, t_total_point):
-        info_len = len(balance_sheet_infos_cp)
-        for i in range(0, info_len):
-            t_score_point = 0
-            t_total_point += len(info_cp) * 7
-            for t1_info in info_cp:
-                for t2_info in info:
-                    subject, subject_cp = t1_info.get("subject"), t2_info.get("subject")
-                    if subject != subject_cp:
-                        continue
-                    if subject != "sum":
-                        t_total_point += 1
-                    keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"]
-                    t_score_point += sum([1 if t1_info.get(key) == t2_info.get(key) else 0 for key in keys])
-                    break
-        t_total_point -= 1  # ‘合计’科目不计分
-        return t_score_point, t_total_point
-
     _id = company_cp.get("_id")
     balance_sheet_infos = company.get("balance_sheet_infos")
     balance_sheet_infos_cp = company_cp.get("balance_sheet_infos")
@@ -244,8 +225,8 @@ def evaluate_balance_sheet(company, company_cp):
     accounting_period_2_cp = balance_sheet_infos_cp.get("accounting_period_2")
     total_score = 40
     total_point, score_point = 0, 0
-    score_point, total_point = cal_fun(accounting_period_1, accounting_period_1_cp, score_point, total_point)
-    score_point, total_point = cal_fun(accounting_period_2, accounting_period_2_cp, score_point, total_point)
+    score_point, total_point = _cal_balance(accounting_period_1, accounting_period_1_cp, score_point, total_point)
+    score_point, total_point = _cal_balance(accounting_period_2, accounting_period_2_cp, score_point, total_point)
 
     scores = score_point / total_point * total_score
     balance_sheet_score = round(scores, 2)
@@ -361,32 +342,14 @@ def evaluate_acc_balance_sheet(company, company_cp):
     :param company_cp:
     :return:
     """
-
-    def cal_fun(info, info_cp, t_score_point, t_total_point):
-        info_len = len(acc_balance_sheet_infos_cp)
-        for i in range(0, info_len):
-            t_score_point = 0
-            t_total_point += len(info_cp) * 7
-            for t1_info in info_cp:
-                for t2_info in info:
-                    subject, subject_cp = t1_info.get("subject"), t2_info.get("subject")
-                    if subject != subject_cp:
-                        continue
-                    if subject != "sum":
-                        t_total_point += 1
-                    keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"]
-                    t_score_point += sum([1 if t1_info.get(key) == t2_info.get(key) else 0 for key in keys])
-                    break
-        t_total_point -= 1  # ‘合计’科目不计分
-        return t_score_point, t_total_point
-
     _id = company_cp.get("_id")
     acc_balance_sheet_infos = company.get("acc_balance_sheet_infos")
     acc_balance_sheet_infos_cp = company_cp.get("acc_balance_sheet_infos")
 
     total_score = 40
     total_point, score_point = 0, 0
-    score_point, total_point = cal_fun(acc_balance_sheet_infos, acc_balance_sheet_infos_cp, score_point, total_point)
+    score_point, total_point = _cal_balance(acc_balance_sheet_infos, acc_balance_sheet_infos_cp,
+                                            score_point, total_point)
 
     scores = score_point / total_point * total_score
     acc_balance_sheet_score = round(scores, 2)
@@ -398,67 +361,71 @@ def evaluate_acc_balance_sheet(company, company_cp):
 def evaluate_new_balance_sheet(company, company_cp):
     """
     资产负债表评分
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    total_score = 60
+    _id = company_cp.get("_id")
+    scores = _statement_func("new_balance_sheet", company, company_cp, total_score)
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("new_balance_sheet"): scores}})
+    return scores
 
 
 def evaluate_profit_statement(company, company_cp):
     """
     利润表评分
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    total_score = 40
+    _id = company_cp.get("_id")
+    scores = _statement_func("profit_statement", company, company_cp, total_score)
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("profit_statement"): scores}})
+    return scores
 
 
 def evaluate_trend_analysis(company, company_cp):
     """
     趋势分析法评分
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    total_score = 15
+    _id = company_cp.get("_id")
+    score1 = _statement_func("trend_analysis_infos.new_balance_sheet", company, company_cp, total_score)
+    score2 = _statement_func("trend_analysis_infos.profit_statement", company, company_cp, total_score)
+    scores = {"first": score1, "second": score2}
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("trend_analysis"): scores}})
+    return scores
 
 
 def evaluate_common_ratio_analysis(company, company_cp):
     """
     共同比分析法
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    total_score = 15
+    _id = company_cp.get("_id")
+    score1 = _statement_func("common_ratio_analysis.new_balance_sheet", company, company_cp, total_score)
+    score2 = _statement_func("common_ratio_analysis.profit_statement", company, company_cp, total_score)
+    scores = {"first": score1, "second": score2}
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("common_ratio_analysis"): scores}})
+    return scores
 
 
 def evaluate_ratio_analysis(company, company_cp):
     """
     比率分析法评分
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    total_score = 15
+    _id = company_cp.get("_id")
+    scores = _statement_func("ratio_analysis", company, company_cp, total_score)
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("ratio_analysis"): scores}})
+    return scores
 
 
 def evaluate_dupont_analysis(company, company_cp):
     """
     杜邦分析法
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    total_score = 30
+    _id = company_cp.get("_id")
+    scores = _statement_func("dupont_analysis", company, company_cp, total_score)
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("dupont_analysis"): scores}})
+    return scores
 
 
 def _get_question_no(businesses):
@@ -488,3 +455,54 @@ def _get_company(infos_name):
     company = t_company if t_company else None
     company_cp = company_cp if company_cp else None
     return company, company_cp
+
+
+def _cal_balance(info, info_cp, t_score_point, t_total_point):
+    """
+    平衡表和余额表评分计算
+    :param info:
+    :param info_cp:
+    :param t_score_point:
+    :param t_total_point:
+    :return:
+    """
+    info_len = len(info_cp)
+    for i in range(0, info_len):
+        t_score_point = 0
+        t_total_point += info_len * 7
+        for t1_info in info_cp:
+            for t2_info in info:
+                subject, subject_cp = t1_info.get("subject"), t2_info.get("subject")
+                if subject != subject_cp:
+                    continue
+                if subject != "sum":
+                    t_total_point += 1
+                keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"]
+                t_score_point += sum([1 if t1_info.get(key) == t2_info.get(key) else 0 for key in keys])
+                break
+    t_total_point -= 1  # ‘合计’科目不计分
+    return t_score_point, t_total_point
+
+
+def _statement_func(infos_name, company, company_cp, total_score):
+    """
+    报表通用评分
+    :param infos_name:
+    :param company:
+    :param company_cp:
+    :return:
+    """
+
+    infos = company.get("{}_infos".format(infos_name))
+    infos_cp = company_cp.get("{}_infos".format(infos_name))
+
+    score_point, total_point = 0, 0
+    for key, value in infos_cp.items():
+        keys = ["period_last", "period_end"]
+        t_value = infos.get(key)
+        score_point += sum([1 if value.get(keys[i]) == t_value.get(keys[i]) else 0 for i in range(2)])
+        total_point += 2
+
+    scores = score_point / total_point * total_score
+    scores = round(scores, 2)
+    return scores
