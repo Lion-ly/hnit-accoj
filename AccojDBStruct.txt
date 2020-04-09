@@ -106,8 +106,8 @@ db.accoj.company.insert({"student_no": student_no,			# 用户ID
 										"key_element_score": [double],			# 会计要素部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
 										"subjects_score": [double],				# 会计科目部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
 										"entry_score": [double],				# 会计分录部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
-										"ledger_score": {"ledger1_score": {subjectName: double},# 会计账户部分评分(科目名为键，分数为值)
-														 "ledger2_score": {subjectName: double}},
+										"ledger_score": {"first": double,# 会计账户部分评分(科目名为键，分数为值)
+														 "second": double},
 										"balance_sheet_score": double,			# 会计平衡表部分评分
 										"acc_document_score": [double],			# 会计凭证部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
 										"subsidiary_account_score": {subjectName: double},		# 会计明细账部分评分

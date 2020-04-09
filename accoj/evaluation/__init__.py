@@ -200,12 +200,70 @@ def evaluate_entry(company, company_cp):
 def evaluate_ledger(company, company_cp):
     """
     账户评分
-    :param company:
-    :param company_cp:
-    :return:
     """
-    # Todo
-    pass
+    pl_accounts = {"主营业务收入", "其他业务收入", "公允价值变动损益", "投资收益", "营业外收入", "主营业务成本", "其他业务成本",
+                   "税金及附加", "销售费用", "财务费用", "资产减值损失", "营业外支出", "所得税费用", "以前年度损益调整"}
+
+    def cal_fun1(info, info_cp):
+        nonlocal score_point, total_point
+        keys1 = ["cd", "dr"]
+        total_point += 5
+        total_point += sum([len(info_cp.get(key)) for key in keys1])
+        subject = info_cp.get("subject")
+        if subject not in pl_accounts:
+            # 损益类账户有‘平’T表，特判
+            score_point += 1
+        else:
+            is_left = info.get("is_left")
+            is_left_cp = info_cp.get("is_left")
+            if is_left != is_left_cp:
+                return
+            else:
+                score_point += 1
+        keys2 = ["opening_balance", "current_amount_dr", "current_amount_cr", "ending_balance"]
+        score_point += sum([1 if info.get(t_key) == info_cp.get(t_key) else 0 for t_key in keys2])
+        for key in keys1:
+            t_info = info.get(key)
+            t_info_cp = info.get(key)
+            for t in t_info_cp:
+                bcp_no = t.get("business_no")
+                money_cp = t.get("money")
+                for tt in t_info:
+                    b_no = tt.get("business_no")
+                    if bcp_no == b_no:
+                        score_point += 1
+                        money = t.get("money")
+                        if money_cp == money:
+                            score_point += 1
+                        break
+
+    def cal_fun(infos, infos_cp):
+        for key, info_cp in infos_cp.items():
+            info = infos.get(key)
+            cal_fun1(info, info_cp)
+
+    _id = company_cp.get("_id")
+    ledger_infos = company.get("ledger_infos")
+    ledger_infos_cp = company_cp.get("ledger_infos")
+    ledger_infos1 = ledger_infos.get("ledger_infos_1")
+    ledger_infos_cp1 = ledger_infos_cp.get("ledger_infos_1")
+    ledger_infos2 = ledger_infos.get("ledger_infos_2")
+    ledger_infos_cp2 = ledger_infos_cp.get("ledger_infos_2")
+    total_score = 30
+    total_point, score_point = 0, 0
+
+    cal_fun(ledger_infos1, ledger_infos_cp1)
+    scores1 = score_point / total_point * total_score
+    scores1 = round(scores1, 2)
+    total_point, score_point = 0, 0
+    cal_fun(ledger_infos2, ledger_infos_cp2)
+    scores2 = score_point / total_point * total_score
+    scores2 = round(scores2, 2)
+
+    ledger_score = {"first": scores1, "second": scores2}
+    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.ledger_score": ledger_score}})
+
+    return ledger_score
 
 
 def evaluate_balance_sheet(company, company_cp):
@@ -323,10 +381,9 @@ def evaluate_subsidiary_account(company, company_cp):
     total_point, score_point = 0, 0
 
     for key_cp, info_cp in subsidiary_account_infos_cp.items():
-        for key, info in subsidiary_account_infos.items():
-            if key_cp == key:
-                score_point, total_point = cal_fun(info, info_cp, score_point, total_point)
-                break
+        info = subsidiary_account_infos.get(key_cp)
+        info = info if info else []
+        score_point, total_point = cal_fun(info, info_cp, score_point, total_point)
 
     scores = score_point / total_point * total_score
     subsidiary_account_score = round(scores, 2)
@@ -423,7 +480,17 @@ def evaluate_dupont_analysis(company, company_cp):
     """
     total_score = 30
     _id = company_cp.get("_id")
-    scores = _statement_func("dupont_analysis", company, company_cp, total_score)
+    infos = company.get("{}_infos".format("dupont_analysis"))
+    infos_cp = company_cp.get("{}_infos".format("dupont_analysis"))
+
+    score_point, total_point = 0, 0
+    for key, value in infos_cp.items():
+        t_value = infos.get(key)
+        score_point += 1 if value.get(key) == t_value.get(key) else 0
+        total_point += 1
+
+    scores = score_point / total_point * total_score
+    scores = round(scores, 2)
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("dupont_analysis"): scores}})
     return scores
 
