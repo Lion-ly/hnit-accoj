@@ -37,7 +37,7 @@ def cal_balance_trend_analysis(company):
             if period_last <= 0:
                 new_balance_sheet_infos_in[subject] = {"period_end": mount_money, "period_last": None}
             else:
-                mount_rate = '{:.2%}'.format(mount_money / period_last)
+                mount_rate = round((mount_money / period_last)*100, 2)
                 new_balance_sheet_infos_in[subject] = {"period_end": mount_money, "period_last": mount_rate}
 
     new_balance_sheet_infos_in["conclusion"] = {}
@@ -58,7 +58,7 @@ def cal_profit_trend_analysis(company):
             if period_last <= 0:
                 profit_statement_infos_in[subject] = {"period_end": mount_money, "period_last": None}
             else:
-                mount_rate = '{:.2%}'.format(mount_money / period_last)
+                mount_rate = round((mount_money / period_last)*100, 2)
                 profit_statement_infos_in[subject] = {"period_end": mount_money, "period_last": mount_rate}
     other_lists = ["其他综合收益的税后净额", "以后不能重分类净损益的其他综合收益", "以后将重分类净损益的其他综合收益",
                    "综合收益总额", "每股收益", "基本每股收益", "稀释每股收益"]

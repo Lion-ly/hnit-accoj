@@ -24,7 +24,7 @@ def cal_rate(a, b, subject, period):
     if b == 0:
         ratio_analysis_infos[subject][period] = None
     else:
-        rate = '{:.2%}'.format(a / b)
+        rate = round((a / b)*100, 2)
         ratio_analysis_infos[subject][period] = rate
 
 
