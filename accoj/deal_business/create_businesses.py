@@ -22,7 +22,7 @@ def create_businesses(company):
     # 1号题库已废弃
     low, high = 2, 2  # 题库编号随机生成
     questions_no = random.randint(low, high)
-    flag = deal_business(company, questions_no)
+    flag = create_business(company, questions_no)
     message = "生成业务成功！"
     if not flag:
         message = "业务逻辑出现问题，生成业务失败！"
@@ -30,7 +30,7 @@ def create_businesses(company):
     return True, message
 
 
-def deal_business(company, questions_no):
+def create_business(company, questions_no):
     """
     业务处理
     :param company: company document
@@ -43,7 +43,7 @@ def deal_business(company, questions_no):
 
     questions = mongo.db.question.find(dict(questions_no=questions_no))
     max_question_no = questions.count()
-    deal_function_list = [deal_business_1, deal_business_2]
+    create_function_list = [create_business_1, create_business_2]
     func_index = questions_no - 1
     max_no = 20
     company.update(dict(business_num=0, com_assets=[],
@@ -60,15 +60,15 @@ def deal_business(company, questions_no):
     if not question_no_list:  # test
         # 生成业务
         for i in range(0, max_no):
-            flag, company = deal_function_list[func_index](company=company, questions=questions,
-                                                           max_question_no=max_question_no)
+            flag, company = create_function_list[func_index](company=company, questions=questions,
+                                                             max_question_no=max_question_no)
             if not flag:
                 return False
     else:  # test
         for i in range(0, max_no):
-            flag, company = deal_function_list[func_index](company=company, questions=questions,
-                                                           max_question_no=max_question_no,
-                                                           question_no=question_no_list[i])
+            flag, company = create_function_list[func_index](company=company, questions=questions,
+                                                             max_question_no=max_question_no,
+                                                             question_no=question_no_list[i])
     # 副本公司存储答案
     mongo.db.company.update({"student_no": "{}_cp".format(username)},
                             {"$set": company})
@@ -79,7 +79,7 @@ def deal_business(company, questions_no):
     return True
 
 
-def deal_business_1(company, questions, max_question_no):
+def create_business_1(company, questions, max_question_no):
     """
     题库1的处理
     :param company: company document
@@ -360,7 +360,7 @@ def deal_with_question_1(company, question_no, questions):
     return company
 
 
-def deal_business_2(company, questions, max_question_no, question_no=False):
+def create_business_2(company, questions, max_question_no, question_no=False):
     """
     题库2的处理
     第一个月:

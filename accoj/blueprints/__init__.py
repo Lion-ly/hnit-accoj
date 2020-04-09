@@ -9,13 +9,7 @@ from _datetime import datetime
 from flask import session
 from accoj.utils import is_number, allowed_file
 from accoj.extensions import mongo
-from accoj.evaluation.evaluate_key_element import evaluate_key_element
-from accoj.evaluation.evaluate_subject import evaluate_subject
-from accoj.evaluation.evaluate_entry import evaluate_entry
-from accoj.evaluation.evaluate_acc_document import evaluate_acc_document
-from accoj.evaluation.evaluate_balance_sheet import evaluate_balance_sheet
-from accoj.evaluation.evaluate_subsidiary_account import evaluate_subsidiary_account
-from accoj.evaluation.evaluate_acc_balance_sheet import evaluate_acc_balance_sheet
+from accoj.evaluation import evaluate
 
 MAX_BUSINESS_NO = 20
 
@@ -26,19 +20,20 @@ def submit_infos(type_num, infos, submit_type, infos_name, is_first=None, busine
     if type_num == 1:
         result, message = _submit_infos1(infos=infos, submit_type=submit_type, infos_name=infos_name)
     elif type_num == 2:
-        result, message = _submit_infos2(infos=infos, submit_type=submit_type, infos_name=infos_name, is_first=is_first)
+        result, message = _submit_infos2(infos=infos, submit_type=submit_type, infos_name=infos_name,
+                                         is_first=is_first)
     elif type_num == 3:
         result, message = _submit_infos3(infos=infos, submit_type=submit_type, infos_name=infos_name,
                                          business_no=business_no)
     elif type_num == 4:
-        result, message = _submit_infos4(infos=infos, submit_type=submit_type, infos_name=infos_name, subject=subject,
-                                         ledger_period=ledger_period)
+        result, message = _submit_infos4(infos=infos, submit_type=submit_type, infos_name=infos_name,
+                                         subject=subject, ledger_period=ledger_period)
     return result, message
 
 
 def _submit_infos1(infos, submit_type, infos_name):
     """
-    提交信息（第一类，非第九次课程一二部分、第六七次）
+    提交信息（第一类，非第九次课程一二部分 、第六七次）
     :param infos: submit infos
     :param submit_type: submit type
     :param infos_name: infos name
@@ -302,14 +297,7 @@ def get_data(type_num, infos_name, info_keys, is_first=False):
         if len(confirmed) == MAX_BUSINESS_NO:
             evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
-                if infos_name == "key_element":
-                    scores = evaluate_key_element(company, company_cp)
-                elif infos_name == "subject":
-                    scores = evaluate_subject(company, company_cp)
-                elif infos_name == "entry":
-                    scores = evaluate_entry(company, company_cp)
-                elif infos_name == "acc_document":
-                    scores = evaluate_acc_document(company, company_cp)
+                scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
             else:
                 scores = evaluation.get("{}_score".format(infos_name))
             confirm_flag = True
@@ -318,16 +306,13 @@ def get_data(type_num, infos_name, info_keys, is_first=False):
         if confirmed:
             evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
-                if infos_name == "balance_sheet":
-                    scores = evaluate_balance_sheet(company, company_cp)
-                elif infos_name == "acc_balance_sheet":
-                    scores = evaluate_acc_balance_sheet(company, company_cp)
+                scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
             else:
                 scores = evaluation.get("{}_score".format(infos_name))
             confirm_flag = True
     elif type_num == 3:
         # 3.“账户和明细账部分”
-        pass
+        scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
     if not confirm_flag:
         answer_infos = None
     info_values = [infos, answer_infos, confirmed, saved, scores]
