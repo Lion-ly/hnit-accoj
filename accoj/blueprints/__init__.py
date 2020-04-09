@@ -246,11 +246,15 @@ def _get_infos(infos_name, is_first=False):
     :return: infos, confirmed, saved
     """
 
-    def get_company(t_infos_name):
+    def get_company():
+        nonlocal infos_name
         t_company = None
         t_company_cp = None
         username = session.get("username")
-        filter_dict.update({"student_no": 1, "{}_infos".format(t_infos_name): 1, "businesses": 1})
+        if infos_name in {"key_element", "subject", "entry", "acc_document"}:
+            filter_dict.update({"businesses": 1})
+        if infos_name in {"ledger", "subsidiary_account"}:
+            filter_dict.update({"involve_subjects": 1})
         companies = mongo.db.company.find({"student_no": {"$regex": r"^{}".format(username)}}, filter_dict)
         for company_t in companies:
             if company_t.get("student_no").endswith("_cp"):
@@ -262,9 +266,9 @@ def _get_infos(infos_name, is_first=False):
         return t_company, t_company_cp
 
     infos_key = "{}_infos".format(infos_name)
-    filter_dict = {infos_key: 1, "schedule_confirm": 1, "schedule_saved": 1, "evaluation": 1}
+    filter_dict = {infos_key: 1, "student_no": 1, "schedule_confirm": 1, "schedule_saved": 1, "evaluation": 1}
 
-    company, company_cp = get_company(infos_name)
+    company, company_cp = get_company()
     infos = company.get("{}_infos".format(infos_name))
     answer_infos = company_cp.get("{}_infos".format(infos_name))
     schedule_confirm = company.get("schedule_confirm")
@@ -292,10 +296,10 @@ def get_data(type_num, infos_name, info_keys, is_first=False):
     scores = None
     confirm_flag = False
     infos, answer_infos, confirmed, saved, company, company_cp = _get_infos(infos_name=infos_name, is_first=is_first)
+    evaluation = company_cp.get("evaluation")
     if type_num == 1:
         # 1.“二三四”以及“六的会计凭证部分”
         if len(confirmed) == MAX_BUSINESS_NO:
-            evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
             else:
@@ -304,7 +308,6 @@ def get_data(type_num, infos_name, info_keys, is_first=False):
     elif type_num == 2:
         # 2.非“二三四以及六的会计凭证部分 ”以及“账户和明细账部分”
         if confirmed:
-            evaluation = company_cp.get("evaluation")
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
             else:
@@ -312,7 +315,27 @@ def get_data(type_num, infos_name, info_keys, is_first=False):
             confirm_flag = True
     elif type_num == 3:
         # 3.“账户和明细账部分”
-        scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
+        involve_subjects = company.get("involve_subjects")
+        involve_subjects_1 = involve_subjects.get("involve_subjects_1")
+        involve_subjects_2 = involve_subjects.get("involve_subjects_2")
+        if infos_name == "ledger":
+            ledger1_confirm = confirmed.get("ledger1_confirm")
+            ledger2_confirm = confirmed.get("ledger2_confirm")
+            if ledger1_confirm and ledger1_confirm:
+                if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(ledger2_confirm):
+                    if not evaluation or not evaluation.get("{}_score".format(infos_name)):
+                        scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
+                    else:
+                        scores = evaluation.get("{}_score".format(infos_name))
+                    confirm_flag = True
+        elif infos_name == "subsidiary_account":
+            if set(confirmed) == set(involve_subjects_2):
+                if not evaluation or not evaluation.get("{}_score".format(infos_name)):
+                    scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
+                else:
+                    scores = evaluation.get("{}_score".format(infos_name))
+                confirm_flag = True
+
     if not confirm_flag:
         answer_infos = None
     info_values = [infos, answer_infos, confirmed, saved, scores]
