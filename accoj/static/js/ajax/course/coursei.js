@@ -149,12 +149,13 @@ function paddingBusiness(data) {
     let periodNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (!businesses) return;
 
+    let $createBusiness = $("#createBusiness");
     $("#businessPeriod").show();
-    $("#createBusiness").addClass("btn-warning").removeClass("btn-success");
-    $("#createBusiness").text("重新生成");
+    $createBusiness.addClass("btn-warning").removeClass("btn-success");
+    $createBusiness.text("重新生成");
     if (business_confirmed) {
         $("#business_confirmed_span").show();
-        $("#createBusiness").attr("disabled", "disabled");
+        $createBusiness.attr("disabled", "disabled");
         $("#submit_business_button").attr("disabled", "disabled");
     }
     $("#menu").children().children().each(function (index, item) {
