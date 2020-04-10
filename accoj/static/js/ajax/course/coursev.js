@@ -290,12 +290,10 @@ function initLi(data) {
     pageNum = 0;
     $("li[id^=coursevli]").remove();
     $("#TTablePage").children().remove();
-    if (!ledger_infos && !first) {
-        return;
-    }
-    if (data && !data["ledger_infos"]) {
-        return;
-    }
+
+    if (!ledger_infos && !first) return;
+    if (data || !data["ledger_infos"]) return;
+
     let info_key = "ledger_infos_" + now_period,
         confirmed_key = "ledger" + now_period + "_confirm",
         saved_key = "ledger" + now_period + "_saved",

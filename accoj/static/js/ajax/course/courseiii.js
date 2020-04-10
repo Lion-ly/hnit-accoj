@@ -308,5 +308,4 @@ function iiiDisabledInput(flag) {
     buttons = buttons.join();
     flag = flag ? flag : false;
     $(buttons).prop("disabled", flag);
-    $(buttons).prop("disabled", flag);
 }

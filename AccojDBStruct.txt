@@ -4,6 +4,7 @@
 
 # 用户集合(已确定)
 db.accoj.users.insert({"student_no": "17020340111", 	# 学号
+                       "role": string,                  # 角色("root", "admin", "teacher", "student")
 					   "student_name": "郭雄",  		# 姓名
 					   "student_faculty": "计算机与信息科学学院", # 学院
 					   "student_class": "网络1701"		# 班级

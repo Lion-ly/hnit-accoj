@@ -3,16 +3,20 @@ let business_list = Array();
  *  # courseBase
  *	? 控制导航栏的active，确定当前处于导航栏的位置
  */
-let csrf_token;
+let csrf_token; // csrf令牌全局变量
+/**
+ * 导航栏li标签激活状态控制
+ */
 $(function () {
     $("#menu").find("li").each(function (index, item) {
-        let href = $(item).children().attr("href"),
+        let $item = $(item),
+            href = $item.children().attr("href"),
             pathname = location.pathname.split("_")[0],
             isAddClass = href === pathname;
         if (isAddClass) {
-            $(item).addClass("active");
+            $item.addClass("active");
         } else {
-            $(item).removeClass("active");
+            $item.removeClass("active");
         }
     });
 });
@@ -143,8 +147,9 @@ function show_message(id, message, message_type, timeout, message_head = false) 
  * @param submit_deal_fun
  */
 function show_submit_confirm(submit_deal_fun) {
-    $("#submit_confirm_button").attr("onclick", submit_deal_fun);
-    $("#submit_confirm_button").attr("disabled", false);
+    let $submit_confirm_button = $("#submit_confirm_button");
+    $submit_confirm_button.attr("onclick", submit_deal_fun);
+    $submit_confirm_button.attr("disabled", false);
     $("#submit_confirm").modal('show');
 }
 
@@ -207,8 +212,10 @@ function submit_confirm_clicked() {
     $("#submit_confirm_button").attr("disabled", true);
     // 定时自动关闭
     setTimeout(function () {
-        $("#submit_confirm").modal('hide');
-    }, 2000)
+        let $submit_confirm = $("#submit_confirm");
+        if($submit_confirm.css("display") === "block")
+            $submit_confirm.modal('hide');
+    }, 2000);
 }
 
 //==================================正则表达式限制输入==================================//
@@ -277,10 +284,11 @@ function removeAllError() {
 function bindRealNumber(selector) {
     selector = selector ? selector : $("input[data-real-number]");
     selector.each(function (index, item) {
-        $(item).change(function () {
+        let $item = $(item);
+        $item.change(function () {
             RealNumber(item);
         });
-        $(item).focus(function () {
+        $item.focus(function () {
             removeError(item);
         })
     });
@@ -328,10 +336,11 @@ function bindLimitJieDai(selector) {
 function bindLimitPercent(selector) {
     selector = selector ? selector : $("input[data-limit-percent]");
     selector.each(function (index, item) {
-        $(item).change(function () {
+        let $item = $(item);
+        $item.change(function () {
             LimitPercent(item);
         });
-        $(item).focus(function () {
+        $item.focus(function () {
             removeError(item);
         })
     });
@@ -520,6 +529,14 @@ function spanStatusCtr(confirmed, saved, spanID) {
     }
 }
 
+/**
+ * 显示分数
+ * @param nowScore
+ * @param nowTotalScore
+ * @param totalScore
+ * @param $nowSelectorNum
+ * @param $totalSelectorNum
+ */
 function showScoreEm(nowScore, nowTotalScore, totalScore, $nowSelectorNum, $totalSelectorNum) {
     function t_reg(className) {
         return (className.match(/(^|\s)acc-score-\S+/g) || []).join(' ');
@@ -617,30 +634,32 @@ function pageSplitBind(callbackFuc, maxPage = 20) {
             }
             $("li[data-page-control]").each(function (index, item) {
                 if (index > 1 && index < maxLen + 2) {
-                    let thisNo = parseInt($(item).children().text());
+                    let $item = $(item),
+                        thisNo = parseInt($item.children().text());
                     if (isPrev) {
                         let textValue;
                         if (isFirstPage) textValue = firstArray[index - 2];
                         else textValue = thisNo - minus;
-                        $(item).children().text(textValue);
+                        $item.children().text(textValue);
                     } else {
                         let textValue;
                         if (isLastPage) textValue = lastArray[index - 2];
                         else textValue = thisNo + minus;
-                        $(item).children().text(textValue);
+                        $item.children().text(textValue);
                     }
                 }
             });
-            activeNoAfter = parseInt($(activeLi).children().text());
+            activeNoAfter = parseInt($activeLi.children().text());
             callbackFuc(activeNoAfter);
         }
 
-        let activeLi = $("li[data-page-control][class=active]"),
-            prevSpan = $(activeLi).prev().children().text(),
-            nextSpan = $(activeLi).next().children().text(),
-            activeNoInt = parseInt($(activeLi).children().text()),
+        let $this = $(this),
+            $activeLi = $("li[data-page-control][class=active]"),
+            prevSpan = $activeLi.prev().children().text(),
+            nextSpan = $activeLi.next().children().text(),
+            activeNoInt = parseInt($activeLi.children().text()),
             activeNoAfter = activeNoInt,
-            clickedSpanNo = $(this).children().text();
+            clickedSpanNo = $this.children().text();
 
         let clickedSpanNoInt = parseInt(clickedSpanNo);
         if (clickedSpanNoInt === activeNoInt) return;
@@ -656,20 +675,20 @@ function pageSplitBind(callbackFuc, maxPage = 20) {
                 return;
             }
             activeNoAfter -= 1;
-            activeLi.removeClass("active");
-            activeLi.prev().addClass("active");
+            $activeLi.removeClass("active");
+            $activeLi.prev().addClass("active");
         } else if (clickedSpanNo === "›") { // 下一题
             if (nextSpan === "›") {
                 switchPage(1, maxNo);
                 return;
             }
             activeNoAfter += 1;
-            activeLi.removeClass("active");
-            activeLi.next().addClass("active");
+            $activeLi.removeClass("active");
+            $activeLi.next().addClass("active");
         } else {
             activeNoAfter = clickedSpanNoInt;
-            activeLi.removeClass("active");
-            $(this).addClass("active");
+            $activeLi.removeClass("active");
+            $this.addClass("active");
         }
         callbackFuc(activeNoAfter);
     });
@@ -776,7 +795,7 @@ function bindAnswerSource(selector, mapInfo, mapAnswer) {
 }
 
 /*
- 保存和提交按钮解除禁用
+ 保存和提交按钮禁用
  */
 function DisableButton(flag) {
     let $button = $("button[data-save], button[data-confirm]");
