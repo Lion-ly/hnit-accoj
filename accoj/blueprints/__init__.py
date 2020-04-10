@@ -238,11 +238,10 @@ def _deal_update(submit_type, find_dict, update_confirm, update_save):
     return True, ""
 
 
-def _get_infos(infos_name, is_first=False):
+def _get_infos(infos_name):
     """
     获取信息
     :param infos_name: infos name
-    :param is_first: boolean
     :return: infos, confirmed, saved
     """
 
@@ -275,27 +274,26 @@ def _get_infos(infos_name, is_first=False):
     schedule_saved = company.get("schedule_saved")
     confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
     saved = schedule_saved.get("{}_saved".format(infos_name))
-    if is_first:
-        times = "first" if is_first == 1 else "second"
-        confirmed = confirmed.get(times) if confirmed else False
-        saved = saved.get(times) if saved else False
+    # if is_first:
+    #    times = "first" if is_first == 1 else "second"
+    #    confirmed = confirmed.get(times) if confirmed else False
+    #    saved = saved.get(times) if saved else False
     return infos, answer_infos, confirmed, saved, company, company_cp
 
 
-def get_data(type_num, infos_name, info_keys, is_first=False):
+def get_data(type_num, infos_name, info_keys):
     """
     获取信息，数据封装
     :param type_num:
     :param infos_name:
     :param info_keys:
-    :param is_first:
     :return:
     """
     info_keys.append("scores")
     info_len = len(info_keys)
     scores = None
     confirm_flag = False
-    infos, answer_infos, confirmed, saved, company, company_cp = _get_infos(infos_name=infos_name, is_first=is_first)
+    infos, answer_infos, confirmed, saved, company, company_cp = _get_infos(infos_name=infos_name)
     evaluation = company_cp.get("evaluation")
     if type_num == 1:
         # 1.“二三四”以及“六的会计凭证部分”
@@ -307,7 +305,9 @@ def get_data(type_num, infos_name, info_keys, is_first=False):
             confirm_flag = True
     elif type_num == 2:
         # 2.非“二三四以及六的会计凭证部分 ”以及“账户和明细账部分”
-        if confirmed:
+        td = {"trend_analysis", "common_ratio_analysis"}
+        td = infos_name in td
+        if td and confirmed.get("first") and confirmed.get("second") or (not td and confirmed):
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
             else:

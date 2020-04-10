@@ -90,8 +90,9 @@ def login():
                 message = "请输入正确的验证码"
                 return jsonify(result="false", message="{}".format(message))
             else:
-                session["username"] = student_no
                 role = "student"
+                session["username"] = student_no
+                session["role"] = role
                 post = dict(student_no="{}".format(student_no),
                             role=role,
                             student_name="",

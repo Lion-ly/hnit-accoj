@@ -94,7 +94,7 @@ function get_subsidiary_account_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_subsidiary_account_info(data) {
+function map_subsidiary_account_info(data, isFromButton) {
     data = data ? data : "";
     subsidiary_account_infos = data ? data["subsidiary_account_infos"] : subsidiary_account_infos;
     subsidiary_account_confirmed = data ? data["subsidiary_account_confirmed"] : subsidiary_account_confirmed;
@@ -112,14 +112,15 @@ function map_subsidiary_account_info(data) {
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
         let $options = $("#subjectSelect").children();
         $.each($options, function (index, item) {
-            let optionValue = $(item).val(),
+            let $item = $(item),
+                optionValue = $item.val(),
                 color = "#555";
             if (subsidiary_account_confirmed && subsidiary_account_confirmed.indexOf(optionValue) !== -1) {
                 color = "#5cb85c";
             } else if (subsidiary_account_saved && subsidiary_account_saved.indexOf(optionValue) !== -1) {
                 color = "#5bc0de";
             }
-            $(item).css("color", color);
+            $item.css("color", color);
             if (optionValue === nowSubject) $("#subjectSelect").css("color", color);
         });
     } else return;
@@ -133,6 +134,13 @@ function map_subsidiary_account_info(data) {
     $.each(subsidiary_account_confirmed, function (index, item) {
         confirmed = subsidiary_account_confirmed.indexOf(item) === -1;
     });
+    if (answer_infos) {
+        showAnswerButton();
+        confirmed = true;
+        saved = true;
+        isFromButton = 1;
+        $("button[data-answer-1]").text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "subsidiary_account_submit_span");
 
@@ -144,7 +152,7 @@ function map_subsidiary_account_info(data) {
         // 明细账信息为空则返回
         return;
     }
-    vii1PaddingData(subsidiary_account_info);
+    vii1PaddingData(subsidiary_account_info, isFromButton);
 
 }
 
@@ -199,7 +207,7 @@ function get_acc_balance_sheet_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_acc_balance_sheet_info(data) {
+function map_acc_balance_sheet_info(data, isFromButton) {
     data = data ? data : "";
     acc_balance_sheet_infos = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_infos;
     acc_balance_sheet_confirmed = data ? data["acc_balance_sheet_confirmed"] : acc_balance_sheet_confirmed;
@@ -207,11 +215,16 @@ function map_acc_balance_sheet_info(data) {
     answer_infos2 = data ? data["answer_infos"] : answer_infos2;
     scores2 = data ? data["scores"] : scores2;
 
+    if (answer_infos) {
+        showAnswerButton();
+        isFromButton = 1;
+        $("button[data-answer-2]").text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(acc_balance_sheet_confirmed, acc_balance_sheet_saved, "acc_balance_sheet_submit_span");
 
     if (!acc_balance_sheet_infos) return;
-    vii2PaddingData(acc_balance_sheet_infos);
+    vii2PaddingData(acc_balance_sheet_infos, isFromButton);
 }
 
 // ===============================获取和填充数据===============================//
@@ -272,81 +285,94 @@ function vii1GetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function vii1PaddingData(data) {
-    // 填充明细账数据
-    let subsidiary_account_info = data;
-    // 添加行
-    let firstPeriod = true;
-    for (let i = 2; i < subsidiary_account_info.length - 2; i++) {
-        if (subsidiary_account_info.length === 6) break;
-        if (firstPeriod && subsidiary_account_info[i]["summary"] === "本期合计") {
-            firstPeriod = false;
-            i += 2;
-        }
-        if (firstPeriod) {
-            vii1_AddRow(true);
-        } else {
-            vii1_AddRow(false);
-        }
-    }
-    // 填充信息
-    let infoIndex = 0,
-        firstRow = true;
-    $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
-        let thisInputs = $(this).find("input"),
-            date = subsidiary_account_info[infoIndex]["date"].split("-"),
-            word = subsidiary_account_info[infoIndex]["word"],
-            no = subsidiary_account_info[infoIndex]["no"],
-            summary = subsidiary_account_info[infoIndex]["summary"],
-            dr_money = subsidiary_account_info[infoIndex]["dr_money"],
-            orientation = subsidiary_account_info[infoIndex]["orientation"],
-            cr_money = subsidiary_account_info[infoIndex]["cr_money"],
-            balance_money = subsidiary_account_info[infoIndex]["balance_money"],
-            year = date[0];
-        if (firstRow) {
-            let dateTmp = new Date();
-            year = year ? year : dateTmp.getFullYear();
-            $("#yearNow").val(year);
-            firstRow = false;
-        }
-        let month = date[1],
-            day = date[2],
-            prefix = "0000000000";
-        dr_money = dr_money ? dr_money * 100 : dr_money;
-        cr_money = cr_money ? cr_money * 100 : cr_money;
-        balance_money = balance_money ? balance_money * 100 : balance_money;
-        dr_money = dr_money ? dr_money.toString() : dr_money;
-        cr_money = cr_money ? cr_money.toString() : cr_money;
-        balance_money = balance_money ? balance_money.toString() : balance_money;
-        dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
-        cr_money = cr_money ? prefix.substring(0, 10 - cr_money.length) + cr_money : cr_money;
-        balance_money = balance_money ? prefix.substring(0, 10 - balance_money.length) + balance_money : balance_money;
-        let money = dr_money ? dr_money : prefix;
-        money += cr_money ? cr_money : prefix;
-        money += orientation ? orientation : "0";
-        money += balance_money ? balance_money : prefix;
-        let firstNum = true;
-        $(thisInputs[0]).val(month);
-        $(thisInputs[1]).val(day);
-        $(thisInputs[2]).val(word);
-        $(thisInputs[3]).val(no);
-        $(thisInputs[4]).val(summary);
-        for (let i = 5; i < 36; i++) {
-            if (money) {
-                if (i === 15 || i === 25 || i === 26) {
-                    firstNum = true;
-                }
-                if (firstNum && money[i - 5] !== "0") {
-                    $(thisInputs[i]).val(money[i - 5]);
-                    firstNum = false;
-                }
-                if (!firstNum && i < money.length + 5)
-                    $(thisInputs[i]).val(money[i - 5]);
+function vii1PaddingData(data, isFromButton) {
+    function padding() {
+        // 填充明细账数据
+        let subsidiary_account_info = data;
+        // 添加行
+        let firstPeriod = true;
+        for (let i = 2; i < subsidiary_account_info.length - 2; i++) {
+            if (subsidiary_account_info.length === 6) break;
+            if (firstPeriod && subsidiary_account_info[i]["summary"] === "本期合计") {
+                firstPeriod = false;
+                i += 2;
+            }
+            if (firstPeriod) {
+                vii1_AddRow(true);
+            } else {
+                vii1_AddRow(false);
             }
         }
-        infoIndex++;
-    });
+        // 填充信息
+        let infoIndex = 0,
+            firstRow = true;
+        $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
+            let thisInputs = $(this).find("input"),
+                date = subsidiary_account_info[infoIndex]["date"].split("-"),
+                word = subsidiary_account_info[infoIndex]["word"],
+                no = subsidiary_account_info[infoIndex]["no"],
+                summary = subsidiary_account_info[infoIndex]["summary"],
+                dr_money = subsidiary_account_info[infoIndex]["dr_money"],
+                orientation = subsidiary_account_info[infoIndex]["orientation"],
+                cr_money = subsidiary_account_info[infoIndex]["cr_money"],
+                balance_money = subsidiary_account_info[infoIndex]["balance_money"],
+                year = date[0];
+            if (firstRow) {
+                let dateTmp = new Date();
+                year = year ? year : dateTmp.getFullYear();
+                $("#yearNow").val(year);
+                firstRow = false;
+            }
+            let month = date[1],
+                day = date[2],
+                prefix = "0000000000";
+            dr_money = dr_money ? dr_money * 100 : dr_money;
+            cr_money = cr_money ? cr_money * 100 : cr_money;
+            balance_money = balance_money ? balance_money * 100 : balance_money;
+            dr_money = dr_money ? dr_money.toString() : dr_money;
+            cr_money = cr_money ? cr_money.toString() : cr_money;
+            balance_money = balance_money ? balance_money.toString() : balance_money;
+            dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
+            cr_money = cr_money ? prefix.substring(0, 10 - cr_money.length) + cr_money : cr_money;
+            balance_money = balance_money ? prefix.substring(0, 10 - balance_money.length) + balance_money : balance_money;
+            let money = dr_money ? dr_money : prefix;
+            money += cr_money ? cr_money : prefix;
+            money += orientation ? orientation : "0";
+            money += balance_money ? balance_money : prefix;
+            let firstNum = true;
+            $(thisInputs[0]).val(month);
+            $(thisInputs[1]).val(day);
+            $(thisInputs[2]).val(word);
+            $(thisInputs[3]).val(no);
+            $(thisInputs[4]).val(summary);
+            for (let i = 5; i < 36; i++) {
+                if (money) {
+                    if (i === 15 || i === 25 || i === 26) {
+                        firstNum = true;
+                    }
+                    if (firstNum && money[i - 5] !== "0") {
+                        $(thisInputs[i]).val(money[i - 5]);
+                        firstNum = false;
+                    }
+                    if (!firstNum && i < money.length + 5)
+                        $(thisInputs[i]).val(money[i - 5]);
+                }
+            }
+            infoIndex++;
+        });
+    }
+
+    if (!data) return;
+    if (isFromButton) {
+        removeAllError();
+        let nowTotalScore = 40,
+            totalScore = 100;
+        showScoreEm(scores1, nowTotalScore, totalScore, 1, 1);
+        if (isFromButton === 2) vii1ResetInfo();
+    }
+    padding();
 }
 
 /**
@@ -384,36 +410,71 @@ function vii2GetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function vii2PaddingData(data) {
-    // 填充科目余额表数据
-    let acc_balance_sheet_infos = data;
-    // 创建行
-    for (let i = 0; i < acc_balance_sheet_infos.length - 2; i++) vii2_AddRow();
-    // 填充数据
-    let index = 0;
-    $("[id^=vii2Row]").each(function () {
-        let thisInputs = $(this).find("input"),
-            subject = acc_balance_sheet_infos[index]["subject"],
-            borrow_1 = acc_balance_sheet_infos[index]["borrow_1"],
-            lend_1 = acc_balance_sheet_infos[index]["lend_1"],
-            borrow_2 = acc_balance_sheet_infos[index]["borrow_2"],
-            lend_2 = acc_balance_sheet_infos[index]["lend_2"],
-            borrow_3 = acc_balance_sheet_infos[index]["borrow_3"],
-            lend_3 = acc_balance_sheet_infos[index]["lend_3"],
-            inputIndex = 0;
-        if (subject !== "sum") {
-            $(thisInputs[inputIndex]).val(subject);
-            inputIndex = 1;
-        }
-        $(thisInputs[inputIndex]).val(borrow_1);
-        $(thisInputs[inputIndex + 1]).val(lend_1);
-        $(thisInputs[inputIndex + 2]).val(borrow_2);
-        $(thisInputs[inputIndex + 3]).val(lend_2);
-        $(thisInputs[inputIndex + 4]).val(borrow_3);
-        $(thisInputs[inputIndex + 5]).val(lend_3);
-        index++;
-    });
+function vii2PaddingData(data, isFromButton) {
+    function padding() {
+        // 填充科目余额表数据
+        let info = data,
+            info_cp = "",
+            error_pos = Array();
+        // 创建行
+        for (let i = 0; i < info.length - 2; i++) vii2_AddRow();
+        if (isFromButton === 1)
+            info_cp = answer_infos2;
+        // 填充数据
+        let index = 0;
+        $("[id^=vii2Row]").each(function () {
+            let $this = $(this),
+                t_info_cp = "",  // 答案的行
+                $thisInputs = $this.find("input"),
+                $thisInputs0 = $($thisInputs[0]),
+                keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"],
+                subject = info[index]["subject"],
+                inputIndex = 0;
+            if (subject !== "sum") $thisInputs0.val(subject);
+
+            if (isFromButton === 1) {
+                for (let i = 0; i < info_cp.length; i++) {
+                    if (subject === info_cp[i]["subject"]) {
+                        t_info_cp = info_cp[i];
+                        break;
+                    }
+                }
+                if (!t_info_cp) error_pos.push($thisInputs0);
+            }
+
+            $thisInputs.each(function (t_index, item) {
+                let $item = $(item),
+                    value = info[index][keys[inputIndex]],
+                    value_cp = "";
+                if (subject === "sum" && t_index === 0) {
+                    $item.val(value);
+                    if (t_info_cp) {
+                        value_cp = t_info_cp[inputIndex++];
+                        if (value_cp != value) error_pos.push($item);
+                    }
+                } else if (t_index !== 0) {
+                    $item.val(value);
+                    if (t_info_cp) {
+                        value_cp = t_info_cp[inputIndex++];
+                        if (value_cp != value) error_pos.push($item);
+                    } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
+                }
+            });
+            index++;
+        });
+    }
+
+    if (!data) return;
+    if (isFromButton) {
+        removeAllError();
+        let nowTotalScore = 40,
+            totalScore = 100;
+        showScoreEm(scores2, nowTotalScore, totalScore, 2, 2);
+        if (isFromButton === 2) vii2ResetInfo();
+    }
+    padding();
 }
 
 // ==================================事件控制==================================//

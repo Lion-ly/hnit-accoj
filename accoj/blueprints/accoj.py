@@ -738,8 +738,8 @@ def get_ix_first_info():
     :return:
     """
     infos_name = "trend_analysis"
-    info_keys = ["ixFirst_infos", "answer_infos", "ixFirst_confirmed", "ixFirst_saved"]
-    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=1)
+    info_keys = ["ixFirst_infos", "answer_infos", "confirm", "saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -766,8 +766,8 @@ def get_ix_second_info():
     :return:
     """
     infos_name = "trend_analysis"
-    info_keys = ["ixSecond_infos", "answer_infos", "ixSecond_confirmed", "ixSecond_saved"]
-    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=2)
+    info_keys = ["ixSecond_infos", "answer_infos", "confirm", "saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -804,8 +804,8 @@ def get_ix2_first_info():
     :return:
     """
     infos_name = "common_ratio_analysis"
-    info_keys = ["ix2First_infos", "answer_infos", "ix2First_confirmed", "ix2First_saved"]
-    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=1)
+    info_keys = ["ix2First_infos", "answer_infos", "confirm", "saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 
@@ -832,8 +832,8 @@ def get_ix2_second_info():
     :return:
     """
     infos_name = "common_ratio_analysis"
-    info_keys = ["ix2Second_infos", "answer_infos", "ix2Second_confirmed", "ix2Second_saved"]
-    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys, is_first=2)
+    info_keys = ["ix2Second_infos", "answer_infos", "confirm", "saved"]
+    data = get_data(type_num=2, infos_name=infos_name, info_keys=info_keys)
     return jsonify(result=True, data=data)
 
 

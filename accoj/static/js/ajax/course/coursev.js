@@ -6,7 +6,9 @@ let involve_subjects = Object(),  // 正确答案中包含的所有科目列表
     now_subject = "",            // 当前所选科目
     first = true,
     involve_subjects_len = 0,
-    now_period = 1;
+    now_period = 1,
+    answer_infos = "",
+    scores = "";
 
 // 页面加载完成填充数据
 $(document).ready(function () {
@@ -95,23 +97,29 @@ function get_ledger_info(isFromSubmit = false, subject = "") {
 /**
  * 将数据映射到前端
  * @param data
+ * @param isFromButton
  */
-function map_ledger_info(data) {
+function map_ledger_info(data, isFromButton) {
     data = data ? data : "";
     ledger_infos = data ? data["ledger_infos"] : ledger_infos;
     ledger_confirmed = data ? data["ledger_confirmed"] : ledger_confirmed;
     ledger_saved = data ? data["ledger_saved"] : ledger_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
 
     if (!ledger_infos) return;
     let info_key = "ledger_infos_" + now_period,
         ledger_infos_tmp = ledger_infos.hasOwnProperty(info_key) ? ledger_infos[info_key] : "";
 
+    if (answer_infos) {
+        showAnswerButton();
+        isFromButton = 1;
+        $("button[data-answer]").text("查看答案");
+    }
     if (ledger_infos_tmp) {
         let ledger_info = ledger_infos_tmp.hasOwnProperty(now_subject) ? ledger_infos_tmp[now_subject] : "";
-        if (ledger_info) {
-            // 账户信息为空则返回
-            vPaddingData(ledger_info);
-        }
+        if (ledger_info)
+            vPaddingData(ledger_info, isFromButton);
     }
 }
 
@@ -175,70 +183,80 @@ function vGetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function vPaddingData(data) {
-    let confirmed_key = "ledger" + now_period + "_confirm",
-        saved_key = "ledger" + now_period + "_saved",
-        ledger_confirmed_tmp = ledger_confirmed[confirmed_key],
-        ledger_saved_tmp = ledger_saved[saved_key];
+function vPaddingData(data, isFromButton) {
+    function padding() {
+        let confirmed_key = "ledger" + now_period + "_confirm",
+            saved_key = "ledger" + now_period + "_saved",
+            ledger_confirmed_tmp = ledger_confirmed[confirmed_key],
+            ledger_saved_tmp = ledger_saved[saved_key];
 
-    let ledger_info = data,
-        confirmed = ledger_confirmed_tmp.indexOf(now_subject) !== -1,
-        saved = ledger_saved_tmp.indexOf(now_subject) !== -1,
-        is_left = ledger_info["is_left"],
-        opening_balance = ledger_info["opening_balance"],
-        current_amount_dr = ledger_info["current_amount_dr"],
-        current_amount_cr = ledger_info["current_amount_cr"],
-        ending_balance = ledger_info["ending_balance"],
-        dr_array = ledger_info["dr"],
-        cr_array = ledger_info["cr"];
-    //  移除旧表
-    $("[id=ttableLeft], [id=ttableRight]").remove();
-    //  创建新表
-    if (is_left) {
-        tTableAppendLeft();
-    } else {
-        tTableAppendRight();
-    }
-    // 填充科目
-    $("#coursev_select").append("<option name='coursev_option'>" + now_subject + "</option>");
-    // 增加行
-    for (let i = 0; i < dr_array.length; i++)
-        $("#v_addRowDr").click();
-    for (let i = 0; i < cr_array.length; i++)
-        $("#v_addRowCr").click();
-    // 填充会计账户信息
-    $("input[name=opening_balance]").val(opening_balance);
-    $("input[name=current_amount_dr]").val(current_amount_dr);
-    $("input[name=current_amount_cr]").val(current_amount_cr);
-    $("input[name=ending_balance]").val(ending_balance);
-    let dr_index = 0,
-        cr_index = 0;
-    //  填充借记
-    $("input[name=dr]").each(function () {
-        $(this).parent().prev().children().val(dr_array[dr_index]["business_no"]);
-        $(this).val(dr_array[dr_index]["money"]);
-        dr_index += 1;
-    });
-    // 填充贷记
-    $("input[name=cr]").each(function () {
-        $(this).parent().prev().children().val(dr_array[cr_index]["business_no"]);
-        $(this).val(dr_array[cr_index]["money"]);
-        cr_index += 1;
-    });
+        let ledger_info = data,
+            confirmed = ledger_confirmed_tmp.indexOf(now_subject) !== -1,
+            saved = ledger_saved_tmp.indexOf(now_subject) !== -1,
+            is_left = ledger_info["is_left"],
+            opening_balance = ledger_info["opening_balance"],
+            current_amount_dr = ledger_info["current_amount_dr"],
+            current_amount_cr = ledger_info["current_amount_cr"],
+            ending_balance = ledger_info["ending_balance"],
+            dr_array = ledger_info["dr"],
+            cr_array = ledger_info["cr"];
+        //  移除旧表
+        $("[id=ttableLeft], [id=ttableRight]").remove();
+        //  创建新表
+        if (is_left) tTableAppendLeft();
+        else tTableAppendRight();
 
-    // 如果已保存过则将li标签设为已保存状态的颜色，已提交过同上
-    let now_active_li = $("li.active[id^=coursevli]");
-    if (confirmed || saved) {
-        now_active_li.attr("onclick", "coursevLiChange(this, true)");
-        $("#coursev_select").attr("disabled", true);
-        // 初始化为saved
-        let li_color = "#5bc0de";
-        if (confirmed) {
-            li_color = "#5cb85c";
+        // 填充科目
+        $("#coursev_select").append("<option name='coursev_option'>" + now_subject + "</option>");
+        // 增加行
+        for (let i = 0; i < dr_array.length; i++)
+            $("#v_addRowDr").click();
+        for (let i = 0; i < cr_array.length; i++)
+            $("#v_addRowCr").click();
+        // 填充会计账户信息
+        $("input[name=opening_balance]").val(opening_balance);
+        $("input[name=current_amount_dr]").val(current_amount_dr);
+        $("input[name=current_amount_cr]").val(current_amount_cr);
+        $("input[name=ending_balance]").val(ending_balance);
+        let dr_index = 0,
+            cr_index = 0;
+        //  填充借记
+        $("input[name=dr]").each(function () {
+            $(this).parent().prev().children().val(dr_array[dr_index]["business_no"]);
+            $(this).val(dr_array[dr_index]["money"]);
+            dr_index += 1;
+        });
+        // 填充贷记
+        $("input[name=cr]").each(function () {
+            $(this).parent().prev().children().val(dr_array[cr_index]["business_no"]);
+            $(this).val(dr_array[cr_index]["money"]);
+            cr_index += 1;
+        });
+
+        // 如果已保存过则将li标签设为已保存状态的颜色，已提交过同上
+        let now_active_li = $("li.active[id^=coursevli]");
+        if (confirmed || saved) {
+            now_active_li.attr("onclick", "coursevLiChange(this, true)");
+            $("#coursev_select").attr("disabled", true);
+            // 初始化为saved
+            let li_color = "#5bc0de";
+            if (confirmed) {
+                li_color = "#5cb85c";
+            }
+            now_active_li.children().css("color", li_color);
         }
-        now_active_li.children().css("color", li_color);
     }
+
+    if (!data) return;
+    if (isFromButton) {
+        removeAllError();
+        let nowTotalScore = 60,
+            totalScore = 100;
+        showScoreEm(scores, nowTotalScore, totalScore);
+    }
+    padding();
 }
 
 //==================================事件控制==================================//
@@ -246,9 +264,14 @@ function vPaddingData(data) {
  * 事件绑定
  */
 function vBind() {
+    function map_answer() {
+        spanStatusCtr(true, true, "submit_status_span");
+        vPaddingData(answer_infos, 2);
+    }
+
     bind_confirm_info("submit_ledger_info");
     bind_save_info(submit_ledger_info);
-    bindAnswerSource();
+    bindAnswerSource("", map_ledger_info, map_answer);
     let $creatId1 = $("#createNewTableLeft"),
         $creatId2 = $("#createNewTableRight");
     $creatId1.click(function () {

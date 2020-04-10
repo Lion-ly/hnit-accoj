@@ -33,14 +33,17 @@
                         <p class="acc-title">1、编写资产负债表
                             <span id="new_balance_sheet_span" class="glyphicon glyphicon-ok acc-completed">已完成</span>
                         </p>
-                        <em data-total-score-1></em>
-                        <em data-now-score-1></em>
+                        <div>
+                            &nbsp;
+                            <em data-total-score-1></em>
+                            <em data-now-score-1></em>
+                        </div>
                         <div class="table-responsive">
                         <table class="table table-bordered acc-container-tableformat acc-table-sm">
                             <tbody>
                             <tr class="acc-unedit">
                                 <th colspan="2">
-                                    <span style="float: left;">编制单位：admin</span>
+                                    <span style="float: left;">编制单位：{{ username }}</span>
                                 </th>
                                 <th colspan="2">
                                     <span>2020年2月28日</span>
@@ -74,12 +77,12 @@
                                 <td><label><input name="短期借款Last"></label></td>
                             </tr>
                             <tr>
-                                <td class="acc-unedit">金融资产</td>
-                                <td><label><input name="金融资产End"></label></td>
-                                <td><label><input name="金融资产Last"></label></td>
-                                <td class="acc-unedit">金融负债</td>
-                                <td><label><input name="金融负债End"></label></td>
-                                <td><label><input name="金融负债Last"></label></td>
+                                <td class="acc-unedit">交易性金融资产</td>
+                                <td><label><input name="交易性金融资产"></label></td>
+                                <td><label><input name="交易性金融资产"></label></td>
+                                <td class="acc-unedit">交易性金融负债</td>
+                                <td><label><input name="交易性金融负债End"></label></td>
+                                <td><label><input name="交易性金融负债Last"></label></td>
                             </tr>
                             <tr>
                                 <td class="acc-unedit">应收票据</td>
@@ -171,9 +174,9 @@
                                 <td><label><input name="流动负债合计Last"></label></td>
                             </tr>
                             <tr>
-                                <td class="acc-unedit">可供出售金融资产</td>
-                                <td><label><input name="可供出售金融资产End"></label></td>
-                                <td><label><input name="可供出售金融资产Last"></label></td>
+                                <td class="acc-unedit">可供售出金融资产</td>
+                                <td><label><input name="可供售出金融资产End"></label></td>
+                                <td><label><input name="可供售出金融资产Last"></label></td>
                                 <th class="acc-unedit" style="text-align: left">非流动负债：</th>
                                 <td class="acc-unedit"></td>
                                 <td class="acc-unedit"></td>
@@ -325,14 +328,17 @@
                         <p class="acc-title">2、编写利润表
                             <span id="profit_statement_span" class="glyphicon glyphicon-ok acc-completed"> 已完成</span>
                         </p>
-                        <em data-total-score-2></em>
-                        <em data-now-score-2></em>
+                        <div>
+                            &nbsp;
+                            <em data-total-score-2></em>
+                            <em data-now-score-2></em>
+                        </div>
                         <div class="table-responsive">
                         <table class="table table-bordered acc-container-tableformat acc-table-sm">
                             <tbody>
                             <tr class="acc-unedit">
                                 <th colspan="3">
-                                    <span style="float: left;">编制单位：admin</span>
+                                    <span style="float: left;">编制单位：{{ username }}</span>
                                     <span>2020年2月</span>
                                     <span style="float: right;">单位：元</span>
                                 </th>
@@ -378,9 +384,9 @@
                                 <td><label><input name="资产减值损失Last"></label></td>
                             </tr>
                             <tr>
-                                <td class="acc-unedit">加：公允价值变动收益（损失以“-”号填列）</td>
-                                <td><label><input name="公允价值变动收益End"></label></td>
-                                <td><label><input name="公允价值变动收益Last"></label></td>
+                                <td class="acc-unedit">加：公允价值变动损益（损失以“-”号填列）</td>
+                                <td><label><input name="公允价值变动损益End"></label></td>
+                                <td><label><input name="公允价值变动损益Last"></label></td>
                             </tr>
                             <tr>
                                 <td class="acc-unedit">投资收益（损失以“-”号填列）</td>
@@ -463,7 +469,7 @@
                                 <span class="glyphicon"></span>保存
                             </button>
                             <button type="button" class="btn btn-success" data-confirm-2>
-                                <span class="glyphicon"></span>&提交
+                                <span class="glyphicon"></span>提交
                             </button>
                         </div>
                     </div>

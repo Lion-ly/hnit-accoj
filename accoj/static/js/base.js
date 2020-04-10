@@ -534,10 +534,10 @@ function spanStatusCtr(confirmed, saved, spanID) {
  * @param nowScore
  * @param nowTotalScore
  * @param totalScore
- * @param $nowSelectorNum
- * @param $totalSelectorNum
+ * @param nowSelectorNum
+ * @param totalSelectorNum
  */
-function showScoreEm(nowScore, nowTotalScore, totalScore, $nowSelectorNum, $totalSelectorNum) {
+function showScoreEm(nowScore, nowTotalScore, totalScore, nowSelectorNum, totalSelectorNum) {
     function t_reg(className) {
         return (className.match(/(^|\s)acc-score-\S+/g) || []).join(' ');
     }
@@ -548,8 +548,8 @@ function showScoreEm(nowScore, nowTotalScore, totalScore, $nowSelectorNum, $tota
         $nowSelector = "em[data-now-score",
         $totalSelector = "em[data-total-score";
 
-    $nowSelector = $nowSelectorNum ? $nowSelector + "-" + $nowSelectorNum : $nowSelector;
-    $totalSelector = $totalSelectorNum ? $totalSelector + "-" + $totalSelectorNum : $totalSelector;
+    $nowSelector = nowSelectorNum ? $nowSelector + "-" + nowSelectorNum : $nowSelector;
+    $totalSelector = totalSelectorNum ? $totalSelector + "-" + totalSelectorNum : $totalSelector;
     $nowSelector = $($nowSelector + "]");
     $totalSelector = $($totalSelector + "]");
 

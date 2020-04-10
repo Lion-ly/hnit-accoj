@@ -70,7 +70,7 @@
                             <table class="table table-bordered acc-container-tableformat acc-table-sm">
                                 <tbody>
                                 <tr class="acc-unedit">
-                                    <th colspan="2"><span style="float: left;">编制单位：admin</span>
+                                    <th colspan="2"><span style="float: left;">编制单位：{{ username }}</span>
                                     </th>
                                     <th colspan="2"><span>2020年2月28日</span></th>
                                     <th colspan="2"><span style="float: right;">单位：元</span></th>
@@ -100,12 +100,12 @@
                                     <td><label><input name="短期借款Last"></label></td>
                                 </tr>
                                 <tr>
-                                    <td class="acc-unedit">金融资产</td>
-                                    <td><label><input name="金融资产End"></label></td>
-                                    <td><label><input name="金融资产Last"></label></td>
-                                    <td class="acc-unedit">金融负债</td>
-                                    <td><label><input name="金融负债End"></label></td>
-                                    <td><label><input name="金融负债Last"></label></td>
+                                    <td class="acc-unedit">交易性金融资产</td>
+                                    <td><label><input name="交易性金融资产End"></label></td>
+                                    <td><label><input name="交易性金融资产Last"></label></td>
+                                    <td class="acc-unedit">交易性金融负债</td>
+                                    <td><label><input name="交易性金融负债End"></label></td>
+                                    <td><label><input name="交易性金融负债Last"></label></td>
                                 </tr>
                                 <tr>
                                     <td class="acc-unedit">应收票据</td>
@@ -197,9 +197,9 @@
                                     <td><label><input name="流动负债合计Last"></label></td>
                                 </tr>
                                 <tr>
-                                    <td class="acc-unedit">可供出售金融资产</td>
-                                    <td><label><input name="可供出售金融资产End"></label></td>
-                                    <td><label><input name="可供出售金融资产Last"></label></td>
+                                    <td class="acc-unedit">可供售出金融资产</td>
+                                    <td><label><input name="可供售出金融资产End"></label></td>
+                                    <td><label><input name="可供售出金融资产Last"></label></td>
                                     <th class="acc-unedit" style="text-align: left">非流动负债：</th>
                                     <td class="acc-unedit"></td>
                                     <td class="acc-unedit"></td>
@@ -365,7 +365,7 @@
                             <table class="table table-bordered acc-container-tableformat acc-table-sm">
                                 <tbody>
                                 <tr class="acc-unedit">
-                                    <th colspan="3"><span style="float: left;">编制单位：admin</span>
+                                    <th colspan="3"><span style="float: left;">编制单位：{{ username }}</span>
                                         <span>2020年2月</span> <span style="float: right;">单位：元</span>
                                     </th>
                                 </tr>
@@ -410,9 +410,9 @@
                                     <td><label><input name="资产减值损失Last"></label></td>
                                 </tr>
                                 <tr>
-                                    <td class="acc-unedit">加：公允价值变动收益（损失以“-”号填列）</td>
-                                    <td><label><input name="公允价值变动收益End"></label></td>
-                                    <td><label><input name="公允价值变动收益Last"></label></td>
+                                    <td class="acc-unedit">加：公允价值变动损益（损失以“-”号填列）</td>
+                                    <td><label><input name="公允价值变动损益End"></label></td>
+                                    <td><label><input name="公允价值变动损益Last"></label></td>
                                 </tr>
                                 <tr>
                                     <td class="acc-unedit">投资收益（损失以“-”号填列）</td>
