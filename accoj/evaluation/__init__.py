@@ -443,8 +443,8 @@ def evaluate_trend_analysis(company, company_cp):
     """
     total_score = 15
     _id = company_cp.get("_id")
-    score1 = _statement_func("trend_analysis_infos.new_balance_sheet", company, company_cp, total_score)
-    score2 = _statement_func("trend_analysis_infos.profit_statement", company, company_cp, total_score)
+    score1 = _statement_func("trend_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
+    score2 = _statement_func("trend_analysis_infos.profit_statement_infos", company, company_cp, total_score)
     scores = {"first": score1, "second": score2}
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("trend_analysis"): scores}})
     return scores
@@ -456,8 +456,8 @@ def evaluate_common_ratio_analysis(company, company_cp):
     """
     total_score = 15
     _id = company_cp.get("_id")
-    score1 = _statement_func("common_ratio_analysis.new_balance_sheet", company, company_cp, total_score)
-    score2 = _statement_func("common_ratio_analysis.profit_statement", company, company_cp, total_score)
+    score1 = _statement_func("common_ratio_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
+    score2 = _statement_func("common_ratio_analysis_infos.profit_statement_infos", company, company_cp, total_score)
     scores = {"first": score1, "second": score2}
     mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("common_ratio_analysis"): scores}})
     return scores
@@ -485,8 +485,10 @@ def evaluate_dupont_analysis(company, company_cp):
 
     score_point, total_point = 0, 0
     for key, value in infos_cp.items():
+        if key == "conclusion":
+            continue
         t_value = infos.get(key)
-        score_point += 1 if value.get(key) == t_value.get(key) else 0
+        score_point += 1 if value == t_value else 0
         total_point += 1
 
     scores = score_point / total_point * total_score
@@ -559,16 +561,30 @@ def _statement_func(infos_name, company, company_cp, total_score):
     :param company_cp:
     :return:
     """
-
-    infos = company.get("{}_infos".format(infos_name))
-    infos_cp = company_cp.get("{}_infos".format(infos_name))
+    if infos_name.find(".") != -1:
+        t_name = infos_name.split(".")
+        print(t_name)
+        infos = company.get(t_name[0]).get(t_name[1])
+        infos_cp = company_cp.get(t_name[0]).get(t_name[1])
+    else:
+        infos = company.get("{}_infos".format(infos_name))
+        infos_cp = company_cp.get("{}_infos".format(infos_name))
 
     score_point, total_point = 0, 0
     for key, value in infos_cp.items():
+        if key == "conclusion":
+            continue
         keys = ["period_last", "period_end"]
-        t_value = infos.get(key)
-        score_point += sum([1 if value.get(keys[i]) == t_value.get(keys[i]) else 0 for i in range(2)])
-        total_point += 2
+        if value.get(keys[0]):
+            total_point += 1
+        if value.get(keys[1]):
+            total_point += 1
+        try:
+            t_value = infos.get(key)
+            score_point += sum(
+                [1 if value.get(keys[i]) and value.get(keys[i]) == t_value.get(keys[i]) else 0 for i in range(2)])
+        except AttributeError:
+            print("键值错误 key: {} {}".format(key, infos_name))
 
     scores = score_point / total_point * total_score
     scores = round(scores, 2)

@@ -200,10 +200,10 @@ function ivPaddingData(data, isFromButton) {
     }
 
     if (!data) return;
-    if (isFromButton) removeAllError();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         index = nowBusinessNo - 1, t_infoLen = 0, answer_info = "";
     if (isFromButton) {
+        removeAllError();
         let nowScore = scores[index * 2],
             nowTotalScore = scores[index * 2 + 1],
             totalScore = scores[scores.length - 1];

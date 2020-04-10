@@ -6,7 +6,11 @@ let profit_statement_infos,
     profit_statement_saved;
 let firstChange = true,
     periodEndData = Object(),
-    periodLastData = Object();
+    periodLastData = Object(),
+    answer_infos1 = "",
+    answer_infos2 = "",
+    scores1 = "",
+    scores2 = "";
 
 $(document).ready(function () {
     function init() {
@@ -68,19 +72,27 @@ function get_new_balance_sheet_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_new_balance_sheet_info(data) {
+function map_new_balance_sheet_info(data, isFromButton) {
 
     data = data ? data : "";
     new_balance_sheet_infos = data ? data["new_balance_sheet_infos"] : new_balance_sheet_infos;
     new_balance_sheet_confirmed = data ? data["new_balance_sheet_confirmed"] : new_balance_sheet_confirmed;
     new_balance_sheet_saved = data ? data["new_balance_sheet_infos"] : new_balance_sheet_saved;
+    answer_infos1 = data ? data["answer_infos"] : answer_infos1;
+    scores1 = data ? data["scores"] : scores1;
 
+    if (answer_infos1) {
+        let $answer = $("button[data-answer-2]");
+        showAnswerButton($answer);
+        isFromButton = 1;
+        $answer.text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(new_balance_sheet_confirmed, new_balance_sheet_saved, "new_balance_sheet_span");
 
     if (!new_balance_sheet_infos) return;
     // 填充数据
-    viiiPaddingData(new_balance_sheet_infos, true);
+    viiiPaddingData(new_balance_sheet_infos, true, isFromButton);
 }
 
 //============================================提交利润表信息============================================//
@@ -134,19 +146,27 @@ function get_profit_statement_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_profit_statement_info(data) {
+function map_profit_statement_info(data, isFromButton) {
 
     data = data ? data : "";
     profit_statement_infos = data ? data["profit_statement_infos"] : profit_statement_infos;
     profit_statement_confirmed = data ? data["profit_statement_confirmed"] : profit_statement_confirmed;
     profit_statement_saved = data ? data["profit_statement_infos"] : profit_statement_saved;
+    answer_infos2 = data ? data["answer_infos"] : answer_infos2;
+    scores2 = data ? data["scores"] : scores2;
 
+    if (answer_infos2) {
+        let $answer = $("button[data-answer-2]");
+        showAnswerButton($answer);
+        isFromButton = 1;
+        $answer.text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(profit_statement_confirmed, profit_statement_saved, "profit_statement_span");
 
     if (!profit_statement_infos) return;
     // 填充数据
-    viiiPaddingData(profit_statement_infos, false);
+    viiiPaddingData(profit_statement_infos, false, isFromButton);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -182,21 +202,40 @@ function viiiGetInput(isFirst) {
  * 填充数据
  * @param data
  * @param isFirst
+ * @param isFromButton
  */
-function viiiPaddingData(data, isFirst) {
-    let divID = "viiiFirst";
-    if (!isFirst) divID = "viiiSecond";
-    let flag = true,
-        inputs = $("#" + divID).find("input");
+function viiiPaddingData(data, isFirst, isFromButton) {
+    function padding() {
+        let divID = "viiiFirst";
+        if (!isFirst) divID = "viiiSecond";
+        let flag = true,
+            inputs = $("#" + divID).find("input");
 
-    $.each(inputs, function (index, item) {
-        let name = $(item).attr("name").replace(/End|Last/, ""),
-            period = "period_end";
-        if (!flag) period = "period_last";
-        let value = data[name][period];
-        $(item).val(value);
-        flag = !flag;
-    });
+        $.each(inputs, function (index, item) {
+            let $item = $(item),
+                name = $item.attr("name").replace(/End|Last/, ""),
+                period = "period_end";
+            if (!flag) period = "period_last";
+            let value = data[name][period];
+            $item.val(value);
+            flag = !flag;
+        });
+    }
+
+    if (!data) return;
+    if (isFromButton) {
+        removeAllError();
+        let nowTotalScore = isFirst ? 60 : 40,
+            totalScore = 100,
+            scores = isFirst ? scores1 : scores2;
+        nowNum = isFirst ? 1 : 2;
+        showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
+        if (isFromButton === 2) {
+            if (isFirst) viii1ResetInfo();
+            else viii2ResetInfo();
+        }
+    }
+    padding();
 }
 
 //===============================================事件控制===============================================//
@@ -204,14 +243,24 @@ function viiiPaddingData(data, isFirst) {
  * 事件绑定
  */
 function viiiBind() {
+    function map_answer1() {
+        spanStatusCtr(true, true, "new_balance_sheet_span");
+        viiiPaddingData(answer_infos1, true, 2);
+    }
+
+    function map_answer2() {
+        spanStatusCtr(true, true, "profit_statement_span");
+        viiiPaddingData(answer_infos2, false, 2);
+    }
+
     bind_confirm_info("submit_new_balance_sheet_info", $("button[data-confirm-1]"));
     bind_save_info(submit_new_balance_sheet_info, $("button[data-save-1]"));
 
     bind_confirm_info("submit_profit_statement_info", $("button[data-confirm-2]"));
     bind_save_info(submit_profit_statement_info, $("button[data-save-2]"));
 
-    bindAnswerSource($("button[data-answer-1]"));
-    bindAnswerSource($("button[data-answer-2]"));
+    bindAnswerSource($("button[data-answer-1]"), map_new_balance_sheet_info, map_answer1);
+    bindAnswerSource($("button[data-answer-2]"), map_profit_statement_info, map_answer2);
 
     let inputs1 = $("#viiiFirst").find("input"),
         inputs2 = $("#viiiSecond").find("input");

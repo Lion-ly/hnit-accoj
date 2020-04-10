@@ -1,6 +1,8 @@
 let coursex_infos,
     coursex_confirmed,
-    coursex_saved;
+    coursex_saved,
+    answer_infos = "",
+    scores = "";
 $(document).ready(function () {
     function init() {
         xBind();
@@ -60,19 +62,27 @@ function get_coursex_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_coursex_info(data) {
+function map_coursex_info(data, isFromButton) {
 
     data = data ? data : "";
     coursex_infos = data ? data["coursex_infos"] : coursex_infos;
     coursex_confirmed = data ? data["coursex_confirmed"] : coursex_confirmed;
     coursex_saved = data ? data["coursex_saved"] : coursex_saved;
+    answer_infos = data ? data["answer_infos"] : answer_infos;
+    scores = data ? data["scores"] : scores;
+
+    if (answer_infos) {
+        showAnswerButton();
+        isFromButton = 1;
+        $("button[data-answer]").text("查看答案");
+    }
 
     // `完成状态`标签控制
     spanStatusCtr(coursex_confirmed, coursex_saved, "coursex_span");
 
     if (!coursex_infos) return;
     // 填充数据
-    CoursexPaddingData(coursex_infos);
+    CoursexPaddingData(coursex_infos, isFromButton);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -100,20 +110,33 @@ function coursexGetInput() {
 /**
  * 填充数据
  * @param data
+ * @param isFromButton
  */
-function CoursexPaddingData(data) {
-    let divID = "coursexData",
-        inputs = $("#" + divID).find("input");
+function CoursexPaddingData(data, isFromButton) {
+    function padding() {
+        let divID = "coursexData",
+            inputs = $("#" + divID).find("input");
 
-    $.each(inputs, function (index, item) {
-        let name = $(item).attr("name"),
-            value = data[name] ? data[name] : "";
+        $.each(inputs, function (index, item) {
+            let name = $(item).attr("name"),
+                value = data[name] ? data[name] : "";
 
-        value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
-        $(item).val(value);
-    });
-    let conclusion = data["conclusion"];
-    $("#" + divID + "Conclusion").val(conclusion);
+            value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
+            $(item).val(value);
+        });
+        let conclusion = data["conclusion"];
+        $("#" + divID + "Conclusion").val(conclusion);
+    }
+
+    if (!data) return;
+    if (isFromButton) {
+        removeAllError();
+        let nowTotalScore = 100,
+            totalScore = 100;
+        showScoreEm(scores, nowTotalScore, totalScore, 1, 1);
+        if (isFromButton === 2) xResetInfo();
+    }
+    padding();
 }
 
 //===============================================事件控制===============================================//
@@ -121,9 +144,14 @@ function CoursexPaddingData(data) {
  * 事件绑定
  */
 function xBind() {
+    function map_answer() {
+        spanStatusCtr(true, true, "submit_status_span");
+        CoursexPaddingData(answer_infos, true, 2);
+    }
+
     bind_confirm_info("submit_coursex_info");
     bind_save_info(submit_coursex_info);
-    bindAnswerSource();
+    bindAnswerSource("", map_coursex_info, map_answer);
 
     let $inputs = $("#coursexData").find("input"),
         $conclusions = $("#coursexDataConclusion");

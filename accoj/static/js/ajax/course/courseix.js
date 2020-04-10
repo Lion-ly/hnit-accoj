@@ -6,7 +6,11 @@ let ixFirst_infos, // 保存本次课程全部信息，减少后端数据请求�
     ixSecond_saved,
     firstChange = true,
     periodEndData = Object(),
-    periodLastData = Object();
+    periodLastData = Object(),
+    answer_infos1 = "",
+    answer_infos2 = "",
+    scores1 = "",
+    scores2 = "";
 
 
 $(document).ready(function () {
@@ -70,18 +74,27 @@ function get_ixFirst_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_ixFirst_info(data) {
+function map_ixFirst_info(data, isFromButton) {
     data = data ? data : "";
     ixFirst_infos = data ? data["ixFirst_infos"] : ixFirst_infos;
-    ixFirst_confirmed = data ? data["ixFirst_confirmed"] : ixFirst_confirmed;
-    ixFirst_saved = data ? data["ixFirst_saved"] : ixFirst_saved;
+    ixFirst_confirmed = data ? data["confirm"]["first"] : ixFirst_confirmed;
+    ixFirst_saved = data ? data["saved"]["first"] : ixFirst_saved;
+    answer_infos1 = data ? data["answer_infos"] : answer_infos1;
+    let scores = data ? data["scores"] : "";
+    scores1 = scores ? scores["first"] : scores1;
 
+    if (answer_infos1) {
+        let $answer = $("button[data-answer-1]");
+        showAnswerButton($answer);
+        isFromButton = 1;
+        $answer.text("查看答案");
+    }
     // `完成状态`标签控制
     spanStatusCtr(ixFirst_confirmed, ixFirst_saved, "ixFirst_span");
 
     if (!ixFirst_infos) return;
     // 填充数据
-    if (ixFirst_saved) IxPaddingData(ixFirst_infos, true);
+    if (ixFirst_saved) IxPaddingData(ixFirst_infos, true, isFromButton);
 }
 
 //============================================提交利润表信息============================================//
@@ -134,19 +147,29 @@ function get_ixSecond_info(isFromSubmit = false) {
 /**
  * 将数据映射到前端
  */
-function map_ixSecond_info(data) {
+function map_ixSecond_info(data, isFromButton) {
 
     data = data ? data : "";
     ixSecond_infos = data ? data["ixSecond_infos"] : ixSecond_infos;
-    ixSecond_confirmed = data ? data["ixSecond_confirmed"] : ixSecond_confirmed;
-    ixSecond_saved = data ? data["ixSecond_saved"] : ixSecond_saved;
+    ixSecond_confirmed = data ? data["confirm"]["second"] : ixSecond_confirmed;
+    ixSecond_saved = data ? data["saved"]["second"] : ixSecond_saved;
+    answer_infos2 = data ? data["answer_infos"] : answer_infos2;
+    let scores = data ? data["scores"] : "";
+    scores2 = scores ? scores["second"] : scores2;
+
+    if (answer_infos2) {
+        let $answer = $("button[data-answer-2]");
+        showAnswerButton($answer);
+        isFromButton = 1;
+        $answer.text("查看答案");
+    }
 
     // `完成状态`标签控制
     spanStatusCtr(ixSecond_confirmed, ixSecond_saved, "ixSecond_span");
 
     if (!ixSecond_infos) return;
     // 填充数据
-    if (ixSecond_saved) IxPaddingData(ixSecond_infos, false);
+    if (ixSecond_saved) IxPaddingData(ixSecond_infos, false, isFromButton);
 }
 
 //===========================================获取和填充数据===========================================//
@@ -184,30 +207,49 @@ function ixGetInput(isFirst) {
  * 填充数据
  * @param data
  * @param isFirst
+ * @param isFromButton
  */
-function IxPaddingData(data, isFirst) {
-    data = isFirst ? data["new_balance_sheet_infos"] : data["profit_statement_infos"];
-    let divID = isFirst ? "ixFirst" : "ixSecond",
-        inputs = $("#" + divID).find("input"),
-        flag = true;
+function IxPaddingData(data, isFirst, isFromButton) {
+    function padding() {
+        data = isFirst ? data["new_balance_sheet_infos"] : data["profit_statement_infos"];
+        let divID = isFirst ? "ixFirst" : "ixSecond",
+            inputs = $("#" + divID).find("input"),
+            flag = true;
 
-    $.each(inputs, function (index, item) {
-        let name = $(item).attr("name").replace(/End|Last/, ""),
-            period = "period_end",
-            percent = "";
+        $.each(inputs, function (index, item) {
+            let $item = $(item),
+                name = $item.attr("name").replace(/End|Last/, ""),
+                period = "period_end",
+                percent = "";
 
-        if (!flag) {
-            period = "period_last";
-            percent = "%"
+            if (!flag) {
+                period = "period_last";
+                percent = "%"
+            }
+            if (data.hasOwnProperty(name)) {
+                let value = data[name][period] ? data[name][period] + percent : "";
+                $item.val(value);
+            }
+            flag = !flag;
+        });
+        let conclusion = data["conclusion"];
+        $("#" + divID + "Conclusion").val(conclusion);
+    }
+
+    if (!data) return;
+    if (isFromButton) {
+        removeAllError();
+        let nowTotalScore = 20,
+            totalScore = 100,
+            scores = isFirst ? scores1 : scores2,
+            nowNum = isFirst ? 1 : 2;
+        showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
+        if (isFromButton === 2) {
+            if (isFirst) ix1ResetInfo();
+            else ix2ResetInfo();
         }
-        if (data.hasOwnProperty(name)) {
-            let value = data[name][period] ? data[name][period] + percent : "";
-            $(item).val(value);
-        }
-        flag = !flag;
-    });
-    let conclusion = data["conclusion"];
-    $("#" + divID + "Conclusion").val(conclusion);
+    }
+    padding();
 }
 
 //===============================================事件控制===============================================//
@@ -215,14 +257,24 @@ function IxPaddingData(data, isFirst) {
  * 事件绑定
  */
 function ixBind() {
+    function map_answer1() {
+        spanStatusCtr(true, true, "new_balance_sheet_span");
+        IxPaddingData(answer_infos1, true, 2);
+    }
+
+    function map_answer2() {
+        spanStatusCtr(true, true, "profit_statement_span");
+        IxPaddingData(answer_infos2, false, 2);
+    }
+
     bind_confirm_info("submit_ixFirst_info", $("button[data-confirm-1]"));
     bind_save_info(submit_ixFirst_info, $("button[data-save-1]"));
 
     bind_confirm_info("submit_ixSecond_info", $("button[data-confirm-2]"));
     bind_save_info(submit_ixSecond_info, $("button[data-save-2]"));
 
-    bindAnswerSource($("button[data-answer-1]"));
-    bindAnswerSource($("button[data-answer-2]"));
+    bindAnswerSource($("button[data-answer-1]"), map_ixFirst_info, map_answer1);
+    bindAnswerSource($("button[data-answer-2]"), map_ixSecond_info, map_answer2);
 
     let $inputs1 = $("#ixFirst").find("input"),
         $inputs2 = $("#ixSecond").find("input"),
