@@ -8,11 +8,12 @@
 # from accoj.extensions import mongo
 
 ratio_analysis_infos = dict()
+dupont_infos = dict()
 
 involve_list = ["流动比率", "速动比率", "现金比率", "资产负债率", "产权比率", "销售毛利率", "营业利润率",
                 "成本费用营业利润率", "净利润率", "净资产收益率", "流动资产周转率", "应收账款周转率",
                 "存货周转率", "固定资产周转率", "总资产周转率", "固定资产增长率", "总资产增长率",
-                "资本积累率", "净利润增长率", "营业收入增长率", "总资产净利率", "权益乘数", "销售净利率"]
+                "资本积累率", "净利润增长率", "营业收入增长率"]
 
 
 def create_dict_keys():
@@ -26,6 +27,10 @@ def cal_rate(a, b, subject, period):
     else:
         rate = round((a / b)*100, 2)
         ratio_analysis_infos[subject][period] = rate
+
+def cal_rate_dupont(a, b, subject):
+    rate = round((a / b)*100, 2)
+    dupont_infos[subject] = rate
 
 
 def create_ratio_analysis(company):
@@ -184,16 +189,17 @@ def cal_ratio_analysis(company):
     cal_rate(0, 0, "营业收入增长率", "period_last")
     cal_rate(this_year_operate_income_up_end, operate_income_last, "营业收入增长率", "period_end")
 
+
+    # 计算净资产收益率
+    cal_rate_dupont(net_profit_end, net_assets_end, "净资产收益率")
     # 计算总资产净利率  =净利润/资产总额×100%
-    cal_rate(net_profit_end, assets_sum_end, "总资产净利率", "period_end")
-
+    cal_rate_dupont(net_profit_end, assets_sum_end, "总资产净利率")
     # 计算权益乘数 权益乘数=资产总额/股东权益总额
-    cal_rate(assets_sum_end, owners_sum_end, "权益乘数", "period_end")
-
+    cal_rate_dupont(assets_sum_end, owners_sum_end, "权益乘数")
     # 计算销售净利率 销售净利率=(净利润/销售收入)×100%
-    cal_rate(net_profit_end, operate_income_end, "销售净利率", "period_end")
+    cal_rate_dupont(net_profit_end, operate_income_end, "销售净利率")
+    # 计算总资产周转率
+    cal_rate_dupont(operate_income_end, assets_sum_end, "总资产周转率")
 
-    # _id = company.get("_id")
-    # 存入数据库
-    # mongo.db.company.update({"_id": _id}, {"$set": {"ratio_analysis_infos": ratio_analysis_infos}})
     company.update({"ratio_analysis_infos": ratio_analysis_infos})
+    company.update({"dupont_analysis_infos":dupont_infos})
