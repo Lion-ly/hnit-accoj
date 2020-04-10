@@ -34,7 +34,9 @@ def signin():
                 return jsonify(result="false", message="{}".format(message))
             user_password = user["password"]
             if check_password_hash(user_password, password):
+                role = user.get("role")
                 session["username"] = student_no
+                session["role"] = role
                 return jsonify(result="true")
             else:
                 message = "密码错误"
@@ -89,7 +91,9 @@ def login():
                 return jsonify(result="false", message="{}".format(message))
             else:
                 session["username"] = student_no
+                role = "student"
                 post = dict(student_no="{}".format(student_no),
+                            role=role,
                             student_name="",
                             student_faculty="{}".format(student_faculty),
                             student_class="{}".format(student_class),
@@ -233,5 +237,8 @@ def find_password():
 
 @auth_bp.app_context_processor
 def my_app_context_processor():
+    d_role = {"root": "root", "admin": 'admin', "teacher": "教师", "student": "学生"}
+    role = session.get("role")
+    role = d_role.get(role)
     username = session.get("username")
-    return {"username": username}
+    return {"role": role, "username": username}

@@ -281,10 +281,10 @@ function iiDisabledInput(flag) {
         $key_elem = $("[id^=key_elem]"),
         $button = $("button[data-save], button[data-confirm]");
     flag = flag ? flag : false;
-    let readonly = flag ? "readonly" : "";
     $button.prop("disabled", flag);
     $aers.prop("disabled", flag);
     $check_box.prop("disabled", flag);
-    $key_elem.attr("readonly", readonly);
+    if(flag) $key_elem.attr("readonly", "readonly");
+    else $key_elem.removeAttr("readonly");
     $key_elem.addClass("acc-white-bg");
 }
