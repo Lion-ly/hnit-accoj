@@ -47,7 +47,7 @@ def evaluate_key_element(company, company_cp):
     """
     scores = 0
     key_element_score = []
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     key_element_infos = company.get("key_element_infos")
     key_element_infos_cp = company_cp.get("key_element_infos")
     businesses = company.get("businesses")
@@ -88,7 +88,8 @@ def evaluate_key_element(company, company_cp):
 
     scores = round(scores / 2, 2)
     key_element_score.append(scores)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.key_element_score": key_element_score}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.key_element_score": key_element_score}}, multi=True)
 
     return key_element_score
 
@@ -102,7 +103,7 @@ def evaluate_subject(company, company_cp):
     """
     scores = 0
     subject_score = []
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     subject_infos = company.get("subject_infos")
     subject_infos_cp = company_cp.get("subject_infos")
     businesses = company.get("businesses")
@@ -138,7 +139,8 @@ def evaluate_subject(company, company_cp):
 
     scores = round(scores / 2, 2)
     subject_score.append(scores)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.subject_score": subject_score}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.subject_score": subject_score}}, multi=True)
 
     return subject_score
 
@@ -152,7 +154,7 @@ def evaluate_entry(company, company_cp):
     """
     scores = 0
     entry_score = []
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     entry_infos = company.get("entry_infos")
     entry_infos_cp = company_cp.get("entry_infos")
     businesses = company.get("businesses")
@@ -192,7 +194,8 @@ def evaluate_entry(company, company_cp):
 
     scores = round(scores / 2, 2)
     entry_score.append(scores)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.entry_score": entry_score}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.entry_score": entry_score}}, multi=True)
 
     return entry_score
 
@@ -206,7 +209,7 @@ def evaluate_ledger(company, company_cp):
 
     def cal_fun1(info, info_cp):
         nonlocal score_point, total_point
-        keys1 = ["cd", "dr"]
+        keys1 = ["cr", "dr"]
         total_point += 5
         total_point += sum([len(info_cp.get(key)) for key in keys1])
         subject = info_cp.get("subject")
@@ -242,13 +245,14 @@ def evaluate_ledger(company, company_cp):
             info = infos.get(key)
             cal_fun1(info, info_cp)
 
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     ledger_infos = company.get("ledger_infos")
     ledger_infos_cp = company_cp.get("ledger_infos")
     ledger_infos1 = ledger_infos.get("ledger_infos_1")
-    ledger_infos_cp1 = ledger_infos_cp.get("ledger_infos_1")
     ledger_infos2 = ledger_infos.get("ledger_infos_2")
+    ledger_infos_cp1 = ledger_infos_cp.get("ledger_infos_1")
     ledger_infos_cp2 = ledger_infos_cp.get("ledger_infos_2")
+
     total_score = 30
     total_point, score_point = 0, 0
 
@@ -256,12 +260,14 @@ def evaluate_ledger(company, company_cp):
     scores1 = score_point / total_point * total_score
     scores1 = round(scores1, 2)
     total_point, score_point = 0, 0
+
     cal_fun(ledger_infos2, ledger_infos_cp2)
     scores2 = score_point / total_point * total_score
     scores2 = round(scores2, 2)
 
     ledger_score = {"first": scores1, "second": scores2}
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.ledger_score": ledger_score}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.ledger_score": ledger_score}}, multi=True)
 
     return ledger_score
 
@@ -273,7 +279,7 @@ def evaluate_balance_sheet(company, company_cp):
     :param company_cp:
     :return:
     """
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     balance_sheet_infos = company.get("balance_sheet_infos")
     balance_sheet_infos_cp = company_cp.get("balance_sheet_infos")
 
@@ -287,10 +293,11 @@ def evaluate_balance_sheet(company, company_cp):
     score_point, total_point = _cal_balance(accounting_period_2, accounting_period_2_cp, score_point, total_point)
 
     scores = score_point / total_point * total_score
-    balance_sheet_score = round(scores, 2)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.balance_sheet_score": balance_sheet_score}})
+    scores = round(scores, 2)
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.balance_sheet_score": scores}}, multi=True)
 
-    return balance_sheet_score
+    return scores
 
 
 def evaluate_acc_document(company, company_cp):
@@ -302,7 +309,7 @@ def evaluate_acc_document(company, company_cp):
     """
     scores = 0
     acc_document_score = []
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     acc_document_infos = company.get("acc_document_infos")
     acc_document_infos_cp = company_cp.get("acc_document_infos")
     businesses = company.get("businesses")
@@ -346,7 +353,8 @@ def evaluate_acc_document(company, company_cp):
 
     scores = round(scores / 2, 2)
     acc_document_score.append(scores)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.acc_document_score": acc_document_score}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.acc_document_score": acc_document_score}}, multi=True)
 
     return acc_document_score
 
@@ -373,7 +381,7 @@ def evaluate_subsidiary_account(company, company_cp):
             t_score_point += sum([1 if t1_info.get(t_key) == t2_info.get(t_key) else 0 for t_key in keys])
         return t_score_point, t_total_point
 
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     subsidiary_account_infos = company.get("subsidiary_account_infos")
     subsidiary_account_infos_cp = company_cp.get("subsidiary_account_infos")
 
@@ -386,10 +394,11 @@ def evaluate_subsidiary_account(company, company_cp):
         score_point, total_point = cal_fun(info, info_cp, score_point, total_point)
 
     scores = score_point / total_point * total_score
-    subsidiary_account_score = round(scores, 2)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.subsidiary_account_score": subsidiary_account_score}})
+    scores = round(scores, 2)
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.subsidiary_account_score": scores}}, multi=True)
 
-    return subsidiary_account_score
+    return scores
 
 
 def evaluate_acc_balance_sheet(company, company_cp):
@@ -399,7 +408,7 @@ def evaluate_acc_balance_sheet(company, company_cp):
     :param company_cp:
     :return:
     """
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     acc_balance_sheet_infos = company.get("acc_balance_sheet_infos")
     acc_balance_sheet_infos_cp = company_cp.get("acc_balance_sheet_infos")
 
@@ -409,10 +418,11 @@ def evaluate_acc_balance_sheet(company, company_cp):
                                             score_point, total_point)
 
     scores = score_point / total_point * total_score
-    acc_balance_sheet_score = round(scores, 2)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.acc_balance_sheet_score": acc_balance_sheet_score}})
+    scores = round(scores, 2)
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.acc_balance_sheet_score": scores}}, multi=True)
 
-    return acc_balance_sheet_score
+    return scores
 
 
 def evaluate_new_balance_sheet(company, company_cp):
@@ -420,9 +430,10 @@ def evaluate_new_balance_sheet(company, company_cp):
     资产负债表评分
     """
     total_score = 60
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     scores = _statement_func("new_balance_sheet", company, company_cp, total_score)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("new_balance_sheet"): scores}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.{}_score".format("new_balance_sheet"): scores}}, multi=True)
     return scores
 
 
@@ -431,9 +442,10 @@ def evaluate_profit_statement(company, company_cp):
     利润表评分
     """
     total_score = 40
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     scores = _statement_func("profit_statement", company, company_cp, total_score)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("profit_statement"): scores}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.{}_score".format("profit_statement"): scores}}, multi=True)
     return scores
 
 
@@ -442,11 +454,12 @@ def evaluate_trend_analysis(company, company_cp):
     趋势分析法评分
     """
     total_score = 15
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     score1 = _statement_func("trend_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
     score2 = _statement_func("trend_analysis_infos.profit_statement_infos", company, company_cp, total_score)
     scores = {"first": score1, "second": score2}
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("trend_analysis"): scores}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.{}_score".format("trend_analysis"): scores}}, multi=True)
     return scores
 
 
@@ -455,11 +468,12 @@ def evaluate_common_ratio_analysis(company, company_cp):
     共同比分析法
     """
     total_score = 15
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     score1 = _statement_func("common_ratio_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
     score2 = _statement_func("common_ratio_analysis_infos.profit_statement_infos", company, company_cp, total_score)
     scores = {"first": score1, "second": score2}
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("common_ratio_analysis"): scores}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.{}_score".format("common_ratio_analysis"): scores}}, multi=True)
     return scores
 
 
@@ -468,9 +482,10 @@ def evaluate_ratio_analysis(company, company_cp):
     比率分析法评分
     """
     total_score = 15
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     scores = _statement_func("ratio_analysis", company, company_cp, total_score)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("ratio_analysis"): scores}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.{}_score".format("ratio_analysis"): scores}}, multi=True)
     return scores
 
 
@@ -479,7 +494,7 @@ def evaluate_dupont_analysis(company, company_cp):
     杜邦分析法
     """
     total_score = 30
-    _id = company_cp.get("_id")
+    username = company.get("student_no")
     infos = company.get("{}_infos".format("dupont_analysis"))
     infos_cp = company_cp.get("{}_infos".format("dupont_analysis"))
 
@@ -493,7 +508,8 @@ def evaluate_dupont_analysis(company, company_cp):
 
     scores = score_point / total_point * total_score
     scores = round(scores, 2)
-    mongo.db.company.update({"_id": _id}, {"$set": {"evaluation.{}_score".format("dupont_analysis"): scores}})
+    mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
+                            {"$set": {"evaluation.{}_score".format("dupont_analysis"): scores}}, multi=True)
     return scores
 
 
@@ -563,7 +579,6 @@ def _statement_func(infos_name, company, company_cp, total_score):
     """
     if infos_name.find(".") != -1:
         t_name = infos_name.split(".")
-        print(t_name)
         infos = company.get(t_name[0]).get(t_name[1])
         infos_cp = company_cp.get(t_name[0]).get(t_name[1])
     else:

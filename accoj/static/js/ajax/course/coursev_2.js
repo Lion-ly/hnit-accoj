@@ -211,9 +211,8 @@ function v2PaddingData(data, isFromButton) {
     if (!data) return;
     if (isFromButton) removeAllError();
     if (isFromButton) {
-        let nowTotalScore = 40,
-            totalScore = 40;
-        showScoreEm(scores, nowTotalScore, totalScore);
+        let nowTotalScore = 40;
+        showScoreEm(scores, nowTotalScore, scores);
         if (isFromButton === 2) v2Reset();
     }
     padding();

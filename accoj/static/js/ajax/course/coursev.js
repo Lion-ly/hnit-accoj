@@ -116,10 +116,11 @@ function map_ledger_info(data, isFromButton) {
         isFromButton = 1;
         $("button[data-answer]").text("查看答案");
     }
+    // console.log(ledger_infos_tmp);
     if (ledger_infos_tmp) {
         let ledger_info = ledger_infos_tmp.hasOwnProperty(now_subject) ? ledger_infos_tmp[now_subject] : "";
-        if (ledger_info)
-            vPaddingData(ledger_info, isFromButton);
+        // console.log(ledger_info);
+        if (ledger_info) vPaddingData(ledger_info, isFromButton);
     }
 }
 
@@ -211,10 +212,10 @@ function vPaddingData(data, isFromButton) {
         // 填充科目
         $("#coursev_select").append("<option name='coursev_option'>" + now_subject + "</option>");
         // 增加行
-        for (let i = 0; i < dr_array.length; i++)
-            $("#v_addRowDr").click();
-        for (let i = 0; i < cr_array.length; i++)
-            $("#v_addRowCr").click();
+        for (let i = 0; i < dr_array.length; i++) $("#v_AddRowDr").click();
+        for (let i = 0; i < cr_array.length; i++) $("#v_AddRowCr").click();
+        // console.log("dr_array.length: " + dr_array.length);
+        // console.log("cr_array.length: " + cr_array.length);
         // 填充会计账户信息
         $("input[name=opening_balance]").val(opening_balance);
         $("input[name=current_amount_dr]").val(current_amount_dr);
@@ -253,8 +254,9 @@ function vPaddingData(data, isFromButton) {
     if (isFromButton) {
         removeAllError();
         let nowTotalScore = 60,
-            totalScore = 100;
-        showScoreEm(scores, nowTotalScore, totalScore);
+            totalScore = scores.first + scores.second,
+            score = now_period === 1 ? scores.first : scores.second;
+        showScoreEm(score, nowTotalScore, totalScore);
     }
     padding();
 }
@@ -315,7 +317,7 @@ function initLi(data) {
     $("#TTablePage").children().remove();
 
     if (!ledger_infos && !first) return;
-    if (data || !data["ledger_infos"]) return;
+    // if (!data) return;
 
     let info_key = "ledger_infos_" + now_period,
         confirmed_key = "ledger" + now_period + "_confirm",
