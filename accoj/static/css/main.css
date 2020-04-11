@@ -296,9 +296,11 @@ ul a {
     display: inline-block;
 }
 
+/*
 .acc-label-select > select > :first-child {
     display: none;
 }
+ */
 
 .acc-label-select + p {
     font-size: 24px;

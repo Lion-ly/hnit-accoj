@@ -155,7 +155,6 @@ def submit_business_info():
     提交业务内容信息，提交成功后不可修改
     :return:
     """
-    period_num = MAX_BUSINESS_NO / 2
     company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
                                         dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
     if not company:
@@ -165,30 +164,21 @@ def submit_business_info():
 
     if not business_confirm:
         cal_answer()  # 计算答案
-        subjects_tmp1 = list()
-        subjects_tmp2 = list()
+
         company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
-                                               dict(entry_infos=1, _id=0))
-        entry_infos = company_cp.get("entry_infos")
-        i = 0
-        for entry_info in entry_infos:
-            for info in entry_info:
-                subject = info.get("subject")
-                if i < period_num:
-                    subjects_tmp1.append(subject)
-                subjects_tmp2.append(subject)
-                i += 1
+                                               dict(ledger_infos=1, _id=0))
+        ledger_infos = company_cp.get("ledger_infos")
+        ledger_infos_1 = ledger_infos.get("ledger_infos_1")
+        ledger_infos_2 = ledger_infos.get("ledger_infos_2")
+        subjects_tmp1 = [key for key in ledger_infos_1]
+        subjects_tmp2 = [key for key in ledger_infos_2]
 
-        subjects_tmp1 = set(subjects_tmp1)
-        subjects_tmp2 = set(subjects_tmp2)
-        involve_subjects = dict(involve_subjects_1=list(subjects_tmp1), involve_subjects_2=list(subjects_tmp2))
+        involve_subjects = dict(involve_subjects_1=subjects_tmp1, involve_subjects_2=subjects_tmp2)
 
-        mongo.db.company.update(dict(student_no="{}".format(session.get("username"))),
+        mongo.db.company.update({"student_no": {"$regex": r"^{}".format(session.get("username"))}},
                                 {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : involve_subjects}})
-        mongo.db.company.update(dict(student_no="{}_cp".format(session.get("username"))),
-                                {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : involve_subjects}})
+                                          "involve_subjects"                 : involve_subjects}},
+                                multi=True)
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")

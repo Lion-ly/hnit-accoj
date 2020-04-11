@@ -2,16 +2,13 @@ let subsidiary_account_infos = "",
     subsidiary_account_confirmed = Array(),
     subsidiary_account_saved = Array(),
     involve_subjects = Array(),
-    period1Vii1Row = 3,
-    period2Vii1Row = 3,
+    period1Vii1Row = 2, period2Vii1Row = 2,
     acc_balance_sheet_infos = "",
     acc_balance_sheet_confirmed = "",
     acc_balance_sheet_saved = "",
     vii2Row = 2,
-    answer_infos1 = "",
-    answer_infos2 = "",
-    scores1 = "",
-    scores2 = "";
+    answer_infos1 = "", answer_infos2 = "",
+    scores1 = "", scores2 = "";
 $(document).ready(function () {
     function init() {
         viiBind();
@@ -30,7 +27,7 @@ function get_involve_subjects() {
         let firstOption = true;
 
         $.each(involve_subjects, function (index, item) {
-            $("#anchorOption").before("<option>" + item + "</option>");
+            $("#subjectSelect").append("<option>" + item + "</option>");
             if (firstOption) {
                 $("#subjectSelect").val(item);
                 firstOption = false;
@@ -102,15 +99,16 @@ function map_subsidiary_account_info(data, isFromButton) {
     answer_infos1 = data ? data["answer_infos"] : answer_infos1;
     scores1 = data ? data["scores"] : scores1;
 
-    let subject = $("#subjectSelect").val();
+    let $subjectSelect = $("#subjectSelect"),
+        subject = $subjectSelect.val();
     if (involve_subjects.indexOf(subject) === -1 || !subsidiary_account_infos) {
         return;
     }
 
     // option颜色控制
-    let nowSubject = $("#subjectSelect").val();
+    let nowSubject = $subjectSelect.val();
     if (subsidiary_account_saved || subsidiary_account_confirmed) {
-        let $options = $("#subjectSelect").children();
+        let $options = $subjectSelect.children();
         $.each($options, function (index, item) {
             let $item = $(item),
                 optionValue = $item.val(),
@@ -121,7 +119,7 @@ function map_subsidiary_account_info(data, isFromButton) {
                 color = "#5bc0de";
             }
             $item.css("color", color);
-            if (optionValue === nowSubject) $("#subjectSelect").css("color", color);
+            if (optionValue === nowSubject) $subjectSelect.css("color", color);
         });
     } else return;
 
@@ -134,12 +132,13 @@ function map_subsidiary_account_info(data, isFromButton) {
     $.each(subsidiary_account_confirmed, function (index, item) {
         confirmed = subsidiary_account_confirmed.indexOf(item) === -1;
     });
-    if (answer_infos) {
-        showAnswerButton();
+    if (answer_infos1) {
+        let $answer = $("button[data-answer-1]");
+        showAnswerButton($answer);
         confirmed = true;
         saved = true;
         isFromButton = 1;
-        $("button[data-answer-1]").text("查看答案");
+        $answer.text("查看答案");
     }
     // `完成状态`标签控制
     spanStatusCtr(confirmed, saved, "subsidiary_account_submit_span");
@@ -152,8 +151,7 @@ function map_subsidiary_account_info(data, isFromButton) {
         // 明细账信息为空则返回
         return;
     }
-    vii1PaddingData(subsidiary_account_info, isFromButton);
-
+    vii1PaddingData(subsidiary_account_infos, isFromButton);
 }
 
 //==================================提交科目余额表信息==================================//
@@ -215,10 +213,11 @@ function map_acc_balance_sheet_info(data, isFromButton) {
     answer_infos2 = data ? data["answer_infos"] : answer_infos2;
     scores2 = data ? data["scores"] : scores2;
 
-    if (answer_infos) {
-        showAnswerButton();
+    if (answer_infos2) {
+        let $answer = $("button[data-answer-2]");
+        showAnswerButton($answer);
         isFromButton = 1;
-        $("button[data-answer-2]").text("查看答案");
+        $answer.text("查看答案");
     }
     // `完成状态`标签控制
     spanStatusCtr(acc_balance_sheet_confirmed, acc_balance_sheet_saved, "acc_balance_sheet_submit_span");
@@ -290,35 +289,38 @@ function vii1GetInput() {
 function vii1PaddingData(data, isFromButton) {
     function padding() {
         // 填充明细账数据
-        let subsidiary_account_info = data;
+        let infos = data;
         // 添加行
         let firstPeriod = true;
-        for (let i = 2; i < subsidiary_account_info.length - 2; i++) {
-            if (subsidiary_account_info.length === 6) break;
-            if (firstPeriod && subsidiary_account_info[i]["summary"] === "本期合计") {
+        for (let i = 1; i < infos.length - 2; i++) {
+            if (infos.length === 4) break;
+            // console.log("i: " + i + "  firstPeriod: " + firstPeriod);
+            // console.log("infos[i][\"summary\"]: " + infos[i]["summary"]);
+            if (firstPeriod && infos[i]["summary"] === "本期合计") {
                 firstPeriod = false;
-                i += 2;
+                continue;
             }
-            if (firstPeriod) {
-                vii1_AddRow(true);
-            } else {
-                vii1_AddRow(false);
-            }
+            if (firstPeriod) vii1_AddRow(true);
+            else vii1_AddRow(false);
         }
         // 填充信息
         let infoIndex = 0,
             firstRow = true;
         $("[id^=period1Vii1Row], [id^=period2Vii1Row], [id=Vii1RowEnd]").each(function () {
+            //console.log(infoIndex);
             let thisInputs = $(this).find("input"),
-                date = subsidiary_account_info[infoIndex]["date"].split("-"),
-                word = subsidiary_account_info[infoIndex]["word"],
-                no = subsidiary_account_info[infoIndex]["no"],
-                summary = subsidiary_account_info[infoIndex]["summary"],
-                dr_money = subsidiary_account_info[infoIndex]["dr_money"],
-                orientation = subsidiary_account_info[infoIndex]["orientation"],
-                cr_money = subsidiary_account_info[infoIndex]["cr_money"],
-                balance_money = subsidiary_account_info[infoIndex]["balance_money"],
-                year = date[0];
+                info = infos[infoIndex],
+                word = info["word"],
+                no = info["no"],
+                summary = info["summary"],
+                dr_money = info["dr_money"],
+                orientation = info["orientation"],
+                cr_money = info["cr_money"],
+                balance_money = info["balance_money"],
+                date = info["date"];
+            date = date ? date : "2020--";
+            date = date.split("-");
+            let year = date[0];
             if (firstRow) {
                 let dateTmp = new Date();
                 year = year ? year : dateTmp.getFullYear();
@@ -331,6 +333,9 @@ function vii1PaddingData(data, isFromButton) {
             dr_money = dr_money ? dr_money * 100 : dr_money;
             cr_money = cr_money ? cr_money * 100 : cr_money;
             balance_money = balance_money ? balance_money * 100 : balance_money;
+            dr_money = parseInt(dr_money);
+            cr_money = parseInt(cr_money);
+            balance_money = parseInt(balance_money);
             dr_money = dr_money ? dr_money.toString() : dr_money;
             cr_money = cr_money ? cr_money.toString() : cr_money;
             balance_money = balance_money ? balance_money.toString() : balance_money;
@@ -342,11 +347,13 @@ function vii1PaddingData(data, isFromButton) {
             money += orientation ? orientation : "0";
             money += balance_money ? balance_money : prefix;
             let firstNum = true;
-            $(thisInputs[0]).val(month);
-            $(thisInputs[1]).val(day);
-            $(thisInputs[2]).val(word);
-            $(thisInputs[3]).val(no);
-            $(thisInputs[4]).val(summary);
+            if (isFromButton !== 2) {
+                $(thisInputs[0]).val(month);
+                $(thisInputs[1]).val(day);
+                $(thisInputs[2]).val(word);
+                $(thisInputs[3]).val(no);
+                $(thisInputs[4]).val(summary);
+            }
             for (let i = 5; i < 36; i++) {
                 if (money) {
                     if (i === 15 || i === 25 || i === 26) {
@@ -365,12 +372,14 @@ function vii1PaddingData(data, isFromButton) {
     }
 
     if (!data) return;
+    let subject = $("#subjectSelect").val();
+    data = data[subject];
     if (isFromButton) {
         removeAllError();
         let nowTotalScore = 40,
             totalScore = 100;
         showScoreEm(scores1, nowTotalScore, totalScore, 1, 1);
-        if (isFromButton === 2) vii1ResetInfo();
+        vii1ResetInfo();
     }
     padding();
 }
@@ -474,6 +483,7 @@ function vii2PaddingData(data, isFromButton) {
         showScoreEm(scores2, nowTotalScore, totalScore, 2, 2);
         if (isFromButton === 2) vii2ResetInfo();
     }
+    console.log("padding!");
     padding();
 }
 
@@ -483,17 +493,17 @@ function vii2PaddingData(data, isFromButton) {
  */
 function viiBind() {
     function map_answer1() {
-        spanStatusCtr(true, true, "new_balance_sheet_span");
+        spanStatusCtr(true, true, "subsidiary_account_submit_span");
         vii1PaddingData(answer_infos1, 2);
     }
 
     function map_answer2() {
-        spanStatusCtr(true, true, "profit_statement_span");
+        spanStatusCtr(true, true, "acc_balance_sheet_submit_span");
         vii2PaddingData(answer_infos2, 2);
     }
 
     bind_confirm_info("submit_subsidiary_account_info", $("button[data-confirm-1]"));
-    bind_save_info(submit_acc_balance_sheet_info, $("button[data-save-1]"));
+    bind_save_info(submit_subsidiary_account_info, $("button[data-save-1]"));
 
     bind_confirm_info("submit_acc_balance_sheet_info", $("button[data-confirm-2]"));
     bind_save_info(submit_acc_balance_sheet_info, $("button[data-save-2]"));
@@ -513,7 +523,7 @@ function viiBind() {
     $("a[data-vii2-addRow]").click(function () {
         vii2_AddRow();
     });
-    $("select[data-get-account-info]").click(function () {
+    $("select[data-get-account-info]").change(function () {
         get_subsidiary_account_info();
     });
 }
@@ -522,10 +532,10 @@ function viiBind() {
  * 重置明细账信息
  */
 function vii1ResetInfo() {
-    period1Vii1Row = 3;
-    period2Vii1Row = 3;
-    $("[id^=period1Vii1Row][id!=Vii1RowEnd][id!=period1Vii1Row1][id!=period1Vii1Row2][id!=period1Vii1RowLast]").remove();
-    $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1Row1][id!=period2Vii1RowLast]").remove();
+    period1Vii1Row = 2;
+    period2Vii1Row = 2;
+    $("[id^=period1Vii1Row][id!=Vii1RowEnd][id!=period1Vii1Row1][id!=period1Vii1RowLast]").remove();
+    $("[id^=period2Vii1Row][id!=Vii1RowEnd][id!=period2Vii1RowLast]").remove();
     $("#subjectSelect").css("color", "#555");
     $("#first").find("input").each(function () {
         let thisValue = $(this).val();
