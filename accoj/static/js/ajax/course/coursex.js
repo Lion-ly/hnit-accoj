@@ -91,19 +91,21 @@ function map_coursex_info(data, isFromButton) {
  * @returns {Object}
  */
 function coursexGetInput() {
-    let divId = "coursexData",
+    let divId = "#coursexData",
         infosName = "coursex_infos";
     let infos = Object(),
-        inputs = $("#" + divId).find("input");
+        $inputs = $(divId).find("input");
 
-    $.each(inputs, function (index, item) {
-        let project = $(item).attr("name"),
-            value = $(item).val();
+    $.each($inputs, function (index, item) {
+        if(index!==$inputs.length - 1) {
+            let project = $(item).attr("name"),
+                value = $(item).val();
 
-        if (!infos.hasOwnProperty(project)) infos[project] = Object();
-        infos[project] = parseFloat(value);
+            if (!infos.hasOwnProperty(project)) infos[project] = Object();
+            infos[project] = parseFloat(value);
+        }
     });
-    infos["conclusion"] = $("#" + divId + "Conclusion").val();
+    infos["conclusion"] = $(divId + "Conclusion").val();
     return {[infosName]: infos};
 }
 
@@ -118,11 +120,13 @@ function CoursexPaddingData(data, isFromButton) {
             inputs = $("#" + divID).find("input");
 
         $.each(inputs, function (index, item) {
-            let name = $(item).attr("name"),
-                value = data[name] ? data[name] : "";
+            if(index!==$inputs.length - 1) {
+                let name = $(item).attr("name"),
+                    value = data[name] ? data[name] : "";
 
-            value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
-            $(item).val(value);
+                value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
+                $(item).val(value);
+            }
         });
         let conclusion = data["conclusion"];
         $("#" + divID + "Conclusion").val(conclusion);
@@ -156,9 +160,11 @@ function xBind() {
     let $inputs = $("#coursexData").find("input"),
         $conclusions = $("#coursexDataConclusion");
     $inputs.each(function (index, item) {
-        let name = $(item).attr("name");
-        if (!name.match(/[率数]$/)) bindRealNumber($(item));
-        else bindLimitPercent($(item));
+        if(index!==$inputs.length - 1) {
+            let name = $(item).attr("name");
+            if (!name.match(/[率数]$/)) bindRealNumber($(item));
+            else bindLimitPercent($(item));
+        }
     });
     bindIllegalCharFilter($conclusions);
 }

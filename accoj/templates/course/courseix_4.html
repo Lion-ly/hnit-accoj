@@ -172,6 +172,17 @@
                 </p>
                 <em data-total-score-2></em>
                 <em data-now-score-2></em>
+                {% if role == "教师" %}
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        <input name="score" type="text" class="form-control" placeholder="满分5">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button">教师评分</button>
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                {% endif %}
                 <label for="Conclusion"></label>
                 <textarea id="Conclusion" class="form-control acc-unresize" rows="5"></textarea>
                 <hr class="simple"/>

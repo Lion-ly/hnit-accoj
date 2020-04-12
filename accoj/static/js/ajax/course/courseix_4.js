@@ -108,6 +108,7 @@ function ix4GetInput() {
         infos[project][period] = parseFloat(value);
         flag = !flag;
     });
+    infos["conclusion"] = $("#" + divId + "Conclusion").val();
     return {[infosName]: infos};
 }
 
@@ -136,6 +137,8 @@ function Ix4PaddingData(data, isFromButton) {
             }
             flag = !flag;
         });
+        let conclusion = data["conclusion"];
+        $("#" + divID + "Conclusion").val(conclusion);
     }
     if (!data) return;
     if (isFromButton) {
