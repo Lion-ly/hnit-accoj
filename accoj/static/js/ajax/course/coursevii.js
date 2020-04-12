@@ -478,10 +478,10 @@ function vii2PaddingData(data, isFromButton) {
     if (!data) return;
     if (isFromButton) {
         removeAllError();
+        vii2ResetInfo();
         let nowTotalScore = 40,
             totalScore = 100;
         showScoreEm(scores2, nowTotalScore, totalScore, 2, 2);
-        if (isFromButton === 2) vii2ResetInfo();
     }
     console.log("padding!");
     padding();

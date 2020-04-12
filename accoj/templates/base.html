@@ -45,45 +45,48 @@
             <div class="navbar-form navbar-right" id="login_signin">
                 <!-- 登录验证 -->
                 {% if username %}
-                <div class="btn-group btn-group-sm" role="group" aria-label="..."
-                     id="logged_in">
-                    <!-- 已登录 -->
-                    <button type="button" class="btn btn-default btn-sm"
-                            disabled="disabled" id="username">
-                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                        {{ role }}
-                        &nbsp;{{ username }}
-                    </button>
-                    <button type="button"
-                            class="btn btn-default btn-sm dropdown-toggle"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="caret"></span> <span class="sr-only">Toggle
+                    <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                         id="logged_in">
+                        <!-- 已登录 -->
+                        <button type="button" class="btn btn-default btn-sm"
+                                disabled="disabled" id="username">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            {{ role }}
+                            &nbsp;{{ username }}
+                            {% if role == "教师" %}
+                                &nbsp;正在查看&nbsp;{{ username }}
+                            {% endif %}
+                        </button>
+                        <button type="button"
+                                class="btn btn-default btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="caret"></span> <span class="sr-only">Toggle
 									Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a></li>
-                        <li><a href="#" data-toggle="modal"
-                               data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
-                                class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出登录</a></li>
-                    </ul>
-                </div>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a></li>
+                            <li><a href="#" data-toggle="modal"
+                                   data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
+                                    class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出登录</a></li>
+                        </ul>
+                    </div>
                 {% else %}
-                <!-- 未登录 -->
-                <div class="btn-group btn-group-sm" role="group" aria-label="..."
-                     id="not_logged_in">
-                    <button type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#signin">登录
-                    </button>
-                    <button type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#login">注册
-                    </button>
-                    <button type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#findpwd">忘记了
-                    </button>
-                </div>
+                    <!-- 未登录 -->
+                    <div class="btn-group btn-group-sm" role="group" aria-label="..."
+                         id="not_logged_in">
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#signin">登录
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#login">注册
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#findpwd">忘记了
+                        </button>
+                    </div>
                 {% endif %}
             </div>
         </div>

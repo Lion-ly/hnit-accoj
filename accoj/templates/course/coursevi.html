@@ -70,6 +70,15 @@
                             </div>
                         </form>
                         <p class="acc-title">2、填制记账凭证：</p>
+                        {% if role == "教师" %}
+                            <div class="input-group col-lg-2">
+                                <input name="score" type="text" class="form-control" placeholder="加分项">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button">教师评分</button>
+                                </span>
+                            </div>
+                            <hr>
+                        {% endif %}
                         <div class="table-responsive">
                             <table class="table table-bordered acc-container-tableformat acc-unborder acc-table-md">
                                 <tbody>
