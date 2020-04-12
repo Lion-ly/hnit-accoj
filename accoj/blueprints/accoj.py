@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from accoj.utils import login_required, complete_required1
 from accoj.blueprints import submit_infos, get_data
 from accoj.utils import is_number, limit_content_length
@@ -961,4 +961,5 @@ def accoj_bp_before_request():
     请求前钩子函数（局部）
     :return:
     """
-    pass
+    if session.get("role"):
+        return redirect(url_for('admin.index'))
