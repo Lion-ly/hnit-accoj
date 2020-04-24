@@ -18,14 +18,14 @@ from flask_admin.model.fields import InlineFormField, InlineFieldList
 class AdminModelView(ModelView):
     def is_accessible(self):
         role = session.get("role")
-        if role in {"root", 'admin'}:
+        if role in {"root", "admin"}:
             return True
         else:
             return False
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
-        return redirect(url_for('index'))
+        return redirect(url_for('index.index'))
 
 
 class UserForm(form.Form):

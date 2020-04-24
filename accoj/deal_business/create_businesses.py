@@ -584,7 +584,7 @@ def deal_with_question_2(company, question_no, questions):
                 elif question_no == 14:
                     # 问题14特判
                     value = 10000 * values_list[1]
-                elif question_no == 15:
+                elif question_no == 15 and value != 1:
                     # 问题15特判
                     value = 100000 * random.randint(10, 15)
                 elif question_no == 19:

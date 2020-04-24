@@ -961,5 +961,5 @@ def accoj_bp_before_request():
     请求前钩子函数（局部）
     :return:
     """
-    if session.get("role"):
+    if session.get("role") == "admin":
         return redirect(url_for('admin.index'))
