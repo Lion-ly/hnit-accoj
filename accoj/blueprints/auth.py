@@ -238,7 +238,7 @@ def find_password():
 
 @auth_bp.app_context_processor
 def my_app_context_processor():
-    d_role = {"root": "root", "admin": 'admin', "teacher": "教师", "student": "学生"}
+    d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生"}
     role = session.get("role")
     role = d_role.get(role)
     username = session.get("username")

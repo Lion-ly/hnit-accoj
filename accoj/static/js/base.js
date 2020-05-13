@@ -759,7 +759,7 @@ function formatDate(date) {
 }
 
 /**
- * 查看答案按钮的效果 具体功能实现需重构
+ * 查看答案按钮
  * @param selector
  * @param mapInfo
  * @param mapAnswer
