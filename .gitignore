@@ -130,7 +130,5 @@ accoj/blueprints/__pycache__/index.cpython-37.pyc
 accoj/utils/__pycache__/add_question.cpython-37.pyc
 
 # Image
-*.png
-*.jpg
 .project
 /git
