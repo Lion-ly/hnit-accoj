@@ -919,13 +919,28 @@ def get_coursex_info():
 
 
 # 用户个人中心----start-----------------------------------------------------------------------------
-# Todo 用户个人中心
 @accoj_bp.route('/profile', methods=['GET'])
 def profile():
     """
     :return:
     """
-    return render_template('profile.html')
+    return render_template('profile/index.html')
+
+
+@accoj_bp.route('/profile_score', methods=['GET'])
+def profile_score():
+    """
+    :return:
+    """
+    return render_template('profile/profile-score.html')
+
+
+@accoj_bp.route('/rank', methods=['GET'])
+def rank():
+    """
+    :return:
+    """
+    return render_template('profile/rank.html')
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------

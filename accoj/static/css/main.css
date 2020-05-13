@@ -225,6 +225,7 @@ ul a {
     background-color: white !important;;
 }
 
+/*分数显示分级*/
 .acc-score-help {
     float: right;
     font-size: 15px;
