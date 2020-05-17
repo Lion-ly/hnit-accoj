@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>{% block title %}{% endblock title %}</title>
-    <link rel="shortcut icon" href="{{url_for('static', filename='img/logo.png')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}">
     <!-- jQuery -->
     <script
             src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js" charset="UTF-8"></script>
@@ -64,10 +64,23 @@
 									Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ url_for('accoj.profile') }}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a></li>
-                            <li><a href="#" data-toggle="modal"
-                                   data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a>
-                            </li>
+                            {% if role == "管理员" %}
+                                <li><a href="{{ url_for('admin.index') }}"><span
+                                        class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;后台管理</a></li>
+                            {% elif role == '学生' or role == '教师' %}
+                                {% if role == '学生' %}
+                                    <li><a href="{{ url_for('accoj.profile') }}"><span
+                                            class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a>
+                                    </li>
+                                {% else %}
+                                    <li><a href="{{ url_for('accoj.teacher') }}"><span
+                                            class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;教师后台</a>
+                                    </li>
+                                {% endif %}
+                                <li><a href="#" data-toggle="modal"
+                                       data-target="#update-password"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;更改密码</a>
+                                </li>
+                            {% endif %}
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ url_for('auth.logout') }}" id="logout"><span
                                     class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;退出登录</a></li>
@@ -386,13 +399,15 @@
                     <li class="acc-qq">
                         <a class="acc-footer-icon">
                             <i class="fa fa-qq fa-2x" aria-hidden="true"></i>
-                            <img class="acc-footer-icontext acc-footer-img" src="{{ url_for('static', filename='img/qqcode.jpg') }}" alt="qq">
+                            <img class="acc-footer-icontext acc-footer-img"
+                                 src="{{ url_for('static', filename='img/qqcode.jpg') }}" alt="qq">
                         </a>
                     </li>
                     <li class="acc-weixin">
                         <a class="acc-footer-icon">
                             <i class="fa fa-weixin fa-2x" aria-hidden="true"></i>
-                            <img class="acc-footer-icontext acc-footer-img" src="{{ url_for('static', filename='img/qqcode.jpg') }}" alt="wx">
+                            <img class="acc-footer-icontext acc-footer-img"
+                                 src="{{ url_for('static', filename='img/qqcode.jpg') }}" alt="wx">
                         </a>
                     </li>
                 </ul>

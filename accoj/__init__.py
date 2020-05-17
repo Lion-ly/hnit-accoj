@@ -20,6 +20,11 @@ basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
 def create_app(config_name=None):
+    """
+    创建应用实例
+    :param config_name:
+    :return:
+    """
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
 
@@ -40,6 +45,11 @@ def create_app(config_name=None):
 
 
 def register_blueprints(app):
+    """
+    注册蓝图
+    :param app:
+    :return:
+    """
     app.register_blueprint(accoj_bp)
     # app.register_blueprint(admin_bp)
     app.register_blueprint(auth_bp)
@@ -47,15 +57,24 @@ def register_blueprints(app):
 
 
 def register_extensions(app):
+    """
+    注册扩展
+    :param app:
+    :return:
+    """
     mongo.init_app(app)
     csrf.init_app(app)  # csrf令牌验证，验证出错或者过期会导致ajax请求失败'400 bad request'
     mail.init_app(app)
-    admin.add_view(UserView(mongo.db.user, 'User'))
+    admin.add_view(UserView(mongo.db.user, 'User')) # 添加后台管理视图
     admin.add_view(CompanyView(mongo.db.company, 'Company'))
     admin.init_app(app)
 
 
 def create_admin():
+    """
+    创建管理员账号
+    :return:
+    """
     mongo.db.user.update(dict(student_no="admin"),
                          dict(student_no="admin",
                               role="admin",

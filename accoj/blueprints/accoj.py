@@ -922,14 +922,25 @@ def get_coursex_info():
 @accoj_bp.route('/profile', methods=['GET'])
 def profile():
     """
+    个人信息
     :return:
     """
     return render_template('profile/index.html')
 
 
+@accoj_bp.route('/profile_schedule', methods=['GET'])
+def profile_schedule():
+    """
+    完成进度
+    :return:
+    """
+    return render_template('profile/profile-schedule.html')
+
+
 @accoj_bp.route('/profile_score', methods=['GET'])
 def profile_score():
     """
+    学生成绩
     :return:
     """
     return render_template('profile/profile-score.html')
@@ -938,12 +949,53 @@ def profile_score():
 @accoj_bp.route('/rank', methods=['GET'])
 def rank():
     """
+    排行榜
     :return:
     """
     return render_template('profile/rank.html')
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------
+
+# 教师后台管理----start-----------------------------------------------------------------------------
+@accoj_bp.route('/teacher', methods=['GET'])
+def teacher():
+    """
+    个人信息
+    :return:
+    """
+    return render_template('teacher/index.html')
+
+
+@accoj_bp.route('/manage_class', methods=['GET'])
+def manage_class():
+    """
+    班级管理
+    :return:
+    """
+    return render_template('teacher/index.html')
+
+
+@accoj_bp.route('/manage_student', methods=['GET'])
+def manage_student():
+    """
+    学生管理
+    :return:
+    """
+    return render_template('teacher/index.html')
+
+
+@accoj_bp.route('/teacher_correct', methods=['GET'])
+def teacher_correct():
+    """
+    教师批改
+    :return:
+    """
+    return render_template('teacher/index.html')
+
+
+# 教师后台管理----end-------------------------------------------------------------------------------
+
 
 # 通用视图----start---------------------------------------------------------------------------------
 @accoj_bp.route('/get_business_list', methods=['POST'])
