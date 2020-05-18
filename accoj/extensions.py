@@ -8,7 +8,9 @@
 from flask_pymongo import PyMongo
 from flask_mail import Mail
 from flask_wtf import CSRFProtect
+from flask_babelex import Babel
 
 mongo = PyMongo()
 mail = Mail()
 csrf = CSRFProtect()
+babel = Babel()

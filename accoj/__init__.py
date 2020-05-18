@@ -11,7 +11,7 @@ from accoj.blueprints.accoj import accoj_bp
 from accoj.blueprints.auth import auth_bp
 from accoj.blueprints.index import index_bp
 from settings import config
-from accoj.extensions import mongo, mail, csrf
+from accoj.extensions import mongo, mail, csrf, babel
 from accoj.blueprints.admin import admin, UserView, CompanyView
 from accoj.deal_business.create_questions import add_question
 from werkzeug.security import generate_password_hash
@@ -65,6 +65,7 @@ def register_extensions(app):
     mongo.init_app(app)
     csrf.init_app(app)  # csrf令牌验证，验证出错或者过期会导致ajax请求失败'400 bad request'
     mail.init_app(app)
+    babel.init_app(app)
     admin.add_view(UserView(mongo.db.user, 'User')) # 添加后台管理视图
     admin.add_view(CompanyView(mongo.db.company, 'Company'))
     admin.init_app(app)

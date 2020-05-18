@@ -6,7 +6,8 @@
 # @File    : admin.py
 # @Software: PyCharm
 # from accoj.extensions import mongo
-from flask import redirect, url_for, session
+from flask import redirect, url_for, session, request
+from accoj.extensions import babel
 import flask_admin
 
 from wtforms import form, fields
@@ -123,6 +124,15 @@ class CompanyView(AdminModelView):
     form = CompanyForm
 
 
+@babel.localeselector
+def get_locale():
+    """
+    汉化
+    :return:
+    """
+    if request.args.get('lang'):
+        session['lang'] = request.args.get('lang')
+    return session.get('lang', 'zh_Hans_CN')
+
+
 admin = flask_admin.Admin(name='HnitAccoj')
-# admin.add_view(UserView(mongo.db.user, 'User'))
-# admin.add_view(CompanyView(mongo.db.company, 'Company'))
