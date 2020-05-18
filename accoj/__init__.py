@@ -66,7 +66,7 @@ def register_extensions(app):
     csrf.init_app(app)  # csrf令牌验证，验证出错或者过期会导致ajax请求失败'400 bad request'
     mail.init_app(app)
     babel.init_app(app)
-    admin.add_view(UserView(mongo.db.user, 'User')) # 添加后台管理视图
+    admin.add_view(UserView(mongo.db.user, 'User'))  # 添加后台管理视图
     admin.add_view(CompanyView(mongo.db.company, 'Company'))
     admin.init_app(app)
 

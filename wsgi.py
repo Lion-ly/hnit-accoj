@@ -7,4 +7,5 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 app = create_app('development')
+# 静态文件热更
 app.jinja_env.auto_reload = True

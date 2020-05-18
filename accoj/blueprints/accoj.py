@@ -973,16 +973,7 @@ def manage_class():
     班级管理
     :return:
     """
-    return render_template('teacher/index.html')
-
-
-@accoj_bp.route('/manage_student', methods=['GET'])
-def manage_student():
-    """
-    学生管理
-    :return:
-    """
-    return render_template('teacher/index.html')
+    return render_template('teacher/manage-class.html')
 
 
 @accoj_bp.route('/teacher_correct', methods=['GET'])
@@ -991,7 +982,7 @@ def teacher_correct():
     教师批改
     :return:
     """
-    return render_template('teacher/index.html')
+    return render_template('teacher/teacher-correct.html')
 
 
 # 教师后台管理----end-------------------------------------------------------------------------------
