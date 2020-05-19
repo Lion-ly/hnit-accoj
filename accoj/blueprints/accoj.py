@@ -967,13 +967,22 @@ def teacher():
     return render_template('teacher/index.html')
 
 
-@accoj_bp.route('/manage_class', methods=['GET'])
-def manage_class():
+@accoj_bp.route('/manage_time', methods=['GET'])
+def manage_time():
     """
-    班级管理
+    时间管理
     :return:
     """
-    return render_template('teacher/manage-class.html')
+    return render_template('teacher/manage-time.html')
+
+
+@accoj_bp.route('/add_class', methods=['GET'])
+def add_class():
+    """
+    添加班级
+    :return:
+    """
+    return render_template('teacher/add-class.html')
 
 
 @accoj_bp.route('/teacher_correct', methods=['GET'])
