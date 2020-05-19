@@ -1,0 +1,97 @@
+{% extends 'teacher/teacher-base.html' %}
+{% block page_title %}添加班级{% endblock %}
+{% block page_title_li %}
+    <li><a href="#">班级管理</a></li>
+    <li class="active">添加班级</li>
+{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">添加班级</strong>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div>
+                                我的班级列表：
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">学校</th>
+                                        <th scope="col">二级学院</th>
+                                        <th scope="col">专业</th>
+                                        <th scope="col">班级</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>湖南工学院</td>
+                                        <td>计算机与信息科学学院</td>
+                                        <td>网络工程</td>
+                                        <td>1701</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>湖南工学院</td>
+                                        <td>计算机与信息科学学院</td>
+                                        <td>网络工程</td>
+                                        <td>1702</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>湖南工学院</td>
+                                        <td>计算机与信息科学学院</td>
+                                        <td>网络工程</td>
+                                        <td>1703</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td>湖南工学院</td>
+                                        <td>经济与管理学院</td>
+                                        <td>会计学</td>
+                                        <td>1701</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">5</th>
+                                        <td>湖南工学院</td>
+                                        <td>经济与管理学院</td>
+                                        <td>会计学</td>
+                                        <td>1702</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">6</th>
+                                        <td>湖南工学院</td>
+                                        <td>经济与管理学院</td>
+                                        <td>工商管理</td>
+                                        <td>1701</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                                添加班级：
+                                <p class="help-block">请选择要添加的Excel表格文件（学生信息）。</p>
+                                <label for="uploadFiles">
+                                    <span class="glyphicon glyphicon-upload"></span>
+                                </label>
+                                <input type="file" id="uploadFiles" accept=".zip,.rar">
+                                    <button class="btn btn-outline-info" type="button">确认添加</button>
+                                <!--文件下载-->
+                                <hr/>
+                                <button type="button">下载附件
+                                </button>&nbsp;&nbsp;
+                                <p class="help-block">点击此处下载样表。</p>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
