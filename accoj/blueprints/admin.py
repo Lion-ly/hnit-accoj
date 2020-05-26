@@ -6,7 +6,7 @@
 # @File    : admin.py
 # @Software: PyCharm
 # from accoj.extensions import mongo
-from flask import redirect, url_for, session, request
+from flask import session, request, abort
 from accoj.extensions import babel
 import flask_admin
 
@@ -26,7 +26,7 @@ class AdminModelView(ModelView):
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
-        return redirect(url_for('index.index'))
+        return abort(403)
 
 
 class UserForm(form.Form):

@@ -967,15 +967,6 @@ def teacher():
     return render_template('teacher/index.html')
 
 
-@accoj_bp.route('/manage_time', methods=['GET'])
-def manage_time():
-    """
-    时间管理
-    :return:
-    """
-    return render_template('teacher/manage-time.html')
-
-
 @accoj_bp.route('/add_class', methods=['GET'])
 def add_class():
     """
@@ -985,13 +976,49 @@ def add_class():
     return render_template('teacher/add-class.html')
 
 
+@accoj_bp.route('/manage_time', methods=['GET'])
+def manage_time():
+    """
+    时间管理
+    :return:
+    """
+    return render_template('teacher/manage-time.html')
+
+
 @accoj_bp.route('/teacher_correct', methods=['GET'])
 def teacher_correct():
     """
-    教师批改
+    批改作业
     :return:
     """
     return render_template('teacher/teacher-correct.html')
+
+
+@accoj_bp.route('/teacher_schedule', methods=['GET'])
+def teacher_schedule():
+    """
+    批改进度
+    :return:
+    """
+    return render_template('teacher/teacher-schedule.html')
+
+
+@accoj_bp.route('/teacher_notify_c', methods=['GET'])
+def teacher_notify_c():
+    """
+    发送通知(班级通知)
+    :return:
+    """
+    return render_template('teacher/teacher-notify-p.html')
+
+
+@accoj_bp.route('/teacher_notify_p', methods=['GET'])
+def teacher_notify_p():
+    """
+    发送通知(个人通知)
+    :return:
+    """
+    return render_template('teacher/teacher-notify-c.html')
 
 
 # 教师后台管理----end-------------------------------------------------------------------------------
