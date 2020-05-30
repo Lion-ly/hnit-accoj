@@ -928,6 +928,32 @@ def profile():
     return render_template('profile/index.html')
 
 
+@accoj_bp.route('/message_system', methods=['GET'])
+def message_system():
+    """
+    系统通知
+    :return:
+    """
+    role = session.get('role')
+    template_dict = dict(student='profile/message_system.html',
+                         teacher='teacher/message_system.html')
+    template = template_dict.get(role)
+    return render_template(template)
+
+
+@accoj_bp.route('/message_whisper', methods=['GET'])
+def message_whisper():
+    """
+    消息面板
+    :return:
+    """
+    role = session.get('role')
+    template_dict = dict(student='profile/message_whisper.html',
+                         teacher='teacher/message_whisper.html')
+    template = template_dict.get(role)
+    return render_template(template)
+
+
 @accoj_bp.route('/profile_schedule', methods=['GET'])
 def profile_schedule():
     """
@@ -952,7 +978,11 @@ def rank():
     排行榜
     :return:
     """
-    return render_template('profile/rank.html')
+    role = session.get('role')
+    template_dict = dict(student='profile/rank.html',
+                         teacher='teacher/rank.html')
+    template = template_dict.get(role)
+    return render_template(template)
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------
