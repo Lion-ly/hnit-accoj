@@ -1,21 +1,162 @@
 {% extends 'teacher/teacher-base.html' %}
 {% block page_title %}我的消息{% endblock %}
 {% block page_title_li %}
-    <li class="active">我的消息</li>
+<li class="active">我的消息</li>
 {% endblock %}
 {% block content %}
-    <div class="animated fadeIn">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <strong class="card-title">我的消息</strong>
-                    </div>
-                    <div class="card-body">
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile/message_whisper.css') }}">
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong class="card-title">我的消息</strong>
+                </div>
+                <div class="card-body">
+                    <div class="msg">
+                        <div class="friend-list">
+                            <div class="title">
+                                私信
+                            </div>
+                            <div class="list">
+                                <article class="active">
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                                <article>
+                                    <img src="" alt="">
+                                    <div class="user-info">
+                                        <span>昵称</span>
+                                        <span>信息信息信息信息信息信息信息</span>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="friend-message">
+                            <div class="title">
+                                芝麻米胡
+                            </div>
+                            <div class="message-box">
+                                <time>2020年06月01日 12:00</time>
+                                <div class="msg-item msg-item-left">
+                                    <img src="" alt="">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                                <div class="msg-item msg-item-right">
+                                    <p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+                                    <img src="" alt="">
+                                </div>
+                            </div>
+                            <div class="send-box">
+                                <textarea property="回复一下吧~"></textarea>
+                                <div>
+                                    <div>
+                                        <span>0</span>
+                                        <span>/</span>
+                                        <span>500</span>
+                                    </div>
+                                    <button>发送</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
