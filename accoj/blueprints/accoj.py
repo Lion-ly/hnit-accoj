@@ -985,6 +985,16 @@ def rank():
     return render_template(template)
 
 
+@accoj_bp.route('/profile_api', methods=['POST'])
+def profile_api():
+    # Todo
+    # 1.get user profile
+    # 2.get schedule
+    # 3.get score
+    # 4.get rank
+    pass
+
+
 # 用户个人中心----end-------------------------------------------------------------------------------
 
 # 教师后台管理----start-----------------------------------------------------------------------------
@@ -1049,6 +1059,11 @@ def teacher_notify_p():
     :return:
     """
     return render_template('teacher/teacher-notify-c.html')
+
+
+@accoj_bp.route('/teacher_api', methods=['POST'])
+def teacher_api():
+    pass
 
 
 # 教师后台管理----end-------------------------------------------------------------------------------

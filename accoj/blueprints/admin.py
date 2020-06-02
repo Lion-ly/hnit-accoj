@@ -16,6 +16,7 @@ from flask_admin.contrib.pymongo import ModelView
 from flask_admin.model.fields import InlineFormField, InlineFieldList
 
 
+# ---------------------------------数据库后台---------------------------------------------------
 class AdminModelView(ModelView):
     def is_accessible(self):
         role = session.get("role")
@@ -136,3 +137,4 @@ def get_locale():
 
 
 admin = flask_admin.Admin(name='HnitAccoj')
+# ---------------------------------数据库后台------end---------------------------------------------

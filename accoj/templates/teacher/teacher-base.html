@@ -53,7 +53,7 @@
                     <a href="{{ url_for('accoj.teacher') }}"><i class="menu-icon fa fa-user"></i>个人信息 </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('accoj.message_system') }}"><i class="menu-icon fa fa-bell"></i>系统通知 </a>
+                    <a href="{{ url_for('accoj.message_system') }}"><i class="menu-icon fa fa-bell-o"></i>系统通知 </a>
                 </li>
                 <li>
                     <a href="{{ url_for('accoj.message_whisper') }}"><i class="menu-icon fa fa-envelope"></i>我的消息 </a>
@@ -68,13 +68,8 @@
                     </ul>
                 </li>
 
-                <li class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false"> <i class="menu-icon fa fa-pencil"></i>批改作业</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li><a href="{{ url_for('accoj.teacher_correct') }}"><i class="fa ti-brush"></i>批改作业</a></li>
-                        <li><a href="{{ url_for('accoj.teacher_schedule') }}"><i class="fa ti-stats-up"></i>批改进度</a></li>
-                    </ul>
+                <li>
+                    <a href="{{ url_for('accoj.teacher_correct') }}"> <i class="menu-icon fa fa-pencil"></i>批改作业</a>
                 </li>
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
