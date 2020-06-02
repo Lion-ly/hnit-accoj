@@ -987,12 +987,27 @@ def rank():
 
 @accoj_bp.route('/profile_api', methods=['POST'])
 def profile_api():
-    # Todo
-    # 1.get user profile
-    # 2.get schedule
-    # 3.get score
-    # 4.get rank
-    pass
+    def get_user_profile():
+        return jsonify(result=True, data=1)
+
+    def get_user_schedule():
+        return jsonify(result=True, data=1)
+
+    def get_user_score():
+        return jsonify(result=True, data=1)
+
+    def get_user_rank():
+        return jsonify(result=True, data=1)
+
+    json_data = request.get_json()
+    api = json_data.get('api')
+    api_dict = dict(get_user_profile=get_user_profile,
+                    get_user_schedule=get_user_schedule,
+                    get_user_score=get_user_score,
+                    get_user_rank=get_user_rank, )
+    if api in api_dict:
+        return api_dict[api]()
+    return jsonify(result=False, data=None)
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------
@@ -1032,15 +1047,6 @@ def teacher_correct():
     :return:
     """
     return render_template('teacher/teacher-correct.html')
-
-
-@accoj_bp.route('/teacher_schedule', methods=['GET'])
-def teacher_schedule():
-    """
-    批改进度
-    :return:
-    """
-    return render_template('teacher/teacher-schedule.html')
 
 
 @accoj_bp.route('/teacher_notify_c', methods=['GET'])
