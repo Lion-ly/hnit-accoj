@@ -11,6 +11,7 @@
  */
 function get_data(data, successFunc, url) {
     data = data ? data : {};
+    data = JSON.stringify(data);
     url = url ? url : '/profile_api';
     let csrf_token = get_csrf_token();
 

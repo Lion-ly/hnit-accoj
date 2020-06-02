@@ -988,7 +988,25 @@ def rank():
 @accoj_bp.route('/profile_api', methods=['POST'])
 def profile_api():
     def get_user_profile():
-        return jsonify(result=True, data=1)
+        user = mongo.db.user.find_one(dict(student_no=student_no),
+                                      dict(_id=0, password=0, role=0))
+        if user:
+            result, data = True, user
+        else:
+            result, data = False, None
+        return jsonify(result=result, data=data)
+
+    def submit_user_profile(_data):
+        user = mongo.db.user.find_one(dict(student_no=student_no),
+                                      dict(_id=1))
+        if user:
+            _data.pop('api')
+            mongo.db.user.update(dict(student_no=student_no),
+                                 {"$set": _data})
+            result, data = True, None
+        else:
+            result, data = False, None
+        return jsonify(result=result, data=data)
 
     def get_user_schedule():
         return jsonify(result=True, data=1)
@@ -1001,12 +1019,16 @@ def profile_api():
 
     json_data = request.get_json()
     api = json_data.get('api')
-    api_dict = dict(get_user_profile=get_user_profile,
-                    get_user_schedule=get_user_schedule,
-                    get_user_score=get_user_score,
-                    get_user_rank=get_user_rank, )
-    if api in api_dict:
-        return api_dict[api]()
+    get_api_dict = dict(get_user_profile=get_user_profile,
+                        get_user_schedule=get_user_schedule,
+                        get_user_score=get_user_score,
+                        get_user_rank=get_user_rank)
+    submit_api_dict = dict(submit_user_profile=submit_user_profile)
+    student_no = session.get('username')
+    if api in get_api_dict:
+        return get_api_dict[api]()
+    elif api in submit_api_dict:
+        return submit_api_dict[api](json_data)
     return jsonify(result=False, data=None)
 
 
