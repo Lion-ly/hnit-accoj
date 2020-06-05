@@ -41,3 +41,33 @@ function get_data(data, successFunc, url) {
         }
     })
 }
+
+function formatDateCN(date) {
+    let d = new Date(new Date(date).toUTCString()),
+        month = '' + (d.getUTCMonth() + 1),
+        day = '' + d.getUTCDate(),
+        year = d.getUTCFullYear(),
+        hour = d.getUTCHours(),
+        minute = d.getUTCMinutes();
+
+    hour = hour.toString();
+    minute = minute.toString();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+    if (hour.length < 2)
+        hour = '0' + hour;
+    if (minute.length < 2)
+        minute = '0' + minute;
+
+    return year + "年" + month + "月" + day + "日 " + hour + ":" + minute;
+}
+
+function unicodeToChar(text) {
+    return text.replace(/\\u[\dA-F]{4}/gi,
+        function (match) {
+            return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+        });
+}

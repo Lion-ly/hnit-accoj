@@ -26,9 +26,14 @@
     <link href="{{ url_for('static', filename='css/main.css') }}"
           rel="stylesheet">
     <script src="{{ url_for('static', filename='js/ajax/auth.js') }}" charset="UTF-8"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";
+        }
+
+        function get_current_user_id() {
+            return "{{ username }}";
         }
     </script>
 </head>
