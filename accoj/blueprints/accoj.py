@@ -9,9 +9,12 @@ from flask import Blueprint, render_template, request, jsonify, session, redirec
 from accoj.utils import login_required, complete_required1
 from accoj.blueprints import submit_infos, get_data
 from accoj.utils import is_number, limit_content_length
-from accoj.extensions import mongo
+from accoj.extensions import mongo, socketio
 from accoj.deal_business.create_businesses import create_businesses
+from flask_socketio import join_room, leave_room, emit
 from accoj.deal_business import cal_answer
+from bson.json_util import dumps
+from _datetime import datetime
 
 accoj_bp = Blueprint('accoj', __name__)
 MAX_BUSINESS_NO = 20
@@ -987,35 +990,46 @@ def rank():
 
 @accoj_bp.route('/profile_api', methods=['POST'])
 def profile_api():
+    """
+    个人中心api
+    :return:
+    """
+
     def get_user_profile():
+        result, data = False, None
         user = mongo.db.user.find_one(dict(student_no=student_no),
                                       dict(_id=0, password=0, role=0))
         if user:
             result, data = True, user
-        else:
-            result, data = False, None
         return jsonify(result=result, data=data)
 
     def submit_user_profile(_data):
+        result, data = False, None
+
         user = mongo.db.user.find_one(dict(student_no=student_no),
                                       dict(_id=1))
         if user:
             _data.pop('api')
+            update_data = dict(
+                nick_name=_data.get('nick_name'),
+                personalized_signature=_data.get('personalized_signature'),
+                student_borth=_data.get('student_borth'))
             mongo.db.user.update(dict(student_no=student_no),
-                                 {"$set": _data})
+                                 {"$set": update_data})
             result, data = True, None
-        else:
-            result, data = False, None
         return jsonify(result=result, data=data)
 
     def get_user_schedule():
-        return jsonify(result=True, data=1)
+        result, data = False, None
+        return jsonify(result=True, data=data)
 
     def get_user_score():
-        return jsonify(result=True, data=1)
+        result, data = False, None
+        return jsonify(result=True, data=data)
 
     def get_user_rank():
-        return jsonify(result=True, data=1)
+        result, data = False, None
+        return jsonify(result=True, data=data)
 
     json_data = request.get_json()
     api = json_data.get('api')
@@ -1095,6 +1109,51 @@ def teacher_api():
 
 
 # 教师后台管理----end-------------------------------------------------------------------------------
+
+# 消息管理系统----start-----------------------------------------------------------------------------
+@socketio.on('join')
+def on_join(data):
+    def get_message():
+        current_room = room
+        messages = mongo.db.message.find({'room': current_room}, dict(_id=0))
+        messages = dumps(messages)
+        return messages
+
+    username = session.get('username')
+    room = data.get('room')
+    join_room(room)
+    session['current_room'] = room
+    print(username + ' 进入了房间 ' + room)
+    messages = get_message()
+    emit('status', username + ' 进入了房间 ' + room, room=room)
+    emit('add_message', messages, room=room)
+
+
+@socketio.on('leave')
+def on_leave(data):
+    username = session.get('username')
+    room = data.get('room')
+    leave_room(room)
+    print(username + ' 离开了房间 ' + room)
+    emit('status', username + ' 离开了房间 ' + room, room=room)
+
+
+@socketio.on('new_room_message')
+def new_room_message(message_body):
+    username = session.get('username')
+    current_room = session.get('current_room')
+    time = datetime.now()
+    post = dict(room=current_room,
+                username=username,
+                message_body=message_body,
+                time=time)
+    mongo.db.message.insert_one(post)
+    post = dumps(post)
+
+    emit('new_room_message', post, room=current_room)
+
+
+# 消息管理系统----end-------------------------------------------------------------------------------
 
 
 # 通用视图----start---------------------------------------------------------------------------------

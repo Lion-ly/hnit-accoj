@@ -33,9 +33,14 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <script src="{{ url_for('static', filename='js/profile-base.js') }}" charset="UTF-8"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";
+        }
+
+        function get_current_user_id() {
+            return "{{ username }}";
         }
     </script>
 
@@ -226,7 +231,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     Copyright © 2019-2020 <a href="http://pointerlabs.org">PointerLabs</a>.
-                        All Rights Reserved.
+                    All Rights Reserved.
                 </div>
                 <div class="col-sm-6 text-right">
                     Designed by 指针实验室&nbsp;PointerLabs
