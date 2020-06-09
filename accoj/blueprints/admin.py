@@ -9,11 +9,25 @@
 from flask import session, request, abort
 from accoj.extensions import babel
 import flask_admin
+from flask_admin import AdminIndexView
 
 from wtforms import form, fields
 
 from flask_admin.contrib.pymongo import ModelView
 from flask_admin.model.fields import InlineFormField, InlineFieldList
+
+
+class MyIndexView(AdminIndexView):
+    def is_accessible(self):
+        role = session.get("role")
+        if role in {"root", "admin"}:
+            return True
+        else:
+            return False
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return abort(403)
 
 
 # ---------------------------------数据库后台---------------------------------------------------
@@ -136,5 +150,5 @@ def get_locale():
     return session.get('lang', 'zh_Hans_CN')
 
 
-admin = flask_admin.Admin(name='HnitAccoj')
+admin = flask_admin.Admin(name='HnitAccoj', index_view=MyIndexView())
 # ---------------------------------数据库后台------end---------------------------------------------

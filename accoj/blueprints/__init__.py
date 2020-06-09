@@ -31,13 +31,16 @@ def submit_infos(type_num, infos, submit_type, infos_name, is_first=None, busine
     return result, message
 
 
-def _submit_infos1(infos, submit_type, infos_name):
+def _submit_infos1(infos: dict, submit_type: str, infos_name: str):
     """
     提交信息（第一类，非第九次课程一二部分 、第六七次）
-    :param infos: submit infos
-    :param submit_type: submit type
-    :param infos_name: infos name
-    :return: (boolean: result, str: message)
+
+    :param
+        infos: submit infos
+    :param
+        submit_type: submit type
+    :param
+        infos_name: infos name
     """
     result, message = False, "未知错误！"
     if not infos:
@@ -67,14 +70,18 @@ def _submit_infos1(infos, submit_type, infos_name):
     return result, message
 
 
-def _submit_infos2(infos, submit_type, infos_name, is_first):
+def _submit_infos2(infos: dict, submit_type: str, infos_name: str, is_first: bool):
     """
     提交信息（第二类，第九次课程一二部分）
-    :param infos: submit infos
-    :param submit_type: submit type
-    :param infos_name: infos name
-    :param is_first: boolean
-    :return: (boolean: result, str: message)
+
+    :param
+        infos: submit infos
+    :param
+        submit_type: submit type
+    :param
+        infos_name: infos name
+    :param
+        is_first: boolean
     """
     times = "first" if is_first else "second"
     sheet_name = "new_balance_sheet_infos" if is_first else "profit_statement_infos"
@@ -109,11 +116,15 @@ def _submit_infos2(infos, submit_type, infos_name, is_first):
 def _submit_infos3(infos, submit_type, infos_name, business_no):
     """
     提交信息（第三类，第二三四六次课程）
-    :param infos: submit infos
-    :param submit_type: submit type
-    :param infos_name: infos name
-    :param business_no: business_no
-    :return: (boolean: result, str: message)
+
+    :param
+        infos: submit infos
+    :param
+        submit_type: submit type
+    :param
+        infos_name: infos name
+    :param
+        business_no: business_no
     """
     result, message = False, "未知错误！"
     if not is_number(business_no) or submit_type not in ["confirm", "save"]:
@@ -173,12 +184,17 @@ def _submit_infos3(infos, submit_type, infos_name, business_no):
 def _submit_infos4(infos, submit_type, infos_name, subject, ledger_period=False):
     """
     提交信息（第四类，`账户`和`明细账`部分）
-    :param infos: submit infos
-    :param submit_type: submit type
-    :param subject: subject
-    :param infos_name: infos name
-    :param ledger_period: leger period # 对于会计账户部分的特判 值为`1 or 2`
-    :return: (boolean: result, str: message)
+
+    :param
+        infos: submit infos
+    :param
+        submit_type: submit type
+    :param
+        subject: subject
+    :param
+        infos_name: infos name
+    :param
+        ledger_period: leger period # 对于会计账户部分的特判 值为`1 or 2`
     """
     result, message = False, "未知错误！"
     if submit_type not in ["confirm", "save"]:
@@ -241,8 +257,9 @@ def _deal_update(submit_type, find_dict, update_confirm, update_save):
 def _get_infos(infos_name):
     """
     获取信息
-    :param infos_name: infos name
-    :return: infos, confirmed, saved
+
+    :param
+        infos_name: infos name
     """
 
     def get_company():
@@ -284,10 +301,13 @@ def _get_infos(infos_name):
 def get_data(type_num, infos_name, info_keys):
     """
     获取信息，数据封装
-    :param type_num:
-    :param infos_name:
-    :param info_keys:
-    :return:
+
+    :param
+        type_num:
+    :param
+        infos_name:
+    :param
+        info_keys:
     """
     info_keys.append("scores")
     info_len = len(info_keys)
