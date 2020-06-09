@@ -25,7 +25,6 @@ MAX_BUSINESS_NO = 20
 def coursei():
     """
     第一次课程
-    :return:
     """
     return render_template('course/coursei.html')
 
@@ -34,10 +33,10 @@ def coursei():
 def get_company_info():
     """
     获取公司信息
-    :return:
     """
     company = mongo.db.company.find_one(dict(student_no=session.get("username")),
-                                        dict(_id=0, com_name=1, com_address=1, com_business_addr=1, com_legal_rep=1,
+                                        dict(_ieweweeweweed=0, com_name=1, com_address=1, com_business_addr=1,
+                                             com_legal_rep=1,
                                              com_regist_cap=1, com_operate_period=1, com_business_scope=1,
                                              com_shareholder=1))
     # 公司已经创立过，填充表单
@@ -50,7 +49,6 @@ def get_company_info():
 def submit_company_info():
     """
     提交公司创立信息表单
-    :return:
     """
 
     def get_schedule_dict(schedule_type):
@@ -156,7 +154,6 @@ def submit_company_info():
 def submit_business_info():
     """
     提交业务内容信息，提交成功后不可修改
-    :return:
     """
     company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
                                         dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
@@ -191,7 +188,6 @@ def submit_business_info():
 def get_business_info():
     """
     获取业务内容信息
-    :return:
     """
     username = session.get("username")
     company = mongo.db.company.find_one(dict(student_no="{}".format(username)),
@@ -210,7 +206,6 @@ def get_business_info():
 def create_business():
     """
     生成业务
-    :return:
     """
     result, message = False, "公司未创立！"
     username = session.get("username")
@@ -236,7 +231,7 @@ def create_business():
 @complete_required1
 def courseii():
     """
-    :return:
+    第二次课程
     """
     return render_template('course/courseii.html')
 
@@ -245,7 +240,6 @@ def courseii():
 def submit_key_element_info():
     """
     提交会计要素信息
-    :return:
     """
     json_data = request.get_json()
     business_no = json_data.get("business_no")
@@ -263,8 +257,7 @@ def submit_key_element_info():
 @accoj_bp.route('/get_key_element_info', methods=['POST'])
 def get_key_element_info():
     """
-    # 获取会计要素信息
-    :return:
+    获取会计要素信息
     """
     infos_name = "key_element"
     info_keys = ["key_element_infos", "answer_infos", "key_element_confirmed", "key_element_saved"]
@@ -280,7 +273,7 @@ def get_key_element_info():
 @complete_required1
 def courseiii():
     """
-    :return:
+    第三次课程
     """
     return render_template('course/courseiii.html')
 
@@ -289,7 +282,6 @@ def courseiii():
 def submit_subject_info():
     """
     提交会计科目信息
-    :return:
     """
     json_data = request.get_json()
     business_no = json_data.get("business_no")
@@ -309,7 +301,6 @@ def submit_subject_info():
 def get_subject_info():
     """
     获取会计科目信息
-    :return:
     """
     infos_name = "subject"
     info_keys = ["subject_infos", "answer_infos", "subject_confirmed", "subject_saved"]
@@ -325,7 +316,7 @@ def get_subject_info():
 @complete_required1
 def courseiv():
     """
-    :return:
+    第四次课程
     """
     return render_template('course/courseiv.html')
 
@@ -334,7 +325,7 @@ def courseiv():
 def submit_entry_info():
     """
     提交会计分录信息
-    :return:
+
     """
     json_data = request.get_json()
     business_no = json_data.get("business_no")
@@ -354,7 +345,6 @@ def submit_entry_info():
 def get_entry_info():
     """
     获取会计分录信息
-    :return:
     """
     infos_name = "entry"
     info_keys = ["entry_infos", "answer_infos", "entry_confirmed", "entry_saved"]
@@ -371,7 +361,6 @@ def get_entry_info():
 def coursev():
     """
     设立账户
-    :return:
     """
     return render_template('course/coursev.html')
 
@@ -380,7 +369,6 @@ def coursev():
 def submit_ledger_info():
     """
     提交会计账户信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("ledger_info")
@@ -401,7 +389,6 @@ def submit_ledger_info():
 def get_ledger_info():
     """
     获取会计账户信息
-    :return:
     """
     infos_name = "ledger"
     info_keys = ["ledger_infos", "answer_infos", "ledger_confirmed", "ledger_saved"]
@@ -413,7 +400,6 @@ def get_ledger_info():
 def delete_ledger_info():
     """
     删除会计账户信息
-    :return:
     """
     json_data = request.get_json()
     subject = json_data.get("subject")
@@ -456,7 +442,6 @@ def delete_ledger_info():
 def coursev_2():
     """
     平衡表
-    :return:
     """
     return render_template('course/coursev_2.html')
 
@@ -465,7 +450,6 @@ def coursev_2():
 def submit_balance_sheet_info():
     """
     提交平衡表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("balance_sheet_infos")
@@ -480,7 +464,6 @@ def submit_balance_sheet_info():
 def get_balance_sheet_info():
     """
     获取平衡表信息
-    :return:
     """
     infos_name = "balance_sheet"
     info_keys = ["balance_sheet_infos", "answer_infos", "balance_sheet_confirmed", "balance_sheet_saved"]
@@ -496,7 +479,7 @@ def get_balance_sheet_info():
 @complete_required1
 def coursevi():
     """
-    :return:
+
     """
     return render_template('course/coursevi.html')
 
@@ -506,7 +489,6 @@ def coursevi():
 def submit_acc_document_info():
     """
     提交会计凭证信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("acc_document_infos")
@@ -526,7 +508,6 @@ def submit_acc_document_info():
 def get_acc_document_info():
     """
     获取会计凭证信息
-    :return:
     """
     infos_name = "acc_document"
     info_keys = ["acc_document_infos", "answer_infos", "acc_document_confirmed", "acc_document_saved"]
@@ -538,7 +519,6 @@ def get_acc_document_info():
 def download_acc_document_info():
     """
     下载会计凭证信息
-    :return:
     """
     json_data = request.get_json()
     business_no = json_data.get("business_no")
@@ -563,7 +543,6 @@ def download_acc_document_info():
 def coursevii():
     """
     账户明细账
-    :return:
     """
     return render_template('course/coursevii.html')
 
@@ -572,7 +551,6 @@ def coursevii():
 def submit_subsidiary_account_info():
     """
     提交会计明细账信息
-    :return:
     """
 
     json_data = request.get_json()
@@ -591,7 +569,6 @@ def submit_subsidiary_account_info():
 def get_subsidiary_account_info():
     """
     获取会计明细账信息
-    :return:
     """
     infos_name = "subsidiary_account"
     info_keys = ["subsidiary_account_infos", "answer_infos", "subsidiary_account_confirmed", "subsidiary_account_saved"]
@@ -603,7 +580,6 @@ def get_subsidiary_account_info():
 def submit_acc_balance_sheet_info():
     """
     提交科目余额表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("acc_balance_sheet_infos")
@@ -618,7 +594,6 @@ def submit_acc_balance_sheet_info():
 def get_acc_balance_sheet_info():
     """
     获取科目余额表信息
-    :return:
     """
     infos_name = "acc_balance_sheet"
     info_keys = ["acc_balance_sheet_infos", "answer_infos", "acc_balance_sheet_confirmed", "acc_balance_sheet_saved"]
@@ -634,7 +609,7 @@ def get_acc_balance_sheet_info():
 @complete_required1
 def courseviii():
     """
-    :return:
+    第八次课程
     """
     return render_template('course/courseviii.html')
 
@@ -644,7 +619,6 @@ def courseviii():
 def submit_new_balance_sheet_info():
     """
     提交资产负债表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("new_balance_sheet_infos")
@@ -659,7 +633,6 @@ def submit_new_balance_sheet_info():
 def get_new_balance_sheet_info():
     """
     获取资产负债表信息
-    :return:
     """
     infos_name = "new_balance_sheet"
     info_keys = ["new_balance_sheet_infos", "answer_infos", "new_balance_sheet_confirmed", "new_balance_sheet_saved"]
@@ -671,7 +644,6 @@ def get_new_balance_sheet_info():
 def submit_profit_statement_info():
     """
     提交利润表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("profit_statement_infos")
@@ -686,7 +658,6 @@ def submit_profit_statement_info():
 def get_profit_statement_info():
     """
     获取利润表信息
-    :return:
     """
     infos_name = "profit_statement"
     info_keys = ["profit_statement_infos", "answer_infos", "profit_statement_confirmed", "profit_statement_saved"]
@@ -703,7 +674,6 @@ def get_profit_statement_info():
 def courseix():
     """
     第九次课程第一部分
-    :return:
     """
     return render_template('course/courseix.html')
 
@@ -712,7 +682,6 @@ def courseix():
 def submit_ix_first_info():
     """
     趋势分析法 提交资产负债表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("ixFirst_infos")
@@ -728,7 +697,6 @@ def submit_ix_first_info():
 def get_ix_first_info():
     """
     趋势分析法 获取资产负债表信息
-    :return:
     """
     infos_name = "trend_analysis"
     info_keys = ["ixFirst_infos", "answer_infos", "confirm", "saved"]
@@ -740,7 +708,6 @@ def get_ix_first_info():
 def submit_ix_second_info():
     """
     趋势分析法 提交利润表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("ixSecond_infos")
@@ -756,7 +723,6 @@ def submit_ix_second_info():
 def get_ix_second_info():
     """
     趋势分析法 获取利润表信息
-    :return:
     """
     infos_name = "trend_analysis"
     info_keys = ["ixSecond_infos", "answer_infos", "confirm", "saved"]
@@ -769,7 +735,6 @@ def get_ix_second_info():
 def courseix_2():
     """
     第九次课程第二部分
-    :return:
     """
     return render_template('course/courseix_2.html')
 
@@ -778,7 +743,6 @@ def courseix_2():
 def submit_ix2_first_info():
     """
     共同比分析法 资产负债表
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("ix2First_infos")
@@ -794,7 +758,6 @@ def submit_ix2_first_info():
 def get_ix2_first_info():
     """
     共同比分析法 获取资产负债表信息
-    :return:
     """
     infos_name = "common_ratio_analysis"
     info_keys = ["ix2First_infos", "answer_infos", "confirm", "saved"]
@@ -806,7 +769,6 @@ def get_ix2_first_info():
 def submit_ix2_second_info():
     """
     共同比分析法 提交利润表信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("ix2Second_infos")
@@ -822,7 +784,6 @@ def submit_ix2_second_info():
 def get_ix2_second_info():
     """
     共同比分析法 获取利润表信息
-    :return:
     """
     infos_name = "common_ratio_analysis"
     info_keys = ["ix2Second_infos", "answer_infos", "confirm", "saved"]
@@ -835,7 +796,6 @@ def get_ix2_second_info():
 def courseix_3():
     """
     第九次课程第三部分
-    :return:
     """
     return render_template('course/courseix_3.html')
 
@@ -845,7 +805,6 @@ def courseix_3():
 def courseix_4():
     """
     第九次课程第四部分
-    :return:
     """
     return render_template('course/courseix_4.html')
 
@@ -854,7 +813,6 @@ def courseix_4():
 def submit_ix4_info():
     """
     提交比率分析法信息
-    :return:
     """
     json_data = request.get_json()
     infos = json_data.get("ix4_infos")
@@ -869,7 +827,6 @@ def submit_ix4_info():
 def get_ix4_info():
     """
     获取比率分析法信息
-    :return:
     """
     infos_name = "ratio_analysis"
     info_keys = ["ix4_infos", "answer_infos", "ix4_confirmed", "ix4_saved"]
@@ -886,7 +843,6 @@ def get_ix4_info():
 def coursex():
     """
     杜邦分析法
-    :return:
     """
     return render_template('course/coursex.html')
 
@@ -895,7 +851,7 @@ def coursex():
 def submit_coursex_info():
     """
     提交杜邦分析法信息
-    :return:
+
     """
     json_data = request.get_json()
     infos = json_data.get("coursex_infos")
@@ -910,7 +866,6 @@ def submit_coursex_info():
 def get_coursex_info():
     """
     获取杜邦分析法信息
-    :return:
     """
     infos_name = "dupont_analysis"
     info_keys = ["coursex_infos", "answer_infos", "coursex_confirmed", "coursex_saved"]
@@ -926,7 +881,6 @@ def get_coursex_info():
 def profile():
     """
     个人信息
-    :return:
     """
     return render_template('profile/index.html')
 
@@ -935,7 +889,6 @@ def profile():
 def message_system():
     """
     系统通知
-    :return:
     """
     role = session.get('role')
     template_dict = dict(student='profile/message_system.html',
@@ -948,7 +901,6 @@ def message_system():
 def message_whisper():
     """
     消息面板
-    :return:
     """
     role = session.get('role')
     template_dict = dict(student='profile/message_whisper.html',
@@ -961,7 +913,6 @@ def message_whisper():
 def profile_schedule():
     """
     完成进度
-    :return:
     """
     return render_template('profile/profile-schedule.html')
 
@@ -970,7 +921,6 @@ def profile_schedule():
 def profile_score():
     """
     学生成绩
-    :return:
     """
     return render_template('profile/profile-score.html')
 
@@ -979,7 +929,6 @@ def profile_score():
 def rank():
     """
     排行榜
-    :return:
     """
     role = session.get('role')
     template_dict = dict(student='profile/rank.html',
@@ -992,7 +941,6 @@ def rank():
 def profile_api():
     """
     个人中心api
-    :return:
     """
 
     def get_user_profile():
@@ -1003,7 +951,7 @@ def profile_api():
             result, data = True, user
         return jsonify(result=result, data=data)
 
-    def submit_user_profile(_data):
+    def submit_user_profile(_data: dict):
         result, data = False, None
 
         user = mongo.db.user.find_one(dict(student_no=student_no),
@@ -1012,6 +960,7 @@ def profile_api():
             _data.pop('api')
             update_data = dict(
                 nick_name=_data.get('nick_name'),
+                student_sex=_data.get('student_sex'),
                 personalized_signature=_data.get('personalized_signature'),
                 student_borth=_data.get('student_borth'))
             mongo.db.user.update(dict(student_no=student_no),
@@ -1053,7 +1002,6 @@ def profile_api():
 def teacher():
     """
     个人信息
-    :return:
     """
     return render_template('teacher/index.html')
 
@@ -1062,7 +1010,6 @@ def teacher():
 def add_class():
     """
     添加班级
-    :return:
     """
     return render_template('teacher/add-class.html')
 
@@ -1071,7 +1018,6 @@ def add_class():
 def manage_time():
     """
     时间管理
-    :return:
     """
     return render_template('teacher/manage-time.html')
 
@@ -1080,7 +1026,6 @@ def manage_time():
 def teacher_correct():
     """
     批改作业
-    :return:
     """
     return render_template('teacher/teacher-correct.html')
 
@@ -1089,7 +1034,6 @@ def teacher_correct():
 def teacher_notify_c():
     """
     发送通知(班级通知)
-    :return:
     """
     return render_template('teacher/teacher-notify-p.html')
 
@@ -1098,7 +1042,6 @@ def teacher_notify_c():
 def teacher_notify_p():
     """
     发送通知(个人通知)
-    :return:
     """
     return render_template('teacher/teacher-notify-c.html')
 
@@ -1112,25 +1055,20 @@ def teacher_api():
 
 # 消息管理系统----start-----------------------------------------------------------------------------
 @socketio.on('join')
-def on_join(data):
-    def get_message():
-        current_room = room
-        messages = mongo.db.message.find({'room': current_room}, dict(_id=0))
-        messages = dumps(messages)
-        return messages
-
+def on_join(data: dict):
     username = session.get('username')
     room = data.get('room')
     join_room(room)
     session['current_room'] = room
     print(username + ' 进入了房间 ' + room)
-    messages = get_message()
+    messages = mongo.db.message.find({'room': room}, dict(_id=0))
+    messages = dumps(messages)
     emit('status', username + ' 进入了房间 ' + room, room=room)
     emit('add_message', messages, room=room)
 
 
 @socketio.on('leave')
-def on_leave(data):
+def on_leave(data: dict):
     username = session.get('username')
     room = data.get('room')
     leave_room(room)
@@ -1139,7 +1077,7 @@ def on_leave(data):
 
 
 @socketio.on('new_room_message')
-def new_room_message(message_body):
+def new_room_message(message_body: str):
     username = session.get('username')
     current_room = session.get('current_room')
     time = datetime.now()
@@ -1153,6 +1091,10 @@ def new_room_message(message_body):
     emit('new_room_message', post, room=current_room)
 
 
+def send_system_message():
+    pass
+
+
 # 消息管理系统----end-------------------------------------------------------------------------------
 
 
@@ -1162,7 +1104,6 @@ def new_room_message(message_body):
 def get_business_list():
     """
     获取业务信息列表
-    :return:
     """
     company = mongo.db.company.find_one({"student_no": session.get("username")},
                                         {"businesses": 1, "involve_subjects": 1, "_id": 0})
@@ -1185,7 +1126,6 @@ def get_business_list():
 def accoj_bp_before_request():
     """
     请求前钩子函数（局部）
-    :return:
     """
     if session.get("role") == "admin":
         return redirect(url_for('admin.index'))
