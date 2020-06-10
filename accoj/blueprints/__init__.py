@@ -35,12 +35,9 @@ def _submit_infos1(infos: dict, submit_type: str, infos_name: str):
     """
     提交信息（第一类，非第九次课程一二部分 、第六七次）
 
-    :param
-        infos: submit infos
-    :param
-        submit_type: submit type
-    :param
-        infos_name: infos name
+    :param infos: submit infos
+    :param submit_type: submit type
+    :param infos_name: infos name
     """
     result, message = False, "未知错误！"
     if not infos:
@@ -74,14 +71,10 @@ def _submit_infos2(infos: dict, submit_type: str, infos_name: str, is_first: boo
     """
     提交信息（第二类，第九次课程一二部分）
 
-    :param
-        infos: submit infos
-    :param
-        submit_type: submit type
-    :param
-        infos_name: infos name
-    :param
-        is_first: boolean
+    :param infos: submit infos
+    :param submit_type: submit type
+    :param infos_name: infos name
+    :param is_first: boolean
     """
     times = "first" if is_first else "second"
     sheet_name = "new_balance_sheet_infos" if is_first else "profit_statement_infos"
@@ -117,14 +110,10 @@ def _submit_infos3(infos, submit_type, infos_name, business_no):
     """
     提交信息（第三类，第二三四六次课程）
 
-    :param
-        infos: submit infos
-    :param
-        submit_type: submit type
-    :param
-        infos_name: infos name
-    :param
-        business_no: business_no
+    :param infos: submit infos
+    :param submit_type: submit type
+    :param infos_name: infos name
+    :param business_no: business_no
     """
     result, message = False, "未知错误！"
     if not is_number(business_no) or submit_type not in ["confirm", "save"]:
@@ -185,16 +174,11 @@ def _submit_infos4(infos, submit_type, infos_name, subject, ledger_period=False)
     """
     提交信息（第四类，`账户`和`明细账`部分）
 
-    :param
-        infos: submit infos
-    :param
-        submit_type: submit type
-    :param
-        subject: subject
-    :param
-        infos_name: infos name
-    :param
-        ledger_period: leger period # 对于会计账户部分的特判 值为`1 or 2`
+    :param infos: submit infos
+    :param submit_type: submit type
+    :param subject: subject
+    :param infos_name: infos name
+    :param ledger_period: leger period # 对于会计账户部分的特判 值为`1 or 2`
     """
     result, message = False, "未知错误！"
     if submit_type not in ["confirm", "save"]:
@@ -258,8 +242,7 @@ def _get_infos(infos_name):
     """
     获取信息
 
-    :param
-        infos_name: infos name
+    :param infos_name: infos name
     """
 
     def get_company():
@@ -302,12 +285,9 @@ def get_data(type_num, infos_name, info_keys):
     """
     获取信息，数据封装
 
-    :param
-        type_num:
-    :param
-        infos_name:
-    :param
-        info_keys:
+    :param type_num:
+    :param infos_name:
+    :param info_keys:
     """
     info_keys.append("scores")
     info_len = len(info_keys)

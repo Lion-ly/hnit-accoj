@@ -976,16 +976,11 @@ def profile_api():
         result, data = False, None
         return jsonify(result=True, data=data)
 
-    def get_user_rank():
-        result, data = False, None
-        return jsonify(result=True, data=data)
-
     json_data = request.get_json()
     api = json_data.get('api')
     get_api_dict = dict(get_user_profile=get_user_profile,
                         get_user_schedule=get_user_schedule,
-                        get_user_score=get_user_score,
-                        get_user_rank=get_user_rank)
+                        get_user_score=get_user_score)
     submit_api_dict = dict(submit_user_profile=submit_user_profile)
     student_no = session.get('username')
     if api in get_api_dict:
@@ -993,6 +988,14 @@ def profile_api():
     elif api in submit_api_dict:
         return submit_api_dict[api](json_data)
     return jsonify(result=False, data=None)
+
+
+@accoj_bp.route('/get_user_rank', methods=['GET'])
+def get_user_rank():
+    result, data = False, None
+    # test data
+    data = [[1, 'Tiger Nixon', 'System Architect', 550, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]]
+    return jsonify(result=True, data=data)
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------
@@ -1035,7 +1038,7 @@ def teacher_notify_c():
     """
     发送通知(班级通知)
     """
-    return render_template('teacher/teacher-notify-p.html')
+    return render_template('teacher/teacher-notify-c.html')
 
 
 @accoj_bp.route('/teacher_notify_p', methods=['GET'])
@@ -1043,7 +1046,7 @@ def teacher_notify_p():
     """
     发送通知(个人通知)
     """
-    return render_template('teacher/teacher-notify-c.html')
+    return render_template('teacher/teacher-notify-p.html')
 
 
 @accoj_bp.route('/teacher_api', methods=['POST'])
@@ -1058,6 +1061,11 @@ def teacher_api():
 def on_join(data: dict):
     username = session.get('username')
     room = data.get('room')
+    # test
+    # if room == username:
+    #    message_head = "作业提交时间截至通知"
+    #    message_body = "请及时完成作业。将于2020-06-05 00:00 截止 当前状态：待提交"
+    #    send_system_message(message_head=message_head, message_body=message_body)
     join_room(room)
     session['current_room'] = room
     print(username + ' 进入了房间 ' + room)
@@ -1091,8 +1099,25 @@ def new_room_message(message_body: str):
     emit('new_room_message', post, room=current_room)
 
 
-def send_system_message():
-    pass
+def send_system_message(message_head: str, message_body: str):
+    """
+    发送系统消息
+
+    :param message_head: message head
+    :param message_body: message body
+    :return: None
+    """
+    time = datetime.now()
+    current_room = session.get('username')
+    username = 'system'
+    message = dict(room=current_room,
+                   username=username,
+                   message_head=message_head,
+                   message_body=message_body,
+                   time=time)
+    mongo.db.message.insert_one(message)
+    message = dumps(message)
+    emit('new_room_message', message, room=current_room)
 
 
 # 消息管理系统----end-------------------------------------------------------------------------------
