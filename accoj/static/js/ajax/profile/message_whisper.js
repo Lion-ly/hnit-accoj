@@ -49,16 +49,17 @@ function addMessage(_data) {
             // if (time - window.lastTime > 5 * 60 * 1000) // 消息间隔时间在五分钟内则不显示时间戳
             //                messages += "<time>" + formatDateCN(time) + "</time>";
             window.lastTime = time;
+            time = formatDateCN(time);
 
             if (username == uuId) {
                 messages += "<div data-message class=\"msg-item msg-item-right\">" +
-                    "<p style='text-align: right;margin-bottom: 0'><small class='time-stamp'>" + formatDateCN(time) + "</small><br/>" + message_body + "</p>" +
+                    "<p style='text-align: right;margin-bottom: 0'><small class='time-stamp'>" + time + "</small><br/>" + message_body + "</p>" +
                     "<img src=\"\" alt=\"\">" +
                     "</div>";
             } else {
                 messages += "<div data-message class=\"msg-item msg-item-left\">" +
                     "<img src=\"\" alt=\"\">" +
-                    "<p style='margin-bottom: 0'><small class='nickname'>" + username + "</small>&nbsp;<small class='time-stamp'>" + formatDateCN(time) + "</small>" + "<br/>" + message_body + "</p>" +
+                    "<p style='margin-bottom: 0'><small class='nickname'>" + username + "</small>&nbsp;<small class='time-stamp'>" + time + "</small>" + "<br/>" + message_body + "</p>" +
                     "</div>";
             }
         }
@@ -67,7 +68,7 @@ function addMessage(_data) {
     }
 
     // 清空原消息框
-    $('div[data-message-box]').html("");
+    $('div[data-message-content]').html("");
     addMessageContent(_data);
 }
 
@@ -83,16 +84,17 @@ function showNewMessage(_data) {
     // if (time - window.lastTime > 5 * 60 * 60) // 消息间隔时间在五分钟内则不显示时间戳
     //    messages += "<time>" + formatDateCN(time) + "</time>";
     window.lastTime = time;
+    time = formatDateCN(time);
 
     if (username == uuId) {
         messages += "<div data-message class=\"msg-item msg-item-right\">" +
-            "<p style='text-align: right;margin-bottom: 0'><small class='time-stamp'>" + formatDateCN(time) + "</small><br/>" + message_body + "</p>" +
+            "<p style='text-align: right;margin-bottom: 0'><small class='time-stamp'>" + time + "</small><br/>" + message_body + "</p>" +
             "<img src=\"\" alt=\"\">" +
             "</div>";
     } else {
         messages += "<div data-message class=\"msg-item msg-item-left\">" +
             "<img src=\"\" alt=\"\">" +
-            "<p style='margin-bottom: 0'><small>" + username + "</small>&nbsp;<small class='time-stamp'>" + formatDateCN(time) + "</small>" + "<br/>" + message_body + "</p>" +
+            "<p style='margin-bottom: 0'><small>" + username + "</small>&nbsp;<small class='time-stamp'>" + time + "</small>" + "<br/>" + message_body + "</p>" +
             "</div>";
     }
     $('div[data-message-box]').append(messages);
