@@ -7,7 +7,7 @@
 # @Software: PyCharm
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from accoj.utils import login_required, complete_required1
-from accoj.blueprints import submit_infos, get_data
+from accoj.blueprints import submit_infos, get_data, update_business_score
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo, socketio
 from accoj.deal_business.create_businesses import create_businesses
@@ -179,6 +179,8 @@ def submit_business_info():
                                 {"$set": {"schedule_confirm.business_confirm": True,
                                           "involve_subjects"                 : involve_subjects}},
                                 multi=True)
+        # 更新成绩
+        update_business_score()
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")
@@ -969,12 +971,104 @@ def profile_api():
         return jsonify(result=result, data=data)
 
     def get_user_schedule():
-        result, data = False, None
-        return jsonify(result=True, data=data)
+        schedule_info = mongo.db.company.find_one(dict(student_no=student_no),
+                                                  dict(_id=0, schedule_confirm=1))
+        # 判断是否有进度
+        if schedule_info:
+            data = []
+            schedule_info = schedule_info.get("schedule_confirm")
+            # 获取涉及的科目数量
+            involve_subjects = mongo.db.company.find_one(dict(student_no=student_no),
+                                                         dict(_id=0, involve_subjects=1)).get("involve_subjects")
+            involve_subjects_1 = involve_subjects.get("involve_subjects_1")
+            involve_subjects_2 = involve_subjects.get("involve_subjects_2")
+            sum_subjects_len = len(set(involve_subjects_1 + involve_subjects_2))
+
+            # 获取进度值
+            trend_analysis_confirm = schedule_info.get("trend_analysis_confirm")
+            common_ratio_analysis_confirm = schedule_info.get("common_ratio_analysis_confirm")
+
+            if schedule_info.get("business_confirm"):
+                data.append(100)
+
+            key_element_score = int((len(schedule_info.get("key_element_confirm")) / 20) * 100)
+            data.append(key_element_score)
+
+            subject_score = int((len(schedule_info.get("subject_confirm")) / 20) * 100)
+            data.append(subject_score)
+
+            entry_schedule_score = int((len(schedule_info.get("entry_confirm")) / 20) * 100)
+            data.append(entry_schedule_score)
+
+            # ledger_confirm   25 25 50
+            ledger__schedule_score = 0
+            ledger__schedule_score += int(
+                (len(schedule_info.get("ledger_confirm").get("ledger1_confirm")) / len(involve_subjects_1)) * 25)
+            ledger__schedule_score += int(
+                (len(schedule_info.get("ledger_confirm").get("ledger2_confirm")) / len(involve_subjects_2)) * 25)
+            if schedule_info.get("balance_sheet_confirm"):
+                ledger__schedule_score += 50
+            data.append(ledger__schedule_score)
+
+            acc_document_schedule_score = int((len(schedule_info.get("acc_document_confirm")) / 20) * 100)
+            data.append(acc_document_schedule_score)
+
+            # 会计账簿部分得分
+            account_schedule_score = 0
+            account_schedule_score += int(
+                (len(schedule_info.get("subsidiary_account_confirm")) / sum_subjects_len) * 50)
+            if schedule_info.get("acc_balance_sheet_confirm"):
+                account_schedule_score += 50
+            data.append(account_schedule_score)
+
+            # 会计报表部分得分
+            Financial_Statements_schecule_score = 0
+            if schedule_info.get("new_balance_sheet_confirm"):
+                Financial_Statements_schecule_score += 50
+            if schedule_info.get("profit_statement_confirm"):
+                Financial_Statements_schecule_score += 50
+            data.append(Financial_Statements_schecule_score)
+
+            # 因素分析未做  20*5 or 15*4+20*2
+            analysis_schedule_score = 0
+            if trend_analysis_confirm.get("first"):
+                analysis_schedule_score += 20
+            if trend_analysis_confirm.get("second"):
+                analysis_schedule_score += 20
+            if common_ratio_analysis_confirm.get("first"):
+                analysis_schedule_score += 20
+            if common_ratio_analysis_confirm.get("second"):
+                analysis_schedule_score += 20
+            if schedule_info.get("ratio_analysis_confirm"):
+                analysis_schedule_score += 20
+            data.append(analysis_schedule_score)
+
+            # 杜邦
+            dupont_schedule_score = 0
+            if schedule_info.get("dupont_analysis_confirm"):
+                dupont_schedule_score += 100
+            data.append(dupont_schedule_score)
+
+            result, data = True, data
+        else:
+            data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            result, data = True, data
+        return jsonify(result=result, data=data)
 
     def get_user_score():
-        result, data = False, None
-        return jsonify(result=True, data=data)
+        user = mongo.db.user.find_one(dict(student_no=student_no),
+                                      dict(_id=1))
+        if user:
+            a_keys = ['_id', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+            a_values = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            search_dict = dict(zip(a_keys, a_values))
+            data_tmp = mongo.db.score.find_one({"student_no": "17020340139"}, search_dict)
+            data = list(data_tmp.values())
+            result =True
+        else:
+            result = False
+            data = None
+        return jsonify(result=result, data=data)
 
     json_data = request.get_json()
     api = json_data.get('api')
@@ -992,10 +1086,13 @@ def profile_api():
 
 @accoj_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
-    result, data = False, None
-    # test data
-    data = [[1, 'Tiger Nixon', 'System Architect', 550, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]]
-    return jsonify(result=True, data=data)
+    # 获取所有的成绩信息
+    scores_info = mongo.db.score.find({}, {"_id": 0})
+    scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
+    for i in range(0, len(scores_info_sorted)):
+        scores_info_sorted[i]["rank"] = i + 1
+    result, data = True, scores_info_sorted
+    return jsonify(result=result, data=data)
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------

@@ -10,7 +10,7 @@ function _init_() {
     }
 
     function plotScoreChart(_data) {
-        let dateArray = _data ? _data.user_schedule: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        let dateArray = _data,
             sum = dateArray.reduce((a, b) => a + b),
             backgroundColor = Array(),
             c1 = 'rgba(255, 99, 132, 0.6)',

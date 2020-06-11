@@ -10,7 +10,7 @@ function _init_() {
     }
 
     function plotScheduleChart(_data) {
-        let dateArray = _data ? _data.user_schedule : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        let dateArray = _data,
             backgroundColor = Array(),
             c1 = 'rgba(255, 99, 132, 0.6)',
             c2 = 'rgba(153, 102, 255, 0.6)',
