@@ -87,11 +87,11 @@ def assign_email():
                 department = [3]
                 position = 'Hunan'
                 body_value = {
-                    "userid"    : userid,
-                    "name"      : name,
-                    "mobile"    : mobile,
+                    "userid": userid,
+                    "name": name,
+                    "mobile": mobile,
                     "department": department,
-                    "position"  : position
+                    "position": position
                 }
                 body = json.dumps(body_value)
                 add_response = requests.post(add_url, date=body)

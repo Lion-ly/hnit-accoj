@@ -171,7 +171,7 @@ def check_email():
             send_mail(email, mail_random, 0, 0)
             if mongo.db.other.find_one(mail):
                 temp = {
-                    "time" : datetime.datetime.utcnow(),
+                    "time": datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.update(mail, {"$set": temp})
@@ -179,7 +179,7 @@ def check_email():
             else:
                 data = {
                     "email": email,
-                    "time" : datetime.datetime.utcnow(),
+                    "time": datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.insert_one(data)
