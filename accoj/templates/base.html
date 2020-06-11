@@ -147,13 +147,20 @@
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <label class="control-label" for="signin-studentid">学&nbsp;&nbsp;号</label>
                         <input type="text" class="form-control" id="signin-studentid"
-                               name="studentid" placeholder="Student ID" required> <label
-                            class="control-label" for="signin-password">密&nbsp;&nbsp;码</label>
-                        <input type="password" class="form-control" id="signin-password"
-                               name="password" placeholder="Password" required> <label
-                            for="signin-rememberme"> <input id="signin-rememberme"
-                                                            type="checkbox" name="rememberme">&nbsp;&nbsp;记住我
-                    </label>
+                               name="studentid" placeholder="Student ID" required>
+                        <label class="control-label" for="signin-password">密&nbsp;&nbsp;码</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control pwd" id="signin-password"
+                                   name="password" placeholder="Password" required>
+                            <span class="input-group-btn">
+                                <button data-reveal class="btn btn-default" type="button">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <label for="signin-rememberme">
+                            <input id="signin-rememberme" type="checkbox" name="rememberme">&nbsp;&nbsp;记住我
+                        </label>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success" id="signin_button">
                                 <span class="glyphicon glyphicon-ok"></span>&nbsp;登录
@@ -205,16 +212,26 @@
                                 <option>网络1703</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" for="login-password">密&nbsp;&nbsp;码</label>
-                            <input type="password" class="form-control" id="login-password"
+                        <label class="control-label" for="login-password">密&nbsp;&nbsp;码</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control pwd" id="login-password"
                                    name="password" placeholder="Password" required>
+                            <span class="input-group-btn">
+                                <button data-reveal class="btn btn-default" type="button">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </span>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" for="login-password-again">确认密码</label>
-                            <input type="password" class="form-control"
+                        <label class="control-label" for="login-password-again">确认密码</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control pwd"
                                    id="login-password-again" name="password_again"
                                    placeholder="Password again" required>
+                            <span class="input-group-btn">
+                                <button data-reveal class="btn btn-default" type="button">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </span>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="login-email">密保邮箱</label> <a
@@ -314,22 +331,37 @@
                     <h4 class="modal-title" id="myModalLabel">更改密码</h4>
                 </div>
                 <div class="modal-body form-group">
+                    <label class="control-label" for="origin_pwd">原密码</label>
                     <form id="update_pwd_form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <div class="form-group">
-                            <label class="control-label" for="origin_pwd">原密码</label>
-                            <input type="password" class="form-control" id="origin_pwd"
+                        <div class="input-group">
+                            <input type="password" class="form-control pwd" id="origin_pwd"
                                    name="origin_pwd" placeholder="Origin Password" required>
+                            <span class="input-group-btn">
+                                <button data-reveal class="btn btn-default" type="button">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </span>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" for="new_pwd">新密码</label>
-                            <input type="password" class="form-control" id="new_pwd" name="new_pwd"
+                        <label class="control-label" for="new_pwd">新密码</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control pwd" id="new_pwd" name="new_pwd"
                                    placeholder="New Password" required>
+                            <span class="input-group-btn">
+                                <button data-reveal class="btn btn-default" type="button">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </span>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" for="new_pwd_again">确认新密码</label>
-                            <input type="password" class="form-control" id="new_pwd_again" name="new_pwd_again"
+                        <label class="control-label" for="new_pwd_again">确认新密码</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control pwd" id="new_pwd_again" name="new_pwd_again"
                                    placeholder="Password_again " required>
+                            <span class="input-group-btn">
+                                <button data-reveal class="btn btn-default" type="button">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </span>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success"

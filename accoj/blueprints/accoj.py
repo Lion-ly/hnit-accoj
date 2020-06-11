@@ -35,7 +35,7 @@ def get_company_info():
     获取公司信息
     """
     company = mongo.db.company.find_one(dict(student_no=session.get("username")),
-                                        dict(_ieweweeweweed=0, com_name=1, com_address=1, com_business_addr=1,
+                                        dict(_id=0, com_name=1, com_address=1, com_business_addr=1,
                                              com_legal_rep=1,
                                              com_regist_cap=1, com_operate_period=1, com_business_scope=1,
                                              com_shareholder=1))
