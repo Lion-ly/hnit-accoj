@@ -7,6 +7,7 @@
 # @Software: PyCharm
 import os, datetime
 from urllib import parse
+from accoj.news_spider import news_spider
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -31,6 +32,8 @@ class BaseConfig(object):
 
     MAIL_PASSWORD = "Accountoj2020"
     MAIL_DEFAULT_SENDER = ('Bluelog Admin', MAIL_USERNAME)
+
+    DOWNLOAD_FOLD = 'download'
     # 静态文件缓存过期时间，默认43200s即12hours
     # 即更新时客户端静态文件不会立即更新而是在12hours之后更新
     SEND_FILE_MAX_AGE_DEFAULT = datetime.timedelta(seconds=12 * 60 * 60)

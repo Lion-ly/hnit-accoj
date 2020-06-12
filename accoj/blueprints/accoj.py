@@ -6,7 +6,7 @@
 # @File    : accoj.py
 # @Software: PyCharm
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
-from accoj.utils import login_required, complete_required1
+from accoj.utils import login_required, complete_required1, login_required_teacher
 from accoj.blueprints import submit_infos, get_data, update_business_score
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo, socketio
@@ -15,6 +15,7 @@ from flask_socketio import join_room, leave_room, emit
 from accoj.deal_business import cal_answer
 from bson.json_util import dumps
 from _datetime import datetime
+from flask import request
 
 accoj_bp = Blueprint('accoj', __name__)
 MAX_BUSINESS_NO = 20
@@ -35,7 +36,7 @@ def get_company_info():
     获取公司信息
     """
     company = mongo.db.company.find_one(dict(student_no=session.get("username")),
-                                        dict(_ieweweeweweed=0, com_name=1, com_address=1, com_business_addr=1,
+                                        dict(_id=0, com_name=1, com_address=1, com_business_addr=1,
                                              com_legal_rep=1,
                                              com_regist_cap=1, com_operate_period=1, com_business_scope=1,
                                              com_shareholder=1))
@@ -939,151 +940,6 @@ def rank():
     return render_template(template)
 
 
-@accoj_bp.route('/profile_api', methods=['POST'])
-def profile_api():
-    """
-    个人中心api
-    """
-
-    def get_user_profile():
-        result, data = False, None
-        user = mongo.db.user.find_one(dict(student_no=student_no),
-                                      dict(_id=0, password=0, role=0))
-        if user:
-            result, data = True, user
-        return jsonify(result=result, data=data)
-
-    def submit_user_profile(_data: dict):
-        result, data = False, None
-
-        user = mongo.db.user.find_one(dict(student_no=student_no),
-                                      dict(_id=1))
-        if user:
-            _data.pop('api')
-            update_data = dict(
-                nick_name=_data.get('nick_name'),
-                student_sex=_data.get('student_sex'),
-                personalized_signature=_data.get('personalized_signature'),
-                student_borth=_data.get('student_borth'))
-            mongo.db.user.update(dict(student_no=student_no),
-                                 {"$set": update_data})
-            result, data = True, None
-        return jsonify(result=result, data=data)
-
-    def get_user_schedule():
-        schedule_info = mongo.db.company.find_one(dict(student_no=student_no),
-                                                  dict(_id=0, schedule_confirm=1))
-        # 判断是否有进度
-        if schedule_info:
-            data = []
-            schedule_info = schedule_info.get("schedule_confirm")
-            # 获取涉及的科目数量
-            involve_subjects = mongo.db.company.find_one(dict(student_no=student_no),
-                                                         dict(_id=0, involve_subjects=1)).get("involve_subjects")
-            involve_subjects_1 = involve_subjects.get("involve_subjects_1")
-            involve_subjects_2 = involve_subjects.get("involve_subjects_2")
-            sum_subjects_len = len(set(involve_subjects_1 + involve_subjects_2))
-
-            # 获取进度值
-            trend_analysis_confirm = schedule_info.get("trend_analysis_confirm")
-            common_ratio_analysis_confirm = schedule_info.get("common_ratio_analysis_confirm")
-
-            if schedule_info.get("business_confirm"):
-                data.append(100)
-
-            key_element_score = int((len(schedule_info.get("key_element_confirm")) / 20) * 100)
-            data.append(key_element_score)
-
-            subject_score = int((len(schedule_info.get("subject_confirm")) / 20) * 100)
-            data.append(subject_score)
-
-            entry_schedule_score = int((len(schedule_info.get("entry_confirm")) / 20) * 100)
-            data.append(entry_schedule_score)
-
-            # ledger_confirm   25 25 50
-            ledger__schedule_score = 0
-            ledger__schedule_score += int(
-                (len(schedule_info.get("ledger_confirm").get("ledger1_confirm")) / len(involve_subjects_1)) * 25)
-            ledger__schedule_score += int(
-                (len(schedule_info.get("ledger_confirm").get("ledger2_confirm")) / len(involve_subjects_2)) * 25)
-            if schedule_info.get("balance_sheet_confirm"):
-                ledger__schedule_score += 50
-            data.append(ledger__schedule_score)
-
-            acc_document_schedule_score = int((len(schedule_info.get("acc_document_confirm")) / 20) * 100)
-            data.append(acc_document_schedule_score)
-
-            # 会计账簿部分得分
-            account_schedule_score = 0
-            account_schedule_score += int(
-                (len(schedule_info.get("subsidiary_account_confirm")) / sum_subjects_len) * 50)
-            if schedule_info.get("acc_balance_sheet_confirm"):
-                account_schedule_score += 50
-            data.append(account_schedule_score)
-
-            # 会计报表部分得分
-            Financial_Statements_schecule_score = 0
-            if schedule_info.get("new_balance_sheet_confirm"):
-                Financial_Statements_schecule_score += 50
-            if schedule_info.get("profit_statement_confirm"):
-                Financial_Statements_schecule_score += 50
-            data.append(Financial_Statements_schecule_score)
-
-            # 因素分析未做  20*5 or 15*4+20*2
-            analysis_schedule_score = 0
-            if trend_analysis_confirm.get("first"):
-                analysis_schedule_score += 20
-            if trend_analysis_confirm.get("second"):
-                analysis_schedule_score += 20
-            if common_ratio_analysis_confirm.get("first"):
-                analysis_schedule_score += 20
-            if common_ratio_analysis_confirm.get("second"):
-                analysis_schedule_score += 20
-            if schedule_info.get("ratio_analysis_confirm"):
-                analysis_schedule_score += 20
-            data.append(analysis_schedule_score)
-
-            # 杜邦
-            dupont_schedule_score = 0
-            if schedule_info.get("dupont_analysis_confirm"):
-                dupont_schedule_score += 100
-            data.append(dupont_schedule_score)
-
-            result, data = True, data
-        else:
-            data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            result, data = True, data
-        return jsonify(result=result, data=data)
-
-    def get_user_score():
-        user = mongo.db.user.find_one(dict(student_no=student_no),
-                                      dict(_id=1))
-        if user:
-            a_keys = ['_id', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-            a_values = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            search_dict = dict(zip(a_keys, a_values))
-            data_tmp = mongo.db.score.find_one({"student_no": "17020340139"}, search_dict)
-            data = list(data_tmp.values())
-            result =True
-        else:
-            result = False
-            data = None
-        return jsonify(result=result, data=data)
-
-    json_data = request.get_json()
-    api = json_data.get('api')
-    get_api_dict = dict(get_user_profile=get_user_profile,
-                        get_user_schedule=get_user_schedule,
-                        get_user_score=get_user_score)
-    submit_api_dict = dict(submit_user_profile=submit_user_profile)
-    student_no = session.get('username')
-    if api in get_api_dict:
-        return get_api_dict[api]()
-    elif api in submit_api_dict:
-        return submit_api_dict[api](json_data)
-    return jsonify(result=False, data=None)
-
-
 @accoj_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
     # 获取所有的成绩信息
@@ -1099,56 +955,52 @@ def get_user_rank():
 
 # 教师后台管理----start-----------------------------------------------------------------------------
 @accoj_bp.route('/teacher', methods=['GET'])
+@login_required_teacher
 def teacher():
     """
     个人信息
     """
     return render_template('teacher/index.html')
 
-
 @accoj_bp.route('/add_class', methods=['GET'])
+@login_required_teacher
 def add_class():
     """
     添加班级
     """
     return render_template('teacher/add-class.html')
 
-
 @accoj_bp.route('/manage_time', methods=['GET'])
+@login_required_teacher
 def manage_time():
     """
     时间管理
     """
     return render_template('teacher/manage-time.html')
 
-
 @accoj_bp.route('/teacher_correct', methods=['GET'])
+@login_required_teacher
 def teacher_correct():
     """
     批改作业
     """
     return render_template('teacher/teacher-correct.html')
 
-
 @accoj_bp.route('/teacher_notify_c', methods=['GET'])
+@login_required_teacher
 def teacher_notify_c():
     """
     发送通知(班级通知)
     """
     return render_template('teacher/teacher-notify-c.html')
 
-
 @accoj_bp.route('/teacher_notify_p', methods=['GET'])
+@login_required_teacher
 def teacher_notify_p():
     """
     发送通知(个人通知)
     """
     return render_template('teacher/teacher-notify-p.html')
-
-
-@accoj_bp.route('/teacher_api', methods=['POST'])
-def teacher_api():
-    pass
 
 
 # 教师后台管理----end-------------------------------------------------------------------------------
@@ -1194,27 +1046,6 @@ def new_room_message(message_body: str):
     post = dumps(post)
 
     emit('new_room_message', post, room=current_room)
-
-
-def send_system_message(message_head: str, message_body: str):
-    """
-    发送系统消息
-
-    :param message_head: message head
-    :param message_body: message body
-    :return: None
-    """
-    time = datetime.now()
-    current_room = session.get('username')
-    username = 'system'
-    message = dict(room=current_room,
-                   username=username,
-                   message_head=message_head,
-                   message_body=message_body,
-                   time=time)
-    mongo.db.message.insert_one(message)
-    message = dumps(message)
-    emit('new_room_message', message, room=current_room)
 
 
 # 消息管理系统----end-------------------------------------------------------------------------------

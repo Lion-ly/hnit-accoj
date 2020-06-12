@@ -1,13 +1,18 @@
 let business_list = Array();
+let csrf_token; // csrf令牌全局变量
+$(document).ready(function () {
+    pwdRevealInit();
+    tooltipInit();
+    navigationLiInit();
+});
 /*	@ 导航当前位置
  *  # courseBase
  *	? 控制导航栏的active，确定当前处于导航栏的位置
  */
-let csrf_token; // csrf令牌全局变量
 /**
  * 导航栏li标签激活状态控制
  */
-$(function () {
+function navigationLiInit() {
     $("#menu").find("li").each(function (index, item) {
         let $item = $(item),
             href = $item.children().attr("href"),
@@ -19,12 +24,25 @@ $(function () {
             $item.removeClass("active");
         }
     });
-});
+}
 
-// 初始化tooltip插件
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-});
+function pwdRevealInit(){
+    // 密码显示或隐藏
+    $("button[data-reveal]").on('click', function () {
+        let $this = $(this),
+            $pwd = $this.parent().prev();
+        if ($pwd.attr('type') === 'password') {
+            $pwd.attr('type', 'text');
+        } else {
+            $pwd.attr('type', 'password');
+        }
+    });
+}
+
+function tooltipInit(){
+    // 初始化tooltip插件
+    $('[data-toggle="tooltip"]').tooltip();
+}
 
 /*	@ 返回首页
  *  # base -> 会计实训系统Accountiong training system
@@ -213,7 +231,7 @@ function submit_confirm_clicked() {
     // 定时自动关闭
     setTimeout(function () {
         let $submit_confirm = $("#submit_confirm");
-        if($submit_confirm.css("display") === "block")
+        if ($submit_confirm.css("display") === "block")
             $submit_confirm.modal('hide');
     }, 2000);
 }

@@ -10,8 +10,13 @@ from accoj.extensions import mongo
 from accoj.utils import is_number
 
 
-def add_question(questions_no):
-    """读取excel表创建题库"""
+def add_question(questions_no: int):
+    """
+    读取excel表创建题库
+
+    :param questions_no: questions no 题库号
+    :return: bool
+    """
     print("\n题库:{}".format(questions_no))
     filename = "accoj/deal_business/questions_{}.xlsx".format(questions_no)
     workbook = open_workbook("{}".format(filename))  # 用wlrd提供的方法读取一个excel文件

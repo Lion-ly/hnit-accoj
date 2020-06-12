@@ -198,29 +198,7 @@
                         <script src="https://cdn.bootcdn.net/ajax/libs/datatables-buttons/2.2.0/js/buttons.print.min.js"></script>
                         <script src="https://cdn.bootcdn.net/ajax/libs/datatables-buttons/2.2.0/js/buttons.colVis.min.js"></script>
                         <script src="{{ url_for('static', filename='assets/js/init/datatables-init.js') }}"></script>
-                        <script type="application/javascript">
-                            $(document).ready(function () {
-                                $.fn.dataTable.ext.errMode = 'throw';
-                                $('#data-table').DataTable({
-                                    retrieve: true,
-                                    columnDefs: [
-                                        {'orderable': false, 'targets': 7}
-                                    ]
-                                });
-                            });
-
-                            function resetSelectAll() {
-                                $("#data-select-all").prop('checked', false);
-                                console.log("Table changed");
-                            }
-
-                            function selectAll() {
-                                $('input[class=switch-input]').each(function (index, item) {
-                                    $item = $(item);
-                                    $item.prop('checked', !$item.prop('checked'));
-                                })
-                            }
-                        </script>
+                        <script src="{{ url_for('static', filename='js/ajax/teacher/teacher-notify-c.js') }}"></script>
                     </div>
                 </div>
             </div>

@@ -6,8 +6,12 @@
 # @File    : __init__.py.py
 # @Software: PyCharm
 from functools import wraps
+from _datetime import datetime
+from bson.json_util import dumps
+from flask_socketio import emit
 from flask import session, redirect, url_for, request, abort
 from accoj.extensions import mongo
+import pandas as pd
 
 ALLOWED_EXTENSIONS = {'zip', 'rar'}
 MAX_BUSINESS_NO = 20
@@ -27,6 +31,21 @@ def login_required(func):
         else:
             return redirect(url_for('index.index'))
 
+    return wrapper
+
+def login_required_teacher(func):
+    """
+    需要教师权限
+
+    :param func:
+    :return:
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get('role') == 'teacher':
+            return func(*args, **kwargs)
+        else:
+            abort(403)
     return wrapper
 
 
@@ -106,3 +125,47 @@ def is_number(s):
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+def send_system_message(message_head: str, message_body: str):
+    """
+    发送系统消息
+
+    :param message_head: message head
+    :param message_body: message body
+    :return: None
+    """
+    time = datetime.now()
+    current_room = session.get('username')
+    username = 'system'
+    message = dict(room=current_room,
+                   username=username,
+                   message_head=message_head,
+                   message_body=message_body,
+                   time=time)
+    mongo.db.message.insert_one(message)
+    message = dumps(message)
+    emit('new_room_message', message, room=current_room)
+
+
+def parse_class_xlrd(class_xlrd: object):
+    """
+    解析班级学生信息excel表
+
+    :param class_xlrd: flask.request.files['file']对象 班级学生信息excel表
+    :return: [dict(student_no=int,
+                   student_name=str,
+                   student_school=str,
+                   student_faculty=str,
+                   student_class=str,
+                   student_phone=int)]
+    """
+    class_info = pd.read_excel(class_xlrd)
+    class_info = class_info.to_numpy()
+    class_info_list = []
+    for student_info in class_info:
+        info_keys = ['student_no', 'student_name', 'student_school', 'student_faculty', 'student_class', 'student_phone']
+        info_keys_len = len(info_keys)
+        info_dict = {info_keys[i]: student_info[i] for i in range(info_keys_len)}
+        class_info_list.append(info_dict)
+    return class_info_list

@@ -191,8 +191,8 @@ $(function(){
             success:function (data) {
                 if (data["result"]==="true")
                 {
-                    show_message("findpwd_form", "密码已重置，即将跳转到首页", "info", 1000);
-                    setTimeout("location.href='localhost:80';location.reload();", 1000);
+                    show_message("findpwd_form", "密码已重置，新密码请注意查收邮箱，即将跳转到首页", "info", 3000);
+                    setTimeout("location.href='localhost:80';location.reload();", 4000);
                 }
                 else
                 {

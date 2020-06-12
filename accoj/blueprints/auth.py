@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : auth.py
 # @Software: PyCharm
-from flask import Blueprint, jsonify, request, session, redirect
+from flask import Blueprint, jsonify, request, session, redirect, render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 from accoj.extensions import mongo
 from accoj.utils import login_required
@@ -171,7 +171,7 @@ def check_email():
             send_mail(email, mail_random, 0, 0)
             if mongo.db.other.find_one(mail):
                 temp = {
-                    "time" : datetime.datetime.utcnow(),
+                    "time": datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.update(mail, {"$set": temp})
@@ -179,7 +179,7 @@ def check_email():
             else:
                 data = {
                     "email": email,
-                    "time" : datetime.datetime.utcnow(),
+                    "time": datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.insert_one(data)
@@ -238,9 +238,20 @@ def find_password():
                     return jsonify(result="false")
     return redirect("/")
 
+@auth_bp.app_errorhandler(403)
+def page_forbidden(e):
+    return render_template('errors/403.html'), 403
+
+@auth_bp.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
 
 @auth_bp.app_context_processor
 def my_app_context_processor():
+    """
+    全局上下文管理
+    :return:
+    """
     d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生"}
     role = session.get("role")
     role = d_role.get(role)
