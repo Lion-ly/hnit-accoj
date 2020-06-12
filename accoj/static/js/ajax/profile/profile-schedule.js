@@ -5,7 +5,7 @@ $(document).ready(function () {
 function _init_() {
     function getUserSchedule() {
         let data = {api: 'get_user_schedule'},
-            url = '/profile_api';
+            url = '/api/profile_api';
         get_data(data, plotScheduleChart, url);
     }
 
