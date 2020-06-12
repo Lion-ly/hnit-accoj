@@ -5,8 +5,8 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
-from accoj.utils import login_required, complete_required1
+from flask import Blueprint, render_template, jsonify, session, redirect, url_for
+from accoj.utils import login_required, complete_required1, login_required_teacher
 from accoj.blueprints import submit_infos, get_data
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo, socketio
@@ -15,6 +15,7 @@ from flask_socketio import join_room, leave_room, emit
 from accoj.deal_business import cal_answer
 from bson.json_util import dumps
 from _datetime import datetime
+from flask import request
 
 accoj_bp = Blueprint('accoj', __name__)
 MAX_BUSINESS_NO = 20
@@ -937,59 +938,6 @@ def rank():
     return render_template(template)
 
 
-@accoj_bp.route('/profile_api', methods=['POST'])
-def profile_api():
-    """
-    个人中心api
-    """
-
-    def get_user_profile():
-        result, data = False, None
-        user = mongo.db.user.find_one(dict(student_no=student_no),
-                                      dict(_id=0, password=0, role=0))
-        if user:
-            result, data = True, user
-        return jsonify(result=result, data=data)
-
-    def submit_user_profile(_data: dict):
-        result, data = False, None
-
-        user = mongo.db.user.find_one(dict(student_no=student_no),
-                                      dict(_id=1))
-        if user:
-            _data.pop('api')
-            update_data = dict(
-                nick_name=_data.get('nick_name'),
-                student_sex=_data.get('student_sex'),
-                personalized_signature=_data.get('personalized_signature'),
-                student_borth=_data.get('student_borth'))
-            mongo.db.user.update(dict(student_no=student_no),
-                                 {"$set": update_data})
-            result, data = True, None
-        return jsonify(result=result, data=data)
-
-    def get_user_schedule():
-        result, data = False, None
-        return jsonify(result=True, data=data)
-
-    def get_user_score():
-        result, data = False, None
-        return jsonify(result=True, data=data)
-
-    json_data = request.get_json()
-    api = json_data.get('api')
-    get_api_dict = dict(get_user_profile=get_user_profile,
-                        get_user_schedule=get_user_schedule,
-                        get_user_score=get_user_score)
-    submit_api_dict = dict(submit_user_profile=submit_user_profile)
-    student_no = session.get('username')
-    if api in get_api_dict:
-        return get_api_dict[api]()
-    elif api in submit_api_dict:
-        return submit_api_dict[api](json_data)
-    return jsonify(result=False, data=None)
-
-
 @accoj_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
     result, data = False, None
@@ -1002,56 +950,52 @@ def get_user_rank():
 
 # 教师后台管理----start-----------------------------------------------------------------------------
 @accoj_bp.route('/teacher', methods=['GET'])
+@login_required_teacher
 def teacher():
     """
     个人信息
     """
     return render_template('teacher/index.html')
 
-
 @accoj_bp.route('/add_class', methods=['GET'])
+@login_required_teacher
 def add_class():
     """
     添加班级
     """
     return render_template('teacher/add-class.html')
 
-
 @accoj_bp.route('/manage_time', methods=['GET'])
+@login_required_teacher
 def manage_time():
     """
     时间管理
     """
     return render_template('teacher/manage-time.html')
 
-
 @accoj_bp.route('/teacher_correct', methods=['GET'])
+@login_required_teacher
 def teacher_correct():
     """
     批改作业
     """
     return render_template('teacher/teacher-correct.html')
 
-
 @accoj_bp.route('/teacher_notify_c', methods=['GET'])
+@login_required_teacher
 def teacher_notify_c():
     """
     发送通知(班级通知)
     """
     return render_template('teacher/teacher-notify-c.html')
 
-
 @accoj_bp.route('/teacher_notify_p', methods=['GET'])
+@login_required_teacher
 def teacher_notify_p():
     """
     发送通知(个人通知)
     """
     return render_template('teacher/teacher-notify-p.html')
-
-
-@accoj_bp.route('/teacher_api', methods=['POST'])
-def teacher_api():
-    pass
 
 
 # 教师后台管理----end-------------------------------------------------------------------------------
@@ -1097,27 +1041,6 @@ def new_room_message(message_body: str):
     post = dumps(post)
 
     emit('new_room_message', post, room=current_room)
-
-
-def send_system_message(message_head: str, message_body: str):
-    """
-    发送系统消息
-
-    :param message_head: message head
-    :param message_body: message body
-    :return: None
-    """
-    time = datetime.now()
-    current_room = session.get('username')
-    username = 'system'
-    message = dict(room=current_room,
-                   username=username,
-                   message_head=message_head,
-                   message_body=message_body,
-                   time=time)
-    mongo.db.message.insert_one(message)
-    message = dumps(message)
-    emit('new_room_message', message, room=current_room)
 
 
 # 消息管理系统----end-------------------------------------------------------------------------------

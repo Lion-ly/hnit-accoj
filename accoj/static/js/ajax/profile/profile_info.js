@@ -16,7 +16,7 @@ function get_user_profile() {
     }
 
     let data = {api: 'get_user_profile'};
-    get_data(data, successFunc, '/profile_api');
+    get_data(data, successFunc, '/api/profile_api');
 }
 
 function save_user_profile() {
@@ -38,10 +38,10 @@ function save_user_profile() {
     }
 
     let data = get_form(),
-        successFunc = function () {
+        successFunc = function (_data) {
         };
     data.api = 'submit_user_profile';
-    get_data(data, successFunc, '/profile_api');
+    get_data(data, successFunc, '/api/profile_api', 'show-tips-box');
 }
 
 function set_user_profile(data) {

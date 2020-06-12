@@ -2,8 +2,6 @@
 {% block page_title %}个人信息{% endblock %}
 {% block page_title_li %}个人信息{% endblock %}
 {% block content %}
-    <script type="application/javascript"
-            src="{{ url_for('static', filename='js/ajax/profile/profile_info.js') }}"></script>
     <div class="container"
          style="padding:20px;background-color: white;border-color: #ddd;border-style: solid;border-width:1px;
          border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0;">
@@ -24,21 +22,21 @@
                         <div class="col col-md-3" style="text-align: right"><label
                                 class=" form-control-label">用户名:</label></div>
                         <div class="col-12 col-md-9">
-                            <p data-student_no class="form-control-static">17020340111</p>
+                            <p data-student_no class="form-control-static"></p>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3" style="text-align: right"><label
                                 class=" form-control-label"> 真实姓名:</label></div>
                         <div class="col-12 col-md-9">
-                            <p data-student_name class="form-control-static">郭雄</p>
+                            <p data-student_name class="form-control-static"></p>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3" style="text-align: right"><label
                                 class=" form-control-label">邮箱地址:</label></div>
                         <div class="col-12 col-md-9">
-                            <p data-email class="form-control-static">1848600800@qq.com</p>
+                            <p data-email class="form-control-static"></p>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -80,21 +78,21 @@
                         <div class="col col-md-3" style="text-align: right"><label
                                 class=" form-control-label">学校:</label></div>
                         <div class="col-12 col-md-9">
-                            <p data-student_school class="form-control-static">湖南工学院</p>
+                            <p data-student_school class="form-control-static"></p>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3" style="text-align: right"><label
                                 class=" form-control-label">二级学院:</label></div>
                         <div class="col-12 col-md-9">
-                            <p data-student_faculty class="form-control-static">计算机与信息科学学院</p>
+                            <p data-student_faculty class="form-control-static"></p>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3" style="text-align: right"><label
                                 class=" form-control-label">班级:</label></div>
                         <div class="col-12 col-md-9">
-                            <p data-student_class class="form-control-static">会计1701</p>
+                            <p data-student_class class="form-control-static"></p>
                         </div>
                     </div>
                 </form>
@@ -105,7 +103,12 @@
                     <span class="glyphicon"></span>保存
                 </button>
             </div>
+            <div id="show-tips-box">
+
+            </div>
 
         </div><!-- .animated -->
     </div>
+    <script type="application/javascript"
+            src="{{ url_for('static', filename='js/ajax/profile/profile_info.js') }}"></script>
 {% endblock %}
