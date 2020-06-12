@@ -300,6 +300,7 @@ def get_data(type_num, infos_name, info_keys):
         if len(confirmed) == MAX_BUSINESS_NO:
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
+                update_scores(infos_name)
             else:
                 scores = evaluation.get("{}_score".format(infos_name))
             confirm_flag = True
@@ -310,6 +311,10 @@ def get_data(type_num, infos_name, info_keys):
         if td and confirmed.get("first") and confirmed.get("second") or (not td and confirmed):
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
+                involve_schedule_names = ['balance_sheet', 'acc_balance_sheet', 'profit_statement',
+                                          'ratio_analysis', 'dupont_analysis']
+                if infos_name in involve_schedule_names:
+                    update_scores(infos_name)
             else:
                 scores = evaluation.get("{}_score".format(infos_name))
             confirm_flag = True
@@ -341,3 +346,151 @@ def get_data(type_num, infos_name, info_keys):
     info_values = [infos, answer_infos, confirmed, saved, scores]
     data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
     return data
+
+
+# 对业务一录入分数
+def update_business_score():
+    student_no = session.get("username")
+    user_info = mongo.db.user.find_one(dict(student_no=student_no),
+                                            dict(_id=0, student_class=1, student_name=1))
+    student_class = user_info.get("student_class")
+    student_Name = user_info.get("student_name")
+    if student_Name:
+        student_name = student_Name
+    else:
+        student_name = "Default"
+    # 第一次更新时输入所有的键值  学号 班级 姓名 总分 各部分
+    infos = {"student_no": student_no, "student_class": student_class, "student_name": student_name}
+    score = [100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    score_keys = ['sum_score', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+    score_infos = dict(zip(score_keys, score))
+    infos.update(score_infos)
+
+    mongo.db.score.insert(infos)
+
+
+def update_scores(schedule_name):
+    """
+    	用户每次提交更新用户的成绩信息
+    	:return:
+    	"""
+    student_no = session.get("username")
+    # 分数信息
+    evaluation_info = mongo.db.company.find_one(dict(student_no=student_no),
+                                                dict(_id=0, evaluation=1))
+    if evaluation_info:
+        evaluation_scores = evaluation_info.get("evaluation")
+    # 成绩信息
+    user_score_info = mongo.db.score.find_one(dict(student_no=student_no), dict(_id=0))
+
+    def update_key_element():
+        if evaluation_scores.get("key_element_score"):
+            key_element_sum_score = evaluation_scores.get("key_element_score")[-1]
+            sum_score = round(user_score_info.get("sum_score") + key_element_sum_score, 2)
+            mongo.db.score.update(dict(student_no=student_no), {"$set":dict(sum_score=sum_score, two=key_element_sum_score)})
+
+    def update_subject():
+        if evaluation_scores.get("subjects_score"):
+            subject_sum_score = evaluation_scores.get("subjects_score")[-1]
+            sum_score = round(user_score_info.get("sum_score") + subject_sum_score, 2)
+            mongo.db.score.update(dict(student_no=student_no),
+                                  {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
+
+    def update_entry():
+        if evaluation_scores.get("entry_score"):
+            entry_sum_score = evaluation_scores.get("entry_score")[-1]
+            sum_score = round(user_score_info.get("sum_score") + entry_sum_score, 2)
+            mongo.db.score.update(dict(student_no=student_no),
+                                  {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
+
+    def update_schedule_five():
+        ledger_score_sum = 0
+        # part 1
+        ledger_score = evaluation_scores.get("ledger_score")
+        if ledger_score:
+            ledger_score_sum += ledger_score.get("first")
+            ledger_score_sum += ledger_score.get("second")
+        # part 2
+        balance_sheet_score = evaluation_scores.get("balance_sheet_score")
+        if balance_sheet_score:
+            ledger_score_sum += balance_sheet_score
+        sum_score = round(user_score_info.get("sum_score") + ledger_score_sum, 2)
+        mongo.db.score.update(dict(student_no=student_no),
+                              {"$set": dict(sum_score=sum_score, five=round(ledger_score_sum, 2))})
+
+
+    def update_acc_document():
+        if evaluation_scores.get("acc_document_score"):
+            acc_sum_score = evaluation_scores.get("acc_document_score")[-1]
+            sum_score = round(acc_sum_score + user_score_info.get("sum_score"), 2)
+            mongo.db.score.update(dict(student_no=student_no),
+                                  {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
+
+
+    def update_schedule_seven():
+        # 会计账簿
+        account_score_sum = 0
+        # part 1
+        subsidiary_account_score = evaluation_scores.get("subsidiary_account_score")
+        if subsidiary_account_score:
+            account_score_sum += subsidiary_account_score
+        # part 2
+        acc_balance_sheet_score = evaluation_scores.get("acc_balance_sheet_score")
+        if acc_balance_sheet_score:
+            account_score_sum += acc_balance_sheet_score
+        sum_score = round(user_score_info.get("sum_score") + account_score_sum, 2)
+        mongo.db.score.update(dict(student_no=student_no),
+                              {"$set": dict(sum_score=sum_score, seven=round(account_score_sum, 2))})
+
+
+    def update_schedule_eight():
+        # 会计报表
+        statements_score = 0
+        new_balance_sheet_score = evaluation_scores.get("new_balance_sheet_score")
+        profit_statement_score = evaluation_scores.get("profit_statement_score")
+        if new_balance_sheet_score:
+            statements_score += new_balance_sheet_score
+        if profit_statement_score:
+            statements_score += profit_statement_score
+        sum_score = round(user_score_info.get("sum_score") + statements_score, 2)
+        mongo.db.score.update(dict(student_no=student_no),
+                              {"$set": dict(sum_score=sum_score, eight=round(statements_score, 2))})
+
+
+    def update_schedule_nine():
+        analysis_score_sum = 0
+        trend_analysis_score = evaluation_scores.get("trend_analysis_score")
+        common_ratio_analysis_score = evaluation_scores.get("common_ratio_analysis_score")
+        ratio_analysis_score = evaluation_scores.get("ratio_analysis_score")
+        if trend_analysis_score:
+            analysis_score_sum = analysis_score_sum + trend_analysis_score.get("first") + trend_analysis_score.get(
+                "second")
+        if common_ratio_analysis_score:
+            analysis_score_sum = analysis_score_sum + common_ratio_analysis_score.get(
+                "first") + common_ratio_analysis_score.get("second")
+        if ratio_analysis_score:
+            analysis_score_sum = analysis_score_sum + ratio_analysis_score
+        sum_score = round(user_score_info.get("sum_score") + analysis_score_sum, 2)
+        mongo.db.score.update(dict(student_no=student_no),
+                              {"$set": dict(sum_score=sum_score, nine=round(analysis_score_sum, 2))})
+
+
+    def update_schedule_ten():
+        if evaluation_scores.get("dupont_analysis_score"):
+            dupont_analysis_score = evaluation_scores.get("dupont_analysis_score")
+            sum_score = round(user_score_info.get("sum_score") + dupont_analysis_score, 2)
+            mongo.db.score.update(dict(student_no=student_no),
+                              {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_score, 2))})
+
+    update_schedule_dict = dict(key_element=update_key_element,
+                                subject=update_subject,
+                                entry=update_entry,
+                                balance_sheet=update_schedule_five,
+                                acc_document=update_acc_document,
+                                acc_balance_sheet=update_schedule_seven,
+                                profit_statement=update_schedule_eight,
+                                ratio_analysis=update_schedule_nine,
+                                dupont_analysis=update_schedule_ten
+                                )
+    if schedule_name in update_schedule_dict:
+        update_schedule_dict[schedule_name]()

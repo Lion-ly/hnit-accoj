@@ -5,9 +5,9 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from accoj.utils import login_required, complete_required1, login_required_teacher
-from accoj.blueprints import submit_infos, get_data
+from accoj.blueprints import submit_infos, get_data, update_business_score
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo, socketio
 from accoj.deal_business.create_businesses import create_businesses
@@ -180,6 +180,8 @@ def submit_business_info():
                                 {"$set": {"schedule_confirm.business_confirm": True,
                                           "involve_subjects"                 : involve_subjects}},
                                 multi=True)
+        # 更新成绩
+        update_business_score()
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")
@@ -940,10 +942,13 @@ def rank():
 
 @accoj_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
-    result, data = False, None
-    # test data
-    data = [[1, 'Tiger Nixon', 'System Architect', 550, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]]
-    return jsonify(result=True, data=data)
+    # 获取所有的成绩信息
+    scores_info = mongo.db.score.find({}, {"_id": 0})
+    scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
+    for i in range(0, len(scores_info_sorted)):
+        scores_info_sorted[i]["rank"] = i + 1
+    result, data = True, scores_info_sorted
+    return jsonify(result=result, data=data)
 
 
 # 用户个人中心----end-------------------------------------------------------------------------------

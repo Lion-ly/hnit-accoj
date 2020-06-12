@@ -27,7 +27,7 @@ function save_user_profile() {
             student_no: $("p[data-student_no]").text(),
             student_name: $("p[data-student_name]").text(),
             email: $("p[data-email]").text(),
-            personalized_signature: $("textarea[data-personalized_signature]").text(),
+            personalized_signature: $("textarea[data-personalized_signature]").val(),
             student_sex: $("input:radio[name=student_sex]:checked").val(),
             student_borth: $("input[data-student_borth]").val(),
             student_school: $("p[data-student_school]").text(),

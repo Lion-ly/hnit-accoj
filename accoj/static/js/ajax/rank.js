@@ -14,9 +14,23 @@ function _init_() {
     });
     $('#bootstrap-data-table').DataTable({
         ajax: {url: '/get_user_rank'},
-        order: [[3, 'desc']],
-        columnDefs: [
-            {'orderable': false, 'targets': [0, 1, 2]}
+        order: [[4, 'desc']],
+        "columns": [
+            { "data": "rank" },
+            { "data": "student_no" },
+            { "data": "student_class" },
+            { "data": "student_name" },
+            { "data": "sum_score" },
+            { "data": "one" },
+            { "data": "two" },
+            { "data": "three" },
+            { "data": "four" },
+            { "data": "five" },
+            { "data": "six" },
+            { "data": "seven" },
+            { "data": "eight" },
+            { "data": "nine" },
+            { "data": "ten" }
         ]
     });
 }
