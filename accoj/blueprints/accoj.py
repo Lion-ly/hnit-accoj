@@ -5,7 +5,7 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template, jsonify, session, redirect, url_for
 from accoj.utils import login_required, complete_required1, login_required_teacher
 from accoj.blueprints import submit_infos, get_data, update_business_score
 from accoj.utils import is_number, limit_content_length
@@ -885,6 +885,8 @@ def profile():
     """
     个人信息
     """
+    if session.get('role') == 'teacher':
+        return redirect(url_for('teacher'))
     return render_template('profile/index.html')
 
 
@@ -917,6 +919,8 @@ def profile_schedule():
     """
     完成进度
     """
+    if session.get('role') == 'teacher':
+        return redirect(url_for('teacher'))
     return render_template('profile/profile-schedule.html')
 
 
@@ -925,6 +929,8 @@ def profile_score():
     """
     学生成绩
     """
+    if session.get('role') == 'teacher':
+        return redirect(url_for('teacher'))
     return render_template('profile/profile-score.html')
 
 
@@ -962,6 +968,7 @@ def teacher():
     """
     return render_template('teacher/index.html')
 
+
 @accoj_bp.route('/add_class', methods=['GET'])
 @login_required_teacher
 def add_class():
@@ -969,6 +976,7 @@ def add_class():
     添加班级
     """
     return render_template('teacher/add-class.html')
+
 
 @accoj_bp.route('/manage_time', methods=['GET'])
 @login_required_teacher
@@ -978,6 +986,7 @@ def manage_time():
     """
     return render_template('teacher/manage-time.html')
 
+
 @accoj_bp.route('/teacher_correct', methods=['GET'])
 @login_required_teacher
 def teacher_correct():
@@ -986,6 +995,7 @@ def teacher_correct():
     """
     return render_template('teacher/teacher-correct.html')
 
+
 @accoj_bp.route('/teacher_notify_c', methods=['GET'])
 @login_required_teacher
 def teacher_notify_c():
@@ -993,6 +1003,7 @@ def teacher_notify_c():
     发送通知(班级通知)
     """
     return render_template('teacher/teacher-notify-c.html')
+
 
 @accoj_bp.route('/teacher_notify_p', methods=['GET'])
 @login_required_teacher
