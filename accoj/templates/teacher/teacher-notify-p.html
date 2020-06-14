@@ -34,7 +34,7 @@
                                         </th>
                                     </tr>
                                     </thead>
-                                    <tbody onchange="resetSelectAll()">
+                                    <tbody>
                                     <tr>
                                         <th scope="row">1</th>
                                         <td>17020340111</td>
@@ -186,22 +186,22 @@
                                 <button class="btn btn-outline-info" type="button">确认发送</button>
                             </div>
                         </form>
-                        <!-- Scripts -->
-                        <link href="https://cdn.bootcdn.net/ajax/libs/datatables/1.10.20/css/dataTables.bootstrap4.min.css"
-                              rel="stylesheet">
-                        <script src="{{ url_for('static', filename='assets/js/lib/data-table/datatables.min.js') }}"></script>
-                        <script src="{{ url_for('static', filename='assets/js/lib/data-table/dataTables.bootstrap.min.js') }}"></script>
-                        <script src="https://cdn.bootcdn.net/ajax/libs/datatables-buttons/2.2.0/js/dataTables.buttons.min.js"></script>
-                        <script src="{{ url_for('static', filename='assets/js/lib/data-table/buttons.bootstrap.min.js') }}"></script>
-                        <script src="https://cdn.bootcdn.net/ajax/libs/jszip/3.3.0/jszip.min.js"></script>
-                        <script src="https://cdn.bootcdn.net/ajax/libs/datatables-buttons/2.2.0/js/buttons.html5.min.js"></script>
-                        <script src="https://cdn.bootcdn.net/ajax/libs/datatables-buttons/2.2.0/js/buttons.print.min.js"></script>
-                        <script src="https://cdn.bootcdn.net/ajax/libs/datatables-buttons/2.2.0/js/buttons.colVis.min.js"></script>
-                        <script src="{{ url_for('static', filename='assets/js/init/datatables-init.js') }}"></script>
-                        <script src="{{ url_for('static', filename='js/ajax/teacher/teacher-notify-c.js') }}"></script>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='assets/js/lib/data-table/datatables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/lib/data-table/dataTables.bootstrap.min.js') }}"></script>
+
+    <script src="https://cdn.staticfile.org/datatables-buttons/2.2.0/js/dataTables.buttons.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/lib/data-table/buttons.bootstrap.min.js') }}"></script>
+    <script src="https://cdn.staticfile.org/jszip/3.3.0/jszip.min.js"></script>
+    <script src="https://cdn.staticfile.org/datatables-buttons/2.2.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/datatables-buttons/2.2.0/js/buttons.print.min.js"></script>
+    <script src="https://cdn.staticfile.org/datatables-buttons/2.2.0/js/buttons.colVis.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/init/datatables-init.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ajax/teacher/teacher-notify-c.js') }}"></script>
 {% endblock %}

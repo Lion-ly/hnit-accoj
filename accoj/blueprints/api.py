@@ -6,8 +6,9 @@
 # @File    : api.py
 # @Software: PyCharm
 from flask import Blueprint, jsonify, request, session, send_from_directory, current_app
+from bson.json_util import dumps
 from accoj.blueprints import get_schedule
-from accoj.utils import parse_class_xlrd, login_required_teacher
+from accoj.utils import parse_class_xlrd, login_required_teacher, login_required
 from accoj.extensions import mongo
 from accoj.emails import assign_email
 import os
@@ -16,6 +17,7 @@ api_bp = Blueprint('api', __name__)
 
 
 @api_bp.route('/profile_api', methods=['POST'])
+@login_required
 def profile_api():
     """
     个人中心api
@@ -133,3 +135,13 @@ def download_attached():
     path = current_app.config['DOWNLOAD_FOLD']
     path = os.path.join(current_app.root_path, path)
     return send_from_directory(path, filename='添加班级格式.xlsx', as_attachment=True)
+
+
+@api_bp.route('/get_news', methods=['GET'])
+def get_news():
+    """获取新闻"""
+    news = mongo.db.news_spider.find()
+    if news:
+        news = dumps(news)
+        return jsonify(result=True, data=news)
+    return jsonify(result=False, data=None)

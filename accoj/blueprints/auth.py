@@ -171,7 +171,7 @@ def check_email():
             send_mail(email, mail_random, 0, 0)
             if mongo.db.other.find_one(mail):
                 temp = {
-                    "time": datetime.datetime.utcnow(),
+                    "time" : datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.update(mail, {"$set": temp})
@@ -179,7 +179,7 @@ def check_email():
             else:
                 data = {
                     "email": email,
-                    "time": datetime.datetime.utcnow(),
+                    "time" : datetime.datetime.utcnow(),
                     "VCode": mail_random
                 }
                 mongo.db.other.insert_one(data)
@@ -238,13 +238,21 @@ def find_password():
                     return jsonify(result="false")
     return redirect("/")
 
+
 @auth_bp.app_errorhandler(403)
 def page_forbidden(e):
     return render_template('errors/403.html'), 403
 
+
 @auth_bp.app_errorhandler(404)
 def page_not_found(e):
     return render_template('errors/404.html'), 404
+
+
+@auth_bp.app_errorhandler(500)
+def internal_error(e):
+    return render_template('errors/500.html'), 500
+
 
 @auth_bp.app_context_processor
 def my_app_context_processor():

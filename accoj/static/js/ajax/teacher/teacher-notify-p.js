@@ -8,10 +8,6 @@ $(document).ready(function () {
     });
 });
 
-function resetSelectAll() {
-    $("#data-select-all").prop('checked', false);
-    console.log("Table changed");
-}
 
 function selectAll() {
     $('input[class=switch-input]').each(function (index, item) {
