@@ -379,6 +379,8 @@ def get_schedule(student_no):
         # 获取涉及的科目数量
         involve_subjects = mongo.db.company.find_one(dict(student_no=student_no),
                                                      dict(_id=0, involve_subjects=1)).get("involve_subjects")
+        if not involve_subjects:
+            return
         involve_subjects_1 = involve_subjects.get("involve_subjects_1")
         involve_subjects_2 = involve_subjects.get("involve_subjects_2")
         sum_subjects_len = len(set(involve_subjects_1 + involve_subjects_2))
