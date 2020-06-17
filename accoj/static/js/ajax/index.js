@@ -6,7 +6,7 @@ $(document).ready(function () {
 var template = '<div class="media">' +
     '<div class="media-body">\n' +
     '            <h4 class="media-heading"><a\n' +
-    '                  href="{HREF}">{TITLE}</a>\n' +
+    '                  href="#" onclick="window.open(\'{HREF}\');return false;">{TITLE}</a>\n' +
     '            </h4>\n' +
     '            <div class="item-content">\n' +
     '                <p>\n' +
