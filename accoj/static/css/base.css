@@ -185,7 +185,31 @@ body {
 /*公告栏*/
 .acc-notice {
     margin-top: 50px;
-    margin-bottom: 30px
+    margin-bottom: 30px;
+    transition: .5s;
+}
+
+.item-title {
+    width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-content {
+    height: 40px;
+    overflow: hidden;
+}
+
+.item-content > p {
+    margin: 0;
+}
+
+.item-info {
+    display: flex;
+    justify-content: space-between;
+    color: gray;
+    font-size: 12px;
 }
 
 /*装饰分割条*/
