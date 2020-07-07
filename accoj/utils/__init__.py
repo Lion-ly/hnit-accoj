@@ -35,14 +35,18 @@ def login_required(func):
 
 def login_required_teacher(func):
     """
-    需要教师权限
+    需要教师权限，只有后台才会用到这个装饰器
 
     :param func:
     :return:
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get('role') == 'teacher':
+        if session.get("role") == "teacher":
+            if session.get("teacher"):
+                # 状态切换，从批改学生作业返回后台的时候
+                session["username"] = session.get("teacher")
+                session["teacher"] = None
             return func(*args, **kwargs)
         else:
             abort(403)

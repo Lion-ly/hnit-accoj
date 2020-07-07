@@ -57,9 +57,11 @@
                                 disabled="disabled" id="username">
                             <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                             {{ role }}
-                            &nbsp;{{ username }}
-                            {% if role == "教师" %}
+                            {% if role == "教师" and teacher %}
+                                &nbsp;{{ teacher }}
                                 &nbsp;正在查看&nbsp;{{ username }}
+                            {% else %}
+                                {{ username }}
                             {% endif %}
                         </button>
                         <button type="button"
