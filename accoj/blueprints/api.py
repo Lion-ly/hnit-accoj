@@ -46,7 +46,7 @@ def profile_api():
                 personalized_signature=_data.get('personalized_signature'),
                 student_borth=_data.get('student_borth'))
             mongo.db.user.update(dict(student_no=student_no),
-                                 {"$set": update_data})
+                                 {'$set': update_data})
             result, data, message = True, None, '保存成功！'
         return jsonify(result=result, data=data, message=message)
 
@@ -63,15 +63,15 @@ def profile_api():
         a_keys = ['_id', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
         a_values = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         search_dict = dict(zip(a_keys, a_values))
-        data_tmp = mongo.db.score.find_one({"student_no": student_no}, search_dict)
+        data_tmp = mongo.db.score.find_one({'student_no': student_no}, search_dict)
         if data_tmp:
             data = list(data_tmp.values())
             result = True
-            print("score")
+            print('score')
         else:
             result = True
             data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            print("no score")
+            print('no score')
         return jsonify(result=result, data=data)
 
     json_data = request.get_json()
@@ -94,7 +94,7 @@ def teacher_api():
     def get_class_list():
         """获取班级列表"""
         result, data = False, None
-        users = mongo.db.user.find_one(dict(teacher=student_no),
+        users = mongo.db.user.find_one(dict(teacher=username),
                                        dict(_id=0, student_school=1, student_faculty=1, student_class=1))
         if users:
             class_info = set()
@@ -106,15 +106,26 @@ def teacher_api():
             result, data = True, class_info
         return jsonify(result=result, data=data)
 
+    def correct_homework(_data: dict):
+        """批改作业"""
+        result, data = False, None
+        student_no = _data.get('student_no')
+        if mongo.db.find_one({'student_no': student_no}):
+            # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
+            session['teacher'] = username
+            session['username'] = student_no  # 权限转换
+            result = True
+        return result, data
+
     json_data = request.get_json()
     _api = json_data.get('api')
     get_api_dict = dict(get_class_list=get_class_list)
-    # submit_api_dict = dict(submit_user_profile=submit_user_profile)
-    student_no = session.get('username')
+    submit_api_dict = dict(correct_homework=correct_homework)
+    username = session.get('username')
     if _api in get_api_dict:
         return get_api_dict[_api]()
-    # elif _api in submit_api_dict:
-    #    return submit_api_dict[_api](json_data)
+    elif _api in submit_api_dict:
+        return submit_api_dict[_api](json_data)
     return jsonify(result=False, data=None)
 
 

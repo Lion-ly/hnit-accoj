@@ -184,7 +184,7 @@ def check_email():
                 }
                 mongo.db.other.insert_one(data)
                 return jsonify(result="true")
-        except:
+        except Exception:
             return jsonify(result="false")
     return redirect("/")
 
@@ -234,7 +234,7 @@ def find_password():
                 try:
                     send_mail(email, 0, 1, new_password)
                     return jsonify(result="true")
-                except:
+                except Exception:
                     return jsonify(result="false")
     return redirect("/")
 
@@ -261,7 +261,7 @@ def my_app_context_processor():
     :return:
     """
     d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生"}
-    role = session.get("role")
-    role = d_role.get(role)
+    role = d_role.get(session.get("role"))
     username = session.get("username")
-    return {"role": role, "username": username}
+    teacher = session.get('teacher')
+    return {"role": role, "username": username, "teacher": teacher}
