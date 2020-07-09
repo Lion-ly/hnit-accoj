@@ -283,7 +283,7 @@ def _get_infos(infos_name):
 
 def get_data(type_num, infos_name, info_keys):
     """
-    获取信息，数据封装
+    获取信息，数据封装，每次课程完成将计算评分
 
     :param type_num:
     :param infos_name:
@@ -299,6 +299,7 @@ def get_data(type_num, infos_name, info_keys):
         # 1.“二三四”以及“六的会计凭证部分”
         if len(confirmed) == MAX_BUSINESS_NO:
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
+                # 每次课程完成将计算评分
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
                 update_scores(infos_name)
             else:
