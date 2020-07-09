@@ -113,15 +113,15 @@ db.accoj.company.insert({"student_no": student_no,			# 用户ID
 										"ledger_score": {"first": double,# 会计账户部分评分(科目名为键，分数为值)
 														 "second": double},
 										"balance_sheet_score": double,			# 会计平衡表部分评分
-										"acc_document_score": [double],			# 会计凭证部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')
+										"acc_document_score": [double],			# 会计凭证部分评分([0,1,2...]下标0存储用户本题得分，1为本题教师评分（值为-1则表示未评分）,2为本题总分，以此类推共20道题，数组最后一个元素用来存储'本次课程得分和'，数组长度为61=20*3+1)
 										"subsidiary_account_score": {subjectName: double},		# 会计明细账部分评分
 										"acc_balance_sheet_score": double,		# 科目余额表部分评分
 										"new_balance_sheet_score": double,		# 资产负债表部分评分
 										"profit_statement_score": double,		# 利润表部分评分
-										"trend_analysis_score":{"first": double, "second": double},
-										"common_ratio_analysis_score":{"first": double, "second": double},
-										"ratio_analysis_score":double,
-										"dupont_analysis_score":double
+										"trend_analysis_score":{"first": {"student_score": double, "teacher_score": double}, "second": {"student_score": double, "teacher_score": double}}, # "student_score"表示学生得分，"teacher_score"表示教师评分(-1表示未评分)，后述亦同
+										"common_ratio_analysis_score":{"first": {"student_score": double, "teacher_score": double}, "second_score": {"student_score": double, "teacher_score": double}},
+										"ratio_analysis_score": {"student_score": double, "teacher_score": double},
+										"dupont_analysis_score": {"student_score": double, "teacher_score": double}
 										},
 						 # 公司业务
 						 "businesses": [{"questions_no": int， 			# 题库号

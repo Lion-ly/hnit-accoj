@@ -323,11 +323,12 @@ def evaluate_acc_document(company, company_cp):
         info_cp = info_cp.get("contents")
 
         total_score = TotalScore[indexes[i] - 1]
+        teacher_score = -1  # 教师评分占位，-1标记未评分
         score = total_score
         score_point = 0
         total_point = len(info_cp) * 3 - 1  # 行数 * 每行三个得分点（总账科目 + 借方金额 + 贷方金额）- 合计
         if total_point == 0:
-            acc_document_score.extend([score, total_score])
+            acc_document_score.extend([score, teacher_score, total_score])
             continue
         for t1_info in info_cp:
             for t2_info in info:
@@ -349,7 +350,7 @@ def evaluate_acc_document(company, company_cp):
         score *= score_point / total_point
         score = round(score, 2)
         scores += score
-        acc_document_score.extend([score, total_score])
+        acc_document_score.extend([score, teacher_score, total_score])
 
     scores = round(scores / 2, 2)
     acc_document_score.append(scores)
@@ -454,10 +455,12 @@ def evaluate_trend_analysis(company, company_cp):
     趋势分析法评分
     """
     total_score = 15
+    teacher_score = -1
     username = company.get("student_no")
     score1 = _statement_func("trend_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
     score2 = _statement_func("trend_analysis_infos.profit_statement_infos", company, company_cp, total_score)
-    scores = {"first": score1, "second": score2}
+    scores = {"first" : {"student_score": score1, "teacher_score": teacher_score},
+              "second": {"student_score": score2, "teacher_score": teacher_score}}
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.{}_score".format("trend_analysis"): scores}}, multi=True)
     return scores
@@ -468,10 +471,12 @@ def evaluate_common_ratio_analysis(company, company_cp):
     共同比分析法
     """
     total_score = 15
+    teacher_score = -1
     username = company.get("student_no")
     score1 = _statement_func("common_ratio_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
     score2 = _statement_func("common_ratio_analysis_infos.profit_statement_infos", company, company_cp, total_score)
-    scores = {"first": score1, "second": score2}
+    scores = {"first" : {"student_score": score1, "teacher_score": teacher_score},
+              "second": {"student_score": score2, "teacher_score": teacher_score}}
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.{}_score".format("common_ratio_analysis"): scores}}, multi=True)
     return scores
@@ -482,8 +487,10 @@ def evaluate_ratio_analysis(company, company_cp):
     比率分析法评分
     """
     total_score = 15
+    teacher_score = -1
     username = company.get("student_no")
     scores = _statement_func("ratio_analysis", company, company_cp, total_score)
+    scores = {"student_score": scores, "teacher_score": teacher_score}
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.{}_score".format("ratio_analysis"): scores}}, multi=True)
     return scores
@@ -494,6 +501,7 @@ def evaluate_dupont_analysis(company, company_cp):
     杜邦分析法
     """
     total_score = 30
+    teacher_score = -1
     username = company.get("student_no")
     infos = company.get("{}_infos".format("dupont_analysis"))
     infos_cp = company_cp.get("{}_infos".format("dupont_analysis"))
@@ -508,6 +516,7 @@ def evaluate_dupont_analysis(company, company_cp):
 
     scores = score_point / total_point * total_score
     scores = round(scores, 2)
+    scores = {"student_score": scores, "teacher_score": teacher_score}
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.{}_score".format("dupont_analysis"): scores}}, multi=True)
     return scores
@@ -599,7 +608,7 @@ def _statement_func(infos_name, company, company_cp, total_score):
             score_point += sum(
                 [1 if value.get(keys[i]) and value.get(keys[i]) == t_value.get(keys[i]) else 0 for i in range(2)])
         except AttributeError:
-            print("键值错误 key: {} {}".format(key, infos_name))
+            raise AttributeError(f"键值错误 key: {key} {infos_name}")
 
     scores = score_point / total_point * total_score
     scores = round(scores, 2)
