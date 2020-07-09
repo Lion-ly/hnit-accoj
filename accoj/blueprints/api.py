@@ -63,7 +63,7 @@ def profile_api():
         a_keys = ['_id', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
         a_values = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         search_dict = dict(zip(a_keys, a_values))
-        data_tmp = mongo.db.score.find_one({'student_no': student_no}, search_dict)
+        data_tmp = mongo.db.rank.find_one({'student_no': student_no}, search_dict)
         if data_tmp:
             data = list(data_tmp.values())
             result = True
