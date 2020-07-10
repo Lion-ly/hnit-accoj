@@ -67,22 +67,22 @@
                     <hr>
                 </li><!-- /.menu-title -->
                 <li>
-                    <a href="{{ url_for('accoj.profile') }}"><i class="menu-icon fa fa-user"></i>个人信息 </a>
+                    <a href="{{ url_for('profile.index') }}"><i class="menu-icon fa fa-user"></i>个人信息 </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('accoj.message_system') }}"><i class="menu-icon fa fa-bell-o"></i>系统通知 </a>
+                    <a href="{{ url_for('profile.message_system') }}"><i class="menu-icon fa fa-bell-o"></i>系统通知 </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('accoj.message_whisper') }}"><i class="menu-icon fa fa-envelope"></i>我的消息 </a>
+                    <a href="{{ url_for('profile.message_whisper') }}"><i class="menu-icon fa fa-envelope"></i>我的消息 </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('accoj.profile_schedule') }}"><i class="menu-icon fa fa-clock-o"></i>我的进度 </a>
+                    <a href="{{ url_for('profile.profile_schedule') }}"><i class="menu-icon fa fa-clock-o"></i>我的进度 </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('accoj.profile_score') }}"><i class="menu-icon fa ti-stats-up"></i>我的成绩 </a>
+                    <a href="{{ url_for('profile.profile_score') }}"><i class="menu-icon fa ti-stats-up"></i>我的成绩 </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('accoj.rank') }}"><i class="menu-icon fa fa-bar-chart-o"></i>排行榜 </a>
+                    <a href="{{ url_for('profile.rank') }}"><i class="menu-icon fa fa-bar-chart-o"></i>排行榜 </a>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -188,7 +188,7 @@
                     </a>
 
                     <div class="user-menu dropdown-menu">
-                        <a class="nav-link" href="{{ url_for('accoj.profile') }}"><i class="fa fa- user"></i>个人中心</a>
+                        <a class="nav-link" href="{{ url_for('profile.index') }}"><i class="fa fa- user"></i>个人中心</a>
 
                         <a class="nav-link" href="#"><i class="fa fa- user"></i>通知 <span class="count">13</span></a>
 

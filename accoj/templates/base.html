@@ -76,11 +76,11 @@
                                         class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;后台管理</a></li>
                             {% elif role == '学生' or role == '教师' %}
                                 {% if role == '学生' %}
-                                    <li><a href="{{ url_for('accoj.profile') }}"><span
+                                    <li><a href="{{ url_for('profile.index') }}"><span
                                             class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人中心</a>
                                     </li>
                                 {% else %}
-                                    <li><a href="{{ url_for('accoj.teacher') }}"><span
+                                    <li><a href="{{ url_for('teacher.index') }}"><span
                                             class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;教师后台</a>
                                     </li>
                                 {% endif %}

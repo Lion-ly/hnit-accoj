@@ -129,6 +129,17 @@ def teacher_api():
     return jsonify(result=False, data=None)
 
 
+@api_bp.route('/get_user_rank', methods=['GET'])
+def get_user_rank():
+    # 获取所有的成绩信息
+    scores_info = mongo.db.rank.find({}, {"_id": 0})
+    scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
+    for i in range(0, len(scores_info_sorted)):
+        scores_info_sorted[i]["rank"] = i + 1
+    result, data = True, scores_info_sorted
+    return jsonify(result=result, data=data)
+
+
 @api_bp.route('/add_class', methods=['POST'])
 @login_required_teacher
 def add_class():

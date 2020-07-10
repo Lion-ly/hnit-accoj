@@ -13,7 +13,7 @@ function _init_() {
         }
     });
     $('#bootstrap-data-table').DataTable({
-        ajax: {url: '/get_user_rank'},
+        ajax: {url: '/api/get_user_rank'},
         order: [[4, 'desc']],
         "columns": [
             { "data": "rank" },

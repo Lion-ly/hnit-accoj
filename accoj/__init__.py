@@ -7,15 +7,26 @@
 # @Software: PyCharm
 import os
 from flask import Flask
+from settings import config
 from accoj.blueprints.accoj import accoj_bp
 from accoj.blueprints.auth import auth_bp
 from accoj.blueprints.index import index_bp
 from accoj.blueprints.api import api_bp
-from settings import config
-from accoj.extensions import mongo, mail, csrf, babel, socketio
-from accoj.blueprints.admin import admin, UserView, CompanyView
+from accoj.blueprints.profile import profile_bp
+from accoj.blueprints.teacher import teacher_bp
+from accoj.blueprints import message
 from accoj.deal_business.create_questions import add_question
 from werkzeug.security import generate_password_hash
+from accoj.exception import (CreateQuestionsException,
+                             ExcelCheckException)
+from accoj.extensions import (mongo,
+                              mail,
+                              csrf,
+                              babel,
+                              socketio)
+from accoj.blueprints.admin import (admin,
+                                    UserView,
+                                    CompanyView)
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -36,11 +47,9 @@ def create_app(config_name=None):
     create_admin()  # 创建管理员
     try:
         if not add_question(questions_no=1) or not add_question(questions_no=2):
-            print("\n创建题库时出错，未写入数据库!")
-    except:
-        print("\nExcel格式检查中断!格式出错!")
-        print("创建题库时出错，未写入数据库!")
-        pass
+            raise CreateQuestionsException()
+    except CreateQuestionsException:
+        raise CreateQuestionsException()
 
     return app
 
@@ -55,6 +64,8 @@ def register_blueprints(app):
     app.register_blueprint(auth_bp)
     app.register_blueprint(index_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(profile_bp, url_prefix='/profile')
+    app.register_blueprint(teacher_bp, url_prefix='/teacher')
 
 
 def register_extensions(app):

@@ -33,6 +33,23 @@ def login_required(func):
 
     return wrapper
 
+def login_required_student(func):
+    """
+    需要学生权限
+
+    :param func:
+    :return:
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get("role") == "student":
+            return func(*args, **kwargs)
+        else:
+            return redirect(url_for('index.index'))
+
+    return wrapper
+
 def login_required_teacher(func):
     """
     需要教师权限，只有后台才会用到这个装饰器
@@ -40,6 +57,7 @@ def login_required_teacher(func):
     :param func:
     :return:
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if session.get("role") == "teacher":
@@ -50,6 +68,7 @@ def login_required_teacher(func):
             return func(*args, **kwargs)
         else:
             abort(403)
+
     return wrapper
 
 
@@ -168,7 +187,8 @@ def parse_class_xlrd(class_xlrd: object):
     class_info = class_info.to_numpy()
     class_info_list = []
     for student_info in class_info:
-        info_keys = ['student_no', 'student_name', 'student_school', 'student_faculty', 'student_class', 'student_phone']
+        info_keys = ['student_no', 'student_name', 'student_school', 'student_faculty', 'student_class',
+                     'student_phone']
         info_keys_len = len(info_keys)
         info_dict = {info_keys[i]: student_info[i] for i in range(info_keys_len)}
         class_info_list.append(info_dict)
