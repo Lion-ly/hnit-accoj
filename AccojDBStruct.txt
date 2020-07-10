@@ -28,7 +28,22 @@ db.accoj.file.insert({"document_no":string, # 学号名+业务索引号(在compa
 					  "filename": string,	# 文件名
 					  "content": string,	# 内容
 					})
-
+# 排行榜成绩集合
+db.accoj.rank.insert({"student_no":string, # 学号名
+					  "student_class": string,	# 班级
+					  "student_name": string,	# 姓名
+					  "sum_score":double,  #总分,
+					  "one",  #第一部分成绩
+					  "two",  #第二部分成绩
+					  "three",  #第三部分成绩
+					  "four",  #第四部分成绩
+					  "five",  #第五部分成绩
+					  "six",  #第六部分成绩
+					  "seven",  #第七部分成绩
+					  "eight",  #第八部分成绩
+					  "nine",  #第九部分成绩
+					  "ten",  #第十部分成绩
+					})
 # 题库集合(已确定)
 db.accoj.question.insert({"questions_no": int， 			# 题库号
 						 "question_no": int,				# 题目编号

@@ -7,7 +7,7 @@
 # @Software: PyCharm
 from flask import Blueprint, render_template, jsonify, session, redirect, url_for
 from accoj.utils import login_required, complete_required1, login_required_teacher
-from accoj.blueprints import submit_infos, get_data, update_business_score
+from accoj.blueprints import submit_infos, get_data, update_business_rank_score
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo, socketio
 from accoj.deal_business.create_businesses import create_businesses
@@ -180,8 +180,8 @@ def submit_business_info():
                                 {"$set": {"schedule_confirm.business_confirm": True,
                                           "involve_subjects"                 : involve_subjects}},
                                 multi=True)
-        # 更新成绩
-        update_business_score()
+        # 更新成绩进排行榜集合
+        update_business_rank_score()
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")
@@ -949,7 +949,7 @@ def rank():
 @accoj_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
     # 获取所有的成绩信息
-    scores_info = mongo.db.score.find({}, {"_id": 0})
+    scores_info = mongo.db.rank.find({}, {"_id": 0})
     scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
     for i in range(0, len(scores_info_sorted)):
         scores_info_sorted[i]["rank"] = i + 1
