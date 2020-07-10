@@ -1,0 +1,106 @@
+Endpoint                              Methods    Rule
+------------------------------------  ---------  ----------------------------------------
+accoj.coursei                         GET        /coursei
+accoj.courseii                        GET        /courseii
+accoj.courseiii                       GET        /courseiii
+accoj.courseiv                        GET        /courseiv
+accoj.courseix                        GET        /courseix
+accoj.courseix_2                      GET        /courseix_2
+accoj.courseix_3                      GET        /courseix_3
+accoj.courseix_4                      GET        /courseix_4
+accoj.coursev                         GET        /coursev
+accoj.coursev_2                       GET        /coursev_2
+accoj.coursevi                        GET        /coursevi
+accoj.coursevii                       GET        /coursevii
+accoj.courseviii                      GET        /courseviii
+accoj.coursex                         GET        /coursex
+accoj.create_business                 POST       /create_business
+accoj.delete_ledger_info              POST       /delete_ledger_info
+accoj.download_acc_document_info      POST       /download_acc_document_info
+accoj.get_acc_balance_sheet_info      POST       /get_acc_balance_sheet_info
+accoj.get_acc_document_info           POST       /get_acc_document_info
+accoj.get_balance_sheet_info          POST       /get_balance_sheet_info
+accoj.get_business_info               POST       /get_business_info
+accoj.get_business_list               POST       /get_business_list
+accoj.get_company_info                POST       /get_company_info
+accoj.get_coursex_info                POST       /get_coursex_info
+accoj.get_entry_info                  POST       /get_entry_info
+accoj.get_ix2_first_info              POST       /get_ix2_first_info
+accoj.get_ix2_second_info             POST       /get_ix2_second_info
+accoj.get_ix4_info                    POST       /get_ix4_info
+accoj.get_ix_first_info               POST       /get_ix_first_info
+accoj.get_ix_second_info              POST       /get_ix_second_info
+accoj.get_key_element_info            POST       /get_key_element_info
+accoj.get_ledger_info                 POST       /get_ledger_info
+accoj.get_new_balance_sheet_info      POST       /get_new_balance_sheet_info
+accoj.get_profit_statement_info       POST       /get_profit_statement_info
+accoj.get_subject_info                POST       /get_subject_info
+accoj.get_subsidiary_account_info     POST       /get_subsidiary_account_info
+accoj.submit_acc_balance_sheet_info   POST       /submit_acc_balance_sheet_info
+accoj.submit_acc_document_info        POST       /submit_acc_document_info
+accoj.submit_balance_sheet_info       POST       /submit_balance_sheet_info
+accoj.submit_business_info            POST       /submit_business_info
+accoj.submit_company_info             POST       /submit_company_info
+accoj.submit_coursex_info             POST       /submit_coursex_info
+accoj.submit_entry_info               POST       /submit_entry_info
+accoj.submit_ix2_first_info           POST       /submit_ix2_first_info
+accoj.submit_ix2_second_info          POST       /submit_ix2_second_info
+accoj.submit_ix4_info                 POST       /submit_ix4_info
+accoj.submit_ix_first_info            POST       /submit_ix_first_info
+accoj.submit_ix_second_info           POST       /submit_ix_second_info
+accoj.submit_key_element_info         POST       /submit_key_element_info
+accoj.submit_ledger_info              POST       /submit_ledger_info
+accoj.submit_new_balance_sheet_info   POST       /submit_new_balance_sheet_info
+accoj.submit_profit_statement_info    POST       /submit_profit_statement_info
+accoj.submit_subject_info             POST       /submit_subject_info
+accoj.submit_subsidiary_account_info  POST       /submit_subsidiary_account_info
+admin.index                           GET        /admin/
+admin.static                          GET        /admin/static/<path:filename>
+api.add_class                         POST       /api/add_class
+api.download_attached                 GET        /api/download_attached
+api.get_news                          GET        /api/get_news
+api.get_user_rank                     GET        /api/get_user_rank
+api.profile_api                       POST       /api/profile_api
+api.teacher_api                       POST       /api/teacher_api
+auth.check_email                      GET, POST  /VCode
+auth.find_password                    GET, POST  /findpsw
+auth.login                            GET, POST  /login
+auth.logout                           GET        /logout
+auth.signin                           GET, POST  /signin
+auth.update_password                  GET, POST  /update_password
+companyview.action_view               POST       /admin/companyview/action/
+companyview.ajax_lookup               GET        /admin/companyview/ajax/lookup/
+companyview.ajax_update               POST       /admin/companyview/ajax/update/
+companyview.create_view               GET, POST  /admin/companyview/new/
+companyview.delete_view               POST       /admin/companyview/delete/
+companyview.details_view              GET        /admin/companyview/details/
+companyview.edit_view                 GET, POST  /admin/companyview/edit/
+companyview.export                    GET        /admin/companyview/export/<export_type>/
+companyview.index_view                GET        /admin/companyview/
+index.about                           GET, POST  /about
+index.index                           GET, POST  /
+profile.index                         GET        /profile/index
+profile.message_system                GET        /profile/message_system
+profile.message_whisper               GET        /profile/message_whisper
+profile.profile_schedule              GET        /profile/profile_schedule
+profile.profile_score                 GET        /profile/profile_score
+profile.rank                          GET        /profile/rank
+static                                GET        /static/<path:filename>
+teacher.add_class                     GET        /teacher/add_class
+teacher.index                         GET        /teacher/index
+teacher.manage_time                   GET        /teacher/manage_time
+teacher.message_system                GET        /teacher/message_system
+teacher.message_whisper               GET        /teacher/message_whisper
+teacher.rank                          GET        /teacher/rank
+teacher.teacher_correct               GET        /teacher/teacher_correct
+teacher.teacher_notify_c              GET        /teacher/teacher_notify_c
+teacher.teacher_notify_p              GET        /teacher/teacher_notify_p
+userview.action_view                  POST       /admin/userview/action/
+userview.ajax_lookup                  GET        /admin/userview/ajax/lookup/
+userview.ajax_update                  POST       /admin/userview/ajax/update/
+userview.create_view                  GET, POST  /admin/userview/new/
+userview.delete_view                  POST       /admin/userview/delete/
+userview.details_view                 GET        /admin/userview/details/
+userview.edit_view                    GET, POST  /admin/userview/edit/
+userview.export                       GET        /admin/userview/export/<export_type>/
+userview.index_view                   GET        /admin/userview/
