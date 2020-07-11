@@ -1,3 +1,6 @@
+"""
+教师后台管理
+"""
 from flask import (session,
                    Blueprint,
                    render_template,
@@ -8,13 +11,13 @@ from accoj.utils import login_required_teacher
 teacher_bp = Blueprint("teacher", __name__)
 
 
-# 教师后台管理----start-----------------------------------------------------------------------------
 @teacher_bp.route('/index', methods=['GET'])
 def index():
     """
     个人信息
     """
     return render_template('teacher/index.html')
+
 
 @teacher_bp.route('/message_system', methods=['GET'])
 def message_system():
@@ -30,6 +33,7 @@ def message_whisper():
     消息面板
     """
     return render_template('teacher/message_whisper.html')
+
 
 @teacher_bp.route('/add_class', methods=['GET'])
 def add_class():
@@ -70,12 +74,14 @@ def teacher_notify_p():
     """
     return render_template('teacher/teacher-notify-p.html')
 
+
 @teacher_bp.route('/rank', methods=['GET'])
 def rank():
     """
     排行榜
     """
     return render_template('teacher/rank.html')
+
 
 @teacher_bp.before_request
 @login_required_teacher

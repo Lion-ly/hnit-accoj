@@ -5,6 +5,7 @@ $(document).ready(function () {
     tooltipInit();
     navigationLiInit();
 });
+
 /*	@ 导航当前位置
  *  # courseBase
  *	? 控制导航栏的active，确定当前处于导航栏的位置
@@ -26,7 +27,7 @@ function navigationLiInit() {
     });
 }
 
-function pwdRevealInit(){
+function pwdRevealInit() {
     // 密码显示或隐藏
     $("button[data-reveal]").on('click', function () {
         let $this = $(this),
@@ -39,7 +40,7 @@ function pwdRevealInit(){
     });
 }
 
-function tooltipInit(){
+function tooltipInit() {
     // 初始化tooltip插件
     $('[data-toggle="tooltip"]').tooltip();
 }
@@ -819,4 +820,21 @@ function DisableButton(flag) {
     let $button = $("button[data-save], button[data-confirm]");
     flag = flag ? flag : false;
     $button.prop("disabled", flag);
+}
+
+/*
+提交教师评分
+ */
+function commit_correct(data, url, successFunc, messageDivID) {
+    /* Todo
+       应实现在courseix.js, courseix_2.js, courseix_4.js和 coursex.js中对此函数的调用。
+       data: {'title': string, 'category': string, 'score': float};
+       url: '/api/commit_correct';
+       successFunc: 应实现successFunc回调函数，当提交评分成功时会调用;
+       messageDivID: ;
+       # title可为{'trend_analysis', 'common_ratio_analysis', 'ratio_analysis', 'dupont_analysis'}中之一;
+       # 若为'trend_analysis'或'common_ratio_analysis'， category值应设为'first'（负债表）或'second'（利润表）， 其余情况设为空;
+       # score字段应进行检查，当title为'dupont_analysis'时，值应为0<=score<=70，其余情况为0<=score<=5。
+     */
+    get_info(data, url, successFunc, messageDivID);
 }

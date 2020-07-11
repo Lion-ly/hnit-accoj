@@ -1,4 +1,4 @@
-class CreateQuestionsException(Exception):
+class CreateQuestionsError(Exception):
     """创建题库异常"""
 
     def __init__(self, msg=""):
@@ -7,7 +7,7 @@ class CreateQuestionsException(Exception):
         self.msg = msg
 
 
-class ExcelCheckException(CreateQuestionsException):
+class ExcelCheckError(CreateQuestionsError):
     """创建题库时excel格式检查异常"""
 
     def __init__(self, msg=""):

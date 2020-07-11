@@ -348,7 +348,6 @@ def get_data(type_num, infos_name, info_keys):
     return data
 
 
-
 def get_schedule(student_no):
     schedule_info = mongo.db.company.find_one(dict(student_no=student_no),
                                               dict(_id=0, schedule_confirm=1))
@@ -403,12 +402,12 @@ def get_schedule(student_no):
         data.append(account_schedule)
 
         # 会计报表部分进度
-        Financial_Statements_schecule = 0
+        financial_statements_schecule = 0
         if schedule_info.get("new_balance_sheet_confirm"):
-            Financial_Statements_schecule += 50
+            financial_statements_schecule += 50
         if schedule_info.get("profit_statement_confirm"):
-            Financial_Statements_schecule += 50
-        data.append(Financial_Statements_schecule)
+            financial_statements_schecule += 50
+        data.append(financial_statements_schecule)
 
         # 因素分析未做  20*5 or 15*4+20*2
         analysis_schedule = 0
@@ -433,19 +432,15 @@ def get_schedule(student_no):
         return data
 
 
-
 #  -----rank集合存入成绩
 # 对业务一录入分数进rank
 def update_business_rank_score():
     student_no = session.get("username")
     user_info = mongo.db.user.find_one(dict(student_no=student_no),
-                                            dict(_id=0, student_class=1, student_name=1))
+                                       dict(_id=0, student_class=1, student_name=1))
     student_class = user_info.get("student_class")
-    student_Name = user_info.get("student_name")
-    if student_Name:
-        student_name = student_Name
-    else:
-        student_name = "Default"
+    student_name = user_info.get("student_name")
+    student_name = student_name if student_name else "Default"
     # 第一次更新时输入所有的键值  学号 班级 姓名 总分 各部分
     infos = {"student_no": student_no, "student_class": student_class, "student_name": student_name}
     score = [100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -458,9 +453,9 @@ def update_business_rank_score():
 
 def update_rank(schedule_name, evaluation=None):
     """
-    	用户每次提交更新用户的排行榜集合中的成绩等信息
-    	:return:
-    	"""
+    用户每次提交更新用户的排行榜集合中的成绩等信息
+    :return:
+    """
     student_no = session.get("username")
     # 分数信息
     if evaluation:
@@ -471,19 +466,20 @@ def update_rank(schedule_name, evaluation=None):
     def update_key_element():
         key_element_sum_score = evaluation_scores[-1]
         sum_score = round(user_score_info.get("sum_score") + key_element_sum_score, 2)
-        mongo.db.rank.update(dict(student_no=student_no), {"$set":dict(sum_score=sum_score, two=key_element_sum_score)})
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, two=key_element_sum_score)})
 
     def update_subject():
         subject_sum_score = evaluation_scores[-1]
         sum_score = round(user_score_info.get("sum_score") + subject_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
-                              {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
+                             {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
 
     def update_entry():
         entry_sum_score = evaluation_scores[-1]
         sum_score = round(user_score_info.get("sum_score") + entry_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
-                              {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
+                             {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
 
     # 第五部分得分
     # 账户得分
@@ -502,13 +498,12 @@ def update_rank(schedule_name, evaluation=None):
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=round(sum_score, 2), five=round(ledger_score_sum, 2))})
 
-
     # 第六部分 会计凭证部分得分
     def update_acc_document():
         acc_sum_score = evaluation_scores[-1]
         sum_score = round(acc_sum_score + user_score_info.get("sum_score"), 2)
         mongo.db.rank.update(dict(student_no=student_no),
-                              {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
+                             {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
 
     # 会计账簿部分得分
     # 明细账
@@ -516,7 +511,6 @@ def update_rank(schedule_name, evaluation=None):
         sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, seven=evaluation)})
-
 
     # 科目余额表
     def update_acc_balance_sheet():
@@ -526,14 +520,12 @@ def update_rank(schedule_name, evaluation=None):
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, seven=this_sum_score)})
 
-
     # 会计报表部分得分
     # 资产负债表
     def update_new_balance_sheet():
         sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, eight=evaluation)})
-
 
     # 利润表
     def update_profit_statement():
@@ -543,13 +535,11 @@ def update_rank(schedule_name, evaluation=None):
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, eight=this_sum_score)})
 
-
-
     # 会计报表部分得分
     # 趋势分析法得分
     def update_trend_analysis():
-        trend_analysis_score_sum =  evaluation.get("first").get("student_score") + \
-                             evaluation.get("second").get("student_score")
+        trend_analysis_score_sum = evaluation.get("first").get("student_score") + \
+                                   evaluation.get("second").get("student_score")
         trend_teacher_score_1 = evaluation.get("first").get("teacher_score")
         trend_teacher_score_2 = evaluation.get("second").get("teacher_score")
 
@@ -560,7 +550,6 @@ def update_rank(schedule_name, evaluation=None):
         sum_score = round(user_score_info.get("sum_score") + trend_analysis_score_sum, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, nine=round(trend_analysis_score_sum, 2))})
-
 
     # 共同比分析法
     def update_common_ratio_analysis():
@@ -590,8 +579,6 @@ def update_rank(schedule_name, evaluation=None):
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
 
-
-
     def update_dupont_analysis():
         dupont_analysis_sum_score = evaluation.get("student_score")
         dupont_analysis_teacher_score = evaluation.get("teacher_score")
@@ -600,7 +587,7 @@ def update_rank(schedule_name, evaluation=None):
 
         sum_score = round(user_score_info.get("sum_score") + dupont_analysis_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
-                          {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_sum_score, 2))})
+                             {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_sum_score, 2))})
 
     update_schedule_dict = dict(key_element=update_key_element,
                                 subject=update_subject,

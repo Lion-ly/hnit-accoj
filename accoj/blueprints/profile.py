@@ -1,16 +1,16 @@
+"""
+用户个人中心
+"""
 from flask import (Blueprint,
                    session,
                    render_template,
                    redirect,
-                   url_for,
-                   jsonify)
-from accoj.extensions import mongo
+                   url_for)
 from accoj.utils import login_required_student
 
 profile_bp = Blueprint("profile", __name__)
 
 
-# 用户个人中心----start-----------------------------------------------------------------------------
 @profile_bp.route('/index', methods=['GET'])
 def index():
     """
