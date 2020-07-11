@@ -91,6 +91,10 @@ def profile_api():
 @api_bp.route('/teacher_api', methods=['POST'])
 @login_required_teacher
 def teacher_api():
+    """
+    教师后台api
+    """
+
     def get_class_list():
         """获取班级列表"""
         result, data = False, None
@@ -132,10 +136,10 @@ def teacher_api():
 @api_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
     # 获取所有的成绩信息
-    scores_info = mongo.db.rank.find({}, {"_id": 0})
+    scores_info = mongo.db.rank.find({}, {'_id': 0})
     scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
     for i in range(0, len(scores_info_sorted)):
-        scores_info_sorted[i]["rank"] = i + 1
+        scores_info_sorted[i]['rank'] = i + 1
     result, data = True, scores_info_sorted
     return jsonify(result=result, data=data)
 
@@ -159,11 +163,52 @@ def download_attached():
     return send_from_directory(path, filename='添加班级格式.xlsx', as_attachment=True)
 
 
+@api_bp.route('/commit_correct', methods=['POST'])
+@login_required_teacher
+def commit_correct():
+    """教师提交作业评分"""
+    titles = {'trend_analysis', 'common_ratio_analysis',  # 报表名
+              'ratio_analysis', 'dupont_analysis'}
+    categories = {'first', 'second'}  # first（负债表） 或 second（利润表）
+    err_message = '评分不符合规范或学生未完成作业'
+    result, data = False, {'message': ''}
+    username = session.get('username')
+    json_data = request.get_json()
+    title = json_data.get('title')
+    category = json_data.get('category')
+    score = json_data.get('score')  # 分数
+    if title in titles:
+        schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
+        if title in {'trend_analysis', 'common_ratio_analysis'}:
+            # 趋势分析法 / 共同比分析法
+            if score and 0 <= score <= 5 and category in categories and schedule_confirm.get(f'{title}_confirm').get(
+                    category):
+                result = True
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
+        elif title == 'ratio_analysis':
+            # 比率分析法
+            if score and 0 <= score <= 5 and schedule_confirm.get(f'{title}_confirm'):
+                result = True
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+        elif title == 'dupont_analysis':
+            # 杜邦分析法
+            if score and 0 <= score <= 70 and schedule_confirm.get(f'{title}_confirm'):
+                result = True
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+    if not result:
+        data['message'] = err_message
+    return jsonify(result=result, data=data)
+
+
 @api_bp.route('/get_news', methods=['GET'])
 def get_news():
     """获取新闻"""
+    result, data = False, None
     news = mongo.db.news_spider.find()
     if news:
-        news = dumps(news)
-        return jsonify(result=True, data=news)
-    return jsonify(result=False, data=None)
+        data = dumps(news)
+        result = True
+    return jsonify(result=result, data=data)

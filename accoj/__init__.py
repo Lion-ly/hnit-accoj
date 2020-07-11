@@ -17,8 +17,8 @@ from accoj.blueprints.teacher import teacher_bp
 from accoj.blueprints import message
 from accoj.deal_business.create_questions import add_question
 from werkzeug.security import generate_password_hash
-from accoj.exception import (CreateQuestionsException,
-                             ExcelCheckException)
+from accoj.exception import (CreateQuestionsError,
+                             ExcelCheckError)
 from accoj.extensions import (mongo,
                               mail,
                               csrf,
@@ -44,12 +44,13 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     register_extensions(app)
     register_blueprints(app)
-    create_admin()  # 创建管理员
+    create_admin()  # 创建初始管理员账号
+    create_teacher_account()  # 创建初始教师账号
     try:
         if not add_question(questions_no=1) or not add_question(questions_no=2):
-            raise CreateQuestionsException()
-    except CreateQuestionsException:
-        raise CreateQuestionsException()
+            raise CreateQuestionsError()
+    except CreateQuestionsError:
+        raise CreateQuestionsError()
 
     return app
 
@@ -89,9 +90,29 @@ def create_admin():
     创建管理员账号
     :return:
     """
-    mongo.db.user.update(dict(student_no="admin"),
-                         dict(student_no="admin",
-                              role="admin",
-                              student_name="admin",
-                              password=generate_password_hash("accojOwner")),
+    create_account(student_no="admin", role="admin", student_name="admin", password="accojOwner")
+
+
+def create_teacher_account():
+    """
+    创建教师账号
+    :return:
+    """
+    create_account(student_no="teacher", role="teacher", student_name="teacher", password="123")
+
+
+def create_account(student_no: str, student_name: str, password: str, role: str = "student"):
+    """
+    创建账号
+    :param student_no: 学号
+    :param role: 权限，可为'admin', 'teacher', 'student', 默认为'student'
+    :param student_name:
+    :param password:
+    :return:
+    """
+    mongo.db.user.update(dict(student_no=student_no),
+                         {"$setOnInsert": dict(student_no=role,
+                                               role=role,
+                                               student_name=student_name,
+                                               password=generate_password_hash(password))},
                          upsert=True)
