@@ -7,7 +7,6 @@
 # @Software: PyCharm
 import os, datetime
 from urllib import parse
-from accoj.news_spider import news_spider
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
