@@ -80,6 +80,5 @@ class RepeatingTimer(Timer):
             self.finished.wait(self.interval)
 
 
-def new_spider_start():
-    t = RepeatingTimer(36000, news_spider)
-    t.start()
+t = RepeatingTimer(36000, news_spider)
+t.start()
