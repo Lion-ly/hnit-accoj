@@ -26,6 +26,7 @@ def news_spider():
     result = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     index = 0
     cnt = mongo.db.news_spider.find().count()
+    print(f"news counts: {cnt}")
     if cnt == 10:
         mongo.db.news_spider.delete_many({})
     for item in a.items():
@@ -80,5 +81,6 @@ class RepeatingTimer(Timer):
             self.finished.wait(self.interval)
 
 
-t = RepeatingTimer(36000, news_spider)
-t.start()
+def new_spider_start():
+    t = RepeatingTimer(36000, news_spider)
+    t.start()
