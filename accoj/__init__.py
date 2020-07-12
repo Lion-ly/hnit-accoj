@@ -15,6 +15,7 @@ from accoj.blueprints.api import api_bp
 from accoj.blueprints.profile import profile_bp
 from accoj.blueprints.teacher import teacher_bp
 from accoj.blueprints import message
+from accoj.news_spider import new_spider_start
 from accoj.deal_business.create_questions import add_question
 from werkzeug.security import generate_password_hash
 from accoj.exception import (CreateQuestionsError,
@@ -46,6 +47,7 @@ def create_app(config_name=None):
     register_blueprints(app)
     create_admin()  # 创建初始管理员账号
     create_teacher_account()  # 创建初始教师账号
+    new_spider_start()
     try:
         if not add_question(questions_no=1) or not add_question(questions_no=2):
             raise CreateQuestionsError()
