@@ -26,7 +26,6 @@ def news_spider():
     result = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     index = 0
     cnt = mongo.db.news_spider.find().count()
-    print(f"news counts: {cnt}")
     if cnt == 10:
         mongo.db.news_spider.delete_many({})
     for item in a.items():

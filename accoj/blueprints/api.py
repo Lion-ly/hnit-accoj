@@ -167,18 +167,21 @@ def download_attached():
 @login_required_teacher
 def commit_correct():
     """教师提交作业评分"""
-    titles = {'trend_analysis', 'common_ratio_analysis',  # 报表名
-              'ratio_analysis', 'dupont_analysis'}
-    categories = {'first', 'second'}  # first（负债表） 或 second（利润表）
     err_message = '评分不符合规范或学生未完成作业'
     result, data = False, {'message': ''}
     username = session.get('username')
+    schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
+    if not schedule_confirm:
+        err_message = '所选账号不存在或该用户未完成作业'
+        return jsonify(result=False, data={'message': err_message})
+    titles = {'trend_analysis', 'common_ratio_analysis',  # 报表名
+              'ratio_analysis', 'dupont_analysis'}
+    categories = {'first', 'second'}  # first（负债表） 或 second（利润表）
     json_data = request.get_json()
     title = json_data.get('title')
     category = json_data.get('category')
     score = json_data.get('score')  # 分数
     if title in titles:
-        schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
         if title in {'trend_analysis', 'common_ratio_analysis'}:
             # 趋势分析法 / 共同比分析法
             if score and 0 <= score <= 5 and category in categories and schedule_confirm.get(f'{title}_confirm').get(

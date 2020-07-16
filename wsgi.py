@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 from accoj import create_app
 from gevent.pywsgi import WSGIServer
@@ -12,5 +13,7 @@ app = create_app('development')
 app.jinja_env.auto_reload = True
 
 if __name__ == '__main__':
+    logging.basicConfig(filename='log.txt', level=logging.DEBUG)
+    # app.run('0.0.0.0', 80)
     http_server = WSGIServer(('0.0.0.0', 80), app)
     http_server.serve_forever()
