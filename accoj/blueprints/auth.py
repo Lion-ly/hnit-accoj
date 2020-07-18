@@ -96,6 +96,7 @@ def login():
                 post = dict(student_no="{}".format(student_no),
                             role=role,
                             student_name="",
+                            teacher="teacher",
                             nick_name="",
                             student_school="",
                             personalized_signature="",

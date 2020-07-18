@@ -98,15 +98,16 @@ def teacher_api():
     def get_class_list():
         """获取班级列表"""
         result, data = False, None
-        users = mongo.db.user.find_one(dict(teacher=username),
-                                       dict(_id=0, student_school=1, student_faculty=1, student_class=1))
+        users = mongo.db.user.find(dict(teacher=username),
+                                   dict(_id=0, student_school=1, student_faculty=1, student_class=1))
         if users:
-            class_info = set()
+            class_info = list()
             for user in users:
-                class_info.add(dict(student_school=user.get('student_school'),
-                                    student_faculty=user.get('student_faculty'),
-                                    student_class=user.get('student_class')))
-            class_info = list(class_info)
+                e_dic = dict(student_school=user.get('student_school'),
+                             student_faculty=user.get('student_faculty'),
+                             student_class=user.get('student_class'))
+                class_info.append(e_dic) if e_dic not in class_info else None
+            class_info = dumps(class_info)
             result, data = True, class_info
         return jsonify(result=result, data=data)
 
