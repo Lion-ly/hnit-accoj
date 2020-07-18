@@ -139,9 +139,33 @@ def get_user_rank():
     # 获取所有的成绩信息
     scores_info = mongo.db.rank.find({}, {'_id': 0})
     scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
-    for i in range(0, len(scores_info_sorted)):
+    scores_info_sorted_len = len(scores_info_sorted)
+    for i in range(0, scores_info_sorted_len):
         scores_info_sorted[i]['rank'] = i + 1
     result, data = True, scores_info_sorted
+    return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_class_info', methods=['GET'])
+@login_required_teacher
+def get_class_info():
+    """
+    教师后台->发送通知->班级通知  表格信息
+    :return:
+    """
+    username = session.get('username')
+    _class_info = mongo.db.user.find(dict(teacher=username),
+                                     dict(_id=0, student_school=1, student_faculty=1, student_class=1))
+    class_info = list()
+    for _class in _class_info:
+        e_dic = dict(student_school=_class.get('student_school'),
+                     student_faculty=_class.get('student_faculty'),
+                     student_class=_class.get('student_class'),
+                     t='<input type="checkbox" class="switch-input">')
+        class_info.append(e_dic) if e_dic not in class_info else None
+    for i, e in enumerate(class_info):
+        class_info[i]['num'] = i + 1
+    result, data = True, class_info
     return jsonify(result=result, data=data)
 
 

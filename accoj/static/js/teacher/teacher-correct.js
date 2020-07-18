@@ -15,7 +15,7 @@ function getStudentInfo() {
     $('#bootstrap-data-table').DataTable({
         ajax: {url: '/api/get_student_info'},
         order: [[4, 'desc']],
-        "columns": [
+        columns: [
             {"data": "rank"},
             {"data": "student_no"},
             {"data": "student_class"},
