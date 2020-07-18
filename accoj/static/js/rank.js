@@ -16,21 +16,21 @@ function _init_() {
         ajax: {url: '/api/get_user_rank'},
         order: [[4, 'desc']],
         "columns": [
-            { "data": "rank" },
-            { "data": "student_no" },
-            { "data": "student_class" },
-            { "data": "student_name" },
-            { "data": "sum_score" },
-            { "data": "one" },
-            { "data": "two" },
-            { "data": "three" },
-            { "data": "four" },
-            { "data": "five" },
-            { "data": "six" },
-            { "data": "seven" },
-            { "data": "eight" },
-            { "data": "nine" },
-            { "data": "ten" }
+            {"data": "rank"},
+            {"data": "student_no"},
+            {"data": "student_class"},
+            {"data": "student_name"},
+            {"data": "sum_score"},
+            {"data": "one"},
+            {"data": "two"},
+            {"data": "three"},
+            {"data": "four"},
+            {"data": "five"},
+            {"data": "six"},
+            {"data": "seven"},
+            {"data": "eight"},
+            {"data": "nine"},
+            {"data": "ten"}
         ]
     });
 }

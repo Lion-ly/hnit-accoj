@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 from dotenv import load_dotenv
 from accoj import create_app
 from gevent.pywsgi import WSGIServer
@@ -11,6 +13,21 @@ app = create_app('development')
 # 静态文件热更
 app.jinja_env.auto_reload = True
 
+
+class RedirectStderr(object):
+
+    def __init__(self, cfg):
+        self._log_file = open(cfg['log_path'], 'a')
+
+    def write(self, msg):
+        self._log_file.write(msg)
+        self._log_file.flush()
+
+
+sys.stderr = RedirectStderr({'log_path': 'log.txt'})
+
 if __name__ == '__main__':
+    logging.basicConfig(filename='log.txt', level=logging.DEBUG)
+    # app.run('0.0.0.0', 80)
     http_server = WSGIServer(('0.0.0.0', 80), app)
     http_server.serve_forever()

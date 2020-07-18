@@ -98,15 +98,16 @@ def teacher_api():
     def get_class_list():
         """获取班级列表"""
         result, data = False, None
-        users = mongo.db.user.find_one(dict(teacher=username),
-                                       dict(_id=0, student_school=1, student_faculty=1, student_class=1))
+        users = mongo.db.user.find(dict(teacher=username),
+                                   dict(_id=0, student_school=1, student_faculty=1, student_class=1))
         if users:
-            class_info = set()
+            class_info = list()
             for user in users:
-                class_info.add(dict(student_school=user.get('student_school'),
-                                    student_faculty=user.get('student_faculty'),
-                                    student_class=user.get('student_class')))
-            class_info = list(class_info)
+                e_dic = dict(student_school=user.get('student_school'),
+                             student_faculty=user.get('student_faculty'),
+                             student_class=user.get('student_class'))
+                class_info.append(e_dic) if e_dic not in class_info else None
+            class_info = dumps(class_info)
             result, data = True, class_info
         return jsonify(result=result, data=data)
 
@@ -138,9 +139,85 @@ def get_user_rank():
     # 获取所有的成绩信息
     scores_info = mongo.db.rank.find({}, {'_id': 0})
     scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
-    for i in range(0, len(scores_info_sorted)):
+    scores_info_sorted_len = len(scores_info_sorted)
+    for i in range(0, scores_info_sorted_len):
         scores_info_sorted[i]['rank'] = i + 1
     result, data = True, scores_info_sorted
+    return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_class_info', methods=['GET'])
+@login_required_teacher
+def get_class_info():
+    """
+    教师后台->发送通知->班级通知  表格信息
+    :return:
+    """
+    username = session.get('username')
+    _class_info = mongo.db.user.find(dict(teacher=username),
+                                     dict(_id=0, student_school=1, student_faculty=1, student_class=1))
+    class_info = list()
+    for _class in _class_info:
+        e_dic = dict(student_school=_class.get('student_school'),
+                     student_faculty=_class.get('student_faculty'),
+                     student_class=_class.get('student_class'),
+                     t='<input type="checkbox" class="switch-input">')
+        class_info.append(e_dic) if e_dic not in class_info else None
+    for i, e in enumerate(class_info):
+        class_info[i]['num'] = i + 1
+    result, data = True, class_info
+    return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_student_info_correct', methods=['GET'])
+@login_required_teacher
+def get_student_info_correct():
+    """
+    教师后台->批改作业  表格信息
+    :return:
+    """
+    username = session.get('username')
+    _user_info = mongo.db.user.find(dict(teacher=username),
+                                    dict(_id=0, student_no=1, student_name=1, student_school=1,
+                                         student_faculty=1, student_class=1))
+    user_info = list()
+    for user in _user_info:
+        e_dic = dict(student_no=user.get('student_no'),
+                     student_name=user.get('student_name'),
+                     student_school=user.get('student_school'),
+                     student_faculty=user.get('student_faculty'),
+                     student_class=user.get('student_class'),
+                     t='<a href="#">开始批改</a>')
+        user_info.append(e_dic)
+    for i, e in enumerate(user_info):
+        user_info[i]['num'] = i + 1
+        user_info[i]['correct_schedule'] = "0%"
+    result, data = True, user_info
+    return jsonify(result=result, data=data)
+
+@api_bp.route('/get_student_info_notify_p', methods=['GET'])
+@login_required_teacher
+def get_student_info_notify_p():
+    """
+    教师后台->发送通知->个人通知  表格信息
+    :return:
+    """
+    username = session.get('username')
+    _user_info = mongo.db.user.find(dict(teacher=username),
+                                    dict(_id=0, student_no=1, student_name=1, student_school=1,
+                                         student_faculty=1, student_class=1))
+    user_info = list()
+    for user in _user_info:
+        e_dic = dict(student_no=user.get('student_no'),
+                     student_name=user.get('student_name'),
+                     student_school=user.get('student_school'),
+                     student_faculty=user.get('student_faculty'),
+                     student_class=user.get('student_class'),
+                     t='<input type="checkbox" class="switch-input">')
+        user_info.append(e_dic)
+    for i, e in enumerate(user_info):
+        user_info[i]['num'] = i + 1
+    result, data = True, user_info
     return jsonify(result=result, data=data)
 
 
@@ -167,18 +244,21 @@ def download_attached():
 @login_required_teacher
 def commit_correct():
     """教师提交作业评分"""
-    titles = {'trend_analysis', 'common_ratio_analysis',  # 报表名
-              'ratio_analysis', 'dupont_analysis'}
-    categories = {'first', 'second'}  # first（负债表） 或 second（利润表）
     err_message = '评分不符合规范或学生未完成作业'
     result, data = False, {'message': ''}
     username = session.get('username')
+    schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
+    if not schedule_confirm:
+        err_message = '所选账号不存在或该用户未完成作业'
+        return jsonify(result=False, data={'message': err_message})
+    titles = {'trend_analysis', 'common_ratio_analysis',  # 报表名
+              'ratio_analysis', 'dupont_analysis'}
+    categories = {'first', 'second'}  # first（负债表） 或 second（利润表）
     json_data = request.get_json()
     title = json_data.get('title')
     category = json_data.get('category')
     score = json_data.get('score')  # 分数
     if title in titles:
-        schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
         if title in {'trend_analysis', 'common_ratio_analysis'}:
             # 趋势分析法 / 共同比分析法
             if score and 0 <= score <= 5 and category in categories and schedule_confirm.get(f'{title}_confirm').get(

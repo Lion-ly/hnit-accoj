@@ -18,9 +18,8 @@ password = parse.quote_plus("Love199805#")
 class BaseConfig(object):
     SECRET_KEY = os.getenv("SECRET_KEY", "dev key")
     TEMPLATES_AUTO_RELOAD = True
-    FLASK_ADMIN_SWATCH = "spacelab" # admin主题
+    FLASK_ADMIN_SWATCH = "spacelab"  # admin主题
 
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     CKEDITOR_ENABLE_CSRF = True
 

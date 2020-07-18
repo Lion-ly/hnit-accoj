@@ -44,13 +44,14 @@ function bind_e() {
 function get_class_list() {
     function plotClassChart(_data) {
         _data = JSON.parse(_data);
+        console.log(_data);
         let t_body = '',
             $table_body = $("#table-body"),
             _dataLen = _data.length;
         for (let i = 0; i < _dataLen; i++) {
-            let student_school = _data.student_school,
-                student_faculty = _data.student_faculty,
-                student_class = _data.student_class;
+            let student_school = _data[i].student_school,
+                student_faculty = _data[i].student_faculty,
+                student_class = _data[i].student_class;
             t_body += '<tr>' +
                 '<th scope="row">' + (i + 1) + '</th>' +
                 '<td>' + student_school + '</td>' +
@@ -63,8 +64,6 @@ function get_class_list() {
 
     let data = {api: 'get_class_list'},
         url = '/api/teacher_api',
-        successFunc = function (_data) {
-            plotClassChart(_data);
-        };
+        successFunc = plotClassChart;
     get_data(data, successFunc, url);
 }

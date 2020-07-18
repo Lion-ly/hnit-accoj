@@ -6,6 +6,7 @@
 db.accoj.users.insert({"student_no": "17020340111", 	# 学号
                        "role": string,                  # 角色("root", "admin", "teacher", "student")
 					   "student_name": "郭雄",  		# 姓名
+					   "teacher": "",                   # 教师工号
 					   "nick_name"="",                  # 昵称
                        "student_school"="",             # 学校
                        "personalized_signature"="",     # 个性签名

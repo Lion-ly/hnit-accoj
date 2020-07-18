@@ -11,6 +11,7 @@ from bson.json_util import dumps
 from flask_socketio import emit
 from flask import session, redirect, url_for, request, abort
 from accoj.extensions import mongo
+from werkzeug.security import generate_password_hash
 import pandas as pd
 
 ALLOWED_EXTENSIONS = {'zip', 'rar'}
@@ -33,6 +34,7 @@ def login_required(func):
 
     return wrapper
 
+
 def login_required_student(func):
     """
     需要学生权限
@@ -49,6 +51,7 @@ def login_required_student(func):
             return redirect(url_for('index.index'))
 
     return wrapper
+
 
 def login_required_teacher(func):
     """
@@ -176,12 +179,12 @@ def parse_class_xlrd(class_xlrd: object):
     解析班级学生信息excel表
 
     :param class_xlrd: flask.request.files['file']对象 班级学生信息excel表
-    :return: [dict(student_no=int,
+    :return: [dict(student_no=str,
                    student_name=str,
                    student_school=str,
                    student_faculty=str,
                    student_class=str,
-                   student_phone=int)]
+                   student_phone=str)]
     """
     class_info = pd.read_excel(class_xlrd)
     class_info = class_info.to_numpy()
@@ -190,6 +193,61 @@ def parse_class_xlrd(class_xlrd: object):
         info_keys = ['student_no', 'student_name', 'student_school', 'student_faculty', 'student_class',
                      'student_phone']
         info_keys_len = len(info_keys)
-        info_dict = {info_keys[i]: student_info[i] for i in range(info_keys_len)}
+        info_dict = {info_keys[i]: str(student_info[i]) for i in range(info_keys_len)}
         class_info_list.append(info_dict)
     return class_info_list
+
+
+def create_account(student_no: str, student_name: str, password: str, role: str = "student",
+                   student_faculty: str = "", student_class: str = "", student_school: str = "",
+                   student_phone: str = "", teacher: str = ""):
+    """
+    创建账号
+    :param teacher:
+    :param student_phone:
+    :param student_school:
+    :param student_class:
+    :param student_faculty:
+    :param student_no: 学号
+    :param role: 权限，可为'admin', 'teacher', 'student', 默认为'student'
+    :param student_name:
+    :param password:
+    :return:
+    """
+    teacher = 'teacher' if not teacher and role == 'student' else teacher
+    mongo.db.user.update(dict(student_no=student_no),
+                         {'$setOnInsert': dict(student_no=student_no,
+                                               role=role,
+                                               student_name=student_name,
+                                               teacher=teacher,
+                                               student_school=student_school,
+                                               student_faculty=student_faculty,
+                                               student_class=student_class,
+                                               student_phone=student_phone,
+                                               password=generate_password_hash(password))},
+                         upsert=True)
+
+
+def create_test_account():
+    """
+    创建测试账号
+    :return:
+    """
+    # 创建管理员账号
+    create_account(student_no="admin", role="admin", student_name="admin", password="accojOwner")
+    # 创建教师账号
+    create_account(student_no="teacher", role="teacher", student_name="teacher", password="123")
+    # 创建学生账号
+    with open('accoj/download/test.xlsx', 'rb') as f:
+        user_infos = parse_class_xlrd(f)
+        user_infos_len = len(user_infos)
+        for i in range(0, user_infos_len):
+            create_account(student_no=user_infos[i].get('student_no'),
+                           student_name=user_infos[i].get('student_name'),
+                           password='123',
+                           role='student',
+                           student_faculty=user_infos[i].get('student_faculty'),
+                           student_class=user_infos[i].get('student_class'),
+                           student_school=user_infos[i].get('student_school'),
+                           student_phone=user_infos[i].get('student_phone'),
+                           teacher='teacher')
