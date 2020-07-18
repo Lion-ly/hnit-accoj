@@ -12,25 +12,20 @@ function getStudentInfo() {
             }
         }
     });
-    $('#bootstrap-data-table').DataTable({
-        ajax: {url: '/api/get_student_info'},
-        order: [[4, 'desc']],
+    $('#data-table').DataTable({
+        ajax: {url: '/api/get_student_info_correct'},
+        columnDefs: [
+            {'orderable': false, 'targets': [0, 1, 2, 3, 4, 5, 6, 7]}
+        ],
         columns: [
-            {"data": "rank"},
+            {"data": "num"},
             {"data": "student_no"},
-            {"data": "student_class"},
             {"data": "student_name"},
-            {"data": "sum_score"},
-            {"data": "one"},
-            {"data": "two"},
-            {"data": "three"},
-            {"data": "four"},
-            {"data": "five"},
-            {"data": "six"},
-            {"data": "seven"},
-            {"data": "eight"},
-            {"data": "nine"},
-            {"data": "ten"}
+            {"data": "student_school"},
+            {"data": "student_faculty"},
+            {"data": "student_class"},
+            {"data": "correct_schedule"},
+            {"data": "t"}
         ]
     });
 }

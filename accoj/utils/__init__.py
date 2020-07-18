@@ -214,10 +214,9 @@ def create_account(student_no: str, student_name: str, password: str, role: str 
     :param password:
     :return:
     """
-    if not teacher and role == 'student':
-        teacher = teacher
+    teacher = 'teacher' if not teacher and role == 'student' else teacher
     mongo.db.user.update(dict(student_no=student_no),
-                         {'$setOnInsert': dict(student_no=role,
+                         {'$setOnInsert': dict(student_no=student_no,
                                                role=role,
                                                student_name=student_name,
                                                teacher=teacher,

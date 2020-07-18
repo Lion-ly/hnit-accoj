@@ -169,6 +169,33 @@ def get_class_info():
     return jsonify(result=result, data=data)
 
 
+@api_bp.route('/get_student_info_correct', methods=['GET'])
+@login_required_teacher
+def get_student_info_correct():
+    """
+    教师后台->批改作业  表格信息
+    :return:
+    """
+    username = session.get('username')
+    _user_info = mongo.db.user.find(dict(teacher=username),
+                                    dict(_id=0, student_no=1, student_name=1, student_school=1,
+                                         student_faculty=1, student_class=1))
+    user_info = list()
+    for user in _user_info:
+        e_dic = dict(student_no=user.get('student_no'),
+                     student_name=user.get('student_name'),
+                     student_school=user.get('student_school'),
+                     student_faculty=user.get('student_faculty'),
+                     student_class=user.get('student_class'),
+                     t='<a href="#">开始批改</a>')
+        user_info.append(e_dic)
+    for i, e in enumerate(user_info):
+        user_info[i]['num'] = i + 1
+        user_info[i]['correct_schedule'] = "0%"
+    result, data = True, user_info
+    return jsonify(result=result, data=data)
+
+
 @api_bp.route('/add_class', methods=['POST'])
 @login_required_teacher
 def add_class():

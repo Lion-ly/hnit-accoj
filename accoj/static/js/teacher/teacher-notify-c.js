@@ -11,6 +11,9 @@ $(document).ready(function () {
     $('#data-table').DataTable({
         ajax: {url: '/api/get_class_info'},
         retrieve: true,
+        columnDefs: [
+            {'orderable': false, 'targets': [0, 1, 2, 3, 4]}
+        ],
         columns: [
             {"data": "num"},
             {"data": "student_school"},
