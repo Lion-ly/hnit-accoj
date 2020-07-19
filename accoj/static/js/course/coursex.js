@@ -97,7 +97,7 @@ function coursexGetInput() {
         $inputs = $(divId).find("input");
 
     $.each($inputs, function (index, item) {
-        if(index!==$inputs.length - 1) {
+        if (index !== $inputs.length - 1) {
             let project = $(item).attr("name"),
                 value = $(item).val();
 
@@ -120,7 +120,7 @@ function CoursexPaddingData(data, isFromButton) {
             inputs = $("#" + divID).find("input");
 
         $.each(inputs, function (index, item) {
-            if(index!==$inputs.length - 1) {
+            if (index !== $inputs.length - 1) {
                 let name = $(item).attr("name"),
                     value = data[name] ? data[name] : "";
 
@@ -160,13 +160,14 @@ function xBind() {
     let $inputs = $("#coursexData").find("input"),
         $conclusions = $("#coursexDataConclusion");
     $inputs.each(function (index, item) {
-        if(index!==$inputs.length - 1) {
+        if (index !== $inputs.length - 1) {
             let name = $(item).attr("name");
             if (!name.match(/[率数]$/)) bindRealNumber($(item));
             else bindLimitPercent($(item));
         }
     });
     bindIllegalCharFilter($conclusions);
+    bind_score("teacher_correct", "dupont_analysis", "course_x_message_1");
 }
 
 /**

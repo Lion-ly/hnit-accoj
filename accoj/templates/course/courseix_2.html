@@ -336,12 +336,13 @@
                             {% if role == "教师" %}
                             <div class="col-lg-2">
                                 <div class="input-group">
-                                    <input name="score-1" type="text" class="form-control" placeholder="满分5">
+                                    <input name="score" type="text" class="form-control" placeholder="满分5">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info" type="button">教师评分</button>
+                                        <button id="teacher_correct1" class="btn btn-info" type="button">教师评分</button>
                                     </span>
                                 </div>
                                 <hr>
+                                <div id="course_ix2_message_1"></div>
                             </div>
                             {% endif %}
                             <label for="ix2FirstConclusion" hidden></label>
@@ -509,12 +510,13 @@
                             {% if role == "教师" %}
                             <div class="col-lg-2">
                                 <div class="input-group">
-                                    <input name="score-2" type="text" class="form-control" placeholder="满分5">
+                                    <input name="score" type="text" class="form-control" placeholder="满分5">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-info" type="button">教师评分</button>
+                                        <button id="teacher_correct2" class="btn btn-info" type="button">教师评分</button>
                                     </span>
                                 </div>
                                 <hr>
+                                <div id="course_ix2_message_2"></div>
                             </div>
                             {% endif %}
                             <label for="ix2SecondConclusion"></label>
