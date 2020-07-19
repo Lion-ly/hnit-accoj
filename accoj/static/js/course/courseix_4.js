@@ -131,8 +131,7 @@ function Ix4PaddingData(data, isFromButton) {
             try {
                 let value = data[name][period] ? data[name][period] + "%" : "";
                 $item.val(value);
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e);
             }
             flag = !flag;
@@ -140,6 +139,7 @@ function Ix4PaddingData(data, isFromButton) {
         let conclusion = data["conclusion"];
         $("#" + divID + "Conclusion").val(conclusion);
     }
+
     if (!data) return;
     if (isFromButton) {
         removeAllError();
@@ -169,6 +169,7 @@ function ix4Bind() {
         $conclusions = $("#Conclusion");
     bindLimitPercent($inputs);
     bindIllegalCharFilter($conclusions);
+    bind_score("teacher_correct", "ratio_analysis", "course_ix4_message_1");
 }
 
 /**

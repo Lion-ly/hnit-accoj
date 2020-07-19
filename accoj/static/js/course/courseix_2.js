@@ -269,8 +269,8 @@ function ix2Bind() {
     bindAnswerSource($("button[data-answer-1]"), map_ix2First_info, map_answer1);
     bindAnswerSource($("button[data-answer-2]"), map_ix2Second_info, map_answer2);
 
-    let $inputs1 = $("#ix2First").find("input"),
-        $inputs2 = $("#ix2Second").find("input"),
+    let $inputs1 = $("#ix2First").find("input[name!=score]"),
+        $inputs2 = $("#ix2Second").find("input[name!=score]"),
         $conclusions = $("[id^=ix2][id$=Conclusion]");
 
     bindLimitPercent($inputs1);
@@ -281,6 +281,9 @@ function ix2Bind() {
         });
     });
     bindIllegalCharFilter($conclusions);
+
+    bind_score("teacher_correct1", "common_ratio_analysis", "course_ix2_message_1", "first");
+    bind_score("teacher_correct2", "common_ratio_analysis", "course_ix2_message_2", "second");
 }
 
 /**

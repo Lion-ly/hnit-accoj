@@ -836,5 +836,36 @@ function commit_correct(data, url, successFunc, messageDivID) {
        # 若为'trend_analysis'或'common_ratio_analysis'， category值应设为'first'（负债表）或'second'（利润表）， 其余情况设为空;
        # score字段应进行检查，当title为'dupont_analysis'时，值应为0<=score<=70，其余情况为0<=score<=5。
      */
+    url = url ? url : '/api/commit_correct';
     get_info(data, url, successFunc, messageDivID);
+}
+
+function bind_score(id, title, messageDivID, category) {
+    function click_fun(score) {
+        let data = {'title': title, 'category': category, 'score': score},
+            flag = true,
+            successFun = function () {
+
+            };
+        score = parseFloat(score);
+        category = category ? category : "";
+        //'评分不符合规范'
+        if (title === 'dupont_analysis') {
+            if (score < 0 || score > 70) flag = false;
+        } else if (["trend_analysis", "common_ratio_analysis", "ratio_analysis"].indexOf(title) != -1) {
+            if (score < 0 || score > 5) flag = false;
+        } else flag = false;
+        if (!flag || !score) {
+            show_message(messageDivID, "评分不符合规范", "danger", 2000, "评分失败!");
+            return;
+        }
+
+        commit_correct(data, '', successFun, messageDivID);
+    }
+
+    id = "#" + id;
+    $(id).click(function () {
+        let score = $($(this).parent().prev()).val();
+        click_fun(score);
+    });
 }

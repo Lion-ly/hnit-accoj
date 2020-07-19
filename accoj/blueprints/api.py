@@ -242,11 +242,13 @@ def download_attached():
 
 
 @api_bp.route('/commit_correct', methods=['POST'])
-@login_required_teacher
+# @login_required_teacher
 def commit_correct():
     """教师提交作业评分"""
-    err_message = '评分不符合规范或学生未完成作业'
     result, data = False, {'message': ''}
+    if not session.get('role'):
+        return jsonify(result=result, data=data)
+    err_message = '评分不符合规范或学生未完成作业'
     username = session.get('username')
     schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
     if not schedule_confirm:

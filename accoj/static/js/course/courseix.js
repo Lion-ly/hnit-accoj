@@ -276,8 +276,8 @@ function ixBind() {
     bindAnswerSource($("button[data-answer-1]"), map_ixFirst_info, map_answer1);
     bindAnswerSource($("button[data-answer-2]"), map_ixSecond_info, map_answer2);
 
-    let $inputs1 = $("#ixFirst").find("input"),
-        $inputs2 = $("#ixSecond").find("input"),
+    let $inputs1 = $("#ixFirst").find("input[name!=score]"),
+        $inputs2 = $("#ixSecond").find("input[name!=score]"),
         $conclusions = $("[id^=ix][id$=Conclusion]"),
         flag = true;
 
@@ -288,16 +288,20 @@ function ixBind() {
     });
     flag = true;
     $inputs2.each(function (index, item) {
-        $(item).change(function () {
-            eventChangeIx(item);
-        });
-        if (flag) bindRealNumber($(item));
-        else bindLimitPercent($(item));
-        flag = !flag;
+            $(item).change(function () {
+                eventChangeIx(item);
+            });
+            if (flag) bindRealNumber($(item));
+            else bindLimitPercent($(item));
+            flag = !flag;
     });
 
     bindIllegalCharFilter($conclusions);
+
+    bind_score("teacher_correct1", "trend_analysis", "course_ix1_message_1", "first");
+    bind_score("teacher_correct2", "trend_analysis", "course_ix1_message_2", "second");
 }
+
 
 /**
  * 资产负债表重置
