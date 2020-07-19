@@ -115,12 +115,12 @@ def teacher_api():
         """批改作业"""
         result, data = False, None
         student_no = _data.get('student_no')
-        if mongo.db.find_one({'student_no': student_no}):
+        if mongo.db.company.find_one({'student_no': student_no}):
             # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
             session['teacher'] = username
             session['username'] = student_no  # 权限转换
             result = True
-        return result, data
+        return jsonify(result=result, data=data)
 
     json_data = request.get_json()
     _api = json_data.get('api')
@@ -187,13 +187,14 @@ def get_student_info_correct():
                      student_school=user.get('student_school'),
                      student_faculty=user.get('student_faculty'),
                      student_class=user.get('student_class'),
-                     t='<a href="#">开始批改</a>')
+                     t='<button type="button" class="btn btn-outline-info">开始批改</a>')
         user_info.append(e_dic)
     for i, e in enumerate(user_info):
         user_info[i]['num'] = i + 1
         user_info[i]['correct_schedule'] = "0%"
     result, data = True, user_info
     return jsonify(result=result, data=data)
+
 
 @api_bp.route('/get_student_info_notify_p', methods=['GET'])
 @login_required_teacher

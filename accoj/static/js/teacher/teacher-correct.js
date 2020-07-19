@@ -3,6 +3,16 @@ $(document).ready(function () {
 });
 
 function getStudentInfo() {
+
+    function bind_correct_homework() {
+        let $trs = $($('#data-table').children()[1]).children();
+        $trs.each(function () {
+            $($($(this).children()[7]).children()).click(function () {
+                correct_homework(this);
+            });
+        });
+    }
+
     $.fn.dataTable.ext.errMode = 'throw';
     let csrf_token = get_csrf_token();
     $.ajaxSetup({
@@ -26,6 +36,17 @@ function getStudentInfo() {
             {"data": "student_class"},
             {"data": "correct_schedule"},
             {"data": "t"}
-        ]
+        ],
+        'fnInitComplete': bind_correct_homework
     });
+}
+
+function correct_homework(obj) {
+    function successFun(data) {
+        window.location.replace('/courseix');
+    }
+
+    let data = {api: 'correct_homework'};
+    data.student_no = $($(obj).parent().parent().children()[1]).text();
+    get_data(data, successFun, '/api/teacher_api');
 }
