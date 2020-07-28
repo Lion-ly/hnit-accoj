@@ -36,6 +36,7 @@ class BaseConfig(object):
     # 即更新时客户端静态文件不会立即更新而是在12hours之后更新
     SEND_FILE_MAX_AGE_DEFAULT = datetime.timedelta(seconds=12 * 60 * 60)
     MONGO_URI = "mongodb://{}:{}@localhost:27017/accoj".format(username, password)
+    REDIS_URL = "redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@localhost:6379/0"
 
 
 class DevelopmentConfig(BaseConfig):

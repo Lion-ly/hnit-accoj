@@ -24,7 +24,8 @@ from accoj.extensions import (mongo,
                               mail,
                               csrf,
                               babel,
-                              socketio)
+                              socketio,
+                              redis_cli)
 from accoj.blueprints.admin import (admin,
                                     UserView,
                                     CompanyView)
@@ -45,6 +46,14 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     register_extensions(app)
     register_blueprints(app)
+    # redis连接测试
+    redis_cli['status'] = 'success'
+    status = redis_cli['status'].decode('utf-8')
+    if status:
+        print(f"INFO: redis test {status}!")
+    else:
+        print(f"ERROR: redis test Fail!")
+
     create_test_account()  # 创建测试账号
     new_spider_start()
     try:
@@ -77,6 +86,7 @@ def register_extensions(app):
     :return:
     """
     mongo.init_app(app)
+    redis_cli.init_app(app)
     csrf.init_app(app)  # csrf令牌验证，验证出错或者过期会导致ajax请求失败'400 bad request'
     mail.init_app(app)
     babel.init_app(app)
