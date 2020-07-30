@@ -5,12 +5,13 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : __init__.py.py
 # @Software: PyCharm
+import json
 from functools import wraps
 from _datetime import datetime
 from bson.json_util import dumps
 from flask_socketio import emit
 from flask import session, redirect, url_for, request, abort
-from accoj.extensions import mongo
+from accoj.extensions import mongo, redis_cli
 from werkzeug.security import generate_password_hash
 import pandas as pd
 
@@ -238,16 +239,53 @@ def create_test_account():
     # 创建教师账号
     create_account(student_no="teacher", role="teacher", student_name="teacher", password="123")
     # 创建学生账号
-    with open('accoj/download/test.xlsx', 'rb') as f:
+    try:
+        create_account_from_excel('accoj/download/test.xlsx')
+        create_account_from_excel('accoj/download/test1.xlsx')
+        create_account_from_excel('accoj/download/test2.xlsx')
+        print('INFO: Create test account successfully!')
+    except Exception:
+        pass
+
+
+def create_account_from_excel(filename: str):
+    with open(filename, 'rb') as f:
         user_infos = parse_class_xlrd(f)
-        user_infos_len = len(user_infos)
-        for i in range(0, user_infos_len):
-            create_account(student_no=user_infos[i].get('student_no'),
-                           student_name=user_infos[i].get('student_name'),
+        if not user_infos:
+            print(f'Named \'{filename}\' is empty, Create account Fail!')
+            return
+        class_name = f'{user_infos[0].get("student_school")}-{user_infos[0].get("student_class")}'
+        students = []
+        for user_info in user_infos:
+            student_no = user_info.get('student_no')
+            students.append(student_no)
+            create_account(student_no=student_no,
+                           student_name=user_info.get('student_name'),
                            password='123',
                            role='student',
-                           student_faculty=user_infos[i].get('student_faculty'),
-                           student_class=user_infos[i].get('student_class'),
-                           student_school=user_infos[i].get('student_school'),
-                           student_phone=user_infos[i].get('student_phone'),
+                           student_faculty=user_info.get('student_faculty'),
+                           student_class=user_info.get('student_class'),
+                           student_school=user_info.get('student_school'),
+                           student_phone=user_info.get('student_phone'),
                            teacher='teacher')
+        create_class(class_name, students)
+
+
+def create_class(class_name: str, students: list, teacher: str = 'teacher'):
+    _time = {"1" : {"start": "", "end": ""},
+             "2" : {"start": "", "end": ""},
+             "3" : {"start": "", "end": ""},
+             "4" : {"start": "", "end": ""},
+             "5" : {"start": "", "end": ""},
+             "6" : {"start": "", "end": ""},
+             "7" : {"start": "", "end": ""},
+             "8" : {"start": "", "end": ""},
+             "9" : {"start": "", "end": ""},
+             "10": {"start": "", "end": ""}}
+    mongo.db.classes.update(dict(class_name=class_name),
+                            {'$setOnInsert': dict(teacher=teacher,
+                                                  students=students,
+                                                  time=_time)},
+                            upsert=True)
+
+    redis_cli[f'classes:{class_name}'] = json.dumps(_time)

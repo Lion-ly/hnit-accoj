@@ -50,6 +50,7 @@ def create_app(config_name=None):
     redis_cli['status'] = 'success'
     status = redis_cli['status'].decode('utf-8')
     if status:
+        redis_cli.delete('status')
         print(f"INFO: redis test {status}!")
     else:
         print(f"ERROR: redis test Fail!")
