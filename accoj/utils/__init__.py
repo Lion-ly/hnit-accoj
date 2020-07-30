@@ -9,11 +9,12 @@ import json
 from functools import wraps
 from _datetime import datetime
 from bson.json_util import dumps
+import pandas as pd
 from flask_socketio import emit
 from flask import session, redirect, url_for, request, abort
-from accoj.extensions import mongo, redis_cli
 from werkzeug.security import generate_password_hash
-import pandas as pd
+from accoj.extensions import mongo, redis_cli
+from accoj.exception import CreatAccountError
 
 ALLOWED_EXTENSIONS = {'zip', 'rar'}
 MAX_BUSINESS_NO = 20
@@ -244,8 +245,8 @@ def create_test_account():
         create_account_from_excel('accoj/download/test1.xlsx')
         create_account_from_excel('accoj/download/test2.xlsx')
         print('INFO: Create test account successfully!')
-    except Exception:
-        pass
+    except CreatAccountError:
+        raise CreatAccountError()
 
 
 def create_account_from_excel(filename: str):

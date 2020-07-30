@@ -1,19 +1,23 @@
 """
 消息管理系统
 """
-from accoj.extensions import (socketio,
-                              mongo)
-from flask_socketio import (join_room,
-                            leave_room,
-                            emit)
 from _datetime import datetime
 from bson.json_util import dumps
+from flask_socketio import (join_room,
+                            leave_room,
+                            emit,
+                            disconnect)
 from flask import session
+from accoj.extensions import (socketio,
+                              mongo)
 
 
 @socketio.on('join')
 def on_join(data: dict):
     username = session.get('username')
+    if not username:
+        disconnect()
+        return
     room = data.get('room')
     # test
     # if room == username:
@@ -32,14 +36,26 @@ def on_join(data: dict):
 @socketio.on('leave')
 def on_leave(data: dict):
     username = session.get('username')
+    if not username:
+        disconnect()
+        return
     room = data.get('room')
     leave_room(room)
     print(username + ' 离开了房间 ' + room)
     emit('status', username + ' 离开了房间 ' + room, room=room)
+    disconnect()
 
 
 @socketio.on('new_room_message')
 def new_room_message(message_body: str):
+    username = session.get('username')
+    if not username:
+        disconnect()
+        return
+    send_message(message_body)
+
+
+def send_message(message_body: str):
     username = session.get('username')
     current_room = session.get('current_room')
     time = datetime.now()
