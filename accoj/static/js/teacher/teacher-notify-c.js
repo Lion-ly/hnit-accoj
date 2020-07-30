@@ -9,7 +9,7 @@ $(document).ready(function () {
         }
     });
     $('#data-table').DataTable({
-        ajax: {url: '/api/get_class_info'},
+        ajax: {url: '/api/get_student_info_notify_c'},
         retrieve: true,
         columnDefs: [
             {'orderable': false, 'targets': [0, 1, 2, 3, 4]}

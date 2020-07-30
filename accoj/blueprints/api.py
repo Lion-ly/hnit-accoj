@@ -5,13 +5,15 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : api.py
 # @Software: PyCharm
+import datetime
+import os
+import json
 from flask import Blueprint, jsonify, request, session, send_from_directory, current_app
 from bson.json_util import dumps
 from accoj.blueprints import get_schedule
 from accoj.utils import parse_class_xlrd, login_required_teacher, login_required
-from accoj.extensions import mongo
+from accoj.extensions import mongo, redis_cli
 from accoj.emails import assign_email
-import os
 
 api_bp = Blueprint('api', __name__)
 
@@ -146,9 +148,9 @@ def get_user_rank():
     return jsonify(result=result, data=data)
 
 
-@api_bp.route('/get_class_info', methods=['GET'])
+@api_bp.route('/get_student_info_notify_c', methods=['GET'])
 @login_required_teacher
-def get_class_info():
+def get_student_info_notify_c():
     """
     教师后台->发送通知->班级通知  表格信息
     :return:
@@ -222,6 +224,51 @@ def get_student_info_notify_p():
     return jsonify(result=result, data=data)
 
 
+@api_bp.route('/manage_time', methods=['POST'])
+@login_required_teacher
+def manage_time():
+    """时间管理"""
+
+    def time_validate(text: str):
+        try:
+            datetime.datetime.strptime(text, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return False
+
+    def format_check(time: dict):
+        for v, k in time:
+            if not time_validate(v['start']) or not time_validate(v['end']):
+                return False
+        return True
+
+    result, data = False, None
+    json_data = request.get_json()
+    class_name = json_data.get('class_name')
+    _time = json_data.get('time')
+    is_ok = format_check(_time)
+    if is_ok:
+        _data = mongo.db.classes.update()({'class_name': class_name},
+                                          {'$set': {'time': _time}})
+        if _data:
+            result = True
+            redis_cli[f'classes:{class_name}'] = json.dumps({'time': _time})
+    return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_manage_time_info', methods=['GET'])
+@login_required_teacher
+def get_manage_time_info():
+    """获取时间管理信息"""
+    result, data = False, None
+    json_data = request.get_json()
+    class_name = json_data.get('class_name')
+    time_info = redis_cli[f'classes:{class_name}']
+    if time_info:
+        time_info = time_info.decode('utf-8')
+        data = time_info
+    return jsonify(result=result, data=data)
+
+
 @api_bp.route('/add_class', methods=['POST'])
 @login_required_teacher
 def add_class():
@@ -246,7 +293,7 @@ def download_attached():
 def commit_correct():
     """教师提交作业评分"""
     result, data = False, {'message': ''}
-    if not session.get('role'):
+    if session.get('role') != 'teacher':
         return jsonify(result=result, data=data)
     err_message = '评分不符合规范或学生未完成作业'
     username = session.get('username')
