@@ -7,9 +7,10 @@ function _init_() {
     window.lastTime = "0";
     window.uuId = get_current_user_id();
     window.currentRoom = uuId;
-    $(document).bind('beforeunload', function () {
+        window.onbeforeunload = function () {
         socket.emit('leave', {'room': currentRoom});
-    });
+        e.returnValue = 'onbeforeunload';
+    };
 
     socket.on('connect', function () {
         // 连接时加入房间

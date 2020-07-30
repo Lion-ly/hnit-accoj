@@ -422,11 +422,11 @@ function deleteTableV(obj) {
         ledger_saved_tmp = ledger_saved[saved_key],
         subject = $("li[id^=coursevli][class=active]").children().text();
 
-    if (ledger_confirmed_tmp.length > 0 && ledger_confirmed_tmp.indexOf(subject) !== -1) {
+    if (ledger_confirmed_tmp && ledger_confirmed_tmp.length > 0 && ledger_confirmed_tmp.indexOf(subject) !== -1) {
         show_message("course_v_message", "已经提交过, 不可删除", "danger", 1000, "删除失败！");
         return;
     }
-    if (ledger_saved_tmp.length > 0 && ledger_saved_tmp.indexOf(subject) !== -1) {
+    if (ledger_confirmed_tmp && ledger_saved_tmp.length > 0 && ledger_saved_tmp.indexOf(subject) !== -1) {
         //  如果已保存才向后台发送删除请求
         delete_ledger_info(subject);
     }

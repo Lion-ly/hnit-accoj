@@ -15,3 +15,12 @@ class ExcelCheckError(CreateQuestionsError):
               "\n创建题库时出错，未写入数据库!" if not msg else msg
         super().__init__(msg)
         self.msg = msg
+
+
+class CreatAccountError(Exception):
+    """创建账户错误"""
+
+    def __init__(self, msg=""):
+        msg = "\n创建账号出错" if not msg else msg
+        super().__init__(msg)
+        self.msg = msg

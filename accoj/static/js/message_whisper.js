@@ -5,9 +5,10 @@ $(document).ready(function () {
 function _init_() {
     window.socket = io();
     window.lastTime = "0";
-    $(document).bind('beforeunload', function () {
+    window.onbeforeunload = function () {
         socket.emit('leave', {'room': '网络工程1701 - 湖南工学院'});
-    });
+        e.returnValue = 'onbeforeunload';
+    };
 
     $("textarea[data-message-content]").keydown(function (e) {
         if (e.ctrlKey && e.keyCode == 13)
