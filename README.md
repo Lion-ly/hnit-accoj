@@ -8,7 +8,7 @@
   运行应用`flask run --host=0.0.0.0 --port=80`<br/>
   查看路由`flask routes`<br/>
 3. MongoDB安装：<br/>
-windows：https://www.cnblogs.com/coodyz/p/12219823.html<br/>
+windows：https://www.cnblogs.com/coodyz/p/13410502.html<br/>
 linux：https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat<br/>
 4. redis安装：<br/>
 windows: `https://medium.com/@mayank_goyal/how-to-install-redis-and-as-a-windows-service-f0ab2559a3b`<br/>

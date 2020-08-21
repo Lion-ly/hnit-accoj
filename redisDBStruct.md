@@ -6,18 +6,19 @@
 `{f'classes:{class_name}': json_str}`
 ```
 注：
-因class为Python关键，故取名classes。
 json_str:
-'{"1": {"start": "2020-07-29 14:49:20", "end": ""},# 时间管理
-  "2": {"start": "", "end": ""},
-  "3": {"start": "", "end": ""},
-  "4": {"start": "", "end": ""},
-  "5": {"start": "", "end": ""},
-  "6": {"start": "", "end": ""},
-  "7": {"start": "", "end": ""},
-  "8": {"start": "", "end": ""},
-  "9": {"start": "", "end": ""},
-  "10": {"start": "", "end": ""}
+'"teacher": teacher, 
+"time": {
+  "1": {"start": "utc time", "end": "utc time", "is_open": false},# 时间管理
+  "2": {"start": "", "end": "", "is_open": false},
+  "3": {"start": "", "end": "", "is_open": false},
+  "4": {"start": "", "end": "", "is_open": false},
+  "5": {"start": "", "end": "", "is_open": false},
+  "6": {"start": "", "end": "", "is_open": false},
+  "7": {"start": "", "end": "", "is_open": false},
+  "8": {"start": "", "end": "", "is_open": false},
+  "9": {"start": "", "end": "", "is_open": false},
+  "10": {"start": "", "end": "", "is_open": false}
 }'
 ```
 2. rank有序集合
