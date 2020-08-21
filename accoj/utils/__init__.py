@@ -6,12 +6,12 @@
 # @File    : __init__.py.py
 # @Software: PyCharm
 import json
+import datetime
 from functools import wraps
-from _datetime import datetime
 from bson.json_util import dumps
 import pandas as pd
 from flask_socketio import emit
-from flask import session, redirect, url_for, request, abort
+from flask import session, redirect, url_for, request, abort, jsonify, render_template
 from werkzeug.security import generate_password_hash
 from accoj.extensions import mongo, redis_cli
 from accoj.exception import CreatAccountError
@@ -77,6 +77,39 @@ def login_required_teacher(func):
     return wrapper
 
 
+def course_time_open_required(course_no: int):
+    """
+    需要课程时间开启
+    :return:
+    """
+
+    def func_wrapper(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            flag = is_course_time_open(course_no)
+            if not flag:
+                return render_template('course/notOpen.html')
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return func_wrapper
+
+
+def course_time_not_end_required(course_no: int):
+    def func_wrapper(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            flag = is_course_time_open(course_no)
+            if flag == -1:
+                return jsonify(result=False, message="提交已截止！")
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return func_wrapper
+
+
 def complete_required1(func):
     """
     需要第一次课程完成
@@ -107,6 +140,40 @@ def get_schedule():
         schedule_confirm = company.get("schedule_confirm")
         schedule_saved = company.get("schedule_saved")
         return dict(schedule_confirm=schedule_confirm, schedule_saved=schedule_saved)
+
+
+def is_course_time_open(course_no: int) -> int:
+    """
+    判断班级课程时间是否开启/结束/截止
+    :param course_no: 课程号（1~10）
+    :return: 0->未开启
+             1->已开启
+             -1->已截止
+    """
+    class_name = session.get("class_name")
+    flag = 0
+    time_info = redis_cli[f'classes:{class_name}']
+    if time_info:
+        time_info = time_info.decode('utf-8')
+    time_info = json.loads(time_info)
+    course_time = time_info.get('time').get(str(course_no))
+    start_time = course_time.get('start')
+    end_time = course_time.get('end')
+    try:
+        end_time = datetime.datetime.strptime(end_time, '%Y-%m-%dT%H:%M')
+        start_time = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M')
+    except ValueError:
+        return 0
+    is_open = course_time.get('is_open')
+    if not is_open:
+        flag = 0
+    else:
+        now_time = datetime.datetime.now()
+        if start_time <= now_time < end_time:
+            flag = 1
+        elif now_time >= end_time:
+            flag = -1
+    return flag
 
 
 def limit_content_length(max_length):
@@ -163,7 +230,7 @@ def send_system_message(message_head: str, message_body: str):
     :param message_body: message body
     :return: None
     """
-    time = datetime.now()
+    time = datetime.datetime.now()
     current_room = session.get('username')
     username = 'system'
     message = dict(room=current_room,
@@ -273,20 +340,20 @@ def create_account_from_excel(filename: str):
 
 
 def create_class(class_name: str, students: list, teacher: str = 'teacher'):
-    _time = {"1" : {"start": "", "end": ""},
-             "2" : {"start": "", "end": ""},
-             "3" : {"start": "", "end": ""},
-             "4" : {"start": "", "end": ""},
-             "5" : {"start": "", "end": ""},
-             "6" : {"start": "", "end": ""},
-             "7" : {"start": "", "end": ""},
-             "8" : {"start": "", "end": ""},
-             "9" : {"start": "", "end": ""},
-             "10": {"start": "", "end": ""}}
+    _time = {"1" : {"start": "", "end": "", "is_open": False},
+             "2" : {"start": "", "end": "", "is_open": False},
+             "3" : {"start": "", "end": "", "is_open": False},
+             "4" : {"start": "", "end": "", "is_open": False},
+             "5" : {"start": "", "end": "", "is_open": False},
+             "6" : {"start": "", "end": "", "is_open": False},
+             "7" : {"start": "", "end": "", "is_open": False},
+             "8" : {"start": "", "end": "", "is_open": False},
+             "9" : {"start": "", "end": "", "is_open": False},
+             "10": {"start": "", "end": "", "is_open": False}}
     mongo.db.classes.update(dict(class_name=class_name),
                             {'$setOnInsert': dict(teacher=teacher,
                                                   students=students,
                                                   time=_time)},
                             upsert=True)
-
-    redis_cli[f'classes:{class_name}'] = json.dumps(_time)
+    if not redis_cli[f'classes:{class_name}']:
+        redis_cli[f'classes:{class_name}'] = json.dumps({"time": _time, "teacher": teacher})

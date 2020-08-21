@@ -109,6 +109,31 @@ def teacher_api():
     教师后台api
     """
 
+    def get_manage_time_info_from_redis():
+        teacher = username
+        time_infos = []
+        for key in redis_cli.scan_iter('classes:*'):
+            time_info = json.loads(redis_cli[key].decode('utf-8'))
+            _teacher = time_info.get('teacher')
+            time = time_info.get('time')
+            class_name = key.decode('utf-8').split(':')[-1]
+            # print(f"class_name: {class_name}")
+            if teacher == _teacher:
+                time_infos.append({'class_name': class_name, 'time': time})
+        return time_infos
+
+    def get_manage_time_info():
+        """获取时间管理信息"""
+        result, data = False, None
+
+        time_infos = get_manage_time_info_from_redis()
+        # print(f"1. timeInfos:{time_infos}")
+        if time_infos:
+            result = True
+            data = json.dumps(time_infos)
+        # print(f"2. timeInfos:{data}")
+        return jsonify(result=result, data=data)
+
     def get_class_list():
         """获取班级列表"""
         result, data = False, None
@@ -136,10 +161,25 @@ def teacher_api():
             result = True
         return jsonify(result=result, data=data)
 
+    def submit_manage_time_info(_data: dict):
+        result, data = False, None
+        class_name = _data.get('class_name')
+        time = _data.get('time')
+        teacher = username
+        if redis_cli[f'classes:{class_name}']:
+            redis_cli[f'classes:{class_name}'] = json.dumps({'time': time, 'teacher': teacher})
+            mongo.db.classes.update({'class_name': class_name}, {'$set': {'time': time}})
+            result = True
+        time_infos = get_manage_time_info_from_redis()
+        if time_infos:
+            result = True
+            data = json.dumps(time_infos)
+        return jsonify(result=result, data=data)
+
     json_data = request.get_json()
     _api = json_data.get('api')
-    get_api_dict = dict(get_class_list=get_class_list)
-    submit_api_dict = dict(correct_homework=correct_homework)
+    get_api_dict = dict(get_class_list=get_class_list, get_manage_time_info=get_manage_time_info)
+    submit_api_dict = dict(correct_homework=correct_homework, submit_manage_time_info=submit_manage_time_info)
     username = session.get('username')
     if _api in get_api_dict:
         return get_api_dict[_api]()
@@ -198,20 +238,6 @@ def manage_time():
     return jsonify(result=result, data=data)
 
 
-@api_bp.route('/get_manage_time_info', methods=['GET'])
-@login_required_teacher
-def get_manage_time_info():
-    """获取时间管理信息"""
-    result, data = False, None
-    json_data = request.get_json()
-    class_name = json_data.get('class_name')
-    time_info = redis_cli[f'classes:{class_name}']
-    if time_info:
-        time_info = time_info.decode('utf-8')
-        data = time_info
-    return jsonify(result=result, data=data)
-
-
 @api_bp.route('/get_student_info_correct', methods=['GET'])
 @login_required_teacher
 def get_student_info_correct():
@@ -219,6 +245,7 @@ def get_student_info_correct():
     教师后台->批改作业  表格信息
     :return:
     """
+    # get_classes_time("湖南工学院-网络工程1701", 1)
     username = session.get('username')
     _user_info = mongo.db.user.find(dict(teacher=username),
                                     dict(_id=0, student_no=1, student_name=1, student_school=1,

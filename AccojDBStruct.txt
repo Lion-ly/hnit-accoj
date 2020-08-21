@@ -23,16 +23,16 @@ db.accoj.users.insert({"student_no": "17020340111", 	# 学号
 db.accoj.classes.insert({"class_name": ""               # 班级名(学校-班级，例'湖南工学院-网络1701')
                          "teacher": ""                    # 教师
                          "students": [""]                 # 学生
-                         "time": {"1": {"start": "2020-07-29 14:49:20", "end": ""},# 时间管理
-                                  "2": {"start": "", "end": ""},
-                                  "3": {"start": "", "end": ""},
-                                  "4": {"start": "", "end": ""},
-                                  "5": {"start": "", "end": ""},
-                                  "6": {"start": "", "end": ""},
-                                  "7": {"start": "", "end": ""},
-                                  "8": {"start": "", "end": ""},
-                                  "9": {"start": "", "end": ""},
-                                  "10": {"start": "", "end": ""}
+                         "time": {"1": {"start": "utc time", "end": "utc time", "is_open": false},# 时间管理
+                                  "2": {"start": "", "end": "", "is_open": false},
+                                  "3": {"start": "", "end": "", "is_open": false},
+                                  "4": {"start": "", "end": "", "is_open": false},
+                                  "5": {"start": "", "end": "", "is_open": false},
+                                  "6": {"start": "", "end": "", "is_open": false},
+                                  "7": {"start": "", "end": "", "is_open": false},
+                                  "8": {"start": "", "end": "", "is_open": false},
+                                  "9": {"start": "", "end": "", "is_open": false},
+                                  "10": {"start": "", "end": "", "is_open": false}
                                 }
                       })
 # 科目库集合

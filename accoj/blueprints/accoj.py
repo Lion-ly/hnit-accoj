@@ -6,7 +6,7 @@
 # @File    : accoj.py
 # @Software: PyCharm
 from flask import Blueprint, render_template, jsonify, session, redirect, url_for
-from accoj.utils import login_required, complete_required1
+from accoj.utils import login_required, complete_required1, course_time_open_required, course_time_not_end_required
 from accoj.blueprints import submit_infos, get_data, update_business_rank_score
 from accoj.utils import is_number, limit_content_length
 from accoj.extensions import mongo
@@ -20,6 +20,7 @@ MAX_BUSINESS_NO = 20
 
 # 第一次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/coursei', methods=['GET'])
+@course_time_open_required(1)
 def coursei():
     """
     第一次课程
@@ -44,6 +45,7 @@ def get_company_info():
 
 
 @accoj_bp.route('/submit_company_info', methods=['POST'])
+@course_time_not_end_required(1)
 def submit_company_info():
     """
     提交公司创立信息表单
@@ -149,6 +151,7 @@ def submit_company_info():
 
 
 @accoj_bp.route('/submit_business_info', methods=['POST'])
+@course_time_not_end_required(1)
 def submit_business_info():
     """
     提交业务内容信息，提交成功后不可修改
@@ -203,6 +206,7 @@ def get_business_info():
 
 
 @accoj_bp.route('/create_business', methods=['POST'])
+@course_time_not_end_required(1)
 def create_business():
     """
     生成业务
@@ -228,6 +232,7 @@ def create_business():
 
 # 第二次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/courseii', methods=['GET'])
+@course_time_open_required(2)
 @complete_required1
 def courseii():
     """
@@ -237,6 +242,7 @@ def courseii():
 
 
 @accoj_bp.route('/submit_key_element_info', methods=['POST'])
+@course_time_not_end_required(2)
 def submit_key_element_info():
     """
     提交会计要素信息
@@ -270,6 +276,7 @@ def get_key_element_info():
 
 # 第三次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/courseiii', methods=['GET'])
+@course_time_open_required(3)
 @complete_required1
 def courseiii():
     """
@@ -279,6 +286,7 @@ def courseiii():
 
 
 @accoj_bp.route('/submit_subject_info', methods=['POST'])
+@course_time_not_end_required(3)
 def submit_subject_info():
     """
     提交会计科目信息
@@ -313,6 +321,7 @@ def get_subject_info():
 
 # 第四次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/courseiv', methods=['GET'])
+@course_time_open_required(4)
 @complete_required1
 def courseiv():
     """
@@ -322,6 +331,7 @@ def courseiv():
 
 
 @accoj_bp.route('/submit_entry_info', methods=['POST'])
+@course_time_not_end_required(4)
 def submit_entry_info():
     """
     提交会计分录信息
@@ -357,6 +367,7 @@ def get_entry_info():
 
 # 第五次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/coursev', methods=['GET'])
+@course_time_open_required(5)
 @complete_required1
 def coursev():
     """
@@ -366,6 +377,7 @@ def coursev():
 
 
 @accoj_bp.route('/submit_ledger_info', methods=['POST'])
+@course_time_not_end_required(5)
 def submit_ledger_info():
     """
     提交会计账户信息
@@ -397,6 +409,7 @@ def get_ledger_info():
 
 
 @accoj_bp.route('/delete_ledger_info', methods=['POST'])
+@course_time_not_end_required(5)
 def delete_ledger_info():
     """
     删除会计账户信息
@@ -438,6 +451,7 @@ def delete_ledger_info():
 
 
 @accoj_bp.route('/coursev_2', methods=['GET'])
+@course_time_open_required(5)
 @complete_required1
 def coursev_2():
     """
@@ -447,6 +461,7 @@ def coursev_2():
 
 
 @accoj_bp.route('/submit_balance_sheet_info', methods=['POST'])
+@course_time_not_end_required(5)
 def submit_balance_sheet_info():
     """
     提交平衡表信息
@@ -476,6 +491,7 @@ def get_balance_sheet_info():
 
 # 第六次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/coursevi', methods=['GET'])
+@course_time_open_required(6)
 @complete_required1
 def coursevi():
     """
@@ -485,6 +501,7 @@ def coursevi():
 
 
 @accoj_bp.route('/submit_acc_document_info', methods=['POST'])
+@course_time_not_end_required(6)
 @limit_content_length(5 * 1024 * 1024)
 def submit_acc_document_info():
     """
@@ -516,6 +533,7 @@ def get_acc_document_info():
 
 
 @accoj_bp.route('/download_acc_document_info', methods=['POST'])
+@course_time_not_end_required(6)
 def download_acc_document_info():
     """
     下载会计凭证信息
@@ -539,6 +557,7 @@ def download_acc_document_info():
 
 # 第七次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/coursevii', methods=['GET'])
+@course_time_open_required(7)
 @complete_required1
 def coursevii():
     """
@@ -548,6 +567,7 @@ def coursevii():
 
 
 @accoj_bp.route('/submit_subsidiary_account_info', methods=['POST'])
+@course_time_not_end_required(7)
 def submit_subsidiary_account_info():
     """
     提交会计明细账信息
@@ -577,6 +597,7 @@ def get_subsidiary_account_info():
 
 
 @accoj_bp.route('/submit_acc_balance_sheet_info', methods=['POST'])
+@course_time_not_end_required(7)
 def submit_acc_balance_sheet_info():
     """
     提交科目余额表信息
@@ -606,6 +627,7 @@ def get_acc_balance_sheet_info():
 
 # 第八次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/courseviii', methods=['GET'])
+@course_time_open_required(8)
 @complete_required1
 def courseviii():
     """
@@ -616,6 +638,7 @@ def courseviii():
 
 # 资产负债表
 @accoj_bp.route('/submit_new_balance_sheet_info', methods=['POST'])
+@course_time_not_end_required(8)
 def submit_new_balance_sheet_info():
     """
     提交资产负债表信息
@@ -641,6 +664,7 @@ def get_new_balance_sheet_info():
 
 
 @accoj_bp.route('/submit_profit_statement_info', methods=['POST'])
+@course_time_not_end_required(8)
 def submit_profit_statement_info():
     """
     提交利润表信息
@@ -655,6 +679,7 @@ def submit_profit_statement_info():
 
 
 @accoj_bp.route('/get_profit_statement_info', methods=['POST'])
+@course_time_not_end_required(8)
 def get_profit_statement_info():
     """
     获取利润表信息
@@ -670,6 +695,7 @@ def get_profit_statement_info():
 
 # 第九次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/courseix', methods=['GET'])
+@course_time_open_required(9)
 @complete_required1
 def courseix():
     """
@@ -679,6 +705,7 @@ def courseix():
 
 
 @accoj_bp.route('/submit_ix_first_info', methods=['POST'])
+@course_time_not_end_required(9)
 def submit_ix_first_info():
     """
     趋势分析法 提交资产负债表信息
@@ -705,6 +732,7 @@ def get_ix_first_info():
 
 
 @accoj_bp.route('/submit_ix_second_info', methods=['POST'])
+@course_time_not_end_required(9)
 def submit_ix_second_info():
     """
     趋势分析法 提交利润表信息
@@ -740,6 +768,7 @@ def courseix_2():
 
 
 @accoj_bp.route('/submit_ix2_first_info', methods=['POST'])
+@course_time_not_end_required(9)
 def submit_ix2_first_info():
     """
     共同比分析法 资产负债表
@@ -766,6 +795,7 @@ def get_ix2_first_info():
 
 
 @accoj_bp.route('/submit_ix2_second_info', methods=['POST'])
+@course_time_not_end_required(9)
 def submit_ix2_second_info():
     """
     共同比分析法 提交利润表信息
@@ -792,6 +822,7 @@ def get_ix2_second_info():
 
 
 @accoj_bp.route('/courseix_3', methods=['GET'])
+@course_time_open_required(9)
 @complete_required1
 def courseix_3():
     """
@@ -801,6 +832,7 @@ def courseix_3():
 
 
 @accoj_bp.route('/courseix_4', methods=['GET'])
+@course_time_open_required(9)
 @complete_required1
 def courseix_4():
     """
@@ -810,6 +842,7 @@ def courseix_4():
 
 
 @accoj_bp.route('/submit_ix4_info', methods=['POST'])
+@course_time_not_end_required(9)
 def submit_ix4_info():
     """
     提交比率分析法信息
@@ -839,6 +872,7 @@ def get_ix4_info():
 
 # 第十次课程----start-------------------------------------------------------------------------------
 @accoj_bp.route('/coursex', methods=['GET'])
+@course_time_open_required(10)
 @complete_required1
 def coursex():
     """
@@ -848,6 +882,7 @@ def coursex():
 
 
 @accoj_bp.route('/submit_coursex_info', methods=['POST'])
+@course_time_not_end_required(10)
 def submit_coursex_info():
     """
     提交杜邦分析法信息

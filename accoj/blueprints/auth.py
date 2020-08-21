@@ -33,10 +33,12 @@ def signin():
                 message = "用户不存在"
                 return jsonify(result="false", message="{}".format(message))
             user_password = user["password"]
+            class_name = user["student_school"] + "-" + user["student_class"]
             if check_password_hash(user_password, password):
                 role = user.get("role")
                 session["username"] = student_no
                 session["role"] = role
+                session["class_name"] = class_name
                 return jsonify(result="true")
             else:
                 message = "密码错误"
