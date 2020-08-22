@@ -1,4 +1,17 @@
 $(document).ready(function () {
+    _init_();
+});
+
+function _init_() {
+    getStudentInfoNotifyC();
+    $("#selectAll").click(selectAll);
+    $("#confirmSend").click(sendClassNotify);
+
+}
+
+
+function getStudentInfoNotifyC() {
+    // 获取班级列表并渲染
     $.fn.dataTable.ext.errMode = 'throw';
     let csrf_token = get_csrf_token();
     $.ajaxSetup({
@@ -22,11 +35,33 @@ $(document).ready(function () {
             {"data": "t"}
         ]
     });
-});
+}
 
 function selectAll() {
+    // 全选按钮控制
     $('input[class=switch-input]').each(function (index, item) {
         $item = $(item);
         $item.prop('checked', !$item.prop('checked'));
     })
+}
+
+function sendClassNotify() {
+    // 发送班级通知
+    let $checkeds = $(".switch-input:checked"),
+        message_body = $("#messageContent").val(),
+        messages = [];
+    $checkeds.each(function () {
+        let school = $(this).parent().parent().children(":first").next().text(),
+            classes = $(this).parent().prev().text(),
+            class_name = school + "-" + classes;
+        messages.push({"class_name": class_name, "message_body": message_body});
+    });
+    let data = {"api": "send_class_notify", "messages": messages},
+        url = "/api/teacher_api",
+        messageDivID = "messageInfoBox",
+        successFunc = function () {
+        };
+    if (messages.length < 1) show_message(messageDivID, '未选择要发送的班级！', 'danger', 2000);
+    else if(!message_body) show_message(messageDivID, '消息内容不能为空！', 'danger', 2000);
+    else get_data(data, successFunc, url, messageDivID);
 }

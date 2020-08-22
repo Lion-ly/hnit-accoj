@@ -24,8 +24,7 @@
                                         <th scope="col">二级学院</th>
                                         <th scope="col">班级</th>
                                         <th scope="col">
-                                            <button class="btn btn-outline-info btn-sm" type="button"
-                                                    onclick="selectAll()">
+                                            <button id="selectAll" class="btn btn-outline-info btn-sm" type="button">
                                                 全选
                                             </button>
                                         </th>
@@ -37,11 +36,12 @@
                             </div>
                             <hr/>
                             <div class="text-center">
-                                <textarea rows="4" cols="80" placeholder="信息内容..."
+                                <textarea id="messageContent" rows="4" cols="80" placeholder="信息内容..."
                                           style="border-radius: 3px"></textarea>
                                 <hr/>
-                                <button class="btn btn-outline-info" type="button">确认发送</button>
+                                <button id="confirmSend" class="btn btn-outline-info" type="button">确认发送</button>
                             </div>
+                            <div id="messageInfoBox"></div>
                         </form>
 
                     </div>
