@@ -8,10 +8,18 @@
 import datetime
 import os
 import json
-from flask import Blueprint, jsonify, request, session, send_from_directory, current_app
 from bson.json_util import dumps
+from flask import (Blueprint,
+                   jsonify,
+                   request,
+                   session,
+                   current_app,
+                   send_from_directory)
 from accoj.blueprints import get_schedule
-from accoj.utils import parse_class_xlrd, login_required_teacher, login_required
+from accoj.utils import (parse_class_xlrd,
+                         login_required_teacher,
+                         login_required,
+                         send_system_message_batch)
 from accoj.extensions import mongo, redis_cli
 from accoj.emails import assign_email
 
@@ -110,7 +118,6 @@ def teacher_api():
     """
 
     def get_manage_time_info_from_redis():
-        teacher = username
         time_infos = []
         for key in redis_cli.scan_iter('classes:*'):
             time_info = json.loads(redis_cli[key].decode('utf-8'))
@@ -137,7 +144,7 @@ def teacher_api():
     def get_class_list():
         """获取班级列表"""
         result, data = False, None
-        users = mongo.db.user.find(dict(teacher=username),
+        users = mongo.db.user.find(dict(teacher=teacher),
                                    dict(_id=0, student_school=1, student_faculty=1, student_class=1))
         if users:
             class_info = list()
@@ -156,16 +163,16 @@ def teacher_api():
         student_no = _data.get('student_no')
         if mongo.db.company.find_one({'student_no': student_no}):
             # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
-            session['teacher'] = username
+            session['teacher'] = teacher
             session['username'] = student_no  # 权限转换
             result = True
         return jsonify(result=result, data=data)
 
     def submit_manage_time_info(_data: dict):
-        result, data = False, None
+        """提交时间管理信息"""
+        result, data, message = False, None, ""
         class_name = _data.get('class_name')
         time = _data.get('time')
-        teacher = username
         if redis_cli[f'classes:{class_name}']:
             redis_cli[f'classes:{class_name}'] = json.dumps({'time': time, 'teacher': teacher})
             mongo.db.classes.update({'class_name': class_name}, {'$set': {'time': time}})
@@ -174,13 +181,76 @@ def teacher_api():
         if time_infos:
             result = True
             data = json.dumps(time_infos)
-        return jsonify(result=result, data=data)
+        message = '保存成功！'
+        return jsonify(result=result, data=data, message=message)
+
+    def send_class_notify(_data: dict):
+        """发送班级通知"""
+        result, data, message = False, None, "发送通知失败！"
+        _messages = _data.get('messages')
+        flag = 0
+        messages = []
+        for m in _messages:
+            class_name = m.get('class_name')
+            message_body = m.get('message_body')
+            teacher_message_head = '发送班级通知成功'
+            student_message_head = '教师：班级通知'
+            teacher_message_body = f'To  {class_name}：  {message_body}'
+            messages = [
+                {'message_head': teacher_message_head, 'message_body': teacher_message_body, 'room': teacher,
+                 'username'    : 'system'}]
+            # print(f"class_name={class_name}")
+            classes = mongo.db.classes.find_one({'class_name': class_name})
+            if classes:
+                student_nos = classes.get('students')
+                messages.extend(
+                    [{'message_head': student_message_head, 'message_body': message_body, 'room': student_no,
+                      'username'    : teacher} for student_no in student_nos])
+                flag += 1
+        # print(f"flag={flag}")
+        if flag:
+            send_system_message_batch(messages)
+            message, result = '发送通知成功！', True
+        else:
+            message = '发送通知失败，班级名错误！'
+        return jsonify(result=result, data=data, message=message)
+
+    def send_personal_notify(_data: dict):
+        """发送个人通知"""
+        result, data, message = False, None, '发送通知失败！'
+        _messages = _data.get('messages')
+        flag = 0
+        messages = []
+        for m in _messages:
+            student_no = m.get('student_no')
+            message_body = m.get('message_body')
+            teacher_message_head = '发送个人通知成功'
+            student_message_head = '教师:个人通知'
+            teacher_message_body = f'To  {student_no}：  {message_body}'
+            user = mongo.db.user.find_one({'student_no': student_no})
+            if user and user.get('teacher') == teacher:
+                messages = [
+                    {'message_head': teacher_message_head, 'message_body': teacher_message_body, 'room': teacher,
+                     'username'    : 'system'},
+                    {'message_head': student_message_head, 'message_body': message_body, 'room': student_no,
+                     'username'    : teacher}]
+                flag += 1
+        if flag:
+            send_system_message_batch(messages)
+            message, result = '发送通知成功！', True
+        else:
+            message = '发送通知失败，学生学号错误！'
+        return jsonify(result=result, data=data, message=message)
 
     json_data = request.get_json()
     _api = json_data.get('api')
-    get_api_dict = dict(get_class_list=get_class_list, get_manage_time_info=get_manage_time_info)
-    submit_api_dict = dict(correct_homework=correct_homework, submit_manage_time_info=submit_manage_time_info)
-    username = session.get('username')
+    get_api_dict = dict(get_class_list=get_class_list,
+                        get_manage_time_info=get_manage_time_info)
+    submit_api_dict = dict(correct_homework=correct_homework,
+                           submit_manage_time_info=submit_manage_time_info,
+                           send_class_notify=send_class_notify,
+                           send_personal_notify=send_personal_notify)
+    teacher = session.get('username')
     if _api in get_api_dict:
         return get_api_dict[_api]()
     elif _api in submit_api_dict:

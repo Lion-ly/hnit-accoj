@@ -8,9 +8,7 @@
 import json
 import datetime
 from functools import wraps
-from bson.json_util import dumps
 import pandas as pd
-from flask_socketio import emit
 from flask import session, redirect, url_for, request, abort, jsonify, render_template
 from werkzeug.security import generate_password_hash
 from accoj.extensions import mongo, redis_cli
@@ -152,7 +150,10 @@ def is_course_time_open(course_no: int) -> int:
     """
     class_name = session.get("class_name")
     flag = 0
-    time_info = redis_cli[f'classes:{class_name}']
+    try:
+        time_info = redis_cli[f'classes:{class_name}']
+    except KeyError:
+        return 0
     if time_info:
         time_info = time_info.decode('utf-8')
     time_info = json.loads(time_info)
@@ -222,25 +223,45 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-def send_system_message(message_head: str, message_body: str):
+def send_system_message(message_head: str, message_body: str, room: str, username: str = 'system'):
     """
     发送系统消息
 
     :param message_head: message head
     :param message_body: message body
+    :param room: room name
+    :param username: to people username
     :return: None
     """
     time = datetime.datetime.now()
-    current_room = session.get('username')
-    username = 'system'
-    message = dict(room=current_room,
+    message = dict(room=room,
                    username=username,
                    message_head=message_head,
                    message_body=message_body,
                    time=time)
     mongo.db.message.insert_one(message)
-    message = dumps(message)
-    emit('new_room_message', message, room=current_room)
+
+
+def send_system_message_batch(messages: list):
+    """
+    批量发送系统消息
+    :param messages: [{message_head: "", message_body: "", "username": "", "room": ""}]
+    :return: None
+    """
+    time = datetime.datetime.now()
+    _messages = []
+    for message in messages:
+        message_head = message.get('message_head')
+        message_body = message.get('message_body')
+        room = message.get('room')
+        username = message.get('username')
+        message = dict(room=room,
+                       username=username,
+                       message_head=message_head,
+                       message_body=message_body,
+                       time=time)
+        _messages.append(message)
+    mongo.db.message.insert_many(_messages)
 
 
 def parse_class_xlrd(class_xlrd: object):

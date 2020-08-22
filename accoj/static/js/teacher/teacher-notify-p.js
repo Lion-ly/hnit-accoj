@@ -1,8 +1,14 @@
 $(document).ready(function () {
-    getStudentInfo();
+    _init_();
 });
 
-function getStudentInfo() {
+function _init_() {
+    getStudentInfoNotifyP();
+    $("#selectAll").click(selectAll);
+    $("#confirmSend").click(sendPersonalNotify);
+
+}
+function getStudentInfoNotifyP() {
     $.fn.dataTable.ext.errMode = 'throw';
     let csrf_token = get_csrf_token();
     $.ajaxSetup({
@@ -34,4 +40,23 @@ function selectAll() {
         $item = $(item);
         $item.prop('checked', !$item.prop('checked'));
     })
+}
+
+function sendPersonalNotify() {
+    // 发送个人通知
+    let $checkeds = $(".switch-input:checked"),
+        message_body = $("#messageContent").val(),
+        messages = [];
+    $checkeds.each(function () {
+        let student_no = $(this).parent().parent().children(":first").next().text();
+        messages.push({"student_no": student_no, "message_body": message_body});
+    });
+    let data = {"api": "send_personal_notify", "messages": messages},
+        url = "/api/teacher_api",
+        messageDivID = "messageInfoBox",
+        successFunc = function () {
+        };
+    if (messages.length < 1) show_message(messageDivID, '未选择要发送的学生！', 'danger', 2000);
+    else if(!message_body) show_message(messageDivID, '消息内容不能为空！', 'danger', 2000);
+    else get_data(data, successFunc, url, messageDivID);
 }
