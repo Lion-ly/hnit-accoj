@@ -22,7 +22,7 @@ def news_spider():
     response = requests.get(url=url, headers=header)
     response.encoding = 'utf-8'
     doc = pq(response.text)
-    a = doc('div.list-cont>ul li div.list-pic a')
+    a = doc('div.search-result>ul li div.desc a:first-child')
     result = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     index = 0
     cnt = mongo.db.news_spider.find().count()
@@ -34,41 +34,43 @@ def news_spider():
         result[index]['a_href'] = a_href_all
         index += 1
 
-    img = doc('div.list-cont>ul li div.list-pic a img')
+    img = doc('div.search-result>ul li div.img img')
     index = 0
     for item in img.items():
         img_src = item.attr('src')
         result[index]['img_src'] = img_src
         index += 1
 
-    title = doc('div.list-cont>ul li div.list-intro div.list-name a')
+    title = doc('div.search-result>ul li div.desc a:first-child>h3')
     index = 0
     for item in title.items():
         title_text = item.text()
         result[index]['title_text'] = title_text
         index += 1
 
-    content = doc('div.list-cont>ul li div.list-intro div.list-text a')
+    content = doc('div.search-result>ul li div.desc a:nth-child(2)>p')
     index = 0
     for item in content.items():
         content_text = item.text()
         result[index]['content_text'] = content_text
         index += 1
 
-    span = doc('div.list-cont>ul li div.list-intro div.list-date-time span.zebian')
+    time = doc('div.search-result>ul li div.desc>div.info>span.time')
+    index = 0
+    for item in time.items():
+        time_text = item.text()
+        result[index]['time_text'] = time_text
+        index += 1
+
+    span = doc('div.search-result>ul li div.desc div.info')
+    span.find('span').remove()
     index = 0
     for item in span.items():
         span_text = item.text()
         result[index]['span_text'] = span_text
         index += 1
 
-    time = doc('div.list-cont>ul li div.list-intro div.list-date-time')
-    time.find('span').remove()
-    index = 0
-    for item in time.items():
-        time_text = item.text()
-        result[index]['time_text'] = time_text
-        index += 1
+
 
     mongo.db.news_spider.insert(result)
 
