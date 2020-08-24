@@ -13,7 +13,6 @@ app = create_app('development')
 # 静态文件热更
 app.jinja_env.auto_reload = True
 
-
 class RedirectStderr(object):
 
     def __init__(self, cfg):

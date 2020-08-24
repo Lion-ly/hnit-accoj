@@ -378,3 +378,33 @@ def create_class(class_name: str, students: list, teacher: str = 'teacher'):
                             upsert=True)
     if not redis_cli[f'classes:{class_name}']:
         redis_cli[f'classes:{class_name}'] = json.dumps({"time": _time, "teacher": teacher})
+
+
+def init_celery(app, celery):
+    celery.conf.broker_url = app.config['CELERY_BROKER_URL']
+    celery.conf.result_backend = app.config['CELERY_RESULT_BACKEND']
+    celery.conf.update(app.config)
+    celery.conf.update(
+        result_expires=3600,
+    )
+
+    class ContextTask(celery.Task):
+        """Make celery tasks work with Flask app context"""
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
+
+def redis_connect_test():
+    """redis连接测试"""
+    redis_cli['status'] = 'success'
+    status = redis_cli['status'].decode('utf-8')
+    if status:
+        redis_cli.delete('status')
+        print(f"INFO: redis test {status}!")
+    else:
+        print(f"ERROR: redis test Fail!")
