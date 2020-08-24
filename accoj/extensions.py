@@ -11,6 +11,7 @@ from flask_wtf import CSRFProtect
 from flask_babelex import Babel
 from flask_socketio import SocketIO
 from flask_redis import FlaskRedis
+from celery import Celery
 
 mongo = PyMongo()
 mail = Mail()
@@ -18,3 +19,4 @@ csrf = CSRFProtect()
 babel = Babel()
 socketio = SocketIO()
 redis_cli = FlaskRedis()
+celery = Celery()
