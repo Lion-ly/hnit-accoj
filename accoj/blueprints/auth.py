@@ -9,7 +9,6 @@ from flask import Blueprint, jsonify, request, session, redirect, render_templat
 from werkzeug.security import generate_password_hash, check_password_hash
 from accoj.extensions import mongo
 from accoj.utils import login_required
-from accoj.emails import send_mail
 import re
 import random
 import datetime
@@ -171,7 +170,8 @@ def check_email():
         mail = dict(email="{}".format(email))
         mongo.db.other.create_index("time", expireAfterSeconds=120)
         try:
-            send_mail(email, mail_random, 0, 0)
+            from accoj.emails import async_send_mail
+            async_send_mail.delay(email, mail_random, 0, 0)
             if mongo.db.other.find_one(mail):
                 temp = {
                     "time" : datetime.datetime.utcnow(),
@@ -235,7 +235,8 @@ def find_password():
                 mongo.db.user.update_one({"student_no": student_no},
                                          {"$set": {"password": generate_password_hash(new_password)}})
                 try:
-                    send_mail(email, 0, 1, new_password)
+                    from accoj.emails import async_send_mail
+                    async_send_mail.delay(email, 0, 1, new_password)
                     return jsonify(result="true")
                 except Exception:
                     return jsonify(result="false")

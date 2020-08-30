@@ -5,9 +5,12 @@
 # @Site : https://github.com/coolbreeze2
 # @File : news_spider.py
 # @Software: PyCharm
+from datetime import timedelta
 from pyquery import PyQuery as pq
 from accoj.extensions import mongo
 from threading import Timer
+from celery.task.base import periodic_task
+from accoj import celery
 import requests
 
 
@@ -70,8 +73,6 @@ def news_spider():
         result[index]['span_text'] = span_text
         index += 1
 
-
-
     mongo.db.news_spider.insert(result)
 
 
@@ -85,3 +86,15 @@ class RepeatingTimer(Timer):
 def new_spider_start():
     t = RepeatingTimer(36000, news_spider)
     t.start()
+
+
+'''
+@periodic_task(run_every=timedelta(seconds=36000))
+def periodic_run_news_spider():
+    news_spider()
+'''
+
+
+@celery.task
+def periodic_run_news_spider():
+    new_spider_start()

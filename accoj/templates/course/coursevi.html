@@ -53,14 +53,19 @@
                 </div>
                 <div class="acc-container-answer">
                     <div>
-                        <p class="acc-title">1、上传原始凭证（上传图片或文档）</p>
+                        <p class="acc-title">2、上传原始凭证（上传图片或文档）</p>
                         <!--文件上传-->
                         <form>
                             <div class="form-group">
-                                <label for="uploadFiles">
-                                    <span class="glyphicon glyphicon-upload"></span> Upload files
+                                <label for="downloadTemplate">
+                                    <span class="glyphicon glyphicon-download"></span> 下载模板
                                 </label>
-                                <input type="file" id="uploadFiles" accept=".zip,.rar" data-get-file>
+                                <button id="downloadTemplate" type="button">下载模板</button>&nbsp;&nbsp;
+                                <br>
+                                <label for="uploadFiles">
+                                    <span class="glyphicon glyphicon-upload"></span> 上传文件
+                                </label>
+                                <input style="display: inline" type="file" id="uploadFiles" accept=".zip,.rar" data-get-file>
                                 <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖。</p>
                                 <!--文件下载-->
                                 <button type="button" id="vi_downloadFile_button" data-download-file

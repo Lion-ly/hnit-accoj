@@ -4,6 +4,7 @@ import logging
 from dotenv import load_dotenv
 from accoj import create_app
 from gevent.pywsgi import WSGIServer
+from accoj.news_spider import periodic_run_news_spider
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
@@ -12,6 +13,9 @@ if os.path.exists(dotenv_path):
 app = create_app('development')
 # 静态文件热更
 app.jinja_env.auto_reload = True
+# 后台启动爬虫
+periodic_run_news_spider.delay()
+
 
 class RedirectStderr(object):
 
@@ -23,10 +27,10 @@ class RedirectStderr(object):
         self._log_file.flush()
 
 
-sys.stderr = RedirectStderr({'log_path': 'accoj/log/request.log'})
+# sys.stderr = RedirectStderr({'log_path': 'accoj/log/request.log'})
 
 if __name__ == '__main__':
-    logging.basicConfig(filename='accoj/log/debug.log', level=logging.DEBUG)
+    # logging.basicConfig(filename='accoj/log/debug.log', level=logging.DEBUG)
     # app.run('0.0.0.0', 80)
     http_server = WSGIServer(('0.0.0.0', 80), app)
     http_server.serve_forever()
