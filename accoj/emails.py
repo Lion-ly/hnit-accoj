@@ -17,11 +17,13 @@ from werkzeug.security import generate_password_hash
 from typing import List, Dict
 import requests
 import json
+from accoj import celery
 
-
+'''
 def send_async_mail(app, msg):
     with app.app_context():
         mail.send(msg)
+'''
 
 
 def send_mail(to, mail_random, flag, send_password):
@@ -50,9 +52,16 @@ def send_mail(to, mail_random, flag, send_password):
                         <font size='3' face='arial'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两分钟内有效</font>
                         <p><font size='1' face='arial'>&nbsp;&nbsp;&nbsp;{time}</font></p>
                         '''.format(mailcode=mail_random, time=datetime.now().replace(microsecond=0))
-    thr = Thread(target=send_async_mail, args=[app, msg])
-    thr.start()
-    return thr
+    # with app.app_context():
+    mail.send(msg)
+    # thr = Thread(target=send_async_mail, args=[app, msg])
+    # thr.start()
+    # return thr
+
+
+@celery.task
+def async_send_mail(to, mail_random, flag, send_password):
+    send_mail(to, mail_random, flag, send_password)
 
 
 def gain_access_token():
@@ -137,7 +146,7 @@ def assign_email(user_infos: List[Dict[str, str]]):
                         role=role,
                         student_name=name,
                         nick_name="",
-                        teacher = username,
+                        teacher=username,
                         student_school=student_school,
                         personalized_signature="",
                         student_faculty=student_faculty,
