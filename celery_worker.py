@@ -6,6 +6,7 @@
 # @File    : celery_worker.py
 # @Software: PyCharm
 import os
+from accoj.news_spider import periodic_run_news_spider
 from accoj import celery, create_app
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'development')
