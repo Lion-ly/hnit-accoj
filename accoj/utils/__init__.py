@@ -8,6 +8,7 @@
 import json
 import datetime
 from functools import wraps
+from threading import Timer
 import pandas as pd
 from flask import session, redirect, url_for, request, abort, jsonify, render_template
 from werkzeug.security import generate_password_hash
@@ -389,3 +390,10 @@ def redis_connect_test():
         print(f"INFO: redis test {status}!")
     else:
         print(f"ERROR: redis test Fail!")
+
+
+class RepeatingTimer(Timer):
+    def run(self):
+        while not self.finished.is_set():
+            self.function(*self.args, **self.kwargs)
+            self.finished.wait(self.interval)

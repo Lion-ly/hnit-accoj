@@ -8,7 +8,7 @@
 from datetime import timedelta
 from pyquery import PyQuery as pq
 from accoj.extensions import mongo
-from threading import Timer
+from accoj.utils import RepeatingTimer
 from celery.task.base import periodic_task
 from accoj import celery
 import requests
@@ -74,13 +74,6 @@ def news_spider():
         index += 1
 
     mongo.db.news_spider.insert(result)
-
-
-class RepeatingTimer(Timer):
-    def run(self):
-        while not self.finished.is_set():
-            self.function(*self.args, **self.kwargs)
-            self.finished.wait(self.interval)
 
 
 def new_spider_start():
