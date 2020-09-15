@@ -321,8 +321,10 @@ function initLi(data) {
 
     let info_key = "ledger_infos_" + now_period,
         confirmed_key = "ledger" + now_period + "_confirm",
-        saved_key = "ledger" + now_period + "_saved",
-        ledger_infos_tmp = data ? data["ledger_infos"][info_key] : ledger_infos[info_key],
+        saved_key = "ledger" + now_period + "_saved";
+    if (!(data["ledger_infos"]) || data["ledger_saved"]) return;
+
+    let ledger_infos_tmp = data ? data["ledger_infos"][info_key] : ledger_infos[info_key],
         ledger_confirmed_tmp = data ? data["ledger_confirmed"][confirmed_key] : ledger_confirmed[confirmed_key],
         ledger_saved_tmp = data ? data["ledger_saved"][saved_key] : ledger_saved[saved_key];
 
