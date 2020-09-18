@@ -21,12 +21,12 @@ json_str:
   "10": {"start": "", "end": "", "is_open": false}
 }'
 ```
-2. rank有序集合
+2. rank有序集合(sorted set)
+`rank: rank.score rank.member`
 ```
 注：
-redis有序集合见https://www.runoob.com/redis/redis-sorted-sets.html
-rank只在排行榜更新时（五分钟更新一次）才排序，然后写入rank集合（包括MongoDB）
 score值为用户的排名，成员为json_str，
+rank只在排行榜更新时（五分钟更新一次）才排序，然后写入rank有序集合
 json_str内容如下：
 '
 {
@@ -48,11 +48,10 @@ json_str内容如下：
 
 '
 ```
-3. news_spider集合
-`{f'news_spider:{新闻序号}': json_str}`
+3. news_spider队列(list)
+`news: [json_str]`
 ```
 注：
-news_spider更新时写入此集合以及MongoDB同名集合。
 json_str:
 '{
 "a_href": "", # 新闻链接

@@ -6,6 +6,7 @@
 # @File    : update_rank.py
 # @Software: PyCharm
 
+from bson.json_util import dumps
 from accoj import celery
 from accoj.utils import RepeatingTimer
 from accoj.extensions import (mongo,
@@ -13,14 +14,15 @@ from accoj.extensions import (mongo,
 
 
 def update_user_rank():
+    """更新排行榜信息"""
     scores_info = mongo.db.rank.find({}, {'_id': 0})
-    scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
-    scores_info_sorted_len = len(scores_info_sorted)
-    for i in range(0, scores_info_sorted_len):
-        scores_info_sorted[i]['rank'] = i + 1
+    data = {dumps(scores): scores.get('sum_score') for scores in scores_info}
+    redis_cli.delete('rank')
+    redis_cli.zadd('rank', data)
 
 
-def update_user_rank_start(run_every: int):
+def update_user_rank_start(run_every: int = 300):
+    """排行榜信息周期更新，单位为秒"""
     t = RepeatingTimer(run_every, update_user_rank)
     t.start()
 
@@ -34,4 +36,5 @@ def periodic_update_user_rank():
 
 @celery.task
 def periodic_update_user_rank():
-    update_user_rank_start(300)
+    """周期定时更新排行榜信息"""
+    update_user_rank_start()
