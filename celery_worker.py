@@ -7,10 +7,13 @@
 # @Software: PyCharm
 import os
 from accoj.news_spider import periodic_run_news_spider
-from accoj import celery, create_app
+from accoj import create_app
+from accoj.celery import celery
+from accoj.utils import init_celery
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'development')
 app.app_context().push()
+init_celery(app, celery)
 
 # 启动celery
 # celery worker -A celery_worker.celery --loglevel=INFO --without-gossip --without-mingle --without-heartbeat -Ofair -P gevent

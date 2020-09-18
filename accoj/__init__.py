@@ -7,9 +7,10 @@
 # @Software: PyCharm
 import os
 from flask import Flask
-from celery import Celery
+#from celery import Celery
 import flask_monitoringdashboard as dashboard
 from settings import config
+from accoj.celery import celery
 from accoj.blueprints.accoj import accoj_bp
 from accoj.blueprints.index import index_bp
 from accoj.blueprints.profile import profile_bp
@@ -17,7 +18,8 @@ from accoj.blueprints.teacher import teacher_bp
 from accoj.blueprints import message
 from accoj.deal_business.create_questions import add_question
 from accoj.utils import (create_test_account,
-                         redis_connect_test)
+                         redis_connect_test,
+                         init_celery)
 from accoj.exception import (CreateQuestionsError,
                              ExcelCheckError)
 from accoj.extensions import (mongo,
@@ -32,7 +34,8 @@ from accoj.blueprints.admin import (admin,
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
-celery = Celery(__name__, broker='redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1')
+#celery = Celery('accoj', broker='redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1')
+#celery = Celery('accoj')
 
 
 def create_app(config_name=None):
@@ -49,6 +52,7 @@ def create_app(config_name=None):
     app = Flask('accoj')
     # 加载配置
     app.config.from_object(config[config_name])
+    init_celery(app, celery)
     # 注册扩展
     register_extensions(app)
     # 注册蓝图

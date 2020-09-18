@@ -397,3 +397,31 @@ class RepeatingTimer(Timer):
         while not self.finished.is_set():
             self.function(*self.args, **self.kwargs)
             self.finished.wait(self.interval)
+
+
+def init_celery(app, celery):
+    """Add flask app context to celery.Task"""
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+
+
+def redis_multi_push(redis_cli, q, vals):
+    """
+    redis队列批量push
+    :param redis_cli: redis object
+    :param q: queue name
+    :param vals: values list
+    :return:
+    """
+    pipe = redis_cli.pipeline()
+    for val in vals:
+        pipe.lpush(q, val)
+    pipe.execute()

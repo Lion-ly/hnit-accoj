@@ -26,6 +26,27 @@ json_str:
 注：
 redis有序集合见https://www.runoob.com/redis/redis-sorted-sets.html
 rank只在排行榜更新时（五分钟更新一次）才排序，然后写入rank集合（包括MongoDB）
+score值为用户的排名，成员为json_str，
+json_str内容如下：
+'
+{
+"student_no":string, # 学号名
+  "student_class": string,	# 班级
+  "student_name": string,	# 姓名
+  "sum_score":double,  #总分,
+  "one",  #第一部分成绩
+  "two",  #第二部分成绩
+  "three",  #第三部分成绩
+  "four",  #第四部分成绩
+  "five",  #第五部分成绩
+  "six",  #第六部分成绩
+  "seven",  #第七部分成绩
+  "eight",  #第八部分成绩
+  "nine",  #第九部分成绩
+  "ten",  #第十部分成绩
+}
+
+'
 ```
 3. news_spider集合
 `{f'news_spider:{新闻序号}': json_str}`
@@ -33,7 +54,12 @@ rank只在排行榜更新时（五分钟更新一次）才排序，然后写入r
 注：
 news_spider更新时写入此集合以及MongoDB同名集合。
 json_str:
-'
-
-'
+'{
+"a_href": "", # 新闻链接
+"img_src": "", # 图片链接
+"title_text": "", # 标题
+"content_text": "", # 摘要
+"time_text": "", # 时间
+"span_text": "" # 责编
+}'
 ```

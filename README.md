@@ -27,6 +27,7 @@
 ### 5. 运行
 
 - `pipenv shell`
+- 更改flask-admin源码，路径为`pythonPath\Lib\site-packages\flask_admin\templates\bootstrap2\admin\static.html`, 将'admin.static'改为'dbadmin.static'
 - ```celery worker -A celery_worker.celery --loglevel=INFO --without-gossip --without-mingle --without-heartbeat -Ofair -P gevent```
 - 新开一个窗口运行`pipenv shell`
 - `flask run --port=80 --host=0.0.0.0`
