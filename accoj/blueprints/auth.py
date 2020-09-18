@@ -44,7 +44,7 @@ def signin():
                 return jsonify(result="false", message="{}".format(message))
     return redirect("/")
 
-
+"""
 @auth_bp.route('/login', methods=['POST', 'GET'])
 def login():
     myreg = re.compile(r'\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}')
@@ -112,7 +112,7 @@ def login():
                 mongo.db.user.insert_one(post)
                 return jsonify(result="true")
     return redirect("/")
-
+"""
 
 @auth_bp.route('/logout')
 def logout():

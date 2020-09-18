@@ -28,13 +28,17 @@ api_bp = Blueprint('api', __name__)
 
 @api_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
-    # 获取所有的成绩信息
-    scores_info = mongo.db.rank.find({}, {'_id': 0})
-    scores_info_sorted = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
-    scores_info_sorted_len = len(scores_info_sorted)
-    for i in range(0, scores_info_sorted_len):
-        scores_info_sorted[i]['rank'] = i + 1
-    result, data = True, scores_info_sorted
+    # 获取排行榜
+    # scores_info = mongo.db.rank.find({}, {'_id': 0})
+    # scores_info = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
+    result, data = True, []
+    scores_infos = redis_cli.zrange('rank', 0, -1, desc=True, withscores=True)
+    scores_infos_len = len(scores_infos)
+    if scores_infos_len:
+        scores_info = [json.loads(scores_info[0]) for scores_info in scores_infos]
+        for i in range(0, scores_infos_len):
+            scores_info[i]['rank'] = i + 1
+        result, data = True, scores_info
     return jsonify(result=result, data=data)
 
 
@@ -120,7 +124,7 @@ def teacher_api():
     def get_manage_time_info_from_redis():
         time_infos = []
         for key in redis_cli.scan_iter('classes:*'):
-            time_info = json.loads(redis_cli[key].decode('utf-8'))
+            time_info = json.loads(redis_cli[key])
             _teacher = time_info.get('teacher')
             time = time_info.get('time')
             class_name = key.decode('utf-8').split(':')[-1]
@@ -477,7 +481,7 @@ def get_news():
     news = redis_cli.lrange('news', 0, 10)
     if news:
         # data = dumps(news)
-        news = [json.loads(n.decode('utf-8')) for n in news]
+        news = [json.loads(n) for n in news]
         data = dumps(news)
         result = True
     return jsonify(result=result, data=data)
