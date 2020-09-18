@@ -26,7 +26,7 @@ class BaseConfig(object):
     MAIL_SERVER = "smtp.exmail.qq.com"
     MAIL_PORT = 465
     MAIL_USE_SSL = True
-    MAIL_USERNAME = "accoj@popforever.club"
+    MAIL_USERNAME = "accoj@accoj.top"
 
     MAIL_PASSWORD = "Accountoj2020"
     MAIL_DEFAULT_SENDER = ("Accoj Admin", MAIL_USERNAME)

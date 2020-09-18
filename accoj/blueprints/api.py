@@ -473,8 +473,11 @@ def teacher_notify_p():
 def get_news():
     """获取新闻"""
     result, data = False, None
-    news = mongo.db.news_spider.find()
+    # news = mongo.db.news_spider.find()
+    news = redis_cli.lrange('news', 0, 10)
     if news:
+        # data = dumps(news)
+        news = [json.loads(n.decode('utf-8')) for n in news]
         data = dumps(news)
         result = True
     return jsonify(result=result, data=data)

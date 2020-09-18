@@ -150,5 +150,6 @@ def get_locale():
     return session.get('lang', 'zh_Hans_CN')
 
 
-admin = flask_admin.Admin(name='HnitAccoj', index_view=MyIndexView())
+admin = flask_admin.Admin(name='HnitAccoj', index_view=MyIndexView(url='/dbadmin', endpoint='dbadmin'),
+                          url='/dbadmin', endpoint='dbadmin')
 # ---------------------------------数据库后台------end---------------------------------------------

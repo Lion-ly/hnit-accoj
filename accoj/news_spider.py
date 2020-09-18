@@ -5,10 +5,11 @@
 # @Site : https://github.com/coolbreeze2
 # @File : news_spider.py
 # @Software: PyCharm
+from bson.json_util import dumps
 from datetime import timedelta
 from pyquery import PyQuery as pq
-from accoj.extensions import mongo
-from accoj.utils import RepeatingTimer
+from accoj.extensions import mongo, redis_cli
+from accoj.utils import RepeatingTimer, redis_multi_push
 from celery.task.base import periodic_task
 from accoj import celery
 import requests
@@ -28,9 +29,12 @@ def news_spider():
     a = doc('div.search-result>ul li div.desc a:first-child')
     result = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     index = 0
-    cnt = mongo.db.news_spider.find().count()
-    if cnt == 10:
-        mongo.db.news_spider.delete_many({})
+    # cnt = mongo.db.news_spider.find().count()
+    news = redis_cli.lrange('news', 0, 10)
+    if news:
+        # mongo.db.news_spider.delete_many({})
+        # 删除新闻
+        redis_cli.delete('news')
     for item in a.items():
         a_href = item.attr('href')
         a_href_all = url + a_href
@@ -72,8 +76,9 @@ def news_spider():
         span_text = item.text()
         result[index]['span_text'] = span_text
         index += 1
-
-    mongo.db.news_spider.insert(result)
+    result = [dumps(r) for r in result]
+    redis_multi_push(redis_cli, 'news', result)
+    # mongo.db.news_spider.insert(result)
 
 
 def new_spider_start():
