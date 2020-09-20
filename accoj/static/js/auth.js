@@ -1,3 +1,9 @@
+$(document).ready(function () {
+    $('#signin').keypress(function (e) {
+        if (e.keyCode == 13) $('#signin_button').click();
+    });
+});
+
 $(function () {
     $('#signin_button').click(function () {
         save_cookies();
@@ -141,9 +147,9 @@ $(function () {
                 async: true,
                 success: function (data) {
                     if (data["result"] === "true") {
-                        show_message("login_form", "邮件已发送，请注意查收哦","info",3000);
+                        show_message("login_form", "邮件已发送，请注意查收哦", "info", 3000);
                     } else {
-                        show_message("login_form","邮件未能发送，请稍后重试","danger",3000)
+                        show_message("login_form", "邮件未能发送，请稍后重试", "danger", 3000)
                     }
                 }
 
@@ -168,9 +174,9 @@ $(function () {
                 async: true,
                 success: function (data) {
                     if (data["result"] === "true") {
-                        show_message("findpwd_form", "邮件已发送，请注意查收哦","info",3000);
+                        show_message("findpwd_form", "邮件已发送，请注意查收哦", "info", 3000);
                     } else {
-                        show_message("findpwd_form","邮件未能发送，请稍后重试","danger",3000)
+                        show_message("findpwd_form", "邮件未能发送，请稍后重试", "danger", 3000)
                     }
                 }
 
@@ -179,28 +185,25 @@ $(function () {
         }
     })
 });
-$(function(){
-    $("#findpwd_button").click(function(){
-        let data=$("#findpwd_form").serialize();
+$(function () {
+    $("#findpwd_button").click(function () {
+        let data = $("#findpwd_form").serialize();
         $.ajax({
-            url:"/findpsw",
-            type:"post",
-            dataType:"json",
-            data:data,
-            async:true,
-            success:function (data) {
-                if (data["result"]==="true")
-                {
+            url: "/findpsw",
+            type: "post",
+            dataType: "json",
+            data: data,
+            async: true,
+            success: function (data) {
+                if (data["result"] === "true") {
                     show_message("findpwd_form", "密码已重置，新密码请注意查收邮箱，即将跳转到首页", "info", 3000);
                     setTimeout("location.href='localhost:80';location.reload();", 4000);
-                }
-                else
-                {
+                } else {
                     show_message("findpwd_form", data["message"], "danger", 1000);
                 }
 
             },
-            error:function () {
+            error: function () {
 
             }
         })
