@@ -11,6 +11,8 @@ from flask_wtf import CSRFProtect
 from flask_babelex import Babel
 from flask_socketio import SocketIO
 from flask_redis import FlaskRedis
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 mongo = PyMongo()
 mail = Mail()
@@ -18,3 +20,4 @@ csrf = CSRFProtect()
 babel = Babel()
 socketio = SocketIO()
 redis_cli = FlaskRedis()
+limiter = Limiter(key_func=get_remote_address)

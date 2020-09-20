@@ -7,7 +7,6 @@
 # @Software: PyCharm
 import os
 from flask import Flask
-#from celery import Celery
 import flask_monitoringdashboard as dashboard
 from settings import config
 from accoj.celery import celery
@@ -27,15 +26,13 @@ from accoj.extensions import (mongo,
                               csrf,
                               babel,
                               socketio,
-                              redis_cli)
+                              redis_cli,
+                              limiter)
 from accoj.blueprints.admin import (admin,
                                     UserView,
                                     CompanyView)
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-
-#celery = Celery('accoj', broker='redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1')
-#celery = Celery('accoj')
 
 
 def create_app(config_name=None):
@@ -108,6 +105,7 @@ def register_extensions(app):
     csrf.exempt(dashboard.blueprint)
     # 绑定flask_monitoringdashboard
     dashboard.bind(app)
+    limiter.init_app(app)
 
 
 def create_question_bank():
