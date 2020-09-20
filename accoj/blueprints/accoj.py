@@ -99,6 +99,7 @@ def submit_company_info():
                     err_pos.append({"err_pos": key})
         else:
             if key.startswith("com_shareholder_"):
+                shareholder_num += 1
                 data_dict["com_shareholder"].append(value)
             elif key == "com_operate_period":
                 if not is_number(value):
@@ -939,5 +940,8 @@ def accoj_bp_before_request():
     """
     请求前钩子函数（局部）
     """
-    if session.get("role") == "admin":
+    role = session.get("role")
+    if role == 'admin':
         return redirect(url_for('admin.index'))
+    elif role == 'dbadmin':
+        return redirect(url_for('dbadmin.index'))
