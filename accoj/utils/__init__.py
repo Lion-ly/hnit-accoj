@@ -315,7 +315,7 @@ def create_account(student_no: str, student_name: str, password: str, role: str 
                                                student_faculty=student_faculty,
                                                student_class=student_class,
                                                student_phone=student_phone,
-                                               password=generate_password_hash(password))},
+                                               password=generate_password_hash(password, salt_length=24))},
                          upsert=True)
 
 

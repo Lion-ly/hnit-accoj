@@ -105,6 +105,7 @@ def register_extensions(app):
     csrf.exempt(dashboard.blueprint)
     # 绑定flask_monitoringdashboard
     dashboard.bind(app)
+    # init Flask-Limiter
     limiter.init_app(app)
 
 
