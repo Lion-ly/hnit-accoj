@@ -1,155 +1,142 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2020/1/19 20:55
+# @Time    : 2020/9/20 16:18
 # @Author  : Coodyz
 # @Site    : https://github.com/coolbreeze2
 # @File    : admin.py
 # @Software: PyCharm
-# from accoj.extensions import mongo
-from flask import session, request, abort
-from accoj.extensions import babel
-import flask_admin
-from flask_admin import AdminIndexView
 
-from wtforms import form, fields
+import json
+from flask import (Blueprint,
+                   render_template,
+                   jsonify,
+                   request)
+from accoj.extensions import (mongo,
+                              redis_cli)
+from accoj.utils import (create_account,
+                         login_required_admin,
+                         change_password)
 
-from flask_admin.contrib.pymongo import ModelView
-from flask_admin.model.fields import InlineFormField, InlineFieldList
-
-
-class MyIndexView(AdminIndexView):
-    def is_accessible(self):
-        role = session.get("role")
-        if role in {"root", "admin"}:
-            return True
-        else:
-            return False
-
-    def inaccessible_callback(self, name, **kwargs):
-        # redirect to login page if user doesn't have access
-        return abort(403)
+admin_bp = Blueprint('admin', __name__)
 
 
-# ---------------------------------数据库后台---------------------------------------------------
-class AdminModelView(ModelView):
-    def is_accessible(self):
-        role = session.get("role")
-        if role in {"root", "admin"}:
-            return True
-        else:
-            return False
-
-    def inaccessible_callback(self, name, **kwargs):
-        # redirect to login page if user doesn't have access
-        return abort(403)
+@admin_bp.route('/index', methods=['GET'])
+def index():
+    """后台管理员首页"""
+    return render_template('admin/home.html')
 
 
-class UserForm(form.Form):
-    # student_no = fields.StringField("student_no")
-    role = fields.StringField('role')
-    student_name = fields.StringField('student_name')
-    student_faculty = fields.StringField('student_faculty')
-    student_class = fields.StringField('student_class')
-    student_phone = fields.StringField('student_phone')
-    student_sex = fields.StringField('student_sex')
-    student_borth = fields.StringField('student_borth')
-    # password = fields.StringField('password')
-    email = fields.StringField('email')
+@admin_bp.route('/user_list', methods=['GET'])
+def user_list():
+    """用户列表页面"""
+    return render_template('admin/user_list.html')
 
 
-class UserView(AdminModelView):
-    # can_edit = False
-    can_create = False
-    column_list = ('student_no', 'student_faculty', 'student_class', 'email')
-
-    column_sortable_list = ('student_no', 'student_faculty', 'student_class', 'email')
-    column_searchable_list = ('student_no', 'student_faculty', 'student_class', 'email')
-
-    form = UserForm
-
-
-class LedgerConfirm(form.Form):
-    ledger1_confirm = InlineFieldList(fields.StringField("string"))
-    ledger2_confirm = InlineFieldList(fields.StringField("string"))
-
-
-class LedgerSaved(form.Form):
-    ledger1_saved = InlineFieldList(fields.StringField("string"))
-    ledger2_saved = InlineFieldList(fields.StringField("string"))
-
-
-class FirstSecond(form.Form):
-    first = fields.BooleanField()
-    second = fields.BooleanField()
-
-
-class ScheduleConfirm(form.Form):
-    business_confirm = fields.BooleanField()
-    key_element_confirm = InlineFieldList(fields.IntegerField("int"))
-    subject_confirm = InlineFieldList(fields.IntegerField("int"))
-    entry_confirm = InlineFieldList(fields.IntegerField("int"))
-    ledger_confirm = InlineFormField(LedgerConfirm)
-    balance_sheet_confirm = fields.BooleanField()
-    acc_document_confirm = InlineFieldList(fields.IntegerField("int"))
-    subsidiary_account_confirm = InlineFieldList(fields.StringField("string"))
-    acc_balance_sheet_confirm = fields.BooleanField()
-    new_balance_sheet_confirm = fields.BooleanField()
-    profit_statement_confirm = fields.BooleanField()
-    trend_analysis_confirm = InlineFormField(FirstSecond)
-    common_ratio_analysis_confirm = InlineFormField(FirstSecond)
-    ratio_analysis_confirm = fields.BooleanField()
-    dupont_analysis_confirm = fields.BooleanField()
+@admin_bp.route('/get_user_list', methods=['GET'])
+def get_user_list():
+    """获取用户列表"""
+    _user_info = mongo.db.user.find({},
+                                    dict(_id=0))
+    user_info = list()
+    num = 0
+    for user in _user_info:
+        e_dic = dict(num=num,
+                     student_no=user.get('student_no'),
+                     role=user.get('role'),
+                     student_name=user.get('student_name'),
+                     nick_name=user.get('nick_name'),
+                     student_school=user.get('student_school'),
+                     student_faculty=user.get('student_faculty'),
+                     student_class=user.get('student_class'),
+                     teacher=user.get('teacher'),
+                     student_sex=user.get('student_sex'),
+                     email=user.get('email'))
+        num += 1
+        user_info.append(e_dic)
+    result, data = True, user_info
+    return jsonify(result=result, data=data)
 
 
-class ScheduleSaved(form.Form):
-    business_saved = fields.BooleanField()
-    key_element_saved = InlineFieldList(fields.IntegerField("int"))
-    subject_saved = InlineFieldList(fields.IntegerField("int"))
-    entry_saved = InlineFieldList(fields.IntegerField("int"))
-    ledger_saved = InlineFormField(LedgerSaved)
-    balance_sheet_saved = fields.BooleanField()
-    acc_document_saved = InlineFieldList(fields.IntegerField("int"))
-
-    subsidiary_account_saved = InlineFieldList(fields.StringField("string"))
-    acc_balance_sheet_saved = fields.BooleanField()
-    new_balance_sheet_saved = fields.BooleanField()
-    profit_statement_saved = fields.BooleanField()
-    trend_analysis_saved = InlineFormField(FirstSecond)
-    common_ratio_analysis_saved = InlineFormField(FirstSecond)
-    ratio_analysis_saved = fields.BooleanField()
-    dupont_analysis_saved = fields.BooleanField()
+@admin_bp.route('/get_create_account', methods=['GET'])
+def get_create_account():
+    """创建账号页面"""
+    return render_template('admin/create_account.html')
 
 
-class CompanyForm(form.Form):
-    # student_no = fields.StringField("student_no")
-    com_name = fields.StringField("com_name")
-    com_address = fields.StringField("com_address")
+@admin_bp.route('/submit_create_account', methods=['POST'])
+def submit_create_account():
+    """提交创建的账号信息"""
+    result, data, message = False, {}, "未知错误"
+    json_data = request.get_json()
+    data_list = ["student_no", "student_name", "password", "role", "student_faculty", "student_class", "student_school",
+                 "student_phone", "teacher"]
+    data_list_len = len(data_list)
+    student_no = json_data.get("student_no")
+    user = mongo.db.user.find_one({"student_no": student_no})
+    if not user:
+        create_account(*[json_data.get(data_list[i]) for i in range(0, data_list_len)])
+        result, message = True, "账号创建成功！"
+    if not result:
+        message = "账号已存在！"
+    return jsonify(result=result, message=message)
 
-    schedule_confirm = InlineFormField(ScheduleConfirm)
-    schedule_saved = InlineFormField(ScheduleSaved)
+
+@admin_bp.route('/change_pwd', methods=['GET'])
+def change_pwd():
+    """更改密码页面"""
+    return render_template('admin/change_pwd.html')
 
 
-class CompanyView(AdminModelView):
-    can_create = False
-    column_list = ('student_no', 'com_name', 'com_address')
-    column_sortable_list = ('student_no', 'com_name', 'com_address')
+@admin_bp.route('/submit_change_pwd', methods=['POST'])
+def submit_change_pwd():
+    """提交更改的密码信息"""
+    result, data, message = False, {}, "未知错误！"
+    json_data = request.get_json()
+    if mongo.db.user.find({"student_no": json_data.get("student_no")}):
+        change_password(student_no=json_data.get("student_no"), new_password=json_data.get("password"))
+        result, message = True, "密码更改成功！"
+    if not result:
+        message = "账号不存在！"
+    return jsonify(result=result, data=data, message=message)
 
-    column_searchable_list = ('student_no', 'com_name', 'com_address')
 
-    form = CompanyForm
+@admin_bp.route('/audit_class', methods=['GET'])
+def audit_class():
+    """班级审核页面"""
+    return render_template('admin/audit_class.html')
 
 
-@babel.localeselector
-def get_locale():
+@admin_bp.route('/get_audit_class', methods=['GET'])
+def get_audit_class():
+    """获取班级审核表"""
+    user_info = redis_cli.lrange("user_info", 0, -1)
+    user_info_len = len(user_info)
+    for i in range(0, user_info_len):
+        user_info[i] = json.loads(user_info[i])
+        user_info[i].update({"num": i + 1})
+        user_info[i].update({"tmp": ("<button type='button' class='btn btn-info'>批准通过</button>")})
+    user_info = list(filter(lambda u: u.get("status") == "审核中", user_info))
+    result, data = True, user_info
+    return jsonify(result=result, data=data)
+
+
+@admin_bp.route('/submit_audit_class', methods=['POST'])
+def submit_audit_class():
+    """提交班级审核信息"""
+    result, data = False, {}
+    json_data = request.get_json()
+    student_no = json_data.get('student_no')
+    if student_no.encode('utf-8') in redis_cli.smembers('user'):
+        result, data["message"] = True, "操作成功！"
+    if not result:
+        data["message"] = "操作失败！"
+    return jsonify(result=result, data=data)
+
+
+@admin_bp.before_request
+@login_required_admin
+def admin_bp_before_request():
     """
-    汉化
-    :return:
+    请求前钩子函数（局部）
     """
-    if request.args.get('lang'):
-        session['lang'] = request.args.get('lang')
-    return session.get('lang', 'zh_Hans_CN')
-
-
-admin = flask_admin.Admin(name='HnitAccoj', index_view=MyIndexView(url='/dbadmin', endpoint='dbadmin'),
-                          url='/dbadmin', endpoint='dbadmin')
-# ---------------------------------数据库后台------end---------------------------------------------
+    pass

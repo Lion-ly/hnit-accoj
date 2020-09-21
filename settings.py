@@ -40,6 +40,9 @@ class BaseConfig(object):
     CELERY_BROKER_URL = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1',
     CELERY_RESULT_BACKEND = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1'
 
+    # Flask-Limiter configure
+    # RATELIMIT_DEFAULT = "2 per second;60 per minute"
+
 
 class DevelopmentConfig(BaseConfig):
     pass

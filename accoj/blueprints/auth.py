@@ -264,7 +264,7 @@ def my_app_context_processor():
     全局上下文管理
     :return:
     """
-    d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生"}
+    d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生", "dbadmin": "DBA"}
     role = d_role.get(session.get("role"))
     username = session.get("username")
     teacher = session.get('teacher')

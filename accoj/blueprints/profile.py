@@ -61,9 +61,12 @@ def rank():
 
 @profile_bp.before_request
 @login_required_student
-def accoj_bp_before_request():
+def profile_bp_before_request():
     """
     请求前钩子函数（局部）
     """
-    if session.get("role") == "admin":
+    role = session.get("role")
+    if role == 'admin':
         return redirect(url_for('admin.index'))
+    elif role == 'dbadmin':
+        return redirect(url_for('dbadmin.index'))

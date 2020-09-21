@@ -7,7 +7,6 @@
 # @Software: PyCharm
 import os
 from flask import Flask
-#from celery import Celery
 import flask_monitoringdashboard as dashboard
 from settings import config
 from accoj.celery import celery
@@ -15,7 +14,10 @@ from accoj.blueprints.accoj import accoj_bp
 from accoj.blueprints.index import index_bp
 from accoj.blueprints.profile import profile_bp
 from accoj.blueprints.teacher import teacher_bp
+from accoj.blueprints.admin import admin_bp
 from accoj.blueprints import message
+from accoj.blueprints.api import api_bp
+from accoj.blueprints.auth import auth_bp
 from accoj.deal_business.create_questions import add_question
 from accoj.utils import (create_test_account,
                          redis_connect_test,
@@ -27,15 +29,13 @@ from accoj.extensions import (mongo,
                               csrf,
                               babel,
                               socketio,
-                              redis_cli)
-from accoj.blueprints.admin import (admin,
-                                    UserView,
-                                    CompanyView)
+                              redis_cli,
+                              limiter)
+from accoj.blueprints.dbadmin import (dbadmin,
+                                      UserView,
+                                      CompanyView)
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-
-#celery = Celery('accoj', broker='redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1')
-#celery = Celery('accoj')
 
 
 def create_app(config_name=None):
@@ -61,10 +61,6 @@ def create_app(config_name=None):
     redis_connect_test()
     # 创建测试账号
     create_test_account()
-    # 新闻爬虫开启
-    # new_spider_start()
-    # update celery conf
-    # celery.conf.update(app.config)
     # 创建题库
     create_question_bank()
 
@@ -77,14 +73,14 @@ def register_blueprints(app):
     :param app:
     :return:
     """
-    from accoj.blueprints.api import api_bp
-    from accoj.blueprints.auth import auth_bp
+
     app.register_blueprint(accoj_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(index_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(profile_bp, url_prefix='/profile')
     app.register_blueprint(teacher_bp, url_prefix='/teacher')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
 
 def register_extensions(app):
@@ -100,14 +96,18 @@ def register_extensions(app):
     mail.init_app(app)
     babel.init_app(app)
     socketio.init_app(app)
-    # 添加后台管理视图
-    admin.add_view(UserView(mongo.db.user, 'User'))
-    admin.add_view(CompanyView(mongo.db.company, 'Company'))
-    admin.init_app(app)
+    # 添加数据库后台管理视图
+    dbadmin.add_view(UserView(mongo.db.user, 'User'))
+    dbadmin.add_view(CompanyView(mongo.db.company, 'Company'))
+    dbadmin.init_app(app)
     # 排除dashboard blueprint的csrf防御，因为目前不支持csrf
     csrf.exempt(dashboard.blueprint)
     # 绑定flask_monitoringdashboard
     dashboard.bind(app)
+    # init Flask-Limiter
+    limiter.init_app(app)
+    # set Flask-Limiter
+    set_limiter(limiter)
 
 
 def create_question_bank():
@@ -117,3 +117,13 @@ def create_question_bank():
             raise CreateQuestionsError()
     except CreateQuestionsError:
         raise CreateQuestionsError()
+
+
+def set_limiter(limiter):
+    """Flask-Limiter setting"""
+    limiter.limit("2/second")(accoj_bp)
+    limiter.limit("2/second")(auth_bp)
+    limiter.limit("2/second")(api_bp)
+    limiter.limit("2/second")(profile_bp)
+    limiter.limit("2/second")(teacher_bp)
+    limiter.limit("2/second")(admin_bp)
