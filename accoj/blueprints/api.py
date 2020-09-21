@@ -19,9 +19,9 @@ from accoj.blueprints import get_schedule
 from accoj.utils import (parse_class_xlrd,
                          login_required_teacher,
                          login_required,
-                         send_system_message_batch)
+                         send_system_message_batch,
+                         create_account_from_excel)
 from accoj.extensions import mongo, redis_cli
-from accoj.emails import assign_email
 
 api_bp = Blueprint('api', __name__)
 
@@ -266,10 +266,32 @@ def teacher_api():
 @login_required_teacher
 def add_class():
     """添加班级"""
+    result, data, message = False, None, "上传失败，请检查Excel表格式!"
+    teacher = session.get("username")
     f = request.files['file']
-    class_info = parse_class_xlrd(f)
-    result, message = assign_email(user_infos=class_info)
-    return jsonify(result=result, message=message)
+    '''
+    try:
+        class_info = parse_class_xlrd(f)
+        if not class_info:
+            return jsonify(result=result, message=message)
+        for c in class_info:
+            c.update({"teacher": teacher})
+            c.update({"status": "审核中"})
+        class_info = [dumps(c) for c in class_info]
+        redis_multi_push(redis_cli, "user", class_info)
+        result, message = True, "上传成功，等待管理员审核！"
+    except Exception:
+        pass
+    '''
+    try:
+        class_infos = parse_class_xlrd(f)
+        if not class_infos:
+            return jsonify(result=result, message=message)
+        create_account_from_excel("", class_infos, teacher=teacher)
+        result, message = True, "班级添加成功！"
+    except Exception:
+        pass
+    return jsonify(result=result, data=data, message=message)
 
 
 @api_bp.route('/download_attached', methods=['GET'])

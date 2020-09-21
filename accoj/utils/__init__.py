@@ -7,6 +7,7 @@
 # @Software: PyCharm
 import json
 import datetime
+from bson.json_util import dumps
 from functools import wraps
 from threading import Timer
 import pandas as pd
@@ -54,9 +55,27 @@ def login_required_student(func):
     return wrapper
 
 
+def login_required_admin(func):
+    """
+    需要管理员权限
+
+    :param func:
+    :return:
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get("role") == "admin":
+            return func(*args, **kwargs)
+        else:
+            return redirect(url_for('index.index'))
+
+    return wrapper
+
+
 def login_required_teacher(func):
     """
-    需要教师权限，只有后台才会用到这个装饰器
+    需要教师权限，只有教师后台才会用到这个装饰器
 
     :param func:
     :return:
@@ -280,43 +299,53 @@ def parse_class_xlrd(class_xlrd: object):
     class_info = pd.read_excel(class_xlrd)
     class_info = class_info.to_numpy()
     class_info_list = []
+    info_keys = ['student_no', 'student_name', 'student_school', 'student_faculty', 'student_class',
+                 'student_phone']
+    info_keys_len = len(info_keys)
     for student_info in class_info:
-        info_keys = ['student_no', 'student_name', 'student_school', 'student_faculty', 'student_class',
-                     'student_phone']
-        info_keys_len = len(info_keys)
+        if str(student_info[0]).encode('utf-8') in redis_cli.smembers('user'):
+            return []
         info_dict = {info_keys[i]: str(student_info[i]) for i in range(info_keys_len)}
         class_info_list.append(info_dict)
     return class_info_list
 
 
-def create_account(student_no: str, student_name: str, password: str, role: str = "student",
+def create_account(student_no: str, student_name: str, password: str = "123", role: str = "student",
                    student_faculty: str = "", student_class: str = "", student_school: str = "",
                    student_phone: str = "", teacher: str = ""):
     """
     创建账号
-    :param teacher:
-    :param student_phone:
-    :param student_school:
-    :param student_class:
-    :param student_faculty:
-    :param student_no: 学号
-    :param role: 权限，可为'admin', 'teacher', 'student', 默认为'student'
+
+    :param student_no:
     :param student_name:
     :param password:
+    :param role: 权限，可为'admin', 'teacher', 'student', 默认为'student'
+    :param student_faculty:
+    :param student_class:
+    :param student_school:
+    :param student_phone:
+    :param teacher:
     :return:
     """
+    if student_no.encode('utf-8') in redis_cli.smembers('user'):
+        return False
+    redis_cli.sadd('user', student_no)
     teacher = 'teacher' if not teacher and role == 'student' else teacher
+    insert_dict = dict(student_no=student_no,
+                       role=role,
+                       student_name=student_name,
+                       teacher=teacher,
+                       student_school=student_school,
+                       student_faculty=student_faculty,
+                       student_class=student_class,
+                       student_phone=student_phone,
+                       password=generate_password_hash(password, salt_length=24),
+                       status="通过审核")
     mongo.db.user.update(dict(student_no=student_no),
-                         {'$setOnInsert': dict(student_no=student_no,
-                                               role=role,
-                                               student_name=student_name,
-                                               teacher=teacher,
-                                               student_school=student_school,
-                                               student_faculty=student_faculty,
-                                               student_class=student_class,
-                                               student_phone=student_phone,
-                                               password=generate_password_hash(password, salt_length=24))},
+                         {'$setOnInsert': insert_dict},
                          upsert=True)
+    redis_multi_push(redis_cli, 'user_info', [dumps(insert_dict)])
+    return True
 
 
 def create_test_account():
@@ -324,41 +353,55 @@ def create_test_account():
     创建测试账号
     :return:
     """
-    # 创建管理员账号
+    # 创建数据库管理员账号
+    create_account(student_no="dbadmin", role="dbadmin", student_name="dbadmin", password="accojOwner")
+    # 创建管理员帐号
     create_account(student_no="admin", role="admin", student_name="admin", password="accojOwner")
     # 创建教师账号
     create_account(student_no="teacher", role="teacher", student_name="teacher", password="123")
     # 创建学生账号
     try:
         create_account_from_excel('accoj/download/test.xlsx')
-        create_account_from_excel('accoj/download/test1.xlsx')
-        create_account_from_excel('accoj/download/test2.xlsx')
+        # create_account_from_excel('accoj/download/test1.xlsx')
+        # create_account_from_excel('accoj/download/test2.xlsx')
         print('INFO: Create test account successfully!')
     except CreatAccountError:
         raise CreatAccountError()
 
 
-def create_account_from_excel(filename: str):
-    with open(filename, 'rb') as f:
-        user_infos = parse_class_xlrd(f)
-        if not user_infos:
-            print(f'Named \'{filename}\' is empty, Create account Fail!')
-            return
-        class_name = f'{user_infos[0].get("student_school")}-{user_infos[0].get("student_class")}'
-        students = []
-        for user_info in user_infos:
-            student_no = user_info.get('student_no')
-            students.append(student_no)
-            create_account(student_no=student_no,
-                           student_name=user_info.get('student_name'),
-                           password='123',
-                           role='student',
-                           student_faculty=user_info.get('student_faculty'),
-                           student_class=user_info.get('student_class'),
-                           student_school=user_info.get('student_school'),
-                           student_phone=user_info.get('student_phone'),
-                           teacher='teacher')
-        create_class(class_name, students)
+def create_account_from_excel(filename: str, user_infos=None, teacher: str = 'teacher'):
+    flag = False
+    f = None
+    if not user_infos:
+        flag = True
+        f = open(filename, 'rb')
+        _user_infos = parse_class_xlrd(f)
+        # with open(filename, 'rb') as f:
+    else:
+        _user_infos = user_infos
+    if not _user_infos:
+        print(f'Named \'{filename}\' is empty, Create account Fail!')
+        return
+    class_name = f'{_user_infos[0].get("student_school")}-{_user_infos[0].get("student_class")}'
+    students = []
+    for user_info in _user_infos:
+        student_no = user_info.get('student_no')
+        students.append(student_no)
+        create_account(student_no=student_no,
+                       student_name=user_info.get('student_name'),
+                       password='123',
+                       role='student',
+                       student_faculty=user_info.get('student_faculty'),
+                       student_class=user_info.get('student_class'),
+                       student_school=user_info.get('student_school'),
+                       student_phone=user_info.get('student_phone'),
+                       teacher=teacher)
+    create_class(class_name, students, teacher)
+    if flag:
+        try:
+            f.close()
+        except AttributeError:
+            pass
 
 
 def create_class(class_name: str, students: list, teacher: str = 'teacher'):
@@ -413,15 +456,20 @@ def init_celery(app, celery):
     celery.Task = ContextTask
 
 
-def redis_multi_push(redis_cli, q, vals):
+def redis_multi_push(_redis_cli, q, vals):
     """
     redis队列批量push
-    :param redis_cli: redis object
+    :param _redis_cli: redis object
     :param q: queue name
     :param vals: values list
     :return:
     """
-    pipe = redis_cli.pipeline()
+    pipe = _redis_cli.pipeline()
     for val in vals:
         pipe.lpush(q, val)
     pipe.execute()
+
+
+def change_password(student_no: str, new_password: str):
+    mongo.db.user.update({"student_no": student_no},
+                         {"$set": {"password": generate_password_hash(new_password, salt_length=24)}})

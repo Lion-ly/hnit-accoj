@@ -1,11 +1,15 @@
 """
 教师后台管理
 """
+
+import json
 from flask import (session,
                    Blueprint,
                    render_template,
                    redirect,
-                   url_for)
+                   url_for,
+                   jsonify)
+from accoj.extensions import redis_cli
 from accoj.utils import login_required_teacher
 
 teacher_bp = Blueprint("teacher", __name__)
@@ -83,11 +87,28 @@ def rank():
     return render_template('teacher/rank.html')
 
 
+@teacher_bp.route('/get_class_list', methods=['GET'])
+def get_class_list():
+    """获取班级列表"""
+    teacher = session.get("username")
+    user_info = redis_cli.lrange("user_info", 0, -1)
+    user_info_len = len(user_info)
+    for i in range(0, user_info_len):
+        user_info[i] = json.loads(user_info[i])
+        user_info[i].update({"num": i + 1})
+    user_info = list(filter(lambda u: u.get("teacher") == teacher, user_info))
+    result, data = True, user_info
+    return jsonify(result=result, data=data)
+
+
 @teacher_bp.before_request
 @login_required_teacher
-def accoj_bp_before_request():
+def teacher_bp_before_request():
     """
     请求前钩子函数（局部）
     """
-    if session.get("role") == "admin":
+    role = session.get("role")
+    if role == 'admin':
         return redirect(url_for('admin.index'))
+    elif role == 'dbadmin':
+        return redirect(url_for('dbadmin.index'))

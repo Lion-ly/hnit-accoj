@@ -80,7 +80,7 @@ def gain_access_token():
         return 0
 
 
-def assign_email(user_infos: List[Dict[str, str]]):
+def assign_email(user_infos: List[Dict[str, str]], teacher: str):
     """
     分配邮箱账号并把邮箱账号写入到数据库
 
@@ -90,9 +90,10 @@ def assign_email(user_infos: List[Dict[str, str]]):
                              student_faculty=str,
                              student_class=str.
                              student_phone=int)]
+    :param teacher:
     :return result, message: tuple[bool, str]
     """
-    username = session.get('username')
+    # username = session.get('username')
     if not user_infos:
         return False, 'excel表为空！'
     access_token = gain_access_token()
@@ -139,14 +140,14 @@ def assign_email(user_infos: List[Dict[str, str]]):
                 get_response = requests.get(get_url)
                 get_result = get_response.json()
                 if get_result['errcode'] is 0:
-                    email = f'{userid}@popforever.club'
+                    email = f'{userid}@accoj.top'
                     role = 'student'
                     posts.append(dict(
                         student_no=userid,
                         role=role,
                         student_name=name,
                         nick_name="",
-                        teacher=username,
+                        teacher=teacher,
                         student_school=student_school,
                         personalized_signature="",
                         student_faculty=student_faculty,
@@ -154,9 +155,8 @@ def assign_email(user_infos: List[Dict[str, str]]):
                         student_phone=mobile,
                         student_sex="",
                         student_borth="",
-                        password=f"{generate_password_hash('123')}",
-                        email=email,
-                        company_ids=[]
+                        password=f"{generate_password_hash('123', salt_length=24)}",
+                        email=email
                     ))
                 else:
                     return False, '添加失败'

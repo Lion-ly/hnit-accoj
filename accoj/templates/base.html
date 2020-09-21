@@ -71,9 +71,14 @@
 									Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            {% if role == "管理员" %}
-                                <li><a href="{{ url_for('admin.index') }}"><span
-                                        class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;后台管理</a></li>
+                            {% if role == '管理员' or role == 'DBA' %}
+                                {% if role == '管理员' %}
+                                    <li><a href="{{ url_for('admin.index') }}"><span
+                                            class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;后台管理</a></li>
+                                {% elif role == 'DBA' %}
+                                    <li><a href="{{ url_for('dbadmin.index') }}"><span
+                                            class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;后台管理</a></li>
+                                {% endif %}
                             {% elif role == '学生' or role == '教师' %}
                                 {% if role == '学生' %}
                                     <li><a href="{{ url_for('profile.index') }}"><span

@@ -42,6 +42,34 @@ function bind_e() {
 }
 
 function get_class_list() {
+    $.fn.dataTable.ext.errMode = 'throw';
+    let csrf_token = get_csrf_token();
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        }
+    });
+    $('#data-table').DataTable({
+        ajax: {url: '/teacher/get_class_list'},
+        /*
+        columnDefs: [
+            {'orderable': false, 'targets': [0, 1, 2, 3, 4, 5, 6, 8, 9, 10]}
+        ],
+        */
+        columns: [
+            {"data": "num"},
+            {"data": "student_no"},
+            {"data": "student_name"},
+            {"data": "student_school"},
+            {"data": "student_faculty"},
+            {"data": "student_class"},
+            {"data": "teacher"},
+            {"data": "status"},
+        ]
+    });
+    /*
     function plotClassChart(_data) {
         _data = JSON.parse(_data);
         console.log(_data);
@@ -66,4 +94,5 @@ function get_class_list() {
         url = '/api/teacher_api',
         successFunc = plotClassChart;
     get_data(data, successFunc, url);
+     */
 }
