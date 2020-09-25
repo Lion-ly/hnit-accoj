@@ -88,6 +88,7 @@ def login_required_teacher(func):
                 # 状态切换，从批改学生作业返回后台的时候
                 session["username"] = session.get("teacher")
                 session["teacher"] = None
+                session["class_name"] = None
             return func(*args, **kwargs)
         else:
             abort(403)
@@ -170,12 +171,11 @@ def is_course_time_open(course_no: int) -> int:
     """
     class_name = session.get("class_name")
     flag = 0
-    try:
-        time_info = redis_cli[f'classes:{class_name}']
-    except KeyError:
-        return 0
+    time_info = redis_cli.get(f'classes:{class_name}')
     if time_info:
         time_info = time_info.decode('utf-8')
+    else:
+        return 0
     time_info = json.loads(time_info)
     course_time = time_info.get('time').get(str(course_no))
     start_time = course_time.get('start')
