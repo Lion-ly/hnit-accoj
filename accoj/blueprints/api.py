@@ -165,10 +165,14 @@ def teacher_api():
         """批改作业"""
         result, data = False, None
         student_no = _data.get('student_no')
-        if mongo.db.company.find_one({'student_no': student_no}):
+        user = mongo.db.company.find_one({'student_no': student_no})
+        if user:
             # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
             session['teacher'] = teacher
             session['username'] = student_no  # 权限转换
+            print(f"user={user}")
+            print(f"user.get('student_school')={user.get('student_school')}  user.get('student_class')={user.get('student_class')}")
+            session['class_name'] = user.get('student_school') + '-' + user.get('student_class')
             result = True
         return jsonify(result=result, data=data)
 
@@ -381,27 +385,29 @@ def commit_correct():
     json_data = request.get_json()
     title = json_data.get('title')
     category = json_data.get('category')
-    score = json_data.get('score')  # 分数
+    score = int(json_data.get('score'))  # 分数
     if title in titles:
-        if title in {'trend_analysis', 'common_ratio_analysis'}:
-            # 趋势分析法 / 共同比分析法
-            if score and 0 <= score <= 5 and category in categories and schedule_confirm.get(f'{title}_confirm').get(
-                    category):
-                result = True
-                mongo.db.company.update({'student_no': username},
-                                        {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
-        elif title == 'ratio_analysis':
-            # 比率分析法
-            if score and 0 <= score <= 5 and schedule_confirm.get(f'{title}_confirm'):
-                result = True
-                mongo.db.company.update({'student_no': username},
-                                        {'$set': {f'evaluation.{title}_score.teacher_score': score}})
-        elif title == 'dupont_analysis':
-            # 杜邦分析法
-            if score and 0 <= score <= 70 and schedule_confirm.get(f'{title}_confirm'):
-                result = True
-                mongo.db.company.update({'student_no': username},
-                                        {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+        t_confirm = schedule_confirm.get(f'{title}_confirm')
+        if t_confirm:
+            if title in {'trend_analysis', 'common_ratio_analysis'}:
+                # 趋势分析法 / 共同比分析法
+                if score and 0 <= score <= 5 and category in categories and t_confirm.get(
+                        category):
+                    result = True
+                    mongo.db.company.update({'student_no': username},
+                                            {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
+            elif title == 'ratio_analysis':
+                # 比率分析法
+                if score and 0 <= score <= 5 and t_confirm:
+                    result = True
+                    mongo.db.company.update({'student_no': username},
+                                            {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+            elif title == 'dupont_analysis':
+                # 杜邦分析法
+                if score and 0 <= score <= 70 and t_confirm:
+                    result = True
+                    mongo.db.company.update({'student_no': username},
+                                            {'$set': {f'evaluation.{title}_score.teacher_score': score}})
     if not result:
         data['message'] = err_message
     return jsonify(result=result, data=data)

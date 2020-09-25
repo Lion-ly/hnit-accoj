@@ -826,7 +826,7 @@ function DisableButton(flag) {
 提交教师评分
  */
 function commit_correct(data, url, successFunc, messageDivID) {
-    /* Todo
+    /*
        应实现在courseix.js, courseix_2.js, courseix_4.js和 coursex.js中对此函数的调用。
        data: {'title': string, 'category': string, 'score': float};
        url: '/api/commit_correct';
@@ -837,6 +837,7 @@ function commit_correct(data, url, successFunc, messageDivID) {
        # score字段应进行检查，当title为'dupont_analysis'时，值应为0<=score<=70，其余情况为0<=score<=5。
      */
     url = url ? url : '/api/commit_correct';
+    data = JSON.stringify(data);
     get_info(data, url, successFunc, messageDivID);
 }
 
