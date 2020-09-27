@@ -74,12 +74,10 @@ def evaluate_key_element(company, company_cp):
                 is_up_cp = t1_info.get("is_up")
                 money = t2_info.get("money")
                 money_cp = t1_info.get("money")
-                if key_element == key_element_cp:
+                if key_element == key_element_cp and is_up == is_up_cp:
                     score_point += 1
-                    if is_up == is_up_cp:
+                    if money == money_cp:
                         score_point += 1
-                        if money == money_cp:
-                            score_point += 1
         score_point = score_point if score_point <= total_point else total_point
         score *= score_point / total_point
         score = round(score, 2)
@@ -116,7 +114,7 @@ def evaluate_subject(company, company_cp):
         total_score = TotalScore[indexes[i] - 1]
         score = total_score
         score_point = 0
-        total_point = len(info_cp) * 2
+        total_point = len(info_cp)
         if total_point == 0:
             subject_score.extend([score, total_score])
             continue
@@ -127,10 +125,8 @@ def evaluate_subject(company, company_cp):
                 subject_cp = t1_info.get("subject")
                 is_up = t2_info.get("is_up")
                 is_up_cp = t1_info.get("is_up")
-                if subject == subject_cp:
+                if subject == subject_cp and is_up == is_up_cp:
                     score_point += 1
-                    if is_up == is_up_cp:
-                        score_point += 1
         score_point = score_point if score_point <= total_point else total_point
         score *= score_point / total_point
         score = round(score, 2)
