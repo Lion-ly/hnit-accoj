@@ -50,7 +50,7 @@
 <div class="container acc-intro-hnit">
     <div class="row">
         <div class=" visible-md-block visible-lg-block col-md-3 ">
-            <img src="../static/img/logo_2.png">
+            <img src="{{ url_for('static', filename='img/logo_2.png') }}">
         </div>
         <div class="col-sm-12 col-md-9">
             <p>
@@ -130,5 +130,5 @@
         </ul>
     </div>
 </div>
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/index.js" charset="UTF-8"></script>
 {% endblock courseBody %}

@@ -6,21 +6,18 @@
     <title>{% block title %}{% endblock title %}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}">
     <!-- jQuery -->
-    <script
-            src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js" charset="UTF-8"></script>
-    <script
-            src="{{ url_for('static', filename='js/jquery.cookie.js') }}" charset="UTF-8"></script>
-    <script
-            src="{{ url_for('static', filename='js/jquery.base64.js') }}"></script>
-    <script type="module" src="https://cdn.bootcss.com/popper.js/1.16.1/popper.min.js"></script>
+    <script src="http://cdn.accoj.top/static/cdn/3.1.1.jquery.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/jquery.cookie.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/jquery.base64.js" charset="UTF-8"></script>
+
+    <script type="module" src="http://cdn.accoj.top/static/cdn/1.16.1.popper.js"></script>
     <!-- bootstrap -->
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js" charset="UTF-8"></script>
+    <link href="http://cdn.accoj.top/static/cdn/3.3.7.bootstrap.css" rel="stylesheet">
+    <script src="http://cdn.accoj.top/static/cdn/3.3.7.bootstrap.js" charset="UTF-8"></script>
     <!-- font-awesome -->
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/4.7.0.font-awesome.css" rel="stylesheet">
     <!-- base -->
-    <link href="{{ url_for('static', filename='css/base.css') }}"
-          rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/accoj-1.0.0/base.css" rel="stylesheet">
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";
@@ -30,12 +27,12 @@
             return "{{ username }}";
         }
     </script>
-    <script src="{{ url_for('static', filename='js/base.js') }}" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/base.js" charset="UTF-8"></script>
     <!-- local -->
-    <link href="{{ url_for('static', filename='css/main.css') }}"
+    <link href="http://cdn.accoj.top/static/accoj-1.0.0/main.css"
           rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/auth.js') }}" charset="UTF-8"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/auth.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.3.0.socket.io.js"></script>
 </head>
 <body>
 
