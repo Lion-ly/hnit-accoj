@@ -584,7 +584,7 @@ def deal_with_question_2(company, question_no, questions):
                 elif question_no == 14:
                     # 问题14特判
                     value = 10000 * values_list[1]
-                elif question_no == 15 and value != 1:
+                elif question_no == 15 and i == 3:
                     # 问题15特判
                     value = 100000 * random.randint(10, 15)
                 elif question_no == 19:
@@ -610,7 +610,7 @@ def deal_with_question_2(company, question_no, questions):
                         values_list.insert(0, t_sum)
                         # print("value: {}".format(value))
                         # print("t_sum: {}".format(t_sum))
-                        print("values_list: {}".format(values_list))
+                        # print("values_list: {}".format(values_list))
                         content = content.replace("v{}".format(1), str(t_sum))
                         content = content.replace("v{}".format(4), str(value))
                     continue
