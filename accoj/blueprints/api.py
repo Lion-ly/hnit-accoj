@@ -49,6 +49,25 @@ def profile_api():
     个人中心api
     """
 
+    def get_manage_time_info_from_redis():
+        time_infos = []
+        class_name = session.get('class_name')
+        time_info =  redis_cli.get(f'classes:{class_name}')
+        time_info = json.loads(time_info)
+        time = time_info.get('time')
+        time_infos.append({'class_name': class_name, 'time': time})
+        return time_infos
+
+    def get_manage_time_info():
+        """获取时间管理信息"""
+        result, data = False, None
+
+        time_infos = get_manage_time_info_from_redis()
+        if time_infos:
+            result = True
+            data = json.dumps(time_infos)
+        return jsonify(result=result, data=data)
+
     def get_user_profile():
         """获取用户个人信息"""
         result, data = False, None
@@ -102,7 +121,8 @@ def profile_api():
 
     json_data = request.get_json()
     _api = json_data.get('api')
-    get_api_dict = dict(get_user_profile=get_user_profile,
+    get_api_dict = dict(get_manage_time_info=get_manage_time_info,
+                        get_user_profile=get_user_profile,
                         get_user_schedule=get_user_schedule,
                         get_user_score=get_user_score)
     submit_api_dict = dict(submit_user_profile=submit_user_profile)
@@ -171,7 +191,8 @@ def teacher_api():
             session['teacher'] = teacher
             session['username'] = student_no  # 权限转换
             print(f"user={user}")
-            print(f"user.get('student_school')={user.get('student_school')}  user.get('student_class')={user.get('student_class')}")
+            print(
+                f"user.get('student_school')={user.get('student_school')}  user.get('student_class')={user.get('student_class')}")
             session['class_name'] = user.get('student_school') + '-' + user.get('student_class')
             result = True
         return jsonify(result=result, data=data)
