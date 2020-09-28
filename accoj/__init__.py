@@ -119,11 +119,11 @@ def create_question_bank():
         raise CreateQuestionsError()
 
 
-def set_limiter(limiter):
+def set_limiter(_limiter):
     """Flask-Limiter setting"""
-    limiter.limit("2/second")(accoj_bp)
-    limiter.limit("2/second")(auth_bp)
-    limiter.limit("2/second")(api_bp)
-    limiter.limit("2/second")(profile_bp)
-    limiter.limit("2/second")(teacher_bp)
-    limiter.limit("2/second")(admin_bp)
+    _limiter.limit("2/second")(accoj_bp)
+    _limiter.limit("2/second")(auth_bp)
+    _limiter.limit("2/second")(api_bp)
+    _limiter.limit("2/second")(profile_bp)
+    _limiter.limit("2/second")(teacher_bp)
+    _limiter.limit("2/second")(admin_bp)

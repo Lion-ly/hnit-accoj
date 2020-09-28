@@ -15,12 +15,12 @@ from flask import (Blueprint,
                    session,
                    current_app,
                    send_from_directory)
-from accoj.blueprints import get_schedule
 from accoj.utils import (parse_class_xlrd,
                          login_required_teacher,
                          login_required,
                          send_system_message_batch,
-                         create_account_from_excel)
+                         create_account_from_excel,
+                         get_student_schedule)
 from accoj.extensions import mongo, redis_cli
 
 api_bp = Blueprint('api', __name__)
@@ -29,8 +29,6 @@ api_bp = Blueprint('api', __name__)
 @api_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
     # 获取排行榜
-    # scores_info = mongo.db.rank.find({}, {'_id': 0})
-    # scores_info = sorted(scores_info, key=lambda e: (e.__getitem__('sum_score')), reverse=True)
     result, data = True, []
     scores_infos = redis_cli.zrange('rank', 0, -1, desc=True, withscores=True)
     scores_infos_len = len(scores_infos)
@@ -52,7 +50,7 @@ def profile_api():
     def get_manage_time_info_from_redis():
         time_infos = []
         class_name = session.get('class_name')
-        time_info =  redis_cli.get(f'classes:{class_name}')
+        time_info = redis_cli.get(f'classes:{class_name}')
         time_info = json.loads(time_info)
         time = time_info.get('time')
         time_infos.append({'class_name': class_name, 'time': time})
@@ -96,7 +94,7 @@ def profile_api():
         return jsonify(result=result, data=data, message=message)
 
     def get_user_schedule():
-        data = get_schedule(student_no)
+        data = get_student_schedule(student_no)
         if data:
             result, data = True, data
         else:
@@ -183,19 +181,21 @@ def teacher_api():
 
     def correct_homework(_data: dict):
         """批改作业"""
-        result, data = False, None
+        result, data, message = False, {}, "学号不存在或输入的用户未注册公司！"
         student_no = _data.get('student_no')
-        user = mongo.db.company.find_one({'student_no': student_no})
-        if user:
-            # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
-            session['teacher'] = teacher
-            session['username'] = student_no  # 权限转换
-            print(f"user={user}")
-            print(
-                f"user.get('student_school')={user.get('student_school')}  user.get('student_class')={user.get('student_class')}")
-            session['class_name'] = user.get('student_school') + '-' + user.get('student_class')
-            result = True
-        return jsonify(result=result, data=data)
+        company = mongo.db.company.find_one({'student_no': student_no})
+        if company:
+            user = mongo.db.user.find_one({'student_no': student_no})
+            if user.get('teacher') == teacher:
+                # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
+                session['teacher'] = teacher
+                session['username'] = student_no  # 权限转换
+                session['class_name'] = user.get('student_school') + '-' + user.get('student_class')
+                result = True
+            else:
+                message = "输入的学号班级错误！"
+        message = "" if result else message
+        return jsonify(result=result, data=data, message=message)
 
     def submit_manage_time_info(_data: dict):
         """提交时间管理信息"""
@@ -366,24 +366,21 @@ def get_student_info_correct():
     教师后台->批改作业  表格信息
     :return:
     """
-    # get_classes_time("湖南工学院-网络工程1701", 1)
-    username = session.get('username')
-    _user_info = mongo.db.user.find(dict(teacher=username),
-                                    dict(_id=0, student_no=1, student_name=1, student_school=1,
-                                         student_faculty=1, student_class=1))
-    user_info = list()
-    for user in _user_info:
-        e_dic = dict(student_no=user.get('student_no'),
-                     student_name=user.get('student_name'),
-                     student_school=user.get('student_school'),
-                     student_faculty=user.get('student_faculty'),
-                     student_class=user.get('student_class'),
-                     t='<button type="button" class="btn btn-outline-info">开始批改</a>')
-        user_info.append(e_dic)
-    for i, e in enumerate(user_info):
-        user_info[i]['num'] = i + 1
-        user_info[i]['correct_schedule'] = "0%"
-    result, data = True, user_info
+    teacher = session.get('username')
+    result, data = False, []
+    classes_dict = {}
+    classes_infos = mongo.db.classes.find({}, dict(class_name=1, teacher=1))
+    for c in classes_infos:
+        classes_dict[c.get('class_name').split('-')[-1]] = c.get('teacher')
+    scores_infos = redis_cli.zrange('rank', 0, -1, desc=True, withscores=True)
+    scores_infos_len = len(scores_infos)
+    if scores_infos_len:
+        scores_info = [json.loads(scores_info[0]) for scores_info in scores_infos]
+        for i in range(0, scores_infos_len):
+            scores_info[i]['rank'] = i + 1
+            scores_info[i]['correct_schedule'] = "0%"
+        scores_info = list(filter(lambda x: classes_dict[x['student_class']] == teacher, scores_info))
+        result, data = True, scores_info
     return jsonify(result=result, data=data)
 
 
