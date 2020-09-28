@@ -133,6 +133,12 @@ def submit_audit_class():
     return jsonify(result=result, data=data)
 
 
+@admin_bp.route('/score_rejudge', methods=['GET'])
+def score_rejudge():
+    """题目重判页面"""
+    return render_template('admin/score_rejudge.html')
+
+
 @admin_bp.before_request
 @login_required_admin
 def admin_bp_before_request():

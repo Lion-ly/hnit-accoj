@@ -107,7 +107,7 @@ def register_extensions(app):
     # init Flask-Limiter
     limiter.init_app(app)
     # set Flask-Limiter
-    set_limiter(limiter)
+    # set_limiter(limiter)
 
 
 def create_question_bank():
