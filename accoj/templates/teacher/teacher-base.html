@@ -38,7 +38,7 @@
     <script src="http://cdn.accoj.top/static/cdn/0.7.2.matchHeight.js" charset="UTF-8"></script>
 
     <script src="http://cdn.accoj.top/static/cdn/back-stage/main.js" charset="UTF-8"></script>
-    <script src="http://cdn.accoj.top/static/accoj-1.0.0/profile-base.js" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/profile-base.js') }}" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";

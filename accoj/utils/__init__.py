@@ -11,9 +11,15 @@ from bson.json_util import dumps
 from functools import wraps
 from threading import Timer
 import pandas as pd
-from flask import session, redirect, url_for, request, abort, jsonify, render_template
+from flask import (session,
+                   redirect,
+                   url_for, request,
+                   abort,
+                   jsonify,
+                   render_template)
 from werkzeug.security import generate_password_hash
-from accoj.extensions import mongo, redis_cli
+from accoj.extensions import (mongo,
+                              redis_cli)
 from accoj.exception import CreatAccountError
 
 ALLOWED_EXTENSIONS = {'zip', 'rar'}
@@ -345,6 +351,8 @@ def create_account(student_no: str, student_name: str, password: str = "123", ro
                          {'$setOnInsert': insert_dict},
                          upsert=True)
     redis_multi_push(redis_cli, 'user_info', [dumps(insert_dict)])
+    if role == "student":
+        insert_rank_score_student(student_no=student_no)
     return True
 
 
@@ -473,3 +481,300 @@ def redis_multi_push(_redis_cli, q, vals):
 def change_password(student_no: str, new_password: str):
     mongo.db.user.update({"student_no": student_no},
                          {"$set": {"password": generate_password_hash(new_password, salt_length=24)}})
+
+
+#  -----rank集合存入成绩
+def insert_rank_score(student_no: str, score: list):
+    """
+    rank集合存入成绩
+    :param student_no: 学号
+    :param score: 分数列表，[sum_score, one, two, three, four, five, six, seven, eight, nine, ten]
+    :return:
+    """
+    user_info = mongo.db.user.find_one(dict(student_no=student_no),
+                                       dict(_id=0, student_class=1, student_name=1))
+    student_class = user_info.get("student_class")
+    student_name = user_info.get("student_name")
+    student_name = student_name if student_name else "Default"
+    # 第一次更新时输入所有的键值  学号 班级 姓名 总分 各部分
+    infos = {"student_no": student_no, "student_class": student_class, "student_name": student_name}
+    score_keys = ['sum_score', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+    score_infos = dict(zip(score_keys, score))
+    infos.update(score_infos)
+    return infos
+
+
+def insert_rank_score_student(student_no: str):
+    """
+    创建学生账号时存入成绩
+    :param student_no: 学号
+    :return:
+    """
+    score = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    infos = insert_rank_score(student_no=student_no, score=score)
+    mongo.db.rank.insert(infos)
+
+
+def update_business_rank_score():
+    """
+    对业务一录入分数进rank
+    :return:
+    """
+    student_no = session.get("username")
+    score = [100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    infos = insert_rank_score(student_no=student_no, score=score)
+    mongo.db.rank.update({"student_no": student_no}, infos)
+
+
+def update_rank(schedule_name, evaluation=None):
+    """
+    用户每次提交更新用户的排行榜集合中的成绩等信息
+    :param schedule_name:
+    :param evaluation:
+    :return:
+    """
+    student_no = session.get("username")
+    # 分数信息
+    if evaluation:
+        evaluation_scores = evaluation
+    # 排行集合成绩信息
+    user_score_info = mongo.db.rank.find_one(dict(student_no=student_no), dict(_id=0))
+
+    def update_key_element():
+        key_element_sum_score = evaluation_scores[-1]
+        sum_score = round(user_score_info.get("sum_score") + key_element_sum_score, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, two=key_element_sum_score)})
+
+    def update_subject():
+        subject_sum_score = evaluation_scores[-1]
+        sum_score = round(user_score_info.get("sum_score") + subject_sum_score, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
+
+    def update_entry():
+        entry_sum_score = evaluation_scores[-1]
+        sum_score = round(user_score_info.get("sum_score") + entry_sum_score, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
+
+    # 第五部分得分
+    # 账户得分
+    def update_ledger():
+        ledger_score_sum = evaluation.get("first") + evaluation.get("second")
+        sum_score = round(user_score_info.get("sum_score") + ledger_score_sum, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, five=round(ledger_score_sum, 2))})
+
+    # 平衡表得分
+    def update_balance_sheet():
+        ledger_score_sum = user_score_info.get("five")
+        ledger_score_sum += evaluation
+        sum_score = user_score_info.get("sum_score")
+        sum_score += evaluation
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=round(sum_score, 2), five=round(ledger_score_sum, 2))})
+
+    # 第六部分 会计凭证部分得分
+    def update_acc_document():
+        acc_sum_score = evaluation_scores[-1]
+        sum_score = round(acc_sum_score + user_score_info.get("sum_score"), 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
+
+    # 会计账簿部分得分
+    # 明细账
+    def update_subsidiary_account():
+        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, seven=evaluation)})
+
+    # 科目余额表
+    def update_acc_balance_sheet():
+        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        this_sum_score = user_score_info.get("seven")
+        this_sum_score = round(this_sum_score + evaluation, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, seven=this_sum_score)})
+
+    # 会计报表部分得分
+    # 资产负债表
+    def update_new_balance_sheet():
+        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, eight=evaluation)})
+
+    # 利润表
+    def update_profit_statement():
+        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        this_sum_score = user_score_info.get("eight")
+        this_sum_score = round(this_sum_score + evaluation, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, eight=this_sum_score)})
+
+    # 会计报表部分得分
+    # 趋势分析法得分
+    def update_trend_analysis():
+        trend_analysis_score_sum = evaluation.get("first").get("student_score") + \
+                                   evaluation.get("second").get("student_score")
+        trend_teacher_score_1 = evaluation.get("first").get("teacher_score")
+        trend_teacher_score_2 = evaluation.get("second").get("teacher_score")
+
+        if trend_teacher_score_1 >= 0:
+            trend_analysis_score_sum += trend_teacher_score_1
+        if trend_teacher_score_2 >= 0:
+            trend_analysis_score_sum += trend_teacher_score_2
+        sum_score = round(user_score_info.get("sum_score") + trend_analysis_score_sum, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, nine=round(trend_analysis_score_sum, 2))})
+
+    # 共同比分析法
+    def update_common_ratio_analysis():
+        analysis_sum_score = user_score_info.get("nine")
+        common_analysis_score = evaluation.get(
+            "first").get("student_score") + evaluation.get("second").get("student_score")
+        common_ratio_teacher_score_1 = evaluation.get("first").get("teacher_score")
+        common_ratio_teacher_score_2 = evaluation.get("second").get("teacher_score")
+        if common_ratio_teacher_score_1 >= 0:
+            common_analysis_score += common_ratio_teacher_score_1
+        if common_ratio_teacher_score_2 >= 0:
+            common_analysis_score += common_ratio_teacher_score_2
+        analysis_sum_score = round(analysis_sum_score + common_analysis_score, 2)
+        sum_score = round(user_score_info.get("sum_score") + common_analysis_score, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
+
+    def update_ratio_analysis():
+        analysis_sum_score = user_score_info.get("nine")
+        ratio_analysis_score = evaluation_scores.get("student_score")
+        ratio_analysis_teacher_score = evaluation.get("teacher_score")
+        if ratio_analysis_teacher_score >= 0:
+            ratio_analysis_score += ratio_analysis_teacher_score
+
+        analysis_sum_score += ratio_analysis_score
+        sum_score = round(user_score_info.get("sum_score") + ratio_analysis_score, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
+
+    def update_dupont_analysis():
+        dupont_analysis_sum_score = evaluation.get("student_score")
+        dupont_analysis_teacher_score = evaluation.get("teacher_score")
+        if dupont_analysis_teacher_score >= 0:
+            dupont_analysis_sum_score += dupont_analysis_teacher_score
+
+        sum_score = round(user_score_info.get("sum_score") + dupont_analysis_sum_score, 2)
+        mongo.db.rank.update(dict(student_no=student_no),
+                             {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_sum_score, 2))})
+
+    update_schedule_dict = dict(key_element=update_key_element,
+                                subject=update_subject,
+                                entry=update_entry,
+                                # 会计账户和平衡表
+                                ledger=update_ledger,
+                                balance_sheet=update_balance_sheet,
+                                acc_document=update_acc_document,
+                                # 明细账和科目余额表
+                                subsidiary_account=update_subsidiary_account,
+                                acc_balance_sheet=update_acc_balance_sheet,
+                                # 资产负债和利润表部分
+                                new_balance_sheet=update_new_balance_sheet,
+                                profit_statement=update_profit_statement,
+                                # 第九部分 趋势分析  比率分析
+                                trend_analysis=update_trend_analysis,
+                                common_ratio_analysis=update_common_ratio_analysis,
+                                ratio_analysis=update_ratio_analysis,
+                                # 第十部分
+                                dupont_analysis=update_dupont_analysis
+                                )
+    if schedule_name in update_schedule_dict:
+        update_schedule_dict[schedule_name]()
+
+
+def get_student_schedule(student_no: str):
+    """
+    获取学生做题进度
+
+    :param student_no: 学号
+    :return:
+    """
+    schedule_info = mongo.db.company.find_one(dict(student_no=student_no),
+                                              dict(_id=0, schedule_confirm=1))
+    # 判断是否有进度
+    if schedule_info:
+        data = []
+        schedule_info = schedule_info.get("schedule_confirm")
+        # 获取涉及的科目数量
+        involve_subjects = mongo.db.company.find_one(dict(student_no=student_no),
+                                                     dict(_id=0, involve_subjects=1)).get("involve_subjects")
+        if not involve_subjects:
+            return
+        involve_subjects_1 = involve_subjects.get("involve_subjects_1")
+        involve_subjects_2 = involve_subjects.get("involve_subjects_2")
+        sum_subjects_len = len(set(involve_subjects_1 + involve_subjects_2))
+
+        # 获取进度值
+        trend_analysis_confirm = schedule_info.get("trend_analysis_confirm")
+        common_ratio_analysis_confirm = schedule_info.get("common_ratio_analysis_confirm")
+
+        if schedule_info.get("business_confirm"):
+            data.append(100)
+
+        key_element_schedule = int((len(schedule_info.get("key_element_confirm")) / 20) * 100)
+        data.append(key_element_schedule)
+
+        subject_schedule = int((len(schedule_info.get("subject_confirm")) / 20) * 100)
+        data.append(subject_schedule)
+
+        entry_schedule_schedule = int((len(schedule_info.get("entry_confirm")) / 20) * 100)
+        data.append(entry_schedule_schedule)
+
+        # ledger_confirm   25 25 50
+        ledger__schedule = 0
+        ledger__schedule += int(
+            (len(schedule_info.get("ledger_confirm").get("ledger1_confirm")) / len(involve_subjects_1)) * 25)
+        ledger__schedule += int(
+            (len(schedule_info.get("ledger_confirm").get("ledger2_confirm")) / len(involve_subjects_2)) * 25)
+        if schedule_info.get("balance_sheet_confirm"):
+            ledger__schedule += 50
+        data.append(ledger__schedule)
+
+        acc_document_schedule = int((len(schedule_info.get("acc_document_confirm")) / 20) * 100)
+        data.append(acc_document_schedule)
+
+        # 会计账簿部分进度
+        account_schedule = 0
+        account_schedule += int(
+            (len(schedule_info.get("subsidiary_account_confirm")) / sum_subjects_len) * 50)
+        if schedule_info.get("acc_balance_sheet_confirm"):
+            account_schedule += 50
+        data.append(account_schedule)
+
+        # 会计报表部分进度
+        financial_statements_schecule = 0
+        if schedule_info.get("new_balance_sheet_confirm"):
+            financial_statements_schecule += 50
+        if schedule_info.get("profit_statement_confirm"):
+            financial_statements_schecule += 50
+        data.append(financial_statements_schecule)
+
+        # 因素分析未做  20*5 or 15*4+20*2
+        analysis_schedule = 0
+        if trend_analysis_confirm.get("first"):
+            analysis_schedule += 20
+        if trend_analysis_confirm.get("second"):
+            analysis_schedule += 20
+        if common_ratio_analysis_confirm.get("first"):
+            analysis_schedule += 20
+        if common_ratio_analysis_confirm.get("second"):
+            analysis_schedule += 20
+        if schedule_info.get("ratio_analysis_confirm"):
+            analysis_schedule += 20
+        data.append(analysis_schedule)
+
+        # 杜邦
+        dupont_schedule = 0
+        if schedule_info.get("dupont_analysis_confirm"):
+            dupont_schedule += 100
+        data.append(dupont_schedule)
+
+        return data

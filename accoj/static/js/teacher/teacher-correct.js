@@ -1,17 +1,9 @@
 $(document).ready(function () {
     getStudentInfo();
+    $("#correct_homework").click(correct_homework);
 });
 
 function getStudentInfo() {
-
-    function bind_correct_homework() {
-        let $trs = $($('#data-table').children()[1]).children();
-        $trs.each(function () {
-            $($($(this).children()[7]).children()).click(function () {
-                correct_homework(this);
-            });
-        });
-    }
 
     $.fn.dataTable.ext.errMode = 'throw';
     let csrf_token = get_csrf_token();
@@ -24,29 +16,34 @@ function getStudentInfo() {
     });
     $('#data-table').DataTable({
         ajax: {url: '/api/get_student_info_correct'},
-        columnDefs: [
-            {'orderable': false, 'targets': [0, 1, 2, 3, 4, 5, 6, 7]}
-        ],
-        columns: [
-            {"data": "num"},
+        order: [[4, 'desc']],
+        "columns": [
+            {"data": "rank"},
             {"data": "student_no"},
-            {"data": "student_name"},
-            {"data": "student_school"},
-            {"data": "student_faculty"},
             {"data": "student_class"},
-            {"data": "correct_schedule"},
-            {"data": "t"}
-        ],
-        'fnInitComplete': bind_correct_homework
+            {"data": "student_name"},
+            {"data": "sum_score"},
+            {"data": "one"},
+            {"data": "two"},
+            {"data": "three"},
+            {"data": "four"},
+            {"data": "five"},
+            {"data": "six"},
+            {"data": "seven"},
+            {"data": "eight"},
+            {"data": "nine"},
+            {"data": "ten"},
+            {"data": "correct_schedule"}
+        ]
     });
 }
 
-function correct_homework(obj) {
+function correct_homework() {
     function successFun(data) {
         window.location.replace('/courseix');
     }
 
     let data = {api: 'correct_homework'};
-    data.student_no = $($(obj).parent().parent().children()[1]).text();
-    get_data(data, successFun, '/api/teacher_api');
+    data.student_no = $("#input_sdudent_no").val();
+    get_data(data, successFun, '/api/teacher_api', 'messageInfoBox');
 }

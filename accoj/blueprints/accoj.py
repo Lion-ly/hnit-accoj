@@ -5,10 +5,20 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : accoj.py
 # @Software: PyCharm
-from flask import Blueprint, render_template, jsonify, session, redirect, url_for
-from accoj.utils import login_required, complete_required1, course_time_open_required, course_time_not_end_required
-from accoj.blueprints import submit_infos, get_data, update_business_rank_score
-from accoj.utils import is_number, limit_content_length
+from flask import (Blueprint,
+                   render_template,
+                   jsonify,
+                   session,
+                   redirect,
+                   url_for)
+from accoj.utils import (login_required,
+                         complete_required1,
+                         course_time_open_required,
+                         course_time_not_end_required)
+from accoj.blueprints import submit_infos, get_data
+from accoj.utils import (is_number,
+                         limit_content_length,
+                         update_business_rank_score)
 from accoj.extensions import mongo
 from accoj.deal_business.create_businesses import create_businesses
 from accoj.deal_business import cal_answer

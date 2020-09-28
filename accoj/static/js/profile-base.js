@@ -40,7 +40,7 @@ function get_data(data, successFunc, url, messageDivID) {
                     show_message(messageDivID, message, 'info', 2000);
             } else {
                 if (messageDivID && message)
-                    show_message(messageDivID, data, 'danger', 3000);
+                    show_message(messageDivID, message, 'danger', 3000);
             }
         },
         error: function (err) {
