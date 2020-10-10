@@ -107,7 +107,7 @@ def register_extensions(app):
     # init Flask-Limiter
     limiter.init_app(app)
     # set Flask-Limiter
-    # set_limiter(limiter)
+    set_limiter(limiter)
 
 
 def create_question_bank():
@@ -121,9 +121,10 @@ def create_question_bank():
 
 def set_limiter(_limiter):
     """Flask-Limiter setting"""
-    _limiter.limit("2/second")(accoj_bp)
-    _limiter.limit("2/second")(auth_bp)
-    _limiter.limit("2/second")(api_bp)
-    _limiter.limit("2/second")(profile_bp)
-    _limiter.limit("2/second")(teacher_bp)
-    _limiter.limit("2/second")(admin_bp)
+    set_time = "15/second"
+    _limiter.limit(set_time)(accoj_bp)
+    _limiter.limit(set_time)(auth_bp)
+    _limiter.limit(set_time)(api_bp)
+    _limiter.limit(set_time)(profile_bp)
+    _limiter.limit(set_time)(teacher_bp)
+    _limiter.limit(set_time)(admin_bp)
