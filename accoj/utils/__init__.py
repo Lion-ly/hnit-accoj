@@ -778,12 +778,3 @@ def get_student_schedule(student_no: str):
         data.append(dupont_schedule)
 
         return data
-
-
-def get_remote_addr():
-    from flask import request
-    environ = request.environ
-    try:
-        return environ["HTTP_X_FORWARDED_FOR"].split(",")[0].strip()
-    except (KeyError, IndexError):
-        return environ.get("REMOTE_ADDR")
