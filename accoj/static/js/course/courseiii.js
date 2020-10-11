@@ -40,6 +40,7 @@ function submit_subject_info(submit_type) {
  */
 function get_subject_info(isFromSubmit = false) {
     iiiDisabledInput(false);
+    iiiResetInfo();
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
@@ -48,7 +49,6 @@ function get_subject_info(isFromSubmit = false) {
         //  若不是从按钮或第一次加载调用
         if (!subject_saved.length || subject_saved.indexOf(nowBusinessNo - 1) === -1) {
             //  若未保存，则不向后台请求数据
-            iiiResetInfo();
             return;
         }
     }
