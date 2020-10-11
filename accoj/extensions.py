@@ -12,16 +12,7 @@ from flask_babelex import Babel
 from flask_socketio import SocketIO
 from flask_redis import FlaskRedis
 from flask_limiter import Limiter
-
-
-def get_remote_addr():
-    from flask import request
-    environ = request.environ
-    try:
-        return environ["HTTP_X_FORWARDED_FOR"].split(",")[0].strip()
-    except (KeyError, IndexError):
-        return environ.get("REMOTE_ADDR")
-
+from accoj.utils.get_remote_addr import get_remote_addr
 
 mongo = PyMongo()
 mail = Mail()
