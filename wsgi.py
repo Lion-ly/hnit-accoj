@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from gevent import monkey
 
 monkey.patch_all()
@@ -15,29 +17,22 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-from flask import has_request_context, request
 from flask.logging import default_handler
+from flask import has_request_context, request
 from accoj.utils.get_remote_addr import get_remote_addr
 
 
-class RequestFormatter(logging.Formatter):
+class CustomFormatter(logging.Formatter):
     def format(self, record):
+        record.now = datetime.now().replace(microsecond=0)
         if has_request_context():
             record.url = request.url
             record.remote_addr = get_remote_addr()
         else:
             record.url = None
             record.remote_addr = None
+        return super(CustomFormatter, self).format(record)
 
-        return super().format(record)
-
-
-# 更改日志默认格式
-formatter = RequestFormatter(
-    '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
-    '%(levelname)s in %(module)s: %(message)s'
-)
-default_handler.setFormatter(formatter)
 
 app = create_app('development')
 # 静态文件热更
@@ -64,5 +59,8 @@ class RedirectStderr(object):
 if __name__ == '__main__':
     # logging.basicConfig(filename='accoj/log/debug.log', level=logging.DEBUG)
     # app.run('0.0.0.0', 80)
+    custom_format = """%(remote_addr)s - - [%(now)s] client real ip"""
+    default_handler.setFormatter(CustomFormatter(fmt=custom_format))
+    app.logger.addHandler(default_handler)
     http_server = WSGIServer(('0.0.0.0', 80), app)
     http_server.serve_forever()
