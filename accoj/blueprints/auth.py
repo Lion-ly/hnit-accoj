@@ -264,6 +264,8 @@ def my_app_context_processor():
     全局上下文管理
     :return:
     """
+    from flask import current_app
+    current_app.logger.warning("record client real ip")
     d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生", "dbadmin": "DBA"}
     role = d_role.get(session.get("role"))
     username = session.get("username")
