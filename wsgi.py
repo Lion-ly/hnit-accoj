@@ -15,6 +15,30 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
+from flask import has_request_context, request
+from flask.logging import default_handler
+from accoj.utils.get_remote_addr import get_remote_addr
+
+
+class RequestFormatter(logging.Formatter):
+    def format(self, record):
+        if has_request_context():
+            record.url = request.url
+            record.remote_addr = get_remote_addr()
+        else:
+            record.url = None
+            record.remote_addr = None
+
+        return super().format(record)
+
+
+# 更改日志默认格式
+formatter = RequestFormatter(
+    '[%(asctime)s] %(remote_addr)s requested %(url)s\n'
+    '%(levelname)s in %(module)s: %(message)s'
+)
+default_handler.setFormatter(formatter)
+
 app = create_app('development')
 # 静态文件热更
 app.jinja_env.auto_reload = True
@@ -34,6 +58,7 @@ class RedirectStderr(object):
         self._log_file.flush()
 
 
+# 日志stderr重定向
 # sys.stderr = RedirectStderr({'log_path': 'accoj/log/request.log'})
 
 if __name__ == '__main__':
