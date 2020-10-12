@@ -359,7 +359,7 @@ def manage_time():
     return jsonify(result=result, data=data)
 
 
-@api_bp.route('/get_student_info_correct', methods=['GET'])
+@api_bp.route('/get_student_info_correct', methods=['GET','POST'])
 @login_required_teacher
 def get_student_info_correct():
     """

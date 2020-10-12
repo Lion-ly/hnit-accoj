@@ -17,6 +17,7 @@
                             <label for="input_sdudent_no">输入学号：
                             </label><input id="input_sdudent_no" type="number">
                             <button id="correct_homework" type="button" class="btn btn-outline-info">开始批改</button>
+                            <button id="export_grades" type="button" class="btn btn-outline-info">导出成绩</button>
                             <hr/>
                             <div id="messageInfoBox"></div>
                         </div>
@@ -63,6 +64,7 @@
     <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.print.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.colVis.js" charset="UTF-8"></script>
     <script src="{{ url_for('static', filename='js/teacher/teacher-correct.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/exportExcel.js') }}"></script>
     <!--
     <script src="http://cdn.accoj.top/static/accoj-1.0.0/teacher-correct.js"></script>
     -->
