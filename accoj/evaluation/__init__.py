@@ -37,8 +37,13 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
             company_cp = companies[i + 1]
             course_list = c_dict.get(course_no)
             for course in course_list:
-                scores = evaluate(infos_name=course, company=company, company_cp=company_cp)
-                update_rank(schedule_name=course, scores=scores, student_no=_student_no)
+                try:
+                    scores = evaluate(infos_name=course, company=company, company_cp=company_cp)
+                    update_rank(schedule_name=course, scores=scores, student_no=_student_no, is_rejudge=True)
+                except AttributeError:
+                    print(f"重判学号{_student_no}第{course_no}次课程失败!")
+                except TypeError:
+                    print(f"重判学号{_student_no}第{course_no}次课程失败!")
             i += 2
 
     def rejudge_all():
@@ -60,7 +65,7 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
             users = []
             for student in students:
                 users.extend([student, f"{student}_cp"])
-            companies = mongo.db.find({"student_no": {"$in": users}})
+            companies = mongo.db.company.find({"student_no": {"$in": users}})
             rejudge_course(companies)
 
     def rejudge_by_student_no():
