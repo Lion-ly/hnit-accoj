@@ -16,6 +16,7 @@ from accoj.extensions import (mongo,
 from accoj.utils import (create_account,
                          login_required_admin,
                          change_password)
+from accoj.evaluation import rejudge
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -137,6 +138,17 @@ def submit_audit_class():
 def score_rejudge():
     """题目重判页面"""
     return render_template('admin/score_rejudge.html')
+
+
+@admin_bp.route('/submit_rejudge', methods=['POST'])
+def submit_rejudge():
+    """重判题目"""
+    data = request.get_json()
+    course_no = data.get('course_no')
+    class_name = data.get('class_name')
+    student_no = data.get('student_no')
+    rejudge.delay(course_no, class_name, student_no)
+    return jsonify(result=True, data=None)
 
 
 @admin_bp.before_request

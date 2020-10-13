@@ -15,7 +15,6 @@
                         <div class="input-group form-inline mb-2 col-lg-2 col-sm-2">
                             <label for="courseSelect">选择课程：</label>
                             <select id="courseSelect" class="custom-select">
-                                <option name="1" value="1">第一次课程</option>
                                 <option name="2" value="2">第二次课程</option>
                                 <option name="3" value="3">第三次课程</option>
                                 <option name="4" value="4">第四次课程</option>
@@ -31,11 +30,7 @@
                         <div class="input-group form-inline mb-2 col-lg-2 col-sm-2">
                             <label for="classSelect">选择班级：</label>
                             <select id="classSelect" class="custom-select">
-                                <option name="0" value="1">无</option>
-                                <option name="1" value="1">网络1701</option>
-                                <option name="2" value="2">网络1702</option>
-                                <option name="3" value="3">网络1703</option>
-                                <option name="4" value="4">网络1704</option>
+                                <option name="0" value="0">无</option>
                             </select>
                         </div>
                         <span style="display: block">（注：若选择无，则以学号为单位或者全部重判，全部重判则学号也应置空）</span>
@@ -44,18 +39,17 @@
                             <label for="student_no">输入学号：</label>
                             <input id="student_no" type="number">
                         </div>
-                        <span>（注：若不输入，默认以班级为单位）</span>
+                        <span>（注：若无输入，则以班级为单位或全部重判）</span>
                         <div class="text-center">
                             <button id="rejudge-button" class="btn btn-outline-info btn-group-vertical" type="button">
                                 开始重判
                             </button>
                         </div>
+                        <div id="show-tips-box"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--
-    <script src="http://cdn.accoj.top/static/accoj-1.0.0/admin-score-rejudge.js"></script>
-    -->
+    <script type="application/javascript" src="{{ url_for('static', filename='js/admin/score_rejudge.js') }}"></script>
 {% endblock %}

@@ -359,7 +359,7 @@ def manage_time():
     return jsonify(result=result, data=data)
 
 
-@api_bp.route('/get_student_info_correct', methods=['GET','POST'])
+@api_bp.route('/get_student_info_correct', methods=['GET', 'POST'])
 @login_required_teacher
 def get_student_info_correct():
     """
@@ -530,4 +530,15 @@ def get_news():
         news = [json.loads(n) for n in news]
         data = dumps(news)
         result = True
+    return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_class_name_list', methods=['POST'])
+def get_class_name_list():
+    """获取班级名称列表"""
+    result, data = False, None
+    classes = mongo.db.classes.find({}, dict(_id=0, class_name=1))
+    if classes:
+        classes = [c.get('class_name') for c in classes]
+        result, data = True, dumps(classes)
     return jsonify(result=result, data=data)

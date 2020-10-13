@@ -526,17 +526,17 @@ def update_business_rank_score():
     mongo.db.rank.update({"student_no": student_no}, infos)
 
 
-def update_rank(schedule_name, evaluation=None):
+def update_rank(schedule_name, scores=None, student_no=None):
     """
     用户每次提交更新用户的排行榜集合中的成绩等信息
     :param schedule_name:
-    :param evaluation:
+    :param scores:
     :return:
     """
-    student_no = session.get("username")
+    student_no = student_no if student_no else session.get("username")
     # 分数信息
-    if evaluation:
-        evaluation_scores = evaluation
+    if scores:
+        evaluation_scores = scores
     # 排行集合成绩信息
     user_score_info = mongo.db.rank.find_one(dict(student_no=student_no), dict(_id=0))
 
@@ -561,7 +561,7 @@ def update_rank(schedule_name, evaluation=None):
     # 第五部分得分
     # 账户得分
     def update_ledger():
-        ledger_score_sum = evaluation.get("first") + evaluation.get("second")
+        ledger_score_sum = scores.get("first") + scores.get("second")
         sum_score = round(user_score_info.get("sum_score") + ledger_score_sum, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, five=round(ledger_score_sum, 2))})
@@ -569,9 +569,9 @@ def update_rank(schedule_name, evaluation=None):
     # 平衡表得分
     def update_balance_sheet():
         ledger_score_sum = user_score_info.get("five")
-        ledger_score_sum += evaluation
+        ledger_score_sum += scores
         sum_score = user_score_info.get("sum_score")
-        sum_score += evaluation
+        sum_score += scores
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=round(sum_score, 2), five=round(ledger_score_sum, 2))})
 
@@ -585,40 +585,40 @@ def update_rank(schedule_name, evaluation=None):
     # 会计账簿部分得分
     # 明细账
     def update_subsidiary_account():
-        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        sum_score = round(scores + user_score_info.get("sum_score"), 2)
         mongo.db.rank.update(dict(student_no=student_no),
-                             {"$set": dict(sum_score=sum_score, seven=evaluation)})
+                             {"$set": dict(sum_score=sum_score, seven=scores)})
 
     # 科目余额表
     def update_acc_balance_sheet():
-        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        sum_score = round(scores + user_score_info.get("sum_score"), 2)
         this_sum_score = user_score_info.get("seven")
-        this_sum_score = round(this_sum_score + evaluation, 2)
+        this_sum_score = round(this_sum_score + scores, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, seven=this_sum_score)})
 
     # 会计报表部分得分
     # 资产负债表
     def update_new_balance_sheet():
-        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        sum_score = round(scores + user_score_info.get("sum_score"), 2)
         mongo.db.rank.update(dict(student_no=student_no),
-                             {"$set": dict(sum_score=sum_score, eight=evaluation)})
+                             {"$set": dict(sum_score=sum_score, eight=scores)})
 
     # 利润表
     def update_profit_statement():
-        sum_score = round(evaluation + user_score_info.get("sum_score"), 2)
+        sum_score = round(scores + user_score_info.get("sum_score"), 2)
         this_sum_score = user_score_info.get("eight")
-        this_sum_score = round(this_sum_score + evaluation, 2)
+        this_sum_score = round(this_sum_score + scores, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, eight=this_sum_score)})
 
     # 会计报表部分得分
     # 趋势分析法得分
     def update_trend_analysis():
-        trend_analysis_score_sum = evaluation.get("first").get("student_score") + \
-                                   evaluation.get("second").get("student_score")
-        trend_teacher_score_1 = evaluation.get("first").get("teacher_score")
-        trend_teacher_score_2 = evaluation.get("second").get("teacher_score")
+        trend_analysis_score_sum = scores.get("first").get("student_score") + \
+                                   scores.get("second").get("student_score")
+        trend_teacher_score_1 = scores.get("first").get("teacher_score")
+        trend_teacher_score_2 = scores.get("second").get("teacher_score")
 
         if trend_teacher_score_1 >= 0:
             trend_analysis_score_sum += trend_teacher_score_1
@@ -631,10 +631,10 @@ def update_rank(schedule_name, evaluation=None):
     # 共同比分析法
     def update_common_ratio_analysis():
         analysis_sum_score = user_score_info.get("nine")
-        common_analysis_score = evaluation.get(
-            "first").get("student_score") + evaluation.get("second").get("student_score")
-        common_ratio_teacher_score_1 = evaluation.get("first").get("teacher_score")
-        common_ratio_teacher_score_2 = evaluation.get("second").get("teacher_score")
+        common_analysis_score = scores.get(
+            "first").get("student_score") + scores.get("second").get("student_score")
+        common_ratio_teacher_score_1 = scores.get("first").get("teacher_score")
+        common_ratio_teacher_score_2 = scores.get("second").get("teacher_score")
         if common_ratio_teacher_score_1 >= 0:
             common_analysis_score += common_ratio_teacher_score_1
         if common_ratio_teacher_score_2 >= 0:
@@ -647,7 +647,7 @@ def update_rank(schedule_name, evaluation=None):
     def update_ratio_analysis():
         analysis_sum_score = user_score_info.get("nine")
         ratio_analysis_score = evaluation_scores.get("student_score")
-        ratio_analysis_teacher_score = evaluation.get("teacher_score")
+        ratio_analysis_teacher_score = scores.get("teacher_score")
         if ratio_analysis_teacher_score >= 0:
             ratio_analysis_score += ratio_analysis_teacher_score
 
@@ -657,8 +657,8 @@ def update_rank(schedule_name, evaluation=None):
                              {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
 
     def update_dupont_analysis():
-        dupont_analysis_sum_score = evaluation.get("student_score")
-        dupont_analysis_teacher_score = evaluation.get("teacher_score")
+        dupont_analysis_sum_score = scores.get("student_score")
+        dupont_analysis_teacher_score = scores.get("teacher_score")
         if dupont_analysis_teacher_score >= 0:
             dupont_analysis_sum_score += dupont_analysis_teacher_score
 

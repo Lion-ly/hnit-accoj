@@ -5,11 +5,90 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : __init__.py.py
 # @Software: PyCharm
-from accoj.extensions import mongo
 from flask import session
+from accoj.extensions import mongo
+from accoj.utils import update_rank
+from accoj import celery
 
 TotalScore = [9, 10, 10, 10, 9, 10, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 10, 10,
               10, 10, 10, 10, 13.5, 13.5, 13.5, 13.5, 10, 10, 9, 10, 10, 10, 10, 10, 0]
+
+
+@celery.task
+def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
+    """
+    重判题目
+    :param course_no: 课程号 '2 - 10'
+    :param class_name: 班级名 例：'湖南工学院-物管1901'
+    :param student_no: 学号名
+    :return: bool
+    """
+
+    def rejudge_course(companies):
+        if companies:
+            companies = list(companies)
+        else:
+            return
+        companies_len = len(companies)
+        i = 0
+        while i < companies_len:
+            company = companies[i]
+            _student_no = company.get('student_no')
+            company_cp = companies[i + 1]
+            course_list = c_dict.get(course_no)
+            for course in course_list:
+                scores = evaluate(infos_name=course, company=company, company_cp=company_cp)
+                update_rank(schedule_name=course, scores=scores, student_no=_student_no)
+            i += 2
+
+    def rejudge_all():
+        """
+        全部重判
+        :return:
+        """
+        companies = mongo.db.company.find()
+        rejudge_course(companies)
+
+    def rejudge_by_class():
+        """
+        按班级重判
+        :return:
+        """
+        _classes = mongo.db.classes.find_one({"class_name": class_name})
+        if _classes:
+            students = _classes.get('students')
+            users = []
+            for student in students:
+                users.extend([student, f"{student}_cp"])
+            companies = mongo.db.find({"student_no": {"$in": users}})
+            rejudge_course(companies)
+
+    def rejudge_by_student_no():
+        """
+        按学号重判
+        :return:
+        """
+        companies = mongo.db.company.find({"student_no": {"$regex": r"^{}".format(student_no)}})
+        rejudge_course(companies)
+
+    c_dict = {2 : ["key_element"],
+              3 : ["subject"],
+              4 : ["entry"],
+              5 : ["ledger", "balance_sheet"],
+              6 : ["acc_document"],
+              7 : ["subsidiary_account", "acc_balance_sheet"],
+              8 : ["new_balance_sheet", "profit_statement"],
+              9 : ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
+              10: ["dupont_analysis"]}
+    if course_no not in [i for i in range(2, 11)]:
+        return False
+    if not (class_name or student_no):
+        rejudge_all()
+    elif class_name != "0":
+        rejudge_by_class()
+    elif student_no:
+        rejudge_by_student_no()
+    return True
 
 
 def evaluate(infos_name, company, company_cp):
