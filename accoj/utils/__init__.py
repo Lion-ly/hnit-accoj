@@ -526,7 +526,7 @@ def update_business_rank_score():
     mongo.db.rank.update({"student_no": student_no}, infos)
 
 
-def update_rank(schedule_name, scores=None, student_no=None):
+def update_rank(schedule_name, scores=None, student_no=None, is_rejudge=False):
     """
     用户每次提交更新用户的排行榜集合中的成绩等信息
     :param schedule_name:
@@ -542,19 +542,28 @@ def update_rank(schedule_name, scores=None, student_no=None):
 
     def update_key_element():
         key_element_sum_score = evaluation_scores[-1]
-        sum_score = round(user_score_info.get("sum_score") + key_element_sum_score, 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('two')
+        sum_score = round(sum_score + key_element_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, two=key_element_sum_score)})
 
     def update_subject():
         subject_sum_score = evaluation_scores[-1]
-        sum_score = round(user_score_info.get("sum_score") + subject_sum_score, 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('three')
+        sum_score = round(sum_score + subject_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
 
     def update_entry():
         entry_sum_score = evaluation_scores[-1]
-        sum_score = round(user_score_info.get("sum_score") + entry_sum_score, 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('four')
+        sum_score = round(sum_score + entry_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
 
@@ -562,7 +571,10 @@ def update_rank(schedule_name, scores=None, student_no=None):
     # 账户得分
     def update_ledger():
         ledger_score_sum = scores.get("first") + scores.get("second")
-        sum_score = round(user_score_info.get("sum_score") + ledger_score_sum, 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('five')
+        sum_score = round(sum_score + ledger_score_sum, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, five=round(ledger_score_sum, 2))})
 
@@ -578,14 +590,20 @@ def update_rank(schedule_name, scores=None, student_no=None):
     # 第六部分 会计凭证部分得分
     def update_acc_document():
         acc_sum_score = evaluation_scores[-1]
-        sum_score = round(acc_sum_score + user_score_info.get("sum_score"), 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('six')
+        sum_score = round(acc_sum_score + sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
 
     # 会计账簿部分得分
     # 明细账
     def update_subsidiary_account():
-        sum_score = round(scores + user_score_info.get("sum_score"), 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('seven')
+        sum_score = round(scores + sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, seven=scores)})
 
@@ -600,7 +618,10 @@ def update_rank(schedule_name, scores=None, student_no=None):
     # 会计报表部分得分
     # 资产负债表
     def update_new_balance_sheet():
-        sum_score = round(scores + user_score_info.get("sum_score"), 2)
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('eight')
+        sum_score = round(scores + sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, eight=scores)})
 
@@ -615,6 +636,9 @@ def update_rank(schedule_name, scores=None, student_no=None):
     # 会计报表部分得分
     # 趋势分析法得分
     def update_trend_analysis():
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('nine')
         trend_analysis_score_sum = scores.get("first").get("student_score") + \
                                    scores.get("second").get("student_score")
         trend_teacher_score_1 = scores.get("first").get("teacher_score")
@@ -624,7 +648,7 @@ def update_rank(schedule_name, scores=None, student_no=None):
             trend_analysis_score_sum += trend_teacher_score_1
         if trend_teacher_score_2 >= 0:
             trend_analysis_score_sum += trend_teacher_score_2
-        sum_score = round(user_score_info.get("sum_score") + trend_analysis_score_sum, 2)
+        sum_score = round(sum_score + trend_analysis_score_sum, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, nine=round(trend_analysis_score_sum, 2))})
 
@@ -657,12 +681,15 @@ def update_rank(schedule_name, scores=None, student_no=None):
                              {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
 
     def update_dupont_analysis():
+        sum_score = user_score_info.get("sum_score")
+        if is_rejudge:
+            sum_score -= user_score_info.get('ten')
         dupont_analysis_sum_score = scores.get("student_score")
         dupont_analysis_teacher_score = scores.get("teacher_score")
         if dupont_analysis_teacher_score >= 0:
             dupont_analysis_sum_score += dupont_analysis_teacher_score
 
-        sum_score = round(user_score_info.get("sum_score") + dupont_analysis_sum_score, 2)
+        sum_score = round(sum_score + dupont_analysis_sum_score, 2)
         mongo.db.rank.update(dict(student_no=student_no),
                              {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_sum_score, 2))})
 

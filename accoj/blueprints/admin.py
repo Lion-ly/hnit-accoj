@@ -145,6 +145,7 @@ def submit_rejudge():
     """重判题目"""
     data = request.get_json()
     course_no = data.get('course_no')
+    course_no = int(course_no)
     class_name = data.get('class_name')
     student_no = data.get('student_no')
     rejudge.delay(course_no, class_name, student_no)
