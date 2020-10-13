@@ -8,6 +8,7 @@
 import os
 from accoj.news_spider import periodic_run_news_spider
 from accoj.update_rank import periodic_update_user_rank
+from accoj.evaluation import rejudge
 from accoj import create_app
 from accoj.celery import celery
 from accoj.utils import init_celery
