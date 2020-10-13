@@ -16,10 +16,10 @@ password = parse.quote_plus("Love199805#")
 
 
 class BaseConfig(object):
+    DEBUG = False
     SECRET_KEY = os.getenv("SECRET_KEY", "dev key")
     TEMPLATES_AUTO_RELOAD = True
     FLASK_ADMIN_SWATCH = "spacelab"  # admin主题
-
 
     CKEDITOR_ENABLE_CSRF = True
 
@@ -40,8 +40,11 @@ class BaseConfig(object):
     CELERY_BROKER_URL = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1',
     CELERY_RESULT_BACKEND = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1'
 
-    # Flask-Limiter configure
-    # RATELIMIT_DEFAULT = "2 per second;60 per minute"
+    LOG_PATH = 'accoj/log/request.log'
+    LOG_DEBUG_PATH = 'accoj/log/debug.log'
+
+    # 无效配置，应更改`flask_monitoringdashboard.core.config`中的Config.password
+    DASHBOARD_PASSWORD = 'Love199805#'
 
 
 class DevelopmentConfig(BaseConfig):
