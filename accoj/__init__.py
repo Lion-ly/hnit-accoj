@@ -30,7 +30,8 @@ from accoj.extensions import (mongo,
                               babel,
                               socketio,
                               redis_cli,
-                              limiter)
+                              limiter,
+                              logger)
 from accoj.blueprints.dbadmin import (dbadmin,
                                       UserView,
                                       CompanyView)
@@ -108,6 +109,8 @@ def register_extensions(app):
     limiter.init_app(app)
     # set Flask-Limiter
     set_limiter(limiter)
+    # init log
+    logger.init_app(app)
 
 
 def create_question_bank():

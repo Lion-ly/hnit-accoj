@@ -12,6 +12,7 @@ from flask_babelex import Babel
 from flask_socketio import SocketIO
 from flask_redis import FlaskRedis
 from flask_limiter import Limiter
+from accoj.utils.log_util import Logger
 from accoj.utils.get_remote_addr import get_remote_addr
 
 mongo = PyMongo()
@@ -21,3 +22,4 @@ babel = Babel()
 socketio = SocketIO()
 redis_cli = FlaskRedis()
 limiter = Limiter(key_func=get_remote_addr)
+logger = Logger()
