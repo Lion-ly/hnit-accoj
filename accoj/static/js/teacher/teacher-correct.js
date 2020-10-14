@@ -74,7 +74,7 @@ function export_grade() {
 
 
         let dataList = new Array()
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < data.length; i++) {
             dataList[i] = new Array()
         }
 
