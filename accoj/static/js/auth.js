@@ -4,31 +4,7 @@ $(document).ready(function () {
     });
 });
 
-$(function () {
-    $('#signin_button').click(function () {
-        save_cookies();
-        data = $('#signin_form').serialize();
-        $.ajax({
-            url: "/signin",
-            type: "post",
-            data: data,
-            dataType: "json",
-            async: true,
-            success: function (data) {
-                if (data["result"] === "true") {
-                    show_message("signin_form", "登陆成功 1s后自动跳转", "info", 1000);
-                    setTimeout("location.href='localhost:80';location.reload();", 1000);
-                } else {
-                    show_message("signin_form", data["message"], "danger", 1000);
-                }
-            },
-            error: function (err) {
-                console.log(err.statusText + "异常");
-            }
-        })
 
-    })
-});
 
 $(function () {
     $('#login_button').click(function () {
@@ -209,3 +185,39 @@ $(function () {
         })
     })
 });
+
+$(function () {
+    let sliding_validation = SlidingValidation.create($('#slider'),
+        {
+            progress_bg: 'rgba(25,145,250,0.2)',
+            success_slider_wrapper_bg:'rgb(210,244,239)',
+            slide_block_wrapper_width: "70%",
+            margin: "20px 0 20px 0",
+            left: "13%"
+        }, function () {
+            $('#signin_button').removeAttr("disabled");
+            $('#signin_button').click(function () {
+                save_cookies();
+                data = $('#signin_form').serialize();
+                $.ajax({
+                    url: "/signin",
+                    type: "post",
+                    data: data,
+                    dataType: "json",
+                    async: true,
+                    success: function (data) {
+                        if (data["result"] === "true") {
+                            show_message("signin_form", "登陆成功 1s后自动跳转", "info", 1000);
+                            setTimeout("location.href='localhost:80';location.reload();", 1000);
+                        } else {
+                            show_message("signin_form", data["message"], "danger", 1000);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err.statusText + "异常");
+                    }
+                })
+
+            })
+        });
+})

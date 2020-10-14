@@ -11,6 +11,8 @@
     <script src="http://cdn.accoj.top/static/accoj-1.0.0/jquery.base64.js" charset="UTF-8"></script>
 
     <script type="module" src="http://cdn.accoj.top/static/cdn/1.16.1.popper.js"></script>
+
+    <script src="{{ url_for('static', filename='js/Sliding_Validation_Gu.js') }}" charset="UTF-8"></script>
     <!-- bootstrap -->
     <link href="http://cdn.accoj.top/static/cdn/3.3.7.bootstrap.css" rel="stylesheet">
     <script src="http://cdn.accoj.top/static/cdn/3.3.7.bootstrap.js" charset="UTF-8"></script>
@@ -31,7 +33,7 @@
     <!-- local -->
     <link href="http://cdn.accoj.top/static/accoj-1.0.0/main.css"
           rel="stylesheet">
-    <script src="http://cdn.accoj.top/static/accoj-1.0.0/auth.js" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/2.3.0.socket.io.js"></script>
 </head>
 <body>
@@ -159,11 +161,12 @@
                                 </button>
                             </span>
                         </div>
+                        <div id="slider"></div>
                         <label for="signin-rememberme">
                             <input id="signin-rememberme" type="checkbox" name="rememberme">&nbsp;&nbsp;记住我
                         </label>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-success" id="signin_button">
+                            <button type="button" class="btn btn-success" id="signin_button" disabled="disabled">
                                 <span class="glyphicon glyphicon-ok"></span>&nbsp;登录
                             </button>
                             <button type="button" class="btn btn-default"
