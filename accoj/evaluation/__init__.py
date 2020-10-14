@@ -30,9 +30,10 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
         schedule_confirm = company.get("schedule_confirm")
         confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
 
-        if course_no in [2, 3, 4, 6] and len(confirmed) == MAX_BUSINESS_NO:
+        if course_no in [2, 3, 4, 6]:
             # 1.第二三四六次课6
-            confirm_flag = True
+            if len(confirmed) == MAX_BUSINESS_NO:
+                confirm_flag = True
         elif infos_name in {"ledger", "subsidiary_account"}:
             # 2.“账户和明细账部分”
             involve_subjects = company.get("involve_subjects")
