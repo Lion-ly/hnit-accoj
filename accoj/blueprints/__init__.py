@@ -309,10 +309,10 @@ def get_data(type_num, infos_name, info_keys):
                 scores = evaluation.get("{}_score".format(infos_name))
             confirm_flag = True
     elif type_num == 2:
-        # 2.非“二三四以及六的会计凭证部分 ”以及“账户和明细账部分”
+        # 2.非(“二三四以及六的会计凭证部分 ”以及“账户和明细账部分”)
         td = {"trend_analysis", "common_ratio_analysis"}
         td = infos_name in td
-        if td and confirmed.get("first") and confirmed.get("second") or (not td and confirmed):
+        if (td and confirmed.get("first") and confirmed.get("second")) or (not td and confirmed):
             if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                 scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
                 update_rank(infos_name, scores)
@@ -327,7 +327,7 @@ def get_data(type_num, infos_name, info_keys):
         if infos_name == "ledger":
             ledger1_confirm = confirmed.get("ledger1_confirm")
             ledger2_confirm = confirmed.get("ledger2_confirm")
-            if ledger1_confirm and ledger1_confirm:
+            if ledger1_confirm and ledger2_confirm:
                 if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(ledger2_confirm):
                     if not evaluation or not evaluation.get("{}_score".format(infos_name)):
                         scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
