@@ -3,7 +3,7 @@ $(document).ready(function () {
     _init_();
 });
 
-var template = '<div class="media">' +
+let template = '<div class="media">' +
     '<div class="media-body">\n' +
     '            <h4 class="media-heading"><a\n' +
     '                  href="#" onclick="window.open(\'{HREF}\');return false;">{TITLE}</a>\n' +
@@ -20,7 +20,7 @@ var template = '<div class="media">' +
     '        </div>' +
     '</div>';
 
-var newsJSON;
+let newsJSON;
 
 function _init_() {
     function successFunc(news) {
@@ -70,20 +70,22 @@ function get_news(successFunc) {
     })
 }
 
-
+// 加载新闻动作
 function show_news(){
-    var $more = $('#more');
-    var flag = $more.attr("class");
-    var limit = flag === "fa fa-chevron-up" ? 3 : newsJSON.length;
+    scroll_go('.news',-50);
+    let $more = $('#more');
+    let flag = $more.attr("class");
+    let limit = flag === "fa fa-chevron-up" ? 3 : newsJSON.length;
     items(limit);
     $more.toggleClass("fa-chevron-down");
     $more.toggleClass("fa-chevron-up");
 }
 
+// 将数据加载至页面
 function items(limit){
-    var items = $('.acc-notice');
+    let items = $('#news-list');
     items.html("");
-    for (var itemNum = 0;itemNum < limit;itemNum++) {
+    for (let itemNum = 0;itemNum < limit;itemNum++) {
         items.append(
             template.replace("{HREF}", newsJSON[itemNum].a_href)
                 .replace("{TITLE}", newsJSON[itemNum].title_text)
@@ -92,4 +94,14 @@ function items(limit){
                 .replace("{TIME}", newsJSON[itemNum].time_text)
         );
     }
+}
+
+//滚动过去
+function scroll_go(go) {
+    let height = $(go).offset().top ;
+    $('html').animate({scrollTop: height + "px"}, 500);
+}
+function scroll_go(go,offset) {
+    let height = $(go).offset().top + offset;
+    $('html').animate({scrollTop: height + "px"}, 500);
 }

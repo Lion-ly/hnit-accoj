@@ -19,7 +19,8 @@
     <!-- font-awesome -->
     <link href="http://cdn.accoj.top/static/cdn/4.7.0.font-awesome.css" rel="stylesheet">
     <!-- base -->
-    <link href="http://cdn.accoj.top/static/accoj-1.0.0/base.css" rel="stylesheet">
+    <!--<link href="http://cdn.accoj.top/static/accoj-1.0.0/base.css" rel="stylesheet">-->
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";

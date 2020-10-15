@@ -18,3 +18,8 @@ def index():
 @index_bp.route('/about', methods=['POST', 'GET'])
 def about():
     return render_template('about.html')
+
+
+@index_bp.route('/notice', methods=['POST', 'GET'])
+def notice():
+    return render_template('notice.html')
