@@ -16,7 +16,8 @@ from accoj.extensions import (mongo,
                               redis_cli)
 from accoj.utils import (create_account,
                          login_required_admin,
-                         change_password)
+                         change_password,
+                         init_course_confirm)
 from accoj.evaluation import rejudge
 
 admin_bp = Blueprint('admin', __name__)
@@ -135,21 +136,31 @@ def submit_audit_class():
     return jsonify(result=result, data=data)
 
 
-@admin_bp.route('/score_rejudge', methods=['GET'])
-def score_rejudge():
-    """题目重判页面"""
-    return render_template('admin/score_rejudge.html')
+@admin_bp.route('/course_manage', methods=['GET'])
+def course_manage():
+    """课程管理页面"""
+    return render_template('admin/course_manage.html')
 
 
 @admin_bp.route('/submit_rejudge', methods=['POST'])
 def submit_rejudge():
     """重判题目"""
     data = request.get_json()
-    course_no = data.get('course_no')
-    course_no = int(course_no)
+    course_no = int(data.get('course_no'))
     class_name = data.get('class_name')
     student_no = data.get('student_no')
     rejudge.delay(course_no, class_name, student_no)
+    return jsonify(result=True, data=None)
+
+
+@admin_bp.route('/course_redo', methods=['POST'])
+def course_redo():
+    """题目重做"""
+    data = request.get_json()
+    course_no = int(data.get('course_no'))
+    class_name = data.get('class_name')
+    student_no = data.get('student_no')
+    init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
     return jsonify(result=True, data=None)
 
 
@@ -162,13 +173,13 @@ def log_check():
 @admin_bp.route('/debug_log_download', methods=['GET'])
 def debug_log_download():
     """debug日志下载"""
-    return send_file(r'log\debug.log', as_attachment=True)
+    return send_file('log/debug.log', as_attachment=True)
 
 
 @admin_bp.route('/request_log_download', methods=['GET'])
 def request_log_download():
     """request日志下载"""
-    return send_file(r'log\request.log', as_attachment=True)
+    return send_file('log/request.log', as_attachment=True)
 
 
 @admin_bp.before_request

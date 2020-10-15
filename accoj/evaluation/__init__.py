@@ -7,9 +7,9 @@
 # @Software: PyCharm
 from flask import session
 from accoj.extensions import mongo
-from accoj.utils import update_rank
+from accoj.utils import (update_rank,
+                         is_confirmed)
 from accoj import celery
-from settings import MAX_BUSINESS_NO
 
 TotalScore = [9, 10, 10, 10, 9, 10, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 10, 10,
               10, 10, 10, 10, 13.5, 13.5, 13.5, 13.5, 10, 10, 9, 10, 10, 10, 10, 10, 0]
@@ -24,38 +24,6 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
     :param student_no: 学号名
     :return: bool
     """
-
-    def is_confirmed(company, infos_name):
-        confirm_flag = False
-        schedule_confirm = company.get("schedule_confirm")
-        confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
-
-        if course_no in [2, 3, 4, 6]:
-            # 1.第二三四六次课6
-            if len(confirmed) == MAX_BUSINESS_NO:
-                confirm_flag = True
-        elif infos_name in {"ledger", "subsidiary_account"}:
-            # 2.“账户和明细账部分”
-            involve_subjects = company.get("involve_subjects")
-            involve_subjects_1 = involve_subjects.get("involve_subjects_1")
-            involve_subjects_2 = involve_subjects.get("involve_subjects_2")
-            if infos_name == "ledger":
-                ledger1_confirm = confirmed.get("ledger1_confirm")
-                ledger2_confirm = confirmed.get("ledger2_confirm")
-                if ledger1_confirm and ledger2_confirm:
-                    if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(
-                            ledger2_confirm):
-                        confirm_flag = True
-            elif infos_name == "subsidiary_account":
-                if set(confirmed) == set(involve_subjects_2):
-                    confirm_flag = True
-        else:
-            # 3.其余部分
-            td = {"trend_analysis", "common_ratio_analysis"}
-            td = infos_name in td
-            if (td and confirmed.get("first") and confirmed.get("second")) or (not td and confirmed):
-                confirm_flag = True
-        return confirm_flag
 
     def rejudge_course(companies):
         if companies:
@@ -74,7 +42,7 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
             for course in course_list:
                 try:
                     scores = evaluate(infos_name=course, company=company, company_cp=company_cp)
-                    if is_confirmed(company=company, infos_name=course):
+                    if is_confirmed(course_no=course_no, company=company, infos_name=course):
                         update_rank(schedule_name=course, scores=scores, student_no=_student_no)
                         cnt += 1
                     else:
@@ -131,7 +99,7 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
               10: ["dupont_analysis"]}
     if course_no not in [i for i in range(2, 11)]:
         return False
-    if not (class_name or student_no):
+    if class_name == "0" and not student_no:
         rejudge_all()
     elif class_name != "0":
         rejudge_by_class()
