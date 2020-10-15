@@ -1,0 +1,34 @@
+{% extends 'admin/admin-base.html' %}
+{% block page_title %}日志查看{% endblock %}
+{% block page_title_li %}
+    <li class="active">日志查看</li>
+{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">日志查看</strong>
+                    </div>
+                    <div class="card-body" style="height: 60%;width: 80%;">
+                        <div class="text-center">
+                            <a href="{{ url_for('admin.debug_log_download') }}">
+                                <button id="log-download" class="btn btn-outline-info btn-group-vertical" type="button">
+                                    debug日志下载
+                                </button>
+                            </a>
+                            <a href="{{ url_for('admin.request_log_download') }}">
+                                <button id="log-download" class="btn btn-outline-info btn-group-vertical" type="button">
+                                    request日志下载
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+
+{% endblock %}

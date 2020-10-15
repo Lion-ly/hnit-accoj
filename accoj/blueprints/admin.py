@@ -10,7 +10,8 @@ import json
 from flask import (Blueprint,
                    render_template,
                    jsonify,
-                   request)
+                   request,
+                   send_file)
 from accoj.extensions import (mongo,
                               redis_cli)
 from accoj.utils import (create_account,
@@ -115,7 +116,7 @@ def get_audit_class():
     for i in range(0, user_info_len):
         user_info[i] = json.loads(user_info[i])
         user_info[i].update({"num": i + 1})
-        user_info[i].update({"tmp": ("<button type='button' class='btn btn-info'>批准通过</button>")})
+        user_info[i].update({"tmp": "<button type='button' class='btn btn-info'>批准通过</button>"})
     user_info = list(filter(lambda u: u.get("status") == "审核中", user_info))
     result, data = True, user_info
     return jsonify(result=result, data=data)
@@ -150,6 +151,24 @@ def submit_rejudge():
     student_no = data.get('student_no')
     rejudge.delay(course_no, class_name, student_no)
     return jsonify(result=True, data=None)
+
+
+@admin_bp.route('/log_check', methods=['GET'])
+def log_check():
+    """日志查看页面"""
+    return render_template('admin/log_check.html')
+
+
+@admin_bp.route('/debug_log_download', methods=['GET'])
+def debug_log_download():
+    """debug日志下载"""
+    return send_file(r'log\debug.log', as_attachment=True)
+
+
+@admin_bp.route('/request_log_download', methods=['GET'])
+def request_log_download():
+    """request日志下载"""
+    return send_file(r'log\request.log', as_attachment=True)
 
 
 @admin_bp.before_request

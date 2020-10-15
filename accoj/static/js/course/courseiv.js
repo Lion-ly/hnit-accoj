@@ -169,7 +169,7 @@ function ivPaddingData(data, isFromButton) {
                     $("#money1").attr("value", money);
                     $("#money1").val(money);
                     borrow_first = false;
-                } else iv_AddRow("borrow", subject, money)
+                } else iv_AddRow(true, subject, money)
             } else {
                 if (loan_first) {
                     // 贷记第一行
@@ -178,7 +178,7 @@ function ivPaddingData(data, isFromButton) {
                     $("#money0").attr("value", money);
                     $("#money0").val(money);
                     loan_first = false;
-                } else iv_AddRow("loan", subject, money)
+                } else iv_AddRow(false, subject, money)
             }
             if (isFromButton === 1) {
                 flag = false;
