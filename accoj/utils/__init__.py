@@ -7,6 +7,7 @@
 # @Software: PyCharm
 import json
 import datetime
+from typing import List
 from bson.json_util import dumps
 from functools import wraps
 from threading import Timer
@@ -529,6 +530,7 @@ def update_business_rank_score():
 def update_rank(schedule_name, scores=None, student_no=None):
     """
     用户每次提交更新用户的排行榜集合中的成绩等信息
+    :param student_no:
     :param schedule_name:
     :param scores:
     :return:
@@ -805,3 +807,124 @@ def get_student_schedule(student_no: str):
         data.append(dupont_schedule)
 
         return data
+
+
+def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: str = "") -> bool:
+    """
+    课程重做
+
+    """
+
+    def format_key(t_key):
+        return f"{t_key}_confirm"
+
+    def _redo(students: List[str]) -> bool:
+        """
+        :param students: student_no list
+        :return: bool
+        """
+        if students == [] or course_no not in [i for i in range(2, 11)]:
+            return False
+
+        schedule_dic = {format_key("key_element")          : [],
+                        format_key("subject")              : [],
+                        format_key("entry")                : [],
+                        format_key("ledger")               : {format_key("ledger1"): [], format_key("ledger2"): []},
+                        format_key("balance_sheet")        : False,
+                        format_key("acc_document")         : [],
+                        format_key("subsidiary_account")   : [],
+                        format_key("acc_balance_sheet")    : False,
+                        format_key("new_balance_sheet")    : False,
+                        format_key("profit_statement")     : False,
+                        format_key("trend_analysis")       : {"first": False, "second": False},
+                        format_key("common_ratio_analysis"): {"first": False, "second": False},
+                        format_key("ratio_analysis")       : False,
+                        format_key("dupont_analysis")      : False, }
+        c_dict = {2 : ["key_element"],
+                  3 : ["subject"],
+                  4 : ["entry"],
+                  5 : ["ledger", "balance_sheet"],
+                  6 : ["acc_document"],
+                  7 : ["subsidiary_account", "acc_balance_sheet"],
+                  8 : ["new_balance_sheet", "profit_statement"],
+                  9 : ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
+                  10: ["dupont_analysis"]}
+        users, update_dict = [], {}
+        if students:
+            for student in students:
+                users.extend([student, f"{student}_cp"])
+            companies = mongo.db.company.find({"student_no": {"$in": users}}, {"student_no": 1})
+            users = [company.get('student_no') for company in companies]
+        for course in c_dict.get(course_no):
+            _key = format_key(course)
+            update_dict[f"schedule_confirm.{_key}"] = schedule_dic[_key]
+        mongo.db.company.update({"student_no": {"$in": users}}, {"$set": update_dict})
+        return True
+
+    def redo_all():
+        """
+        全部重做
+        :return:
+        """
+        students = mongo.db.user.find()
+        _redo(students=list(students))
+
+    def redo_by_class():
+        """
+        按班级重做
+        :return:
+        """
+        _classes = mongo.db.classes.find_one({"class_name": class_name})
+        if _classes:
+            students = _classes.get('students')
+            _redo(students=students)
+
+    if course_no not in [i for i in range(2, 11)]:
+        return False
+    if class_name == "0" and not student_no:
+        redo_all()
+    elif class_name != "0":
+        redo_by_class()
+    elif student_no:
+        _redo(students=[student_no])
+    return True
+
+
+def is_confirmed(course_no: int, company, infos_name) -> bool:
+    """
+    课程是否完成
+    :param course_no:
+    :param company:
+    :param infos_name:
+    :return:
+    """
+    confirm_flag = False
+    schedule_confirm = company.get("schedule_confirm")
+    confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
+
+    if course_no in [2, 3, 4, 6]:
+        # 1.第二三四六次课6
+        if len(confirmed) == MAX_BUSINESS_NO:
+            confirm_flag = True
+    elif infos_name in {"ledger", "subsidiary_account"}:
+        # 2.“账户和明细账部分”
+        involve_subjects = company.get("involve_subjects")
+        involve_subjects_1 = involve_subjects.get("involve_subjects_1")
+        involve_subjects_2 = involve_subjects.get("involve_subjects_2")
+        if infos_name == "ledger":
+            ledger1_confirm = confirmed.get("ledger1_confirm")
+            ledger2_confirm = confirmed.get("ledger2_confirm")
+            if ledger1_confirm and ledger2_confirm:
+                if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(
+                        ledger2_confirm):
+                    confirm_flag = True
+        elif infos_name == "subsidiary_account":
+            if set(confirmed) == set(involve_subjects_2):
+                confirm_flag = True
+    else:
+        # 3.其余部分
+        td = {"trend_analysis", "common_ratio_analysis"}
+        td = infos_name in td
+        if (td and confirmed.get("first") and confirmed.get("second")) or (not td and confirmed):
+            confirm_flag = True
+    return confirm_flag
