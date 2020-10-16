@@ -542,3 +542,22 @@ def get_class_name_list():
         classes = [c.get('class_name') for c in classes]
         result, data = True, dumps(classes)
     return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_class_name', methods=['POST'])
+def get_class_name():
+    """获取班级名"""
+    result, data = False, {}
+    username = session.get('username')
+    role = session.get('role')
+    if role == 'student':
+        user = mongo.db.user.find_one({'student_no': username})
+        if user:
+            class_name = f"{user.get('student_school')}-{user.get('student_class')}"
+            result, data['class_name'] = True, [class_name]
+    elif role == 'teacher':
+        classes = mongo.db.classes.find({'teacher': username}, {'class_name': True})
+        if classes:
+            class_name = [_class.get('class_name') for _class in classes]
+            result, data['class_name'] = True, class_name
+    return jsonify(result=result, data=data)
