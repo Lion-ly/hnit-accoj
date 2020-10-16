@@ -150,7 +150,8 @@ def submit_rejudge():
     class_name = data.get('class_name')
     student_no = data.get('student_no')
     rejudge.delay(course_no, class_name, student_no)
-    return jsonify(result=True, data=None)
+    message = "操作成功！"
+    return jsonify(result=True, data=None, message=message)
 
 
 @admin_bp.route('/course_redo', methods=['POST'])
@@ -160,8 +161,9 @@ def course_redo():
     course_no = int(data.get('course_no'))
     class_name = data.get('class_name')
     student_no = data.get('student_no')
-    init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
-    return jsonify(result=True, data=None)
+    flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+    message = "操作成功！" if flag else "操作失败!"
+    return jsonify(result=flag, data=None, message=message)
 
 
 @admin_bp.route('/log_check', methods=['GET'])

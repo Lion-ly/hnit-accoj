@@ -29,7 +29,6 @@ function getClassNameList() {
     let data = {},
         successFunc = function (data) {
             data = JSON.parse(data);
-            console.log("data:\n" + data)
             for (let i = 0; i < data.length; i++) {
                 let className = data[i];
                 $("#classSelect").append(new Option(className, className));
