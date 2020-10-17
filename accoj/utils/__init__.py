@@ -850,7 +850,7 @@ def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: st
                   9 : ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
                   10: ["dupont_analysis"]}
         num_dic = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
-        users, company_update_dict = [], {}
+        users, set_dict, unset_dict = [], {}, {}
         if students:
             for student in students:
                 users.extend([student, f"{student}_cp"])
@@ -858,17 +858,21 @@ def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: st
             users = [company.get('student_no') for company in companies]
         for course in c_dict.get(course_no):
             _key = format_key(course)
-            company_update_dict[f"schedule_confirm.{_key}"] = schedule_dic[_key]
-        # 分数置0
-        t_users = filter(lambda x:not x.endswith("_cp"), users)
+            set_dict[f"schedule_confirm.{_key}"] = schedule_dic[_key]
+            unset_dict[f"evaluation.{course}_score"] = ""
+            # 分数置0
+        t_users = filter(lambda x: not x.endswith("_cp"), users)
         for user in t_users:
             score_key = num_dic.get(course_no)
             scores = mongo.db.rank.find_one({"student_no": user}, {score_key: True})
             old_score = scores.get(score_key)
             mongo.db.rank.update({"student_no": user},
-                                 {"$set": {score_key: 0}, "$inc": {"sum_score": -old_score}})
+                                 {"$set": {score_key: 0},
+                                  "$inc": {"sum_score": -old_score}})
 
-        mongo.db.company.update({"student_no": {"$in": users}}, {"$set": company_update_dict})
+        mongo.db.company.update_many({"student_no": {"$in": users}},
+                                     {"$set"  : set_dict,
+                                      "$unset": unset_dict})
         return True
 
     def redo_all():
