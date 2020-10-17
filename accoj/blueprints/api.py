@@ -199,13 +199,16 @@ def teacher_api():
 
     def submit_manage_time_info(_data: dict):
         """提交时间管理信息"""
-        result, data, message = False, None, ""
+        result, data, message = False, None, "保存失败！"
         class_name = _data.get('class_name')
         time = _data.get('time')
         if redis_cli[f'classes:{class_name}']:
             redis_cli[f'classes:{class_name}'] = json.dumps({'time': time, 'teacher': teacher})
             mongo.db.classes.update({'class_name': class_name}, {'$set': {'time': time}})
             result = True
+            send_class_notify({'message_body': "课程时间已改变，请注意查看课程时间！", 'classes': [class_name]},
+                              is_from_system=True,
+                              message_head="课程时间变更通知")
         time_infos = get_manage_time_info_from_redis()
         if time_infos:
             result = True
@@ -213,31 +216,29 @@ def teacher_api():
         message = '保存成功！'
         return jsonify(result=result, data=data, message=message)
 
-    def send_class_notify(_data: dict):
+    def send_class_notify(_data: dict, is_from_system: bool = False, message_head: str = ""):
         """发送班级通知"""
         result, data, message = False, None, "发送通知失败！"
-        _messages = _data.get('messages')
-        flag = 0
-        messages = []
-        for m in _messages:
-            class_name = m.get('class_name')
-            message_body = m.get('message_body')
-            teacher_message_head = '发送班级通知成功'
-            student_message_head = '教师：班级通知'
-            teacher_message_body = f'To  {class_name}：  {message_body}'
+        message_body = _data.get('message_body')
+        _classes = _data.get('classes')
+        teacher_message_head = '发送班级通知成功'
+        student_message_head = '教师：班级通知'
+        classes = mongo.db.classes.find({"class_name": {"$in": _classes}}, {"students": True})
+        students = []
+        for c in classes:
+            students.extend(c.get('students'))
+        if students:
+            if is_from_system:
+                teacher_message_head = student_message_head = message_head
+                username2 = 'system'
+            else:
+                username2 = teacher
+            message_body = "To: " + str(_classes) + 4 * ' ' + "消息内容: " + message_body
             messages = [
-                {'message_head': teacher_message_head, 'message_body': teacher_message_body, 'room': teacher,
-                 'username'    : 'system'}]
-            # print(f"class_name={class_name}")
-            classes = mongo.db.classes.find_one({'class_name': class_name})
-            if classes:
-                student_nos = classes.get('students')
-                messages.extend(
-                    [{'message_head': student_message_head, 'message_body': message_body, 'room': student_no,
-                      'username'    : teacher} for student_no in student_nos])
-                flag += 1
-        # print(f"flag={flag}")
-        if flag:
+                {'message_head': teacher_message_head, 'message_body': message_body, 'room': [teacher],
+                 'username'    : 'system'},
+                {'message_head': student_message_head, 'message_body': message_body, 'room': students,
+                 'username'    : username2}]
             send_system_message_batch(messages)
             message, result = '发送通知成功！', True
         else:
@@ -247,24 +248,19 @@ def teacher_api():
     def send_personal_notify(_data: dict):
         """发送个人通知"""
         result, data, message = False, None, '发送通知失败！'
-        _messages = _data.get('messages')
-        flag = 0
-        messages = []
-        for m in _messages:
-            student_no = m.get('student_no')
-            message_body = m.get('message_body')
-            teacher_message_head = '发送个人通知成功'
-            student_message_head = '教师:个人通知'
-            teacher_message_body = f'To  {student_no}：  {message_body}'
-            user = mongo.db.user.find_one({'student_no': student_no})
-            if user and user.get('teacher') == teacher:
-                messages = [
-                    {'message_head': teacher_message_head, 'message_body': teacher_message_body, 'room': teacher,
-                     'username'    : 'system'},
-                    {'message_head': student_message_head, 'message_body': message_body, 'room': student_no,
-                     'username'    : teacher}]
-                flag += 1
-        if flag:
+        message_body = _data.get('message_body')
+        students = _data.get('students')
+        teacher_message_head = '发送个人通知成功'
+        student_message_head = '教师:个人通知'
+        users = mongo.db.user.find({"student_no": {"$in": students}}, {"student_no": True})
+        students = [u.get('student_no') for u in users]
+        if students:
+            message_body = "To: " + str(students) + 4 * ' ' + "消息内容: " + message_body
+            messages = [
+                {'message_head': teacher_message_head, 'message_body': message_body, 'room': [teacher],
+                 'username'    : 'system'},
+                {'message_head': student_message_head, 'message_body': message_body, 'room': students,
+                 'username'    : teacher}]
             send_system_message_batch(messages)
             message, result = '发送通知成功！', True
         else:

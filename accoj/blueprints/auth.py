@@ -274,8 +274,9 @@ def my_app_context_processor():
     d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生", "dbadmin": "DBA"}
     student_name = session.get('student_name')
     nick_name = session.get('nick_name')
-    context_dict['username'] = nick_name if nick_name else student_name
-    context_dict['username'] = context_dict['username'] if context_dict['username'] else session.get("username")
+    context_dict['username'] = session.get("username")
+    context_dict['nick_name'] = nick_name if nick_name else student_name
+    context_dict['nick_name'] = context_dict['nick_name'] if context_dict['nick_name'] else context_dict['username']
     context_dict['role'] = d_role.get(session.get("role"))
     context_dict['teacher'] = session.get('teacher')
     return context_dict

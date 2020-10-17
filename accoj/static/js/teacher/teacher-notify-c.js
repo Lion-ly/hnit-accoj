@@ -49,19 +49,19 @@ function sendClassNotify() {
     // 发送班级通知
     let $checkeds = $(".switch-input:checked"),
         message_body = $("#messageContent").val(),
-        messages = [];
+        classes = [];
     $checkeds.each(function () {
         let school = $(this).parent().parent().children(":first").next().text(),
-            classes = $(this).parent().prev().text(),
-            class_name = school + "-" + classes;
-        messages.push({"class_name": class_name, "message_body": message_body});
+            _classes = $(this).parent().prev().text(),
+            class_name = school + "-" + _classes;
+        classes.push(class_name);
     });
-    let data = {"api": "send_class_notify", "messages": messages},
+    let data = {"api": "send_class_notify", "classes": classes, "message_body": message_body},
         url = "/api/teacher_api",
         messageDivID = "messageInfoBox",
         successFunc = function () {
         };
-    if (messages.length < 1) show_message(messageDivID, '未选择要发送的班级！', 'danger', 2000);
+    if (classes.length < 1) show_message(messageDivID, '未选择要发送的班级！', 'danger', 2000);
     else if(!message_body) show_message(messageDivID, '消息内容不能为空！', 'danger', 2000);
     else get_data(data, successFunc, url, messageDivID);
 }

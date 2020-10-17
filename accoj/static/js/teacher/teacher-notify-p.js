@@ -8,6 +8,7 @@ function _init_() {
     $("#confirmSend").click(sendPersonalNotify);
 
 }
+
 function getStudentInfoNotifyP() {
     $.fn.dataTable.ext.errMode = 'throw';
     let csrf_token = get_csrf_token();
@@ -46,17 +47,17 @@ function sendPersonalNotify() {
     // 发送个人通知
     let $checkeds = $(".switch-input:checked"),
         message_body = $("#messageContent").val(),
-        messages = [];
+        students = [];
     $checkeds.each(function () {
         let student_no = $(this).parent().parent().children(":first").next().text();
-        messages.push({"student_no": student_no, "message_body": message_body});
+        students.push(student_no);
     });
-    let data = {"api": "send_personal_notify", "messages": messages},
+    let data = {"api": "send_personal_notify", "message_body": message_body, "students": students},
         url = "/api/teacher_api",
         messageDivID = "messageInfoBox",
         successFunc = function () {
         };
-    if (messages.length < 1) show_message(messageDivID, '未选择要发送的学生！', 'danger', 2000);
-    else if(!message_body) show_message(messageDivID, '消息内容不能为空！', 'danger', 2000);
+    if (students.length < 1) show_message(messageDivID, '未选择要发送的学生！', 'danger', 2000);
+    else if (!message_body) show_message(messageDivID, '消息内容不能为空！', 'danger', 2000);
     else get_data(data, successFunc, url, messageDivID);
 }
