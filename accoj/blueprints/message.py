@@ -57,10 +57,14 @@ def new_room_message(message_body: str):
 
 def send_message(message_body: str):
     username = session.get('username')
+    student_name = session["student_name"]
+    nick_name = session["nick_name"]
     current_room = session.get('current_room')
     time = datetime.now()
-    post = dict(room=current_room,
+    post = dict(room=[current_room],
                 username=username,
+                student_name=student_name,
+                nick_name=nick_name,
                 message_body=message_body,
                 time=time)
     mongo.db.message.insert_one(post)

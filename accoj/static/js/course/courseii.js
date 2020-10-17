@@ -158,7 +158,7 @@ function iiPaddingData(data, isFromButton) {
         // 填充影响类型
         $affect_type.prop("checked", true);
         if (isFromButton === 1) {
-            if (answer_info["affect_type"] !== affect_type &&  answer_info["affect_type"])
+            if (answer_info["affect_type"] !== affect_type && answer_info["affect_type"])
                 hasError($affect_type);
             answer_info = answer_info["info"];
             t_infoLen = answer_info.length;
@@ -197,7 +197,8 @@ function iiPaddingData(data, isFromButton) {
         if (isFromButton === 1) {
             for (let i = 0; i < t_infoLen; i++) {
                 let t_key_element = answer_info[i]["key_element"],
-                    t_is_up = answer_info[i]["is_up"];
+                    t_is_up = answer_info[i]["is_up"],
+                    t_money = answer_info[i]["money"];
 
 
                 flag = false;
@@ -207,7 +208,6 @@ function iiPaddingData(data, isFromButton) {
                         money = key_element_info[j]["money"];
 
                     if (key_element === t_key_element && t_is_up === is_up) {
-                        let t_money = answer_info[j]["money"];
                         flag = money === t_money;
                         break;
                     }
@@ -284,7 +284,7 @@ function iiDisabledInput(flag) {
     $button.prop("disabled", flag);
     $aers.prop("disabled", flag);
     $check_box.prop("disabled", flag);
-    if(flag) $key_elem.attr("readonly", "readonly");
+    if (flag) $key_elem.attr("readonly", "readonly");
     else $key_elem.removeAttr("readonly");
     $key_elem.addClass("acc-white-bg");
 }

@@ -111,6 +111,8 @@ function addMessage(_data) {
         for (let i = 0; i < dataLength; i++) {
             let message_body = _data[i].message_body,
                 username = _data[i].username,
+                student_name = _data[i].student_name,
+                nick_name = _data[i].nick_name,
                 time = _data[i].time.$date;
             message_body = unicodeToChar(message_body);
             // if (time - window.lastTime > 5 * 60 * 1000) // 消息间隔时间在五分钟内则不显示时间戳
@@ -124,6 +126,8 @@ function addMessage(_data) {
                     "<img src=\"\" alt=\"\">" +
                     "</div>";
             } else {
+                username = student_name ? student_name : username;
+                username = nick_name ? nick_name : username;
                 messages += "<div data-message class=\"msg-item msg-item-left\">" +
                     "<img src=\"\" alt=\"\">" +
                     "<p style='margin-bottom: 0'><small class='nickname'>" + username + "</small>&nbsp;<small class='time-stamp'>" + time + "</small>" + "<br/>" + message_body + "</p>" +
@@ -146,6 +150,8 @@ function showNewMessage(_data) {
     let messages = "",
         message_body = _data.message_body,
         username = _data.username,
+        student_name = _data[i].student_name,
+        nick_name = _data[i].nick_name,
         time = _data.time.$date;
 
     message_body = unicodeToChar(message_body);
@@ -160,6 +166,8 @@ function showNewMessage(_data) {
             "<img src=\"\" alt=\"\">" +
             "</div>";
     } else {
+        username = student_name ? student_name : username;
+        username = nick_name ? nick_name : username;
         messages += "<div data-message class=\"msg-item msg-item-left\">" +
             "<img src=\"\" alt=\"\">" +
             "<p style='margin-bottom: 0'><small>" + username + "</small>&nbsp;<small class='time-stamp'>" + time + "</small>" + "<br/>" + message_body + "</p>" +
