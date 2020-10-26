@@ -208,7 +208,6 @@ function vPaddingData(data, isFromButton) {
         //  创建新表
         if (is_left) {
             tTableAppendLeft();
-            console.log("tTableAppendLeft")
         } else tTableAppendRight();
 
         // 填充科目
@@ -233,8 +232,8 @@ function vPaddingData(data, isFromButton) {
         });
         // 填充贷记
         $("input[name=cr]").each(function () {
-            $(this).parent().prev().children().val(dr_array[cr_index]["business_no"]);
-            $(this).val(dr_array[cr_index]["money"]);
+            $(this).parent().prev().children().val(cr_array[cr_index]["business_no"]);
+            $(this).val(cr_array[cr_index]["money"]);
             cr_index += 1;
         });
 

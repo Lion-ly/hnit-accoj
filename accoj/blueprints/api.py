@@ -403,7 +403,12 @@ def commit_correct():
     if title in titles:
         t_confirm = schedule_confirm.get(f'{title}_confirm')
         if t_confirm:
-            if title in {'trend_analysis', 'common_ratio_analysis'}:
+            if title == 'acc_document':
+                if category in t_confirm:
+                    result = True
+                    mongo.db.company.update({'student_no': username},
+                                            {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
+            elif title in {'trend_analysis', 'common_ratio_analysis'}:
                 # 趋势分析法 / 共同比分析法
                 if score and 0 <= score <= 5 and category in categories and t_confirm.get(
                         category):
