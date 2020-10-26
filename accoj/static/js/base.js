@@ -843,15 +843,15 @@ function commit_correct(data, url, successFunc, messageDivID) {
 
 function bind_score(id, title, messageDivID, category) {
     function click_fun(score) {
-        let data = {'title': title, 'category': category, 'score': score},
-            flag = true,
-            successFun = function () {
-
-            };
-        score = parseFloat(score);
+        let flag = true;
         category = category ? category : "";
+        score = parseFloat(score);
         //'评分不符合规范'
-        if (title === 'dupont_analysis') {
+        if (title === "acc_document") {
+            let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
+            category = nowBusinessNo;
+            if (score < 0 || score > 3) flag = false;
+        } else if (title === 'dupont_analysis') {
             if (score < 0 || score > 70) flag = false;
         } else if (["trend_analysis", "common_ratio_analysis", "ratio_analysis"].indexOf(title) != -1) {
             if (score < 0 || score > 5) flag = false;
@@ -860,6 +860,9 @@ function bind_score(id, title, messageDivID, category) {
             show_message(messageDivID, "评分不符合规范", "danger", 2000, "评分失败!");
             return;
         }
+        let data = {'title': title, 'category': category, 'score': score},
+            successFun = function () {
+            };
 
         commit_correct(data, '', successFun, messageDivID);
     }

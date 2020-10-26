@@ -354,6 +354,7 @@ function viBind() {
         businessLiControl(business_no);
         get_acc_document_info();
     }, 20);
+    bind_score("teacher_correct", "acc_document", "correct_message")
 }
 
 /**
