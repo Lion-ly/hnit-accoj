@@ -1,0 +1,78 @@
+{% extends 'course/courseBase.html' %}
+{% block courseBody %}
+<!--第九次课程-->
+<div class="courseBody">
+    <!-- 习题主体 -->
+    <div class="container">
+        <div class="panel panel-default">
+            <!--作业要求-->
+            <div class="panel-heading">
+                <span>1、掌握财务报表基本分析方法及其运用。 </span>
+            </div>
+            <div class="panel-body">
+                <div class="acc-pn-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('accoj.courseix') }}">趋势分析法</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('accoj.courseix_2') }}">共同比分析法</a>
+                            </li>
+                            <li class="active">
+                                <a href="{{ url_for('accoj.courseix_3') }}">因素分析法</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('accoj.courseix_4') }}">比率分析法</a>
+                            </li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <hr class="simple"/>
+                <p class="acc-title">3、因素分析法</p>
+                <p>因素分析法是通过分析影响财务指标的各项因素并计算其对指标的影响程度，来说明财务指标变动或差异的主要原因的一种分析方法，主要有两种计算方法。</p>
+                <!--内容部分-->
+                <div>
+                    <dl>
+                        <dt>1、连环替代法</dt>
+                        <dd>根据因素之间的内在依存关系，依次测定各因素变动对经济指标差异影响的一种分析方法。假设某经济指标由相联系的A、B、C三个因素组成：</dd>
+                        <dd>上期指标 ： N1=A1×B1×C1</dd>
+                        <dd>本期指标 ： N2=A2×B2×C2</dd>
+                        <dd>三个因素都有变化，可用连环替代法进行三次替代求得哪个因素的变化对指标的影响最大。</dd>
+                        <dd>上期指标N1=A1×B1×C1①</dd>
+                        <dd>第一次替代：N3=A2×B1×C1②</dd>
+                        <dd>第二次替代：N4=A2×B2×C1③</dd>
+                        <dd>第三次替代：N2=A2×B2×C2（即本期指标）④</dd>
+                        <dd>②-①：是由于A1变为A2带来的影响</dd>
+                        <dd>③-②：是由于B1变为B2带来的影响</dd>
+                        <dd>④-③：是由于C1变为C2带来的影响</dd>
+                        <dt>2、差额分析法</dt>
+                        <dd>也称绝对分析法，就是直接利用各因素的预算（计划）与实际的差异来按顺序计算，确定其变动对分析对象的影响程度。</dd>
+                        <dd>假设某经济指标由相联系的A、B、C三因素组成：</dd>
+                        <dd>基数指标N1=A1×B1×C1</dd>
+                        <dd>实际指标N2=A2×B2×C2</dd>
+                        <dd>A变动对N的影响：△A=(A2-A1)×B1×C1</dd>
+                        <dd>B变动对N的影响：△B=A2×(B2-B1)×C1</dd>
+                        <dd>C变动对N的影响：△C=A2×B2×(C2－C1)</dd>
+                    </dl>
+                </div>
+                <hr class="simple"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
+
+{% endblock courseBody %}

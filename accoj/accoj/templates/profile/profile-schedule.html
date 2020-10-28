@@ -1,0 +1,24 @@
+{% extends 'profile/profile-base.html' %}
+{% block page_title %}我的进度{% endblock %}
+{% block page_title_li %}我的进度{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">我的进度</strong>
+                    </div>
+                    <div class="card-body" style="height: 60%;width: 60%">
+                        <canvas id="myChart" width="600" height="400"></canvas>
+                        <hr/>
+                        <canvas id="pie-chart" width="600" height="600"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- .animated -->
+    <!-- Scripts -->
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/profile-schedule.js"></script>
+{% endblock %}

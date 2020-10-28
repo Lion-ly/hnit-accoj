@@ -1,0 +1,54 @@
+{% extends 'profile/profile-base.html' %}
+{% block page_title %}排行榜{% endblock %}
+{% block page_title_li %}排行榜{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">排行榜</strong>
+                    </div>
+                    <div class="card-body">
+                        <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="serial">排名</th>
+                                <th>学号</th>
+                                <th>班级</th>
+                                <th>姓名</th>
+                                <th id="data-sorting_asc-ctl">总分</th>
+                                <th>I</th>
+                                <th>II</th>
+                                <th>III</th>
+                                <th>IV</th>
+                                <th>V</th>
+                                <th>VI</th>
+                                <th>VII</th>
+                                <th>VIII</th>
+                                <th>IX</th>
+                                <th>X</th>
+                            </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div><!-- .animated -->
+
+    <!-- Scripts -->
+   <script src="http://cdn.accoj.top/static/cdn/back-stage/datatables.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/dataTables.bootstrap.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.dataTables.buttons.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/buttons.bootstrap.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/3.3.0.jszip.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.html5.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.print.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.colVis.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/rank.js"></script>
+{% endblock %}

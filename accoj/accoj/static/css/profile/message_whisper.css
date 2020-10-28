@@ -1,0 +1,185 @@
+.card-body {
+  padding: 0 !important;
+}
+.card-body .msg {
+  display: flex;
+}
+.card-body .msg .friend-list {
+  width: 240px;
+  padding-right: 0 !important;
+  border-right: 1px solid #f7f7f7;
+}
+.card-body .msg .friend-list .active {
+  background-color: #f7f7f7;
+}
+.card-body .msg .friend-list .title {
+  padding-left: 24px;
+  width: 100%;
+  height: 36px;
+  font-size: 12px;
+  line-height: 36px;
+  border-bottom: 1px solid #f7f7f7;
+}
+.card-body .msg .friend-list .list::-webkit-scrollbar {
+  width: 5px;
+}
+.card-body .msg .friend-list .list::-webkit-scrollbar-thumb {
+  background-color: #cdcdcd;
+  border-radius: 5px;
+}
+.card-body .msg .friend-list .list {
+  width: 100%;
+  height: 800px;
+  overflow-y: scroll;
+}
+.card-body .msg .friend-list .list > article {
+  height: 80px;
+  padding: 19px 24px;
+  display: flex;
+  align-items: center;
+}
+.card-body .msg .friend-list .list > article > img {
+  min-width: 42px;
+  border-radius: 50%;
+  background-color: gray;
+  width: 42px;
+  height: 42px;
+  margin-right: 8px;
+}
+.card-body .msg .friend-list .list > article .user-info {
+  display: flex;
+  flex-direction: column;
+}
+.card-body .msg .friend-list .list > article .user-info > span {
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-body .msg .friend-list .list > article .user-info > span:first-child {
+  font-size: 14px;
+}
+.card-body .msg .friend-list .list > article .user-info > span:last-child {
+  font-size: 12px;
+  color: gray;
+  margin-top: 6px;
+}
+.card-body .msg .friend-message {
+  width: 100%;
+}
+.card-body .msg .friend-message .title {
+  width: 100%;
+  height: 36px;
+  font-size: 13px;
+  line-height: 36px;
+  border-bottom: 1px solid #f7f7f7;
+  text-align: center;
+}
+.card-body .msg .friend-message .message-box::-webkit-scrollbar {
+  width: 5px;
+}
+.card-body .msg .friend-message .message-box::-webkit-scrollbar-thumb {
+  background-color: #cdcdcd;
+  border-radius: 5px;
+}
+.card-body .msg .friend-message .message-box {
+  width: 100%;
+  background-color: #f7f7f7;
+  height: 640px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #d8d8d8;
+  overflow-y: scroll;
+}
+.card-body .msg .friend-message .message-box time {
+  display: block;
+  padding: 16px 0;
+  font-size: 12px;
+  text-align: center;
+}
+.card-body .msg .friend-message .message-box .msg-item {
+  width: 100%;
+  padding: 0 16px 16px 16px;
+}
+.card-body .msg .friend-message .message-box .msg-item > img {
+  min-width: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: gray;
+}
+.card-body .msg .friend-message .message-box .msg-item > p {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #ffffff;
+  max-width: 600px;
+}
+.card-body .msg .friend-message .message-box .msg-item-left {
+  display: flex;
+  justify-content: flex-start;
+}
+.card-body .msg .friend-message .message-box .msg-item-left > p {
+  margin-left: 10px;
+  border-radius: 0 16px 16px 16px;
+}
+.card-body .msg .friend-message .message-box .msg-item-right {
+  display: flex;
+  justify-content: flex-end;
+}
+.card-body .msg .friend-message .message-box .msg-item-right > p {
+  margin-right: 10px;
+  border-radius: 16px 0 16px 16px;
+}
+.card-body .msg .send-box {
+  width: 100%;
+  height: 160px;
+  padding: 0 16px;
+  background-color: #f7f7f7;
+}
+.card-body .msg .send-box > textarea {
+  resize: none;
+  width: 100%;
+  height: 60px;
+  outline: none;
+  border: none;
+  margin: 14px 0;
+  background-color: #f7f7f7;
+}
+.card-body .msg .send-box > div {
+  display: flex;
+  justify-content: flex-end;
+}
+.card-body .msg .send-box > div > div > span {
+  line-height: 12px;
+  -webkit-box-direction: normal;
+  margin: 0;
+  color: #c0c0c0;
+  padding: 1px;
+  font-size: 12px;
+  box-sizing: border-box;
+  vertical-align: bottom;
+}
+.card-body .msg .send-box > div > button {
+  -webkit-box-direction: normal;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  outline: 0;
+  padding: 0;
+  cursor: pointer;
+  margin-left: 10px;
+  position: relative;
+  width: 88px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #e7e7e7;
+  background-color: #fff;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+small.time-stamp{
+  color: #a1a1a1;
+}
+small.nickname{
+  color: #555;
+  font-weight: bold;
+}
+/*# sourceMappingURL=message_whisper.css.map */

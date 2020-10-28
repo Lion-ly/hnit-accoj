@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}会计实训系统 信息{% endblock title %}
+
+{% block meun %}{% endblock meun %}
+
+{% block courseBody %}
+
+    <div class="courseBody">
+        <div class="visible-md-block visible-lg-block">
+        <div class="navbar-fixed-top" style="margin-top: 52px">
+            <div class="container">
+                <div class="list-group" style="width: 20%">                    
+                    <a href="#" class="list-group-item" onclick="getPosition(this)">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;预留
+                    </a>
+                    <a href="#help" class="list-group-item" onclick="getPosition(this)">
+                        <span class="glyphicon glyphicon-duplicate"></span>&nbsp;&nbsp;帮助
+                    </a>
+                    <a href="#feedback" class="list-group-item" onclick="getPosition(this)">
+                        <span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;反馈
+                    </a>
+                    <a href="#about" class="list-group-item" onclick="getPosition(this)">
+                        <span class="glyphicon glyphicon-tent"></span>&nbsp;&nbsp;关于
+                    </a>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container">
+            <div class="col-md-9 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="help" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">帮助</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    <p align="center" style="height: 300px; line-height: 300px">占位</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="feedback" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">反馈</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    <p align="center" style="height: 300px; line-height: 300px">占位</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="about" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">关于</h3>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="media col-xs-12 col-sm-6 col-md-6">
+                                    <div class="media-left media-middle">
+                                        <a href="#"> <img class="img-circle" src="{{ url_for('static', filename='img/demoimg1.jpg') }}"
+                                                          alt="..." style="width: 64px; height: 64px">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            Hooyantsing<br/>
+                                            <small class="text-right">前端工程师<br/>
+                                                <em>联系方式</em><br/> <em>QQ:584945164</em><br/>
+                                            </small>
+                                        </h4>
+                                        <p></p>
+                                    </div>
+                                </div>
+
+                                <div class="media col-xs-12 col-sm-6 col-md-6"
+                                     style="margin-top: 0px">
+                                    <div class="media-left media-middle">
+                                        <a href="#"> <img class="img-circle" src="{{ url_for('static', filename='img/demoimg1.jpg') }}"
+                                                          alt="..." style="width: 64px; height: 64px">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            Coodzy<br/>
+                                            <small class="text-right">后端工程师<br/> <em>联系方式</em><br/>
+                                                <em>QQ:</em><br/>
+                                            </small>
+                                        </h4>
+                                        <p></p>
+                                    </div>
+                                </div>
+
+                                <div class="media col-xs-12 col-sm-6 col-md-6">
+                                    <div class="media-left media-middle">
+                                        <a href="#"> <img class="img-circle" src="{{ url_for('static', filename='img/demoimg1.jpg') }}"
+                                                          alt="..." style="width: 64px; height: 64px">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            name<br/>
+                                            <small class="text-right">staff<br/> <em>联系方式</em><br/>
+                                                <em>QQ:</em><br/>
+                                            </small>
+                                        </h4>
+                                        <p></p>
+                                    </div>
+                                </div>
+
+                                <div class="media col-xs-12 col-sm-6 col-md-6">
+                                    <div class="media-left media-middle">
+                                        <a href="#"> <img class="img-circle" src="{{ url_for('static', filename='img/demoimg1.jpg') }}"
+                                                          alt="..." style="width: 64px; height: 64px">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            name<br/>
+                                            <small class="text-right">staff<br/> <em>联系方式</em><br/>
+                                                <em>QQ:</em><br/>
+                                            </small>
+                                        </h4>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
+
+{% endblock courseBody %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block meun %}
+    <!-- 习题菜单 -->
+    <div>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#menu" aria-expanded="false">
+                        <span class="sr-only"></span> <span class="icon-bar"></span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ url_for('accoj.coursei') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">I.会计主体</a></li>
+                        <li><a href="{{ url_for('accoj.courseii') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">II.会计要素</a></li>
+                        <li><a href="{{ url_for('accoj.courseiii') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">III.会计科目</a></li>
+                        <li><a href="{{ url_for('accoj.courseiv') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">IV.会计分录</a></li>
+                        <li><a href="{{ url_for('accoj.coursev') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">V.会计账户</a></li>
+                        <li><a href="{{ url_for('accoj.coursevi') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">VI.会计凭证</a></li>
+                        <li><a href="{{ url_for('accoj.coursevii') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">VII.会计账簿</a></li>
+                        <li><a href="{{ url_for('accoj.courseviii') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">VIII.会计报表</a></li>
+                        <li><a href="{{ url_for('accoj.courseix') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">IX.会计报表分析</a></li>
+                        <li><a href="{{ url_for('accoj.coursex') }}" data-toggle="tooltip" data-placement="bottom"
+                               title="已开放">X.会计报告</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+{% endblock meun %}
+
+{% block title %}会计实训系统 实训{% endblock title %}
