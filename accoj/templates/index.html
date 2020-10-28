@@ -1,178 +1,182 @@
 {% extends 'base.html' %}
 
 {% block title %}
-会计实训系统 首页
+    会计实训系统 首页
 {% endblock title %}
 
 {% block meun %}{% endblock meun %}
 
 {% block courseBody %}
-<!-- 巨幕 -->
-<div class="jumbotron acc-jumbotron-bg"
-     style="background-image: url('{{ url_for('static', filename='img/EMC.png') }}')">
+    <!-- 巨幕 -->
+    <div class="jumbotron acc-jumbotron-bg"
+         style="background-image: url('{{ url_for('static', filename='img/EMC.png') }}')">
+        <div class="container">
+            <div>
+                <h1>经济与管理学院
+                    <small>&nbsp;会计实训系统</small>
+                </h1>
+                <div>
+                    <p>
+                        美国著名经济学家、诺贝尔经济学奖获得者萨缪尔森说：“我们正处在一个科技时代，同时也是一个会计时代，在这个时代里，掌握一些会计知识已成为人们的基本需求。” 在现代社会中，很难想象一个不懂得会计的人如何去管理经济、经营企业，甚至管理自己的家庭。
+                    </p>
+                    <p>
+                        会计之行，始于练习！
+                    </p>
+                </div>
+                <p>
+                    {% if username %}
+                        <a class="btn btn-primary btn-lg" href="{{ url_for('accoj.coursei') }}"
+                           role="button">开启旅途&nbsp;GO!</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#signin"
+                           role="button">开启旅途&nbsp;GO!</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- 公告栏 -->
+
+    <!-- 公告栏 -->
+    <div class="information container">
+        <div class="notice">
+            <div class="info-head">
+                <div class="pb60 intitle">
+                    <h2>公告</h2>
+                    <b>NOTICE</b>
+                    <p>最新发布</p>
+                </div>
+            </div>
+            <article id="notice-list">
+            </article>
+            <div class="info-option">
+                <ul class="pager">
+                    <li><a onclick="">more</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="news">
+            <div class="info-head">
+                <div class="pb60 intitle">
+                    <h2>新闻</h2>
+                    <b>NEWS</b>
+                    <p>当日新闻</p>
+                </div>
+            </div>
+            <article id="news-list">
+            </article>
+            <div class="info-option">
+                <ul class="pager">
+                    <li><a onclick="show_news()"><i id="more" class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 装饰分割条 -->
+    <div id="background">
+        <div class="acc-decorate-line"
+             style="background-image: url('{{ url_for('static', filename='img/Track.jpg') }}')"></div>
+    </div>
+    <!--工学院简介-->
+    <div class="container acc-intro-hnit">
+        <div class="row">
+            <div class=" visible-md-block visible-lg-block col-md-3 ">
+                <img src="{{ url_for('static', filename='img/logo_2.png') }}">
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <p>
+                    湖南工学院坐落于湖南省第二大城市、王船山故里 —— 衡阳市，是 2007 年经教育部批准由湖南建材高等专科学校和湖南大学衡阳分校合并升格的省属公办普通本科院校， 2010 年 3
+                    月湖南工业科技职工大学整体并入，是全国实施“卓越工程师教育培养计划”最年轻的本科院校 ,
+                    是湖南省硕士学位授予立项建设单位。学校立足湖南，重点面向工业企业，为区域经济建设和社会发展服务，是一所以工为主，工、理、管、经、文、艺等多学科协调发展，具有较强的科技服务能力，培养基础实、技术精、能力强、具有创新精神和社会责任感的高素质应用型专门人才的本科院校。
+                </p>
+                <p>
+                    学校现有三个校区，占地 1358 亩，校舍建筑面积 56.89 万平方米。教学科研仪器设备总值 1.9 亿元，图书馆纸质藏书 149 万余册。
+                </p>
+                <p>
+                    学校现有全日制在校学生 18716 人。有教职工 1191 人，其中正高职称 87 人（教授 77 人），副高职称 289 人（副教授 222 人），博士 104 人，硕士 700
+                    人。有享受国务院政府特殊津贴专家
+                    6 人、湖南省政府特殊津贴专家 1 人、湖南省新世纪“ 121 人才工程”第一、二层次人选共4 人 ，第三层次人选 4
+                    人，有一批获得湖南省院士专家咨询委员会专家、教育部思想政治教育中青年杰出人才支持计划培养对象、全国优秀教师、湖南省优秀教师、省级学科带头人等荣誉的高水平教师。
+                </p>
+                <p>
+                    学校设有 12 个二级教学院（部）、 21 个党政管理机构、 3 个党群组织、8个直属单位， 44 个本科专业 ( 其中１个中外合作办学项目 ) 。有省应用特色学科（重点建设学科） 4
+                    个，教育部特色专业 1
+                    个，教育部“卓越计划”试点专业 3 个，省特色专业和重点资助建设专业 4 个，省级综合改革试点专业 5
+                    个。学校安全工程专业通过2018年教育部高等教育教学认证中心的工程教育认证。机械设计制造及其自动化获批国家级一流本科专业建设点；无机非金属材料工程、高分子材料与工程、安全工程、自动化、会计学、工商管理获批湖南省一流专业建设点。
+                </p>
+                <p>
+                    学校全面深化教学改革，着力实施本科教学质量工程。现有校级校外实习基地 125 个，各类实验室 56 个，生均实验仪器设备值1万多元；国家级大学生校外实践教育基地 1
+                    个、省高校大学生创新创业孵化示范基地1个，省创新创业训练中心4个、北斗众创空间集群（湖南）湖南工学院子空间1个，省创新创业教育基地5个；省级优秀实习教学基地 11 个、省级虚拟仿真实验中心 1
+                    个；省级基础课示范实验室 3 个、省级实践教学示范中心 3 个、省级校企合作人才培养示范基地 4 个、省级校地合作示范基地１个、省级创新训练中心 2 个；省级优秀教研室 4 个、省级教学团队 3
+                    个；国家级精品课程
+                    1 门、省级精品课程 9 门。省级精品在线开放课程5门，省级线上、线下混合式一流课程6门、线下一流课程5门。
+                </p>
+                <p>
+                    学校不断加强学科建设和科研工作，产学研合作紧密。设立了 17 个研究院（所），拥有国家地方联合工程实验室 1 个，省级科研平台 9 个，省级教育科学研究基地 2 个，省级科技创新团队 2
+                    个。升本以来，全校教师承担各级各类科研项目 1771 项，获厅局级以上科研成果奖励 55 项；在核心期刊上发表学术论文 2012 篇，其中被 SCI 、 EI 、 SSCI 、 ISTP 收录 411
+                    篇，获得授权专利 483 项，出版各类学术专著 107 部。获省级以上教研教改课题 200 余项，省级以上教学成果奖 25 项。
+                </p>
+                <p>
+                    学校以理事会、校友会、基金会为平台，以“校企合作、产教融合”为重点，分别与中广核、大亚湾、岭澳等多家核电站、苏州热工院、皇朝家私、杭州全盛机电、上海恒企教育、新欧鹏集团、湘窖酒业、深圳联得装备、力特实业、衡阳运机等企业进行合作，在专业建设、课程建设、师资队伍建设、产学研合作、科技服务、创新创业、实习实训、教学评价、设立奖助基金等方面开展卓有成效的合作。
+                </p>
+                <p>
+                    学校积极开展国际交流与合作，先后与美国、英国、德国、法国、日本、韩国、马来西亚等 10 多个国家的 30
+                    多所高校建立了合作关系。学校具有招收来华留学生资格，与英国桑德兰大学合作举办的电气工程及其自动化为教育部批准项目的中外合作办学项目。
+                </p>
+                <p>
+                    奋进中的湖南工学院，秉承“勤学、务实、圆融、卓越”的校训，以学科专业建设为龙头，以应用型人才培养模式改革为重点，以校企合作与国际合作为突破口，全面推进“依法治校、质量立校、人才兴校、特色强校”的发展战略，坚持走“改革创新、强化基础、办出特色、科学发展”之路，正朝着特色鲜明、社会声誉良好的应用型大学建设目标砥砺前行。
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- 友情链接 -->
     <div class="container">
         <div>
-            <h1>经济与管理学院
-                <small>&nbsp;会计实训系统</small>
-            </h1>
-            <div>
-                <p>
-                    美国著名经济学家、诺贝尔经济学奖获得者萨缪尔森说：“我们正处在一个科技时代，同时也是一个会计时代，在这个时代里，掌握一些会计知识已成为人们的基本需求。” 在现代社会中，很难想象一个不懂得会计的人如何去管理经济、经营企业，甚至管理自己的家庭。
-                </p>
-                <p>
-                    会计之行，始于练习！
-                </p>
+            <div class="page-header">
+                <strong>湖南工学院：</strong>
             </div>
-            <p>
-                {% if username %}
-                <a class="btn btn-primary btn-lg" href="{{ url_for('accoj.coursei') }}"
-                   role="button">开启旅途&nbsp;GO!</a>
-                {% else %}
-                <a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#signin"
-                   role="button">开启旅途&nbsp;GO!</a>
-                {% endif %}
-            </p>
-        </div>
-    </div>
-</div>
-<!-- 公告栏 -->
-
-<!-- 公告栏 -->
-<div class="information container">
-    <div class="notice">
-        <div class="info-head">
-            <div class="pb60 intitle">
-                <h2>公告</h2>
-                <b>NOTICE</b>
-                <p>最新发布</p>
+            <div class="row">
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>材料与化学工程学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>计算机与信息科学学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>电气与信息工程学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>机械工程学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>安全与环境工程学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>建筑工程与艺术设计学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>外国语学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>经济与管理学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>马克思主义学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>数理科学与能源工程学院</a>
             </div>
         </div>
-        <article id="notice-list">
-            <div class="ntc-item">
-                <h4><a target="_blank" href="/notice">今日发布1.0版本</a></h4>
-                <time>2020年10月15日</time>
+        <div>
+            <div class="page-header">
+                <strong>友情链接：</strong>
             </div>
-            <div class="ntc-item">
-                <h4><a target="_blank" href="/notice">今日发布2.0版本</a></h4>
-                <time>2020年10月15日</time>
-            </div>
-            <div class="ntc-item">
-                <h4><a target="_blank" href="/notice">今日发布3.0版本</a></h4>
-                <time>2020年10月15日</time>
-            </div>
-        </article>
-        <div class="info-option">
-            <ul class="pager">
-                <li><a onclick="">more</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="news">
-        <div class="info-head">
-            <div class="pb60 intitle">
-                <h2>新闻</h2>
-                <b>NEWS</b>
-                <p>当日新闻</p>
+            <div class="row">
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>湖南工学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>衡阳师范学院</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>南华大学</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>中南大学</a>
+                <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span
+                        class="glyphicon glyphicon-chevron-right"></span>湖南大学</a>
             </div>
         </div>
-        <article id="news-list">
-        </article>
-        <div class="info-option">
-            <ul class="pager">
-                <li><a onclick="show_news()"><i id="more" class="fa fa-chevron-down" aria-hidden="true"></i></a></li>
-            </ul>
-        </div>
     </div>
-</div>
-<!-- 装饰分割条 -->
-<div id="background">
-    <div class="acc-decorate-line"
-         style="background-image: url('{{ url_for('static', filename='img/Track.jpg') }}')"></div>
-</div>
-<!--工学院简介-->
-<div class="container acc-intro-hnit">
-    <div class="row">
-        <div class=" visible-md-block visible-lg-block col-md-3 ">
-            <img src="{{ url_for('static', filename='img/logo_2.png') }}">
-        </div>
-        <div class="col-sm-12 col-md-9">
-            <p>
-                湖南工学院坐落于湖南省第二大城市、王船山故里 —— 衡阳市，是 2007 年经教育部批准由湖南建材高等专科学校和湖南大学衡阳分校合并升格的省属公办普通本科院校， 2010 年 3
-                月湖南工业科技职工大学整体并入，是全国实施“卓越工程师教育培养计划”最年轻的本科院校 ,
-                是湖南省硕士学位授予立项建设单位。学校立足湖南，重点面向工业企业，为区域经济建设和社会发展服务，是一所以工为主，工、理、管、经、文、艺等多学科协调发展，具有较强的科技服务能力，培养基础实、技术精、能力强、具有创新精神和社会责任感的高素质应用型专门人才的本科院校。
-            </p>
-            <p>
-                学校现有三个校区，占地 1358 亩，校舍建筑面积 56.89 万平方米。教学科研仪器设备总值 1.9 亿元，图书馆纸质藏书 149 万余册。
-            </p>
-            <p>
-                学校现有全日制在校学生 18716 人。有教职工 1191 人，其中正高职称 87 人（教授 77 人），副高职称 289 人（副教授 222 人），博士 104 人，硕士 700
-                人。有享受国务院政府特殊津贴专家
-                6 人、湖南省政府特殊津贴专家 1 人、湖南省新世纪“ 121 人才工程”第一、二层次人选共4 人 ，第三层次人选 4
-                人，有一批获得湖南省院士专家咨询委员会专家、教育部思想政治教育中青年杰出人才支持计划培养对象、全国优秀教师、湖南省优秀教师、省级学科带头人等荣誉的高水平教师。
-            </p>
-            <p>
-                学校设有 12 个二级教学院（部）、 21 个党政管理机构、 3 个党群组织、8个直属单位， 44 个本科专业 ( 其中１个中外合作办学项目 ) 。有省应用特色学科（重点建设学科） 4
-                个，教育部特色专业 1
-                个，教育部“卓越计划”试点专业 3 个，省特色专业和重点资助建设专业 4 个，省级综合改革试点专业 5
-                个。学校安全工程专业通过2018年教育部高等教育教学认证中心的工程教育认证。机械设计制造及其自动化获批国家级一流本科专业建设点；无机非金属材料工程、高分子材料与工程、安全工程、自动化、会计学、工商管理获批湖南省一流专业建设点。
-            </p>
-            <p>
-                学校全面深化教学改革，着力实施本科教学质量工程。现有校级校外实习基地 125 个，各类实验室 56 个，生均实验仪器设备值1万多元；国家级大学生校外实践教育基地 1
-                个、省高校大学生创新创业孵化示范基地1个，省创新创业训练中心4个、北斗众创空间集群（湖南）湖南工学院子空间1个，省创新创业教育基地5个；省级优秀实习教学基地 11 个、省级虚拟仿真实验中心 1
-                个；省级基础课示范实验室 3 个、省级实践教学示范中心 3 个、省级校企合作人才培养示范基地 4 个、省级校地合作示范基地１个、省级创新训练中心 2 个；省级优秀教研室 4 个、省级教学团队 3
-                个；国家级精品课程
-                1 门、省级精品课程 9 门。省级精品在线开放课程5门，省级线上、线下混合式一流课程6门、线下一流课程5门。
-            </p>
-            <p>
-                学校不断加强学科建设和科研工作，产学研合作紧密。设立了 17 个研究院（所），拥有国家地方联合工程实验室 1 个，省级科研平台 9 个，省级教育科学研究基地 2 个，省级科技创新团队 2
-                个。升本以来，全校教师承担各级各类科研项目 1771 项，获厅局级以上科研成果奖励 55 项；在核心期刊上发表学术论文 2012 篇，其中被 SCI 、 EI 、 SSCI 、 ISTP 收录 411
-                篇，获得授权专利 483 项，出版各类学术专著 107 部。获省级以上教研教改课题 200 余项，省级以上教学成果奖 25 项。
-            </p>
-            <p>
-                学校以理事会、校友会、基金会为平台，以“校企合作、产教融合”为重点，分别与中广核、大亚湾、岭澳等多家核电站、苏州热工院、皇朝家私、杭州全盛机电、上海恒企教育、新欧鹏集团、湘窖酒业、深圳联得装备、力特实业、衡阳运机等企业进行合作，在专业建设、课程建设、师资队伍建设、产学研合作、科技服务、创新创业、实习实训、教学评价、设立奖助基金等方面开展卓有成效的合作。
-            </p>
-            <p>
-                学校积极开展国际交流与合作，先后与美国、英国、德国、法国、日本、韩国、马来西亚等 10 多个国家的 30
-                多所高校建立了合作关系。学校具有招收来华留学生资格，与英国桑德兰大学合作举办的电气工程及其自动化为教育部批准项目的中外合作办学项目。
-            </p>
-            <p>
-                奋进中的湖南工学院，秉承“勤学、务实、圆融、卓越”的校训，以学科专业建设为龙头，以应用型人才培养模式改革为重点，以校企合作与国际合作为突破口，全面推进“依法治校、质量立校、人才兴校、特色强校”的发展战略，坚持走“改革创新、强化基础、办出特色、科学发展”之路，正朝着特色鲜明、社会声誉良好的应用型大学建设目标砥砺前行。
-            </p>
-        </div>
-    </div>
-</div>
-<!-- 友情链接 -->
-<div class="container">
-    <div>
-        <div class="page-header">
-            <strong>湖南工学院：</strong>
-        </div>
-        <div class="row">
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>材料与化学工程学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>计算机与信息科学学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>电气与信息工程学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>机械工程学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>安全与环境工程学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>建筑工程与艺术设计学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>外国语学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>经济与管理学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>马克思主义学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>数理科学与能源工程学院</a>
-        </div>
-    </div>
-    <div>
-        <div class="page-header">
-            <strong>友情链接：</strong>
-        </div>
-        <div class="row">
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>湖南工学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>衡阳师范学院</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>南华大学</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>中南大学</a>
-            <a class="col-lg-3 col-md-3 col-sm-4 col-xs-6" href=""><span class="glyphicon glyphicon-chevron-right"></span>湖南大学</a>
-        </div>
-    </div>
-</div>
     <!--<script src="http://cdn.accoj.top/static/accoj-1.0.0/index.js" charset="UTF-8"></script>-->
     <script src="{{ url_for('static', filename='js/index.js') }}" charset="UTF-8"></script>
 {% endblock courseBody %}

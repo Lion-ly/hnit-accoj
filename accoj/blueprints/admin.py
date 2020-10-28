@@ -10,13 +10,16 @@ import json
 from flask import (Blueprint,
                    render_template,
                    jsonify,
-                   request)
+                   request,
+                   redirect,
+                   url_for)
 from accoj.extensions import (mongo,
                               redis_cli)
 from accoj.utils import (create_account,
                          login_required_admin,
                          change_password)
 from accoj.evaluation import rejudge
+import time
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -150,6 +153,132 @@ def submit_rejudge():
     student_no = data.get('student_no')
     rejudge.delay(course_no, class_name, student_no)
     return jsonify(result=True, data=None)
+
+
+@admin_bp.route('/announcement', methods=['GET'])
+def announcement():
+    """公告页面"""
+    data = mongo.db.notice.find_one(dict(is_modify=1))
+    if data:
+        return render_template('admin/announcement.html', data=data)
+    else:
+        return render_template('admin/announcement.html', data=dict())
+
+
+@admin_bp.route('/release_announcement', methods=['POST'])
+def release_announcement():
+    """发布公告"""
+    form = request.get_json()
+    notice_subject = form.get("notice_subject")
+    notice_text = form.get("notice_text")
+    notice_abstract = form.get("notice_abstract")
+    res = mongo.db.notice.find_one(dict(subject=notice_subject))
+    if res and res["is_modify"] == 0:
+        return jsonify(result=False)
+    if res and res["is_modify"]:
+        mongo.db.notice.update_one(dict(is_modify=1), {
+            "$set": dict(subject=notice_subject, text=notice_text, abstract=notice_abstract, is_topping=0,
+                         is_modify=0)})
+        return jsonify(result=True)
+    notice = dict(subject=notice_subject, text=notice_text,
+                  abstract=notice_abstract, is_topping=0,
+                  is_modify=0,
+                  timestamp=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    mongo.db.notice.insert_one(notice)
+
+    return jsonify(result=True)
+
+
+@admin_bp.route('/edit_announcement', methods=['GET'])
+def edit_announcement():
+    """获取编辑公告首页"""
+    try:
+        page = request.args.get('page', 1, int)
+        pages, max_page = get_page(page)
+        page_notice = 14
+        if page == 1:
+            notice = mongo.db.notice.find().sort([("is_topping", -1), ("timestamp", -1)]).limit(page_notice)
+            active_page = 1
+        else:
+            notice = mongo.db.notice.find().sort([("is_topping", -1), ("timestamp", -1)]).skip(
+                (page - 1) * page_notice).limit(page_notice)
+            active_page = page
+        return render_template('admin/edit_announcement.html', notice=list(notice), pages=pages,
+                               active_page=active_page,
+                               max_page=max_page)
+    except Exception as e:
+        print(e)
+        return render_template("errors/404.html")
+
+
+@admin_bp.route('/delete_announcement', methods=['GET'])
+def delete_announcement():
+    """删除公告"""
+    try:
+        count = request.args.get("count", type=int)
+        notice = list(mongo.db.notice.find().sort([("is_topping", -1), ("timestamp", -1)]))
+        mongo.db.notice.delete_one(notice[count])
+        return redirect(url_for('admin.edit_announcement'))
+    except Exception as e:
+        print(e)
+    return render_template("errors/404.html")
+
+
+@admin_bp.route('/is_topping', methods=['POST'])
+def is_topping():
+    """置顶"""
+    try:
+        result = request.get_json()
+        result["is_topping"] = result["is_topping"].replace(" ", "").replace("\n","")
+        print(result)
+        if result["is_topping"] == "置顶":
+            is_topping = mongo.db.notice.find_one({"is_topping": 1})
+            if is_topping is None:
+                mongo.db.notice.update_one(dict(subject=result["notice_subject"]), {"$set": dict(is_topping=1)})
+                return jsonify(result=True, message="取消置顶")
+            else:
+                return jsonify(result=False, message="置顶")
+        elif result["is_topping"] == "取消置顶":
+            mongo.db.notice.update_one(dict(subject=result["notice_subject"]), {"$set": dict(is_topping=0)})
+            return jsonify(result=True, message="置顶")
+
+    except Exception as e:
+        print(e)
+        return jsonify(result=False)
+
+
+@admin_bp.route('/is_modify', methods=['POST'])
+def is_modify():
+    """编辑公告"""
+    try:
+        result = request.get_json()
+        res = mongo.db.notice.find_one(dict(is_modify=1))
+        if res:
+            mongo.db.notice.update_many(dict(is_modify=1), {"$set": dict(is_modify=0)})
+        mongo.db.notice.update_one(dict(subject=result["notice_subject"]), {"$set": dict(is_modify=1)})
+        return jsonify(flag=True)
+
+    except Exception as e:
+        print(e)
+        return jsonify(flag=False)
+
+
+def get_page(page, index=3):
+    """页码"""
+    count = mongo.db.notice.count()
+    if count % 14 or count == 0:
+        pages = int(count / 14) + 1
+    else:
+        pages = int(count / 14)
+    pages = list(i for i in range(1, pages + 1))
+    max_page = max(pages)
+    if (max_page - index) <= page:
+        pages_ = pages[page - 1:page + 2]
+    else:
+        pages_ = (pages[page - 1:page + 2])
+    if len(pages_) < 3:
+        pages_ = pages[-3:]
+    return pages_, max_page
 
 
 @admin_bp.before_request

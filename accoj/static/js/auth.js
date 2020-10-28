@@ -186,35 +186,37 @@ $(function () {
 });
 
 $(function () {
-    slider_Verification();
-    $('#signin_button').click(function () {
-        save_cookies();
-        data = $('#signin_form').serialize();
-        $.ajax({
-            url: "/signin",
-            type: "post",
-            data: data,
-            dataType: "json",
-            async: true,
-            success: function (data) {
-                if (data["result"] === "true") {
-                    show_message("signin_form", "登陆成功 1s后自动跳转", "info", 1000);
-                    setTimeout("location.href='localhost:80';location.reload();", 1000);
-                } else {
-                    show_message("signin_form", data["message"], "danger", 1000);
-                    $('#signin_button').attr("disabled", "disabled")
-                    $('#slider').empty();
-                    slider_Verification();
-                }
-            },
-            error: function (err) {
-                console.log(err.statusText + "异常");
+        slider_Verification();
+        $('#signin_button').click(function () {
+            save_cookies();
+            data = $('#signin_form').serialize();
+            if ($('#signin_button').prop("disabled") == false) {
+                $.ajax({
+                    url: "/signin",
+                    type: "post",
+                    data: data,
+                    dataType: "json",
+                    async: true,
+                    success: function (data) {
+                        if (data["result"] === "true") {
+                            show_message("signin_form", "登陆成功 1s后自动跳转", "info", 1000);
+                            setTimeout("location.href='localhost:80';location.reload();", 1000);
+                        } else {
+                            show_message("signin_form", data["message"], "danger", 1000);
+                            $('#signin_button').attr("disabled", true)
+                            $('#slider').empty();
+                            slider_Verification();
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err.statusText + "异常");
+                    }
+                })
             }
         })
 
-    })
-
-})
+    }
+)
 
 
 function slider_Verification() {
@@ -240,7 +242,8 @@ function slider_Verification() {
                 margin: "20px 0 20px 0",
                 left: "13%"
             }, function () {
-                $('#signin_button').removeAttr("disabled");
+                $('#signin_button').attr("disabled", false);
+
 
             });
 

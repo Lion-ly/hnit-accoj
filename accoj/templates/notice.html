@@ -18,19 +18,14 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="notice-panel">
-                    <h3 class="notice-title">最新版本1.0.发布啦</h3>
+                    <h3 class="notice-title">{{ subject }}</h3>
                     <div class="notice-info">
-                        <time class="notice-time">2020年10月15日</time>
-                        <span class="notice-author">Hooy</span>
+                        <time class="notice-time">{{ notice_time }}</time>
+                        <span class="notice-author">Admin</span>
                     </div>
                     <hr/>
                     <article>
-                        <p>噩梦灾变 配件挑战活动的第七季地图存在地图名称错误的问题，地图名称异常显示为绝命背叛[追击]，正确的活动地图名称应为殊死反击[追击]，请战友们在大灾变第七季地图殊死反击[追击]中达成活动要求获取奖励。
-                            望战友们了解并相互转告，给大家带来的不便敬请谅解。</p>
-                        <p>噩梦灾变 配件挑战活动的第七季地图存在地图名称错误的问题，地图名称异常显示为绝命背叛[追击]，正确的活动地图名称应为殊死反击[追击]，请战友们在大灾变第七季地图殊死反击[追击]中达成活动要求获取奖励。
-                            望战友们了解并相互转告，给大家带来的不便敬请谅解。</p>
-                        <p>噩梦灾变 配件挑战活动的第七季地图存在地图名称错误的问题，地图名称异常显示为绝命背叛[追击]，正确的活动地图名称应为殊死反击[追击]，请战友们在大灾变第七季地图殊死反击[追击]中达成活动要求获取奖励。
-                            望战友们了解并相互转告，给大家带来的不便敬请谅解。</p>
+                        {{ text|safe }}
                     </article>
                 </div>
             </div>

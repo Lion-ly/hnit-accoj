@@ -227,14 +227,14 @@ def teacher_api():
             teacher_message_body = f'To  {class_name}：  {message_body}'
             messages = [
                 {'message_head': teacher_message_head, 'message_body': teacher_message_body, 'room': teacher,
-                 'username'    : 'system'}]
+                 'username': 'system'}]
             # print(f"class_name={class_name}")
             classes = mongo.db.classes.find_one({'class_name': class_name})
             if classes:
                 student_nos = classes.get('students')
                 messages.extend(
                     [{'message_head': student_message_head, 'message_body': message_body, 'room': student_no,
-                      'username'    : teacher} for student_no in student_nos])
+                      'username': teacher} for student_no in student_nos])
                 flag += 1
         # print(f"flag={flag}")
         if flag:
@@ -260,9 +260,9 @@ def teacher_api():
             if user and user.get('teacher') == teacher:
                 messages = [
                     {'message_head': teacher_message_head, 'message_body': teacher_message_body, 'room': teacher,
-                     'username'    : 'system'},
+                     'username': 'system'},
                     {'message_head': student_message_head, 'message_body': message_body, 'room': student_no,
-                     'username'    : teacher}]
+                     'username': teacher}]
                 flag += 1
         if flag:
             send_system_message_batch(messages)
@@ -513,7 +513,7 @@ def teacher_notify_p():
     user = mongo.db.user.find({'student_no': student_no})
     if user:
         result = True
-        insert_doc = {'room'        : student_no, 'username': username, 'message_head': message_head,
+        insert_doc = {'room': student_no, 'username': username, 'message_head': message_head,
                       'message_body': message_body, 'time': _time}
         mongo.db.message.insert(insert_doc)
     return jsonify(result=result, data=data)
@@ -531,6 +531,17 @@ def get_news():
         data = dumps(news)
         result = True
     return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_notice', methods=['GET'])
+def get_notice():
+    """获取公告"""
+    result, data = False, None
+    notice = mongo.db.notice.find().sort([("is_topping", -1), ("timestamp", -1)]).limit(3)
+    if notice:
+        notice = [value for value in notice]
+        data = dumps(notice)
+    return jsonify(result=True, data=data)
 
 
 @api_bp.route('/get_class_name_list', methods=['POST'])
