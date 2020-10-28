@@ -23,6 +23,8 @@ from accoj.utils import (create_account,
 from accoj.evaluation import rejudge
 import time
 
+from accoj.evaluation import rejudge
+
 admin_bp = Blueprint('admin', __name__)
 
 
@@ -169,10 +171,10 @@ def course_redo():
     return jsonify(result=flag, data=None, message=message)
 
 
-@admin_bp.route('/log_check', methods=['GET'])
-def log_check():
+@admin_bp.route('/log_backup', methods=['GET'])
+def log_backup():
     """日志查看页面"""
-    return render_template('admin/log_check.html')
+    return render_template('admin/log_backup.html')
 
 
 @admin_bp.route('/debug_log_download', methods=['GET'])

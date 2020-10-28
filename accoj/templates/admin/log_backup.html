@@ -1,7 +1,7 @@
 {% extends 'admin/admin-base.html' %}
-{% block page_title %}日志查看{% endblock %}
+{% block page_title %}备份·日志{% endblock %}
 {% block page_title_li %}
-    <li class="active">日志查看</li>
+    <li class="active">备份·日志</li>
 {% endblock %}
 {% block content %}
     <div class="animated fadeIn">
@@ -13,6 +13,11 @@
                     </div>
                     <div class="card-body" style="height: 60%;width: 80%;">
                         <div class="text-center">
+                            <a href="{{ url_for('admin.debug_log_download') }}">
+                                <button id="backup-download" class="btn btn-outline-info btn-group-vertical" type="button">
+                                    备份下载
+                                </button>
+                            </a>
                             <a href="{{ url_for('admin.debug_log_download') }}">
                                 <button id="log-download" class="btn btn-outline-info btn-group-vertical" type="button">
                                     debug日志下载
