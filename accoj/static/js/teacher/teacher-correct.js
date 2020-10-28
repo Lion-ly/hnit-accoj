@@ -73,15 +73,15 @@ function export_grade() {
         }
 
 
-        let dataList = new Array()
+        let dataList = new Array();
         for (let i = 0; i < data.length; i++) {
-            dataList[i] = new Array()
+            dataList[i] = new Array();
         }
 
-        let cnt = 0
+        let cnt = 0;
         for (let i = 0; i < data.length; i++) {
             for (let key in dataDict) {
-                dataList[i][cnt++] = data[i][key]
+                dataList[i][cnt++] = data[i][key];
             }
         }
         console.log(dataList);

@@ -86,6 +86,16 @@
                 <li>
                     <a href="{{ url_for('admin.audit_class') }}"><i class="menu-icon fa fa-pencil"></i>班级审核 </a>
                 </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="menu-icon fa fa-table"></i>公告管理 </a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-cloud"></i><a href="{{ url_for('admin.announcement') }}"> 发布公告</a></li>
+                        <li><i class="fa fa-plus-square"></i><a href="{{ url_for('admin.edit_announcement') }}">
+                            编辑公告</a>
+                    </ul>
+                </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>

@@ -1,0 +1,76 @@
+{% extends 'admin/admin-base.html' %}
+{% block page_title %}发布通知{% endblock %}
+{% block page_title_li %}
+    <li class="active">发布通知</li>
+{% endblock %}
+{% block content %}
+    <div class="table-responsive" id="edit_table">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>标题</th>
+                <th>操作</th>
+                <th>操作</th>
+                <th>置顶</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in notice %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('index.notice',count=(active_page-1)*14+loop.index0) }}">{{ notice[loop.index0]["subject"] }}</a>({{ notice[loop.index0]["timestamp"] }})
+                    </td>
+                    <td><a href="#" class="is_topping">
+                        {% if notice[loop.index0]["is_topping"] %}取消置顶{% else %}置顶{% endif %}</a></td>
+                    <td><a href="#" class="is_modify">编辑</a></td>
+                    <td><a href="{{ url_for('admin.delete_announcement',count=(active_page-1)*14+loop.index0) }}">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm">
+                    <li {% if active_page == pages|min %}class="disabled"{% endif %}>
+                        <a href="{{ url_for('admin.edit_announcement', page=1) }}">首页</a></li>
+                    <li {% if active_page == pages|min %}class="disabled"{% endif %}>
+                        {% if active_page==1 %}
+                            <a href="{{ url_for('admin.edit_announcement', page=1) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('admin.edit_announcement', page=active_page - 1) }}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                    {% for page in pages %}
+                        <li class="{% if active_page == page %}active{% endif %}">
+                            <a href="{{ url_for('admin.edit_announcement', page=page) }}">{{ page }}</a></li>
+                    {% endfor %}
+                    <li {% if active_page == pages|max %}class="disabled"{% endif %}>
+                        {% if active_page==max_page %}
+                            <a href="{{ url_for('admin.edit_announcement', page=max_page) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('admin.edit_announcement', page=active_page + 1) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                    <li {% if active_page == pages|max %}class="disabled"{% endif %}>
+                        <a href="{{ url_for('admin.edit_announcement', page=max_page) }}">尾页</a></li>
+                    <li class="disabled"><a>共{{ max_page }}页</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='js/admin/notice.js') }}"></script>
+{% endblock content %}

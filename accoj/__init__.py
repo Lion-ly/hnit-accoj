@@ -132,3 +132,4 @@ def set_limiter(_limiter):
     _limiter.limit(set_time)(profile_bp)
     _limiter.limit(set_time)(teacher_bp)
     _limiter.limit(set_time)(admin_bp)
+

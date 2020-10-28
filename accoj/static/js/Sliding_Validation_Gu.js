@@ -193,7 +193,6 @@
 		var move_X = e.clientX;
 		var current_X = move_X - down_X;
 		var move_width=document.getElementById("signin-studentid").clientWidth*0.7-parseInt(this.style.slide_block_width)
-		console.log(move_width)
 		this.current_progress_bg(current_X);
 		this.this_slide_block_obj.css('left', current_X + 'px');
 		if (this.this_slide_block_obj.position().left < this.min_left) {
