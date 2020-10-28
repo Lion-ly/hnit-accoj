@@ -1,6 +1,6 @@
 * {
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
 /*固定footer*/
@@ -10,7 +10,7 @@ html {
 }
 
 body {
-    margin-bottom: 250px;
+    margin-bottom: 300px;
 }
 
 .footer {
@@ -26,7 +26,7 @@ body {
 #project-title {
     margin-bottom: 0;
     background-color: #ffffff;
-    border-color: #ffffff
+    border-color: #ffffff;
 }
 
 /*屏幕大小对导航栏的影响*/
@@ -35,7 +35,8 @@ body {
         float: none;
     }
 
-    .navbar-left, .navbar-right {
+    .navbar-left,
+    .navbar-right {
         float: none !important;
     }
 
@@ -88,7 +89,6 @@ body {
         height: 200px !important;
         background: no-repeat center;
     }
-
 }
 
 @media (min-width: 992px) {
@@ -99,7 +99,7 @@ body {
 
 /*菜单栏*/
 #menu > ul {
-    width: 100%
+    width: 100%;
 }
 
 #menu > ul > li > a {
@@ -121,14 +121,6 @@ body {
     color: #ffffff;
 }
 
-/*友情链接*/
-.acc-friendlink li {
-    width: 19%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 /*底部图标*/
 .acc-footer-icon {
     position: relative;
@@ -144,7 +136,6 @@ body {
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-
     /* 定位 */
     position: absolute;
     z-index: 1;
@@ -186,7 +177,7 @@ body {
 .acc-notice {
     margin-top: 50px;
     margin-bottom: 30px;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .item-title {
@@ -214,6 +205,102 @@ body {
 
 /*装饰分割条*/
 .acc-decorate-line {
-    height: 400px;
+    height: 450px;
     background: no-repeat center;
 }
+
+/*
+公告/新闻 标题
+ */
+.information > div {
+    margin: 50px 0;
+}
+
+.information > div .info-head .pb60 {
+    padding-bottom: 10px;
+}
+
+.information > div .info-head .intitle {
+    text-align: center;
+    position: relative;
+}
+
+.information > div .info-head .intitle > h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    color: #303036;
+    position: relative;
+    z-index: 1;
+}
+
+.information > div .info-head .intitle > b {
+    position: absolute;
+    font-size: 30px;
+    font-weight: bold;
+    color: #e7edfc;
+    z-index: 0;
+    top: -15px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.information > div .info-head .intitle > p {
+    font-size: 16px;
+    color: #999;
+    position: relative;
+    z-index: 1;
+}
+
+.information .notice .ntc-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.information .notice .nct-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.information .notice .nct-title + time {
+    font-size: 12px;
+    color: gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex:1;
+    text-align: right;
+}
+
+/*
+==================== NOTICE START ====================
+ */
+.notice-panel .notice-title {
+    display: flex;
+    justify-content: center;
+    color: #da4709;
+}
+
+.notice-panel .notice-info {
+    display: flex;
+    justify-content: center;
+}
+
+.notice-panel .notice-info .notice-time,
+.notice-panel .notice-info .notice-author {
+    padding: 0 2px;
+    font-size: 12px;
+    color: gray;
+}
+
+.notice-panel article p{
+    font-size: 15px;
+}
+
+/*
+==================== NOTICE END ====================
+ */
+/*# sourceMappingURL=base.css.map */

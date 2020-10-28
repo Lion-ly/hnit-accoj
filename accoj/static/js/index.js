@@ -1,9 +1,11 @@
 // 首页
 $(document).ready(function () {
     _init_();
+    notice_init();
+
 });
 
-var template = '<div class="media">' +
+let template = '<div class="media">' +
     '<div class="media-body">\n' +
     '            <h4 class="media-heading"><a\n' +
     '                  href="#" onclick="window.open(\'{HREF}\');return false;">{TITLE}</a>\n' +
@@ -20,7 +22,16 @@ var template = '<div class="media">' +
     '        </div>' +
     '</div>';
 
-var newsJSON;
+
+let notice_template = '<div class="ntc-item">\n' +
+    '<h4>\n' +
+    '<a href="{HREF}">{notice}</a>\n' + '</h4>' +
+    '{is_topping}</div>' +
+    '<div class="nct-title"><p>{abstract}</p>' +
+    '</div>' + "<time>{notice_time}</time>";
+
+let newsJSON;
+let noticeJSON;
 
 function _init_() {
     function successFunc(news) {
@@ -71,19 +82,22 @@ function get_news(successFunc) {
 }
 
 
-function show_news(){
-    var $more = $('#more');
-    var flag = $more.attr("class");
-    var limit = flag === "fa fa-chevron-up" ? 3 : newsJSON.length;
+// 加载新闻动作
+function show_news() {
+    scroll_go('.news', -50);
+    let $more = $('#more');
+    let flag = $more.attr("class");
+    let limit = flag === "fa fa-chevron-up" ? 3 : newsJSON.length;
     items(limit);
     $more.toggleClass("fa-chevron-down");
     $more.toggleClass("fa-chevron-up");
 }
 
-function items(limit){
-    var items = $('.acc-notice');
+// 将数据加载至页面
+function items(limit) {
+    let items = $('#news-list');
     items.html("");
-    for (var itemNum = 0;itemNum < limit;itemNum++) {
+    for (let itemNum = 0; itemNum < limit; itemNum++) {
         items.append(
             template.replace("{HREF}", newsJSON[itemNum].a_href)
                 .replace("{TITLE}", newsJSON[itemNum].title_text)
@@ -93,3 +107,76 @@ function items(limit){
         );
     }
 }
+
+//滚动过去
+function scroll_go(go) {
+    let height = $(go).offset().top;
+    $('html').animate({scrollTop: height + "px"}, 500);
+}
+
+function scroll_go(go, offset) {
+    let height = $(go).offset().top + offset;
+    $('html').animate({scrollTop: height + "px"}, 500);
+}
+
+
+function notice_init() {
+    function successFunc_notice(notice) {
+        noticeJSON = JSON.parse(notice);
+        len = noticeJSON > 3 ? 3 : noticeJSON.length
+        notice_items(len)
+
+    }
+
+    get_notice(successFunc_notice)
+}
+
+function get_notice(successFunc_notice) {
+    // 获取公告
+    let data = {},
+        csrf_token = get_csrf_token(),
+        url = '/api/get_notice';
+    $.ajax({
+        url: url,
+        type: "get",
+        data: data,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        cache: false,
+        async: true,
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },
+        success: function (data) {
+            let result = data["result"];
+            data = data.hasOwnProperty("data") ? data["data"] : data;
+            if (result === true) {
+                successFunc_notice(data);
+            }
+        },
+        error: function (err) {
+            console.log(err.statusText);
+        }
+    })
+
+}
+
+// 获取前三个公告
+function notice_items(limit) {
+    let items = $('#notice-list');
+    items.html("");
+    for (let itemNum = 0; itemNum < limit; itemNum++) {
+        if (noticeJSON[itemNum].is_topping === 0)
+            items.append(
+                notice_template.replace("{notice}", noticeJSON[itemNum].subject).replace("{notice_time}", noticeJSON[itemNum].timestamp.substr(0, 4) + "年" + noticeJSON[itemNum].timestamp.substr(5, 2) + "月" + noticeJSON[itemNum].timestamp.substr(8, 2) + "日").replace("{HREF}", "/notice?count=" + itemNum).replace("{abstract}", noticeJSON[itemNum].abstract).replace("{is_topping}", ""))
+        else
+            items.append(
+                notice_template.replace("{notice}", noticeJSON[itemNum].subject).replace("{notice_time}", noticeJSON[itemNum].timestamp.substr(0, 4) + "年" + noticeJSON[itemNum].timestamp.substr(5, 2) + "月" + noticeJSON[itemNum].timestamp.substr(8, 2) + "日").replace("{HREF}", "/notice?count=" + itemNum).replace("{abstract}", noticeJSON[itemNum].abstract).replace("{is_topping}", "<span style=\"font-size: 18px;color: #5cb85c;\">【置顶】</span>"))
+
+    }
+}
+
+
+
