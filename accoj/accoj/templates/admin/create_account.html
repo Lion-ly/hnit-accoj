@@ -1,0 +1,107 @@
+{% extends 'admin/admin-base.html' %}
+{% block page_title %}创建账号{% endblock %}
+{% block page_title_li %}
+    <li><a href="#">用户管理</a></li>
+    <li class="active">创建账号</li>
+{% endblock %}
+{% block content %}
+    <div class="container"
+         style="padding:20px;background-color: white;border-color: #ddd;border-style: solid;border-width:1px;
+         border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0;">
+
+        <div class="animated fadeIn">
+
+            <div class="card-body card-block">
+                <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">用户名:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_no" type="text" name="student_no"
+                                                           placeholder="用户名"
+                                                           class="form-control-sm form-control"><span><small
+                                class="form-text text-muted">注：学生学号或教师工号</small></span></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">密码:</label></div>
+                        <div class="col-4 col-md-4"><input id="password" type="text" name="password"
+                                                           placeholder="密码"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：可为空，默认为123</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">权限:</label></div>
+                        <div class="col col-md-8">
+                            <select id="role" class="form-control" style="width: auto">
+                                <option value="teacher">teacher</option>
+                                <option value="student">student</option>
+                                <option value="admin">admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">班级:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_class" type="text" name="student_class"
+                                                           placeholder="所属班级"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：权限为admin / teacher时置空</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">学院:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_faculty" type="text" name="student_faculty"
+                                                           placeholder="所属学院"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：权限为admin时置空，为teacher时可选置空</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">学校:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_school" type="text" name="student_school"
+                                                           placeholder="所属学校"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：权限为admin时可选置空</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">真实姓名:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_name" type="text" name="student_name"
+                                                           placeholder="真实姓名"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：真实姓名</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">手机号:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_phone" type="text" name="student_phone"
+                                                           placeholder="手机号"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：权限为admin时可选置空</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">教师:</label></div>
+                        <div class="col-4 col-md-4"><input id="teacher" type="text" name="teacher"
+                                                           placeholder="所属教师"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：权限为admin / teacher时置空</small></div>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center">
+                <hr/>
+                <button id="submit-button" type="button" class="btn btn-info">
+                    <span class="glyphicon"></span>提交
+                </button>
+            </div>
+            <div id="show-tips-box">
+
+            </div>
+
+        </div><!-- .animated -->
+    </div>
+    <script type="application/javascript"
+            src="http://cdn.accoj.top/static/accoj-1.0.0/create_account.js"></script>
+{% endblock %}

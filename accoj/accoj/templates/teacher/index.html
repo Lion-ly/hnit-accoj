@@ -1,0 +1,114 @@
+{% extends 'teacher/teacher-base.html' %}
+{% block page_title %}个人信息{% endblock %}
+{% block page_title_li %}<li class="active">个人信息</li>{% endblock %}
+{% block content %}
+    <div class="container"
+         style="padding:20px;background-color: white;border-color: #ddd;border-style: solid;border-width:1px;
+         border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0;">
+
+        <div class="animated fadeIn">
+
+            <div class="card-body card-block">
+                <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">昵称:</label></div>
+                        <div class="col-4 col-md-3"><input data-nick_name type="text" name="nick_name"
+                                                           placeholder="你的昵称"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：昵称长度应该不超过10个字符</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">用户名:</label></div>
+                        <div class="col-12 col-md-9">
+                            <p data-student_no class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label"> 真实姓名:</label></div>
+                        <div class="col-12 col-md-9">
+                            <p data-student_name class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">邮箱地址:</label></div>
+                        <div class="col-12 col-md-9">
+                            <p data-email class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label for="textarea-input"
+                                                                                   class=" form-control-label">我的签名:</label>
+                        </div>
+                        <div class="col-8 col-md-6"><textarea data-personalized_signature name="textarea-input"
+                                                              rows="2" placeholder="设置您的签名- ( ゜- ゜)つロ"
+                                                              class="form-control"></textarea></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">性别:</label></div>
+                        <div class="col col-md-9">
+                            <div class="form-check-inline form-check">
+                                <label for="inline-radio1" class="form-check-label ">
+                                    <input type="radio" name="student_sex"
+                                           value="男" class="form-check-input">男&nbsp;
+                                </label>
+                                <label for="inline-radio2" class="form-check-label ">
+                                    <input type="radio" name="student_sex"
+                                           value="女" class="form-check-input">女&nbsp;
+                                </label>
+                                <label for="inline-radio3" class="form-check-label ">
+                                    <input type="radio" name="student_sex"
+                                           value="保密" class="form-check-input" checked>保密
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">出生日期:</label></div>
+                        <div class="col-4 col-md-3"><input data-student_borth type="date" name="text-input"
+                                                           placeholder="Text"
+                                                           class="form-control-sm form-control"></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">学校:</label></div>
+                        <div class="col-12 col-md-9">
+                            <p data-student_school class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">二级学院:</label></div>
+                        <div class="col-12 col-md-9">
+                            <p data-student_faculty class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3" style="text-align: right"><label
+                                class=" form-control-label">班级:</label></div>
+                        <div class="col-12 col-md-9">
+                            <p data-student_class class="form-control-static"></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center">
+                <hr/>
+                <button type="button" class="btn btn-info" data-save>
+                    <span class="glyphicon"></span>保存
+                </button>
+            </div>
+            <div id="show-tips-box">
+
+            </div>
+
+        </div><!-- .animated -->
+    </div>
+    <script type="application/javascript"
+            src="http://cdn.accoj.top/static/accoj-1.0.0/profile_info.js"></script>
+{% endblock %}

@@ -1,0 +1,261 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang=""> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ACCOJ - 教师后台</title>
+    <!-- Shortcut icon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}">
+    <!-- Styles -->
+    <link href="http://cdn.accoj.top/static/cdn/8.0.0.normalize.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/4.1.3.bootstrap.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/4.7.0.font-awesome.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/0.1.2.themify-icons.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/1.2.3.pe-icon-7-stroke.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/3.2.0.flag-icon.css" rel="stylesheet">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link href="http://cdn.accoj.top/static/cdn/back-stage/style.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/back-stage/base.css" rel="stylesheet">
+    <link href="http://cdn.accoj.top/static/cdn/back-stage/cs-skin-elastic.css" rel="stylesheet">
+    <!-- Scripts -->
+    <script src="http://cdn.accoj.top/static/cdn/2.7.2.Chart.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/3.5.1.jquery.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/0.7.0.chartjs-plugin-datalabels.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.3.0.socket.io.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.4.jquery.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/1.14.4.popper.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/4.1.3.bootstrap.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/0.7.2.matchHeight.js" charset="UTF-8"></script>
+
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/main.js" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/profile-base.js') }}" charset="UTF-8"></script>
+    <script type="text/javascript" charset="UTF-8">
+        function get_csrf_token() {
+            return "{{ csrf_token() }}";
+        }
+
+        function get_current_user_id() {
+            return "{{ username }}";
+        }
+    </script>
+</head>
+<body>
+<!-- Left Panel -->
+
+<aside id="left-panel" class="left-panel">
+    <nav class="navbar navbar-expand-sm navbar-default">
+
+        <div id="main-menu" class="main-menu collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a><i class="menu-icon fa fa-laptop"></i>教师后台 </a>
+                </li>
+                <li class="menu-title">
+                    <hr>
+                </li><!-- /.menu-title -->
+                <li>
+                    <a href="{{ url_for('teacher.index') }}"><i class="menu-icon fa fa-user"></i>个人信息 </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('teacher.message_system') }}"><i class="menu-icon fa fa-bell-o"></i>系统通知 </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('teacher.message_whisper') }}"><i class="menu-icon fa fa-envelope"></i>我的消息 </a>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-table"></i>班级管理</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-plus-square"></i><a href="{{ url_for('teacher.add_class') }}"> 添加班级</a></li>
+                        <li><i class="fa fa-clock-o"></i><a href="{{ url_for('teacher.manage_time') }}"> 课程时间</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('teacher.teacher_correct') }}"> <i class="menu-icon fa fa-pencil"></i>批改作业</a>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-bell"></i>发送通知</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><a href="{{ url_for('teacher.teacher_notify_c') }}"><i class="fa fa-bell"></i>班级通知</a></li>
+                        <li><a href="{{ url_for('teacher.teacher_notify_p') }}"><i class="fa fa-bell-o"></i>个人通知</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{{ url_for('teacher.rank') }}"><i class="menu-icon fa fa-bar-chart-o"></i>排行榜 </a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+</aside><!-- /#left-panel -->
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <header id="header" class="header">
+        <div class="top-left">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='img/logo1.png') }}"
+                                                       alt="Logo"></a>
+                <a class="navbar-brand hidden" href="/"><img src="{{ url_for('static', filename='img/logo2.png') }}"
+                                                              alt="Logo"></a>
+            </div>
+        </div>
+        <div class="top-right">
+            <div class="header-menu">
+                <div class="header-left">
+
+                    <div class="dropdown for-notification">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="notification"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-bell"></i>
+                            <span class="count bg-danger">3</span>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="notification">
+                            <p class="red">你有3条未读通知</p>
+                            <a class="dropdown-item media" href="#">
+                                <i class="fa fa-check"></i>
+                                <p>Server #1 overloaded.</p>
+                            </a>
+                            <a class="dropdown-item media" href="#">
+                                <i class="fa fa-info"></i>
+                                <p>Server #2 overloaded.</p>
+                            </a>
+                            <a class="dropdown-item media" href="#">
+                                <i class="fa fa-warning"></i>
+                                <p>Server #3 overloaded.</p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown for-message">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="message"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-envelope"></i>
+                            <span class="count bg-primary">4</span>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="message">
+                            <p class="red">你有4条未读消息</p>
+                            <a class="dropdown-item media" href="#">
+                                <span class="photo media-left"><img alt="avatar" src="{{ url_for('static', filename='img/avatar/1.jpg') }}"></span>
+                                <div class="message media-body">
+                                    <span class="name float-left">Jonathan Smith</span>
+                                    <span class="time float-right">Just now</span>
+                                    <p>Hello, this is an example msg</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item media" href="#">
+                                <span class="photo media-left"><img alt="avatar" src="{{ url_for('static', filename='img/avatar/2.jpg') }}"></span>
+                                <div class="message media-body">
+                                    <span class="name float-left">Jack Sanders</span>
+                                    <span class="time float-right">5 minutes ago</span>
+                                    <p>Lorem ipsum dolor sit amet, consectetur</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item media" href="#">
+                                <span class="photo media-left"><img alt="avatar" src="{{ url_for('static', filename='img/avatar/3.jpg') }}"></span>
+                                <div class="message media-body">
+                                    <span class="name float-left">Cheryl Wheeler</span>
+                                    <span class="time float-right">10 minutes ago</span>
+                                    <p>Hello, this is an example msg</p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item media" href="#">
+                                <span class="photo media-left"><img alt="avatar" src="{{ url_for('static', filename='img/avatar/4.jpg') }}"></span>
+                                <div class="message media-body">
+                                    <span class="name float-left">Rachel Santos</span>
+                                    <span class="time float-right">15 minutes ago</span>
+                                    <p>Lorem ipsum dolor sit amet, consectetur</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-area dropdown float-right">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <img class="user-avatar rounded-circle" src="{{ url_for('static', filename='img/admin.jpg') }}"
+                             alt="User Avatar">
+                    </a>
+
+                    <div class="user-menu dropdown-menu">
+                        <a class="nav-link" href="{{ url_for('teacher.index') }}"><i class="fa fa- user"></i>个人中心</a>
+
+                        <a class="nav-link" href="#"><i class="fa fa- user"></i>通知 <span class="count">13</span></a>
+
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}"><i class="fa fa-power -off"></i>注销</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header><!-- /header -->
+    <!-- Header-->
+
+    <div class="breadcrumbs">
+        <div class="breadcrumbs-inner">
+            <div class="row m-0">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
+                            <h1>{% block page_title %}{% endblock %}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="page-header float-right">
+                        <div class="page-title">
+                            <ol class="breadcrumb text-right">
+                                <li><a href="#">教师后台</a></li>
+                                {% block page_title_li %}{% endblock %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div><!-- .content -->
+
+    <div class="clearfix"></div>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner bg-white">
+            <div class="row">
+                <div class="col-sm-6">
+                    Copyright © 2019-2020 <a href="http://pointerlabs.org">PointerLabs</a>.
+                    All Rights Reserved.
+                </div>
+                <div class="col-sm-6 text-right">
+                    Designed by 指针实验室&nbsp;PointerLabs
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- /.site-footer -->
+
+</div><!-- /#right-panel -->
+
+
+</body>
+</html>

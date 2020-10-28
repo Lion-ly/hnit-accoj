@@ -1,0 +1,52 @@
+{% extends 'admin/admin-base.html' %}
+{% block page_title %}班级审核{% endblock %}
+{% block page_title_li %}
+    <li class="active">班级审核</li>
+{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">发送通知</strong>
+                    </div>
+                    <div class="card-body" style="height: 60%;width: 80%;">
+                        <form>
+                            <div>
+                                <table id="data-table" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">用户名</th>
+                                        <th scope="col">姓名</th>
+                                        <th scope="col">学校</th>
+                                        <th scope="col">二级学院</th>
+                                        <th scope="col">班级</th>
+                                        <th scope="col">教师</th>
+                                        <th scope="col">状态</th>
+                                        <th scope="col">执行操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/datatables.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/dataTables.bootstrap.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.dataTables.buttons.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/buttons.bootstrap.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/3.3.0.jszip.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.html5.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.print.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.colVis.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/audit_class.js"></script>
+{% endblock %}

@@ -1,0 +1,195 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+/*固定footer*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 0;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #2a2730;
+    color: #99979c;
+    padding: 20px 0;
+}
+
+/*页面顶部*/
+#project-title {
+    margin-bottom: 0;
+    background-color: #ffffff;
+    border-color: #ffffff
+}
+
+/*屏幕大小对导航栏的影响*/
+@media (max-width: 992px) {
+    .navbar-header {
+        float: none;
+    }
+
+    .navbar-left, .navbar-right {
+        float: none !important;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-fixed-top {
+        top: 0;
+        border-width: 0 0 1px;
+    }
+
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+
+    .navbar-nav {
+        float: none !important;
+        margin-top: 8px;
+    }
+
+    .navbar-nav > li {
+        float: none;
+    }
+
+    .navbar-nav > li > a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .collapse.in {
+        display: block !important;
+    }
+
+    #menu > ul {
+        margin: 0;
+    }
+
+    #menu > ul > li {
+        width: 100%;
+    }
+
+    /*装饰分割条*/
+    .acc-decorate-line {
+        height: 200px !important;
+        background: no-repeat center;
+    }
+
+}
+
+@media (min-width: 992px) {
+    #menu > ul > li {
+        width: 10%;
+    }
+}
+
+/*菜单栏*/
+#menu > ul {
+    width: 100%
+}
+
+#menu > ul > li > a {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.acc-footer-img {
+    width: 100px !important;
+}
+
+.footer a {
+    color: white;
+}
+
+.footer a:visited {
+    color: #ffffff;
+}
+
+/*友情链接*/
+.acc-friendlink li {
+    width: 19%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*底部图标*/
+.acc-footer-icon {
+    position: relative;
+    display: inline-block;
+}
+
+/*隐藏图标内容*/
+.acc-footer-icon .acc-footer-icontext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    top: -120px;
+    right: -34px;
+}
+
+/*显示图标内容*/
+.acc-footer-icon:hover .acc-footer-icontext {
+    visibility: visible;
+}
+
+.acc-qq a:hover {
+    color: gold;
+}
+
+.acc-weixin a:hover {
+    color: #8ee154;
+}
+
+/*湖南工学院简介*/
+.acc-intro-hnit {
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+
+.acc-intro-hnit p {
+    font-size: 14px;
+    font-family: 楷体, serif;
+    text-indent: 2em;
+}
+
+/*巨幕背景*/
+.acc-jumbotron-bg {
+    background: no-repeat center;
+}
+
+/*公告栏*/
+.acc-notice {
+    margin-top: 50px;
+    margin-bottom: 30px
+}
+
+/*装饰分割条*/
+.acc-decorate-line {
+    height: 400px;
+    background: no-repeat center;
+}

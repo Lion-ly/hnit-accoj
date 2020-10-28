@@ -1,0 +1,48 @@
+{% extends 'admin/admin-base.html' %}
+{% block page_title %}更改密码{% endblock %}
+{% block page_title_li %}
+    <li><a href="#">用户管理</a></li>
+    <li class="active">更改密码</li>
+{% endblock %}
+{% block content %}
+    <div class="container"
+         style="padding:20px;background-color: white;border-color: #ddd;border-style: solid;border-width:1px;
+         border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0;">
+
+        <div class="animated fadeIn">
+
+            <div class="card-body card-block">
+                <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">用户名:</label></div>
+                        <div class="col-4 col-md-4"><input id="student_no" type="text" name="student_no"
+                                                           placeholder="用户名"
+                                                           class="form-control-sm form-control"><span><small
+                                class="form-text text-muted">注：学生学号或教师工号</small></span></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-4" style="text-align: right"><label
+                                class=" form-control-label">新密码:</label></div>
+                        <div class="col-4 col-md-4"><input id="password" type="text" name="password"
+                                                           placeholder="新密码"
+                                                           class="form-control-sm form-control"><small
+                                class="form-text text-muted">注：更新密码</small></div>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center">
+                <hr/>
+                <button id="submit-button" type="button" class="btn btn-info">
+                    <span class="glyphicon"></span>确认更改
+                </button>
+            </div>
+            <div id="show-tips-box">
+
+            </div>
+
+        </div><!-- .animated -->
+    </div>
+    <script type="application/javascript"
+            src="http://cdn.accoj.top/static/accoj-1.0.0/change_pwd.js"></script>
+{% endblock %}

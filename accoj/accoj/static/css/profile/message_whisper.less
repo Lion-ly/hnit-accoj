@@ -1,0 +1,204 @@
+.card-body {
+  padding: 0 !important;
+
+  .msg {
+    display: flex;
+
+    .friend-list {
+      width: 240px;
+      padding-right: 0 !important;
+      border-right: 1px solid #f7f7f7;
+
+      .active {
+        background-color: #f7f7f7;
+      }
+
+      .title {
+        padding-left: 24px;
+        width: 100%;
+        height: 36px;
+        font-size: 12px;
+        line-height: 36px;
+        border-bottom: 1px solid #f7f7f7;
+      }
+
+      .list::-webkit-scrollbar{
+        width: 5px;
+      }
+
+      .list::-webkit-scrollbar-thumb{
+        background-color: #cdcdcd;
+        border-radius: 5px;
+      }
+
+      .list {
+        width: 100%;
+        height: 800px;
+        overflow-y: scroll;
+
+        & > article {
+          height: 80px;
+          padding: 19px 24px;
+          display: flex;
+          align-items: center;
+
+          & > img {
+            min-width: 42px;
+            border-radius: 50%;
+            background-color: gray;
+            width: 42px;
+            height: 42px;
+            margin-right: 8px;
+          }
+
+          .user-info {
+            display: flex;
+            flex-direction: column;
+
+            & > span {
+              width: 120px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            & > span:first-child {
+              font-size: 14px;
+            }
+
+            & > span:last-child {
+              font-size: 12px;
+              color: gray;
+              margin-top: 6px;
+            }
+          }
+        }
+      }
+    }
+
+    .friend-message {
+      width: 100%;
+
+      .title {
+        width: 100%;
+        height: 36px;
+        font-size: 13px;
+        line-height: 36px;
+        border-bottom: 1px solid #f7f7f7;
+        text-align: center;
+      }
+
+      .message-box::-webkit-scrollbar{
+        width: 5px;
+      }
+
+      .message-box::-webkit-scrollbar-thumb{
+        background-color: #cdcdcd;
+        border-radius: 5px;
+      }
+
+      .message-box {
+        width: 100%;
+        background-color: #f7f7f7;
+        height: 640px;
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid #d8d8d8;
+        overflow-y: scroll;
+
+        time {
+          display: block;
+          padding: 16px 0;
+          font-size: 12px;
+          text-align: center;
+        }
+
+        .msg-item {
+          width: 100%;
+          padding: 0 16px 16px 16px;
+
+          & > img {
+            min-width: 30px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: gray;
+          }
+
+          & > p {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #ffffff;
+            max-width: 600px;
+          }
+        }
+
+        .msg-item-left {
+          display: flex;
+          justify-content: flex-start;
+
+          & > p {
+            margin-left: 10px;
+            border-radius: 0 16px 16px 16px;
+          }
+        }
+
+        .msg-item-right {
+          display: flex;
+          justify-content: flex-end;
+
+          & > p {
+            margin-right: 10px;
+            border-radius: 16px 0 16px 16px;
+          }
+        }
+      }
+    }
+    .send-box{
+      width: 100%;
+      height: 160px;
+      padding: 0 16px;
+      background-color: #f7f7f7;
+      & > textarea{
+        resize: none;
+        width: 100%;
+        height: 60px;
+        outline: none;
+        border: none;
+        margin: 14px 0;
+        background-color: #f7f7f7;
+      }
+      & > div{
+        display: flex;
+        justify-content: flex-end;
+        & > div > span{
+          line-height: 12px;
+          -webkit-box-direction: normal;
+          margin: 0;
+          color: #c0c0c0;
+          padding: 1px;
+          font-size: 12px;
+          box-sizing: border-box;
+          vertical-align: bottom;
+        }
+        & > button{
+          -webkit-box-direction: normal;
+          -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+          outline: 0;
+          padding: 0;
+          cursor: pointer;
+          margin-left: 10px;
+          position: relative;
+          width: 88px;
+          height: 30px;
+          text-align: center;
+          border: 1px solid #e7e7e7;
+          background-color: #fff;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+
+}

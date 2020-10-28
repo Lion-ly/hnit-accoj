@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}会计实训系统 信息{% endblock title %}
+
+{% block meun %}{% endblock meun %}
+
+{% block courseBody %}
+
+<div class="container">
+    <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div style="height: 200px;display: flex;flex-direction: column;justify-content: center;align-items: center">推广板/信息板 占位</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="notice-panel">
+                    <h3 class="notice-title">{{ subject }}</h3>
+                    <div class="notice-info">
+                        <time class="notice-time">{{ notice_time }}</time>
+                        <span class="notice-author">Admin</span>
+                    </div>
+                    <hr/>
+                    <article>
+                        {{ text|safe }}
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 防尾前移 -->
+<div class="acc-container-separate"></div>
+
+{% endblock courseBody %}

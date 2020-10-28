@@ -1,0 +1,64 @@
+{% extends 'teacher/teacher-base.html' %}
+{% block page_title %}个人通知{% endblock %}
+{% block page_title_li %}
+    <li><a href="#">发送通知</a></li>
+    <li class="active">个人通知</li>
+{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">发送通知</strong>
+                    </div>
+                    <div class="card-body" style="height: 60%;width: 80%;">
+                        <form>
+                            <div>
+
+                                <table id="data-table" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">学号</th>
+                                        <th scope="col">姓名</th>
+                                        <th scope="col">学校</th>
+                                        <th scope="col">二级学院</th>
+                                        <th scope="col">班级</th>
+                                        <th scope="col">
+                                            <button id="selectAll" class="btn btn-outline-info btn-sm" type="button">
+                                                全选
+                                            </button>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr/>
+                            <div class="text-center">
+                                <textarea id="messageContent" rows="4" cols="80" placeholder="信息内容..."
+                                          style="border-radius: 3px"></textarea>
+                                <hr/>
+                                <button id="confirmSend" class="btn btn-outline-info" type="button">确认发送</button>
+                            </div>
+                            <div id="messageInfoBox"></div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/datatables.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/dataTables.bootstrap.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.dataTables.buttons.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/back-stage/buttons.bootstrap.min.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/3.3.0.jszip.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.html5.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.print.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/2.2.0.buttons.colVis.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/teacher-notify-p.js" charset="UTF-8"></script>
+{% endblock %}

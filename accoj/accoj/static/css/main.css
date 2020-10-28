@@ -1,0 +1,519 @@
+/*--------------------------------------------COMMON START--------------------------------------------*/
+/*颜色*/
+/*绿色 已完成*/
+.acc-color-5cb85c {
+    color: #5cb85c;
+}
+
+/*浅蓝色 已保存*/
+.acc-color-5bc0de {
+    color: #5bc0de;
+}
+
+/*靠左*/
+.acc-left {
+    text-align: left;
+    vertical-align: middle;
+}
+
+/*靠右*/
+.acc-right {
+    text-align: right;
+    vertical-align: middle;
+}
+
+/*居中*/
+.acc-center {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/*table标题垂直居中*/
+.table tbody tr th {
+    vertical-align: middle;
+}
+
+/*水平滚动条内的表格*/
+.acc-table-sm {
+    min-width: 768px;
+}
+
+.acc-table-md {
+    min-width: 992px;
+}
+
+.acc-table-lg {
+    min-width: 1200px;
+}
+
+/*v-x表单格式*/
+.acc-container-tableformat th, td {
+    text-align: center;
+}
+
+/*主体和页尾之间的空白容器*/
+/* .acc-container-separate {
+    height: 0px;
+} */
+
+/*公司法补充信息*/
+dt {
+    text-indent: 1em;
+}
+
+dd {
+    text-indent: 3em;
+}
+
+/*练习题主体容器*/
+.acc-container-answer {
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+/*大标题*/
+.acc-title {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/*已完成*/
+.acc-completed {
+    color: #5cb85c;
+    font-size: medium;
+    display: none;
+}
+
+/*页码居中*/
+.acc-pn-center {
+    text-align: center;
+}
+
+/*分割线*/
+.simple {
+    clear: both;
+}
+
+/*底部按钮居右*/
+.acc-btn-right {
+    float: right;
+}
+
+/*底部按钮居左*/
+.acc-btn-left {
+    float: left;
+    display: none;
+}
+
+/*新建 +*/
+.acc-plus {
+    text-align: center;
+}
+
+.acc-plus a {
+    color: green;
+    padding: 0;
+}
+
+/*删除 -*/
+.acc-minus {
+    text-align: center;
+}
+
+.acc-minus a {
+    color: red;
+    padding: 0;
+}
+
+/*---------------------------------------------COMMON END---------------------------------------------*/
+
+
+/*-----------------------------------------------I START----------------------------------------------*/
+/*新建业务容器*/
+.acc-container-newbusiness {
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: left;
+}
+
+/*新建业务容器 头字体*/
+.acc-container-newbusiness th {
+    color: #ffffff;
+}
+
+/*a标签设置手型且不可选*/
+ul a {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*------------------------------------------------I END----------------------------------------------*/
+
+
+/*--------------------------------------------III START--------------------------------------------*/
+/*三色 默认盒子*/
+.acc-tricolor-default {
+
+    width: 100%;
+    height: 600px;
+}
+
+.acc-tricolor-default > div:first-of-type {
+    height: 100%;
+}
+
+/*三色 增加/减少/撤销按钮*/
+/*.acc-tricolor-btn {
+    float: left;
+    width: 10%;
+    height: 600px;
+    text-align: center;
+}
+
+.acc-tricolor-btn > div:first-of-type {
+    margin-top: 90px;
+    margin-bottom: 220px
+}
+
+.acc-tricolor-btn button {
+    margin: 5px auto;
+}*/
+
+/*三色 浅绿/浅红盒子*/
+.acc-tricolor-scsAndDg {
+
+    width: 100%;
+}
+
+.acc-tricolor-scsAndDg > div > div {
+    height: 288px;
+}
+
+/*---------------------------------------------III END---------------------------------------------*/
+
+/*---------------------------------------------V START--------------------------------------------*/
+/*期间提示*/
+.acc-period-tip {
+    font-weight: 600;
+    font-size: 15px;
+    color: #737373;
+}
+
+/*T表*/
+.acc-ttable {
+    width: 100%;
+}
+
+/*T表input*/
+.acc-ttable input {
+    border-width: thin;
+    width: 100%;
+    height: 100%;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+}
+
+/*白色背景*/
+.acc-white-bg {
+    background-color: white !important;;
+}
+
+/*分数显示分级*/
+.acc-score-help {
+    float: right;
+    font-size: 15px;
+    font-weight: 400;
+    display: none;
+    color: #737373;
+}
+
+.acc-score-1 {
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(82, 196, 26);
+    display: none;
+}
+
+.acc-score-2 {
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(243, 156, 17);
+    display: none;
+}
+
+.acc-score-3 {
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(231, 76, 60);
+    display: none;
+}
+
+.score-left {
+    float: left;
+}
+
+.acc-btn-delete {
+    color: red;
+    font-size: 20px;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+/*----------------------------------------------V END--------------------------------------------*/
+
+
+/*--------------------------------------------VI START--------------------------------------------*/
+/*vi表单内的input*/
+.acc-input-vi {
+    width: 40px;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom-style: solid;
+    border-bottom-color: #0f0f0f;
+}
+
+/*---------------------------------------------VI END---------------------------------------------*/
+
+
+/*--------------------------------------------VII START-------------------------------------------*/
+/*下拉框*/
+.acc-label-select {
+    display: inline;
+}
+
+.acc-label-select > select {
+    width: auto;
+    display: inline-block;
+}
+
+/*
+.acc-label-select > select > :first-child {
+    display: none;
+}
+ */
+
+.acc-label-select + p {
+    font-size: 24px;
+    display: inline;
+}
+
+/*表单 年*/
+.acc-year td:first-of-type {
+    border-right: 0;
+    width: auto;
+}
+
+.acc-year th:first-of-type {
+    border-left: 0;
+}
+
+.acc-year input {
+    width: 40px;
+    height: 100%;
+    border-bottom-style: solid;
+    border-bottom-color: #0f0f0f;
+}
+
+/*---------------------------------------------VII END--------------------------------------------*/
+
+
+/*-------------------------------------------UN 取消 START-----------------------------------------*/
+/*文本框不可拖拽改变大小*/
+.acc-unresize {
+    resize: none;
+}
+
+/*不可编辑背景,灰色*/
+.acc-unedit {
+    background-color: #f5f5f5;
+    padding: 4px !important;
+}
+
+/*取消表格内的label内边距和外边距*/
+.acc-label-0pm label {
+    padding: 0;
+    margin: 0;
+}
+
+/*取消A标签的下划线*/
+.acc-a-unline, .acc-a-unline:hover, .acc-a-unline:focus {
+    text-decoration: none;
+}
+
+/*取消外边框*/
+.acc-unborder {
+    border: 0 !important;
+    outline: none;
+    background: #ffffff;
+}
+
+/*--------------------------------------------UN 取消 END------------------------------------------*/
+
+
+/*------------------------------------------FORMAT 格式 START--------------------------------------*/
+/*.acc-table-format-1-1*/
+.acc-table-format-1-1 > :nth-child(1) {
+    width: 14%;
+}
+
+.acc-table-format-1-1 > :nth-child(2) {
+    width: 20%;
+}
+
+.acc-table-format-1-1 > :nth-child(3) {
+    width: 8%;
+}
+
+.acc-table-format-1-1 > :nth-child(4) {
+    width: 20%;
+}
+
+.acc-table-format-1-1 > :nth-child(5) {
+    width: 8%;
+}
+
+.acc-table-format-1-1 > :nth-child(6) {
+    width: 20%;
+}
+
+/*acc-table-format-1-2*/
+.acc-table-format-1-2 > :nth-child(1) {
+    width: 4%;
+}
+
+.acc-table-format-1-2 > :nth-child(2) {
+    width: 96%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+/*acc-table-format-4-1*/
+.acc-table-format-4-1 > :nth-child(1) {
+    width: 8%;
+    border-right: 0;
+}
+
+.acc-table-format-4-1 > :nth-child(2) {
+    width: 8%;
+    border-left: 0;
+}
+
+.acc-table-format-4-1 > :nth-child(3) {
+    width: 40%;
+}
+
+.acc-table-format-4-1 > :nth-child(4) {
+    width: 40%;
+}
+
+.acc-table-format-4-1 > :nth-child(5) {
+    width: 4%;
+    border: 0;
+}
+
+/*acc-table-format-5-1*/
+.acc-table-format-5-1 > :nth-child(1) {
+    width: 25%
+}
+
+.acc-table-format-5-1 > :nth-child(2) {
+    width: 50%
+}
+
+.acc-table-format-5-1 > :nth-child(3) {
+    width: 25%
+}
+
+/*acc-table-format-5-2*/
+.acc-table-format-5-2 > :nth-child(1) {
+    width: 5%
+}
+
+.acc-table-format-5-2 > :nth-child(2) {
+    width: 50%;
+    text-align: left;
+}
+
+.acc-table-format-5-2 > :nth-child(3) {
+    width: 45%;
+    text-align: left;
+}
+
+/*acc-table-format-5-3*/
+.acc-table-format-5-3 > :nth-child(1) {
+    width: 50%;
+    text-align: right;
+}
+
+.acc-table-format-5-3 > :nth-child(2) {
+    width: 45%;
+    text-align: right;
+}
+
+.acc-table-format-5-3 > :nth-child(3) {
+    width: 5%
+}
+
+/*acc-table-format-6-1*/
+.acc-table-format-6-1 > :nth-child(1),
+.acc-table-format-6-1 > :nth-child(2),
+.acc-table-format-6-1 > :nth-child(3) {
+    width: 14%;
+}
+
+.acc-table-format-6-1 > :nth-child(4),
+.acc-table-format-6-1 > :nth-child(5) {
+    width: 29%;
+}
+
+/*acc-table-format-8-1*/
+.acc-table-format-8-1 > :nth-child(1) {
+    width: 16%;
+}
+
+.acc-table-format-8-1 > :nth-child(2) {
+    width: 17%;
+}
+
+.acc-table-format-8-1 > :nth-child(3) {
+    width: 17%;
+}
+
+.acc-table-format-8-1 > :nth-child(4) {
+    width: 16%;
+}
+
+.acc-table-format-8-1 > :nth-child(5) {
+    width: 17%;
+}
+
+.acc-table-format-8-1 > :nth-child(6) {
+    width: 17%;
+}
+
+/*acc-table-format-8-2*/
+.acc-table-format-8-2 > :nth-child(1) {
+    width: 50%;
+}
+
+.acc-table-format-8-2 > :nth-child(2) {
+    width: 25%;
+}
+
+.acc-table-format-8-2 > :nth-child(3) {
+    width: 25%;
+}
+
+/*-------------------------------------------FORMAT 格式 END---------------------------------------*/
+

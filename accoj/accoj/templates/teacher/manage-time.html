@@ -1,0 +1,144 @@
+{% extends 'teacher/teacher-base.html' %}
+{% block page_title %}课程时间{% endblock %}
+{% block page_title_li %}
+    <li ><a href="#">班级管理</a></li>
+    <li class="active">课程时间</li>
+{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">课程时间</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-2 col-lg-4">
+                            <select class="custom-select" id="classSelect">
+
+                            </select>
+                        </div>
+                        <hr/>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第一次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-1" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-1" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-1" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-1" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第二次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-2" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-2" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-2" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-2" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第三次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-3" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-3" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input  id="remaining-time-3" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-3" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第四次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-4" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-4" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-4" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-4" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第五次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-5" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-5" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-5" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-5" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第六次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-6" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-6" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-6" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-6" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第七次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-7" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-7" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-7" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-7" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第八次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-8" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-8" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-8" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-8" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第九次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-9" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-9" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-9" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-9" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div style="margin: 0.5rem 0 0 0">
+                            第十次课程：
+                            &nbsp;&nbsp;开始时间：
+                            <input id="start-time-10" type="datetime-local">
+                            &nbsp;&nbsp;截止时间：
+                            <input id="end-time-10" type="datetime-local">
+                            &nbsp;&nbsp;剩余时间：
+                            <input id="remaining-time-10" disabled>
+                            &nbsp;&nbsp;开启：
+                            <input id="is_open-10" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="xs"><hr/>
+                        </div>
+                        <div id="messageInfoBox">
+
+                        </div>
+                        <div class="text-center">
+                            <button id="save-time" class="btn btn-outline-info btn-group-vertical" type="button">保存设置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://cdn.accoj.top/static/accoj-1.0.0/teacher-manage-time.js"></script>
+{% endblock %}
