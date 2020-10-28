@@ -213,8 +213,8 @@ function vPaddingData(data, isFromButton) {
         // 填充科目
         $("#coursev_select").append("<option name='coursev_option'>" + now_subject + "</option>");
         // 增加行
-        for (let i = 0; i < dr_array.length; i++) $("#v_AddRowDr").click();
-        for (let i = 0; i < cr_array.length; i++) $("#v_AddRowCr").click();
+        for (let i = 0; dr_array && i < dr_array.length; i++) $("#v_AddRowDr").click();
+        for (let i = 0; cr_array && i < cr_array.length; i++) $("#v_AddRowCr").click();
         // console.log("dr_array.length: " + dr_array.length);
         // console.log("cr_array.length: " + cr_array.length);
         // 填充会计账户信息
@@ -269,7 +269,9 @@ function vPaddingData(data, isFromButton) {
 function vBind() {
     function map_answer() {
         spanStatusCtr(true, true, "submit_status_span");
-        vPaddingData(answer_infos, 2);
+        let info_key = "ledger_infos_" + now_period,
+            ledger_infos_tmp = answer_infos[info_key];
+        vPaddingData(ledger_infos_tmp[now_subject], true);
     }
 
     bind_confirm_info("submit_ledger_info");

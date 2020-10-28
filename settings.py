@@ -17,6 +17,9 @@ password = parse.quote_plus("Love199805#")
 
 class BaseConfig(object):
     DEBUG = True
+    PORT = 80
+    HOST = '0.0.0.0'
+
     SECRET_KEY = os.getenv("SECRET_KEY", "dev key")
     TEMPLATES_AUTO_RELOAD = True
     FLASK_ADMIN_SWATCH = "spacelab"  # admin主题

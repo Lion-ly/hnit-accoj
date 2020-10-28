@@ -28,5 +28,7 @@ if __name__ == '__main__':
     if not app.config.get('DEBUG'):
         sys.stderr = RedirectStderr({'log_path': app.config.get('LOG_PATH')})
         logging.basicConfig(filename=app.config.get('LOG_DEBUG_PATH'), level=logging.DEBUG)
-    http_server = WSGIServer(('0.0.0.0', 80), app)
+    host = app.config['HOST']
+    port = app.config['PORT']
+    http_server = WSGIServer(listener=(host, port), application=app)
     http_server.serve_forever()
