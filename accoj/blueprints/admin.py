@@ -12,12 +12,14 @@ from flask import (Blueprint,
                    jsonify,
                    request,
                    redirect,
-                   url_for)
+                   url_for,
+                   send_file)
 from accoj.extensions import (mongo,
                               redis_cli)
 from accoj.utils import (create_account,
                          login_required_admin,
-                         change_password)
+                         change_password,
+                         init_course_confirm)
 from accoj.evaluation import rejudge
 import time
 
@@ -118,7 +120,7 @@ def get_audit_class():
     for i in range(0, user_info_len):
         user_info[i] = json.loads(user_info[i])
         user_info[i].update({"num": i + 1})
-        user_info[i].update({"tmp": ("<button type='button' class='btn btn-info'>批准通过</button>")})
+        user_info[i].update({"tmp": "<button type='button' class='btn btn-info'>批准通过</button>"})
     user_info = list(filter(lambda u: u.get("status") == "审核中", user_info))
     result, data = True, user_info
     return jsonify(result=result, data=data)
@@ -137,22 +139,52 @@ def submit_audit_class():
     return jsonify(result=result, data=data)
 
 
-@admin_bp.route('/score_rejudge', methods=['GET'])
-def score_rejudge():
-    """题目重判页面"""
-    return render_template('admin/score_rejudge.html')
+@admin_bp.route('/course_manage', methods=['GET'])
+def course_manage():
+    """课程管理页面"""
+    return render_template('admin/course_manage.html')
 
 
 @admin_bp.route('/submit_rejudge', methods=['POST'])
 def submit_rejudge():
     """重判题目"""
     data = request.get_json()
-    course_no = data.get('course_no')
-    course_no = int(course_no)
+    course_no = int(data.get('course_no'))
     class_name = data.get('class_name')
     student_no = data.get('student_no')
     rejudge.delay(course_no, class_name, student_no)
-    return jsonify(result=True, data=None)
+    message = "操作成功！"
+    return jsonify(result=True, data=None, message=message)
+
+
+@admin_bp.route('/course_redo', methods=['POST'])
+def course_redo():
+    """题目重做"""
+    data = request.get_json()
+    course_no = int(data.get('course_no'))
+    class_name = data.get('class_name')
+    student_no = data.get('student_no')
+    flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+    message = "操作成功！" if flag else "操作失败!"
+    return jsonify(result=flag, data=None, message=message)
+
+
+@admin_bp.route('/log_check', methods=['GET'])
+def log_check():
+    """日志查看页面"""
+    return render_template('admin/log_check.html')
+
+
+@admin_bp.route('/debug_log_download', methods=['GET'])
+def debug_log_download():
+    """debug日志下载"""
+    return send_file('log/debug.log', as_attachment=True)
+
+
+@admin_bp.route('/request_log_download', methods=['GET'])
+def request_log_download():
+    """request日志下载"""
+    return send_file('log/request.log', as_attachment=True)
 
 
 @admin_bp.route('/announcement', methods=['GET'])

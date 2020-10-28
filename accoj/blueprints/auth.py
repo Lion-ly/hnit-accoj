@@ -36,6 +36,8 @@ def signin():
             if check_password_hash(user_password, password):
                 role = user.get("role")
                 session["username"] = student_no
+                session["student_name"] = user.get("student_name")
+                session["nick_name"] = user.get("nick_name")
                 session["role"] = role
                 session["class_name"] = class_name
                 return jsonify(result="true")
@@ -43,6 +45,7 @@ def signin():
                 message = "密码错误"
                 return jsonify(result="false", message="{}".format(message))
     return redirect("/")
+
 
 """
 @auth_bp.route('/login', methods=['POST', 'GET'])
@@ -113,6 +116,7 @@ def login():
                 return jsonify(result="true")
     return redirect("/")
 """
+
 
 @auth_bp.route('/logout')
 def logout():
@@ -265,9 +269,14 @@ def my_app_context_processor():
     :return:
     """
     from flask import current_app
+    context_dict = {}
     current_app.logger.warning("record client real ip")
     d_role = {"root": "root", "admin": "管理员", "teacher": "教师", "student": "学生", "dbadmin": "DBA"}
-    role = d_role.get(session.get("role"))
-    username = session.get("username")
-    teacher = session.get('teacher')
-    return {"role": role, "username": username, "teacher": teacher}
+    student_name = session.get('student_name')
+    nick_name = session.get('nick_name')
+    context_dict['username'] = session.get("username")
+    context_dict['nick_name'] = nick_name if nick_name else student_name
+    context_dict['nick_name'] = context_dict['nick_name'] if context_dict['nick_name'] else context_dict['username']
+    context_dict['role'] = d_role.get(session.get("role"))
+    context_dict['teacher'] = session.get('teacher')
+    return context_dict

@@ -1,6 +1,6 @@
 {% extends 'teacher/teacher-base.html' %}
 {% block page_title %}我的消息{% endblock %}
-{% block page_title_li %}<li class="active">我的消息</li>{% endblock %}
+{% block page_title_li %}我的消息{% endblock %}
 {% block content %}
     <div class="animated fadeIn">
         <div class="row">
@@ -15,30 +15,23 @@
                                 <div class="title">
                                     班级
                                 </div>
-                                <div class="list">
-                                    <article class="active">
-                                        <img src="" alt="">
-                                        <div class="user-info">
-                                            <span> 网络工程1701 - 湖南工学院</span>
-                                            <span>信息信息信息信息信息信息信息</span>
-                                        </div>
-                                    </article>
+                                <div id="room-list" class="list">
                                 </div>
                             </div>
                             <div class="friend-message">
-                                <div class="title">
-                                    网络工程1701 - 湖南工学院
+                                <div id="room-name" class="title">
+
                                 </div>
-                                <div data-message-box class="message-box">
+                                <div id="message-box" class="message-box">
 
                                 </div>
                                 <div class="send-box">
-                                    <textarea data-message-content placeholder="输入消息..."></textarea>
+                                    <textarea id="message-content" placeholder="输入消息..."></textarea>
                                     <div>
                                         <div>
-                                            <span>0</span>
+                                            <span id="now-words">0</span>
                                             <span>/</span>
-                                            <span>500</span>
+                                            <span>200</span>
                                         </div>
                                         <button data-send-message>发送</button>
                                     </div>
@@ -51,5 +44,5 @@
         </div>
     </div>
     <link rel="stylesheet" href="http://cdn.accoj.top/static/accoj-1.0.0/message_whisper.css">
-    <script src="http://cdn.accoj.top/static/accoj-1.0.0/message_whisper.js"></script>
+    <script src="{{ url_for('static', filename='js/message_whisper.js') }}"></script>
 {% endblock %}

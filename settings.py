@@ -43,9 +43,6 @@ class BaseConfig(object):
     LOG_PATH = 'accoj/log/request.log'
     LOG_DEBUG_PATH = 'accoj/log/debug.log'
 
-    # 无效配置，应更改`flask_monitoringdashboard.core.config`中的Config.password
-    DASHBOARD_PASSWORD = 'Love199805#'
-
 
 class DevelopmentConfig(BaseConfig):
     pass

@@ -19,6 +19,17 @@ db.accoj.users.insert({"student_no": "17020340111", 	# 学号
 					   "email": "1848600800@qq.com"		# 邮箱
 					  })
 
+# 消息集合
+db.accoj.message.insert({"room": [""],                  # 房间号
+                         "username": "",                # 发送者
+                         "student_name": "",            # 真实姓名
+                         "nick_name": "",               # 昵称
+                         "message_head": "",            # 消息头
+                         "message_body": "",            # 消息主题
+                         "time": ""                     # 时间
+                        })
+
+
 # 班级集合
 db.accoj.classes.insert({"class_name": ""               # 班级名(学校-班级，例'湖南工学院-网络1701')
                          "teacher": ""                    # 教师

@@ -206,8 +206,9 @@ function vPaddingData(data, isFromButton) {
         //  移除旧表
         $("[id=ttableLeft], [id=ttableRight]").remove();
         //  创建新表
-        if (is_left) tTableAppendLeft();
-        else tTableAppendRight();
+        if (is_left) {
+            tTableAppendLeft();
+        } else tTableAppendRight();
 
         // 填充科目
         $("#coursev_select").append("<option name='coursev_option'>" + now_subject + "</option>");
@@ -231,8 +232,8 @@ function vPaddingData(data, isFromButton) {
         });
         // 填充贷记
         $("input[name=cr]").each(function () {
-            $(this).parent().prev().children().val(dr_array[cr_index]["business_no"]);
-            $(this).val(dr_array[cr_index]["money"]);
+            $(this).parent().prev().children().val(cr_array[cr_index]["business_no"]);
+            $(this).val(cr_array[cr_index]["money"]);
             cr_index += 1;
         });
 
@@ -322,7 +323,7 @@ function initLi(data) {
     let info_key = "ledger_infos_" + now_period,
         confirmed_key = "ledger" + now_period + "_confirm",
         saved_key = "ledger" + now_period + "_saved";
-    if (!(data["ledger_infos"]) || data["ledger_saved"]) return;
+    if (data && (!(data["ledger_infos"]) || !data["ledger_saved"])) return;
 
     let ledger_infos_tmp = data ? data["ledger_infos"][info_key] : ledger_infos[info_key],
         ledger_confirmed_tmp = data ? data["ledger_confirmed"][confirmed_key] : ledger_confirmed[confirmed_key],
@@ -396,6 +397,7 @@ function coursevLiChange(obj, role = false) {
             if (li_subject_list.indexOf(item) === -1) {
                 if (!first_option) {
                     first_option = item;
+                    now_subject = item;
                 }
                 option_list += "<option name='coursev_option'>" + item + "</option>";
             }
@@ -467,16 +469,16 @@ function v_AddLeftRow(obj, pm, business_no = "", money = "") {
 }
 
 function v_AddRightRow(obj, pm, business_no = "", money = "") {
-    let is_dr = "cr";
+    let is_dr = "dr";
     if (!pm) {
-        is_dr = "dr";
+        is_dr = "cr";
     }
     $(obj).parent().parent().parent().after(
         "<tr>"
         + "<td><input class='acc-right' onkeyup='limit_number(this)' title='业务编号' name='business_no' value='" + business_no
         + "' placeholder='0'></td>"
         + "<td><input class='acc-right' onchange='RealNumber(this)' onfocus='removeError(this)' title='金额 ' name='" + is_dr + "' value='" + money + "'"
-        + " name='" + is_dr + "' id='' placeholder='0'></td>"
+        + " name='" + is_dr + "' placeholder='0'></td>"
         + "<td>" + "<div class='acc-minus'>"
         + "<a "
         + "type='button' class='btn' onclick='v_DeleteRowT(this)'><span "
@@ -629,7 +631,7 @@ function tTableAppendRight() {
         '                                <tr class="acc-table-format-5-2">' +
         '                                    <td>' +
         '                                        <div class="acc-plus"><a id="v_AddRowDr" type="button"' +
-        '                                                             class="btn" onclick="v_AddLeftRow(this,false)"><span' +
+        '                                                             class="btn" onclick="v_AddLeftRow(this,true)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
         '                                    </td>' +
         '                                    <td>业务编号</td>' +
@@ -654,7 +656,7 @@ function tTableAppendRight() {
         '                                    <td>' +
         '                                        <div class="acc-plus"><a id="v_AddRowCr" type="button"' +
         '                                                              class="btn"' +
-        '                                                              onclick="v_AddRightRow(this,true)"><span' +
+        '                                                              onclick="v_AddRightRow(this,false)"><span' +
         '                                                class="glyphicon glyphicon-plus-sign"></span></a></div>' +
         '                                    </td>' +
         '                                </tr>' +

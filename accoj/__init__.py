@@ -124,7 +124,8 @@ def create_question_bank():
 
 def set_limiter(_limiter):
     """Flask-Limiter setting"""
-    set_time = "2/second"
+    set_time = "10/second"
+    _limiter.limit("4/second")(index_bp)
     _limiter.limit(set_time)(accoj_bp)
     _limiter.limit(set_time)(auth_bp)
     _limiter.limit(set_time)(api_bp)

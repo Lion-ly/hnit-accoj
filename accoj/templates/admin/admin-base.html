@@ -38,7 +38,7 @@
     <script src="http://cdn.accoj.top/static/cdn/0.7.2.matchHeight.js" charset="UTF-8"></script>
 
     <script src="http://cdn.accoj.top/static/cdn/back-stage/main.js" charset="UTF-8"></script>
-    <script src="http://cdn.accoj.top/static/accoj-1.0.0/profile-base.js" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/profile-base.js') }}" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";
@@ -78,10 +78,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ url_for('admin.score_rejudge') }}"><i class="menu-icon fa fa-clock-o"></i>题目重判 </a>
+                    <a href="{{ url_for('admin.course_manage') }}"><i class="menu-icon fa fa-clock-o"></i>课程管理 </a>
                 </li>
                 <li>
-                    <a href="#"><i class="menu-icon fa fa-bell-o"></i>日志查看 </a>
+                    <a href="{{ url_for('admin.log_check') }}"><i class="menu-icon fa fa-bell-o"></i>日志查看 </a>
                 </li>
                 <li>
                     <a href="{{ url_for('admin.audit_class') }}"><i class="menu-icon fa fa-pencil"></i>班级审核 </a>
@@ -111,9 +111,9 @@
     <header id="header" class="header">
         <div class="top-left">
             <div class="navbar-header">
-                <a class="navbar-brand" href="./"><img src="{{ url_for('static', filename='img/logo1.png') }}"
+                <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='img/logo1.png') }}"
                                                        alt="Logo"></a>
-                <a class="navbar-brand hidden" href="./"><img src="{{ url_for('static', filename='img/logo2.png') }}"
+                <a class="navbar-brand hidden" href="/"><img src="{{ url_for('static', filename='img/logo2.png') }}"
                                                               alt="Logo"></a>
             </div>
         </div>

@@ -7,9 +7,9 @@
 # @Software: PyCharm
 from flask import session
 from accoj.extensions import mongo
-from accoj.utils import update_rank
+from accoj.utils import (update_rank,
+                         is_confirmed)
 from accoj import celery
-from settings import MAX_BUSINESS_NO
 
 TotalScore = [9, 10, 10, 10, 9, 10, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 10, 10,
               10, 10, 10, 10, 13.5, 13.5, 13.5, 13.5, 10, 10, 9, 10, 10, 10, 10, 10, 0]
@@ -25,37 +25,6 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
     :return: bool
     """
 
-    def is_confirmed(company, infos_name):
-        confirm_flag = False
-        schedule_confirm = company.get("schedule_confirm")
-        confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
-
-        if course_no in [2, 3, 4, 6] and len(confirmed) == MAX_BUSINESS_NO:
-            # 1.第二三四六次课6
-            confirm_flag = True
-        elif infos_name in {"ledger", "subsidiary_account"}:
-            # 2.“账户和明细账部分”
-            involve_subjects = company.get("involve_subjects")
-            involve_subjects_1 = involve_subjects.get("involve_subjects_1")
-            involve_subjects_2 = involve_subjects.get("involve_subjects_2")
-            if infos_name == "ledger":
-                ledger1_confirm = confirmed.get("ledger1_confirm")
-                ledger2_confirm = confirmed.get("ledger2_confirm")
-                if ledger1_confirm and ledger2_confirm:
-                    if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(
-                            ledger2_confirm):
-                        confirm_flag = True
-            elif infos_name == "subsidiary_account":
-                if set(confirmed) == set(involve_subjects_2):
-                    confirm_flag = True
-        else:
-            # 3.其余部分
-            td = {"trend_analysis", "common_ratio_analysis"}
-            td = infos_name in td
-            if (td and confirmed.get("first") and confirmed.get("second")) or (not td and confirmed):
-                confirm_flag = True
-        return confirm_flag
-
     def rejudge_course(companies):
         if companies:
             companies = list(companies)
@@ -63,6 +32,8 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
             return
         companies_len = len(companies)
         i = 0
+        cnt = 0
+        failed_list = []
         while i < companies_len:
             company = companies[i]
             _student_no = company.get('student_no')
@@ -71,13 +42,21 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
             for course in course_list:
                 try:
                     scores = evaluate(infos_name=course, company=company, company_cp=company_cp)
-                    if is_confirmed(company=company, infos_name=course):
+                    if is_confirmed(course_no=course_no, company=company, infos_name=course):
                         update_rank(schedule_name=course, scores=scores, student_no=_student_no)
+                        cnt += 1
+                    else:
+                        failed_list.append(_student_no)
                 except AttributeError:
-                    print(f"重判学号{_student_no}第{course_no}次课程失败!")
+                    failed_list.append(_student_no)
                 except TypeError:
-                    print(f"重判学号{_student_no}第{course_no}次课程失败!")
+                    failed_list.append(_student_no)
+                except IndexError:
+                    failed_list.append(_student_no)
             i += 2
+        print(f"重判第{course_no}次课程成功数: {cnt}\t失败数：{len(failed_list)}\t共计：{int(companies_len / 2)}")
+        print(f"失败原因：学生未完成课程!")
+        print(f"失败学号：{failed_list}!")
 
     def rejudge_all():
         """
@@ -120,7 +99,7 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
               10: ["dupont_analysis"]}
     if course_no not in [i for i in range(2, 11)]:
         return False
-    if not (class_name or student_no):
+    if class_name == "0" and not student_no:
         rejudge_all()
     elif class_name != "0":
         rejudge_by_class()
@@ -292,12 +271,10 @@ def evaluate_entry(company, company_cp):
                 is_dr_cp = t1_info.get("is_dr")
                 money = t2_info.get("money")
                 money_cp = t1_info.get("money")
-                if subject == subject_cp:
+                if subject == subject_cp and is_dr == is_dr_cp:
                     score_point += 1
-                    if is_dr == is_dr_cp:
+                    if money == money_cp:
                         score_point += 1
-                        if money == money_cp:
-                            score_point += 1
                     break
         score_point = score_point if score_point <= total_point else total_point
         score *= score_point / total_point
