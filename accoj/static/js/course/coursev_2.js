@@ -188,15 +188,16 @@ function v2PaddingData(data, isFromButton) {
                 if (subject === "sum" && t_index === 0) {
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex++];
+                        value_cp = t_info_cp[inputIndex];
                         if (value_cp != value) error_pos.push($item);
                     }
                 } else if (t_index !== 0) {
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex++];
+                        value_cp = t_info_cp[inputIndex];
                         if (value_cp != value) error_pos.push($item);
                     } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
+                    inputIndex++;
                 }
             });
             index++;
