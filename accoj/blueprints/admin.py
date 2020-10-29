@@ -20,7 +20,6 @@ from accoj.utils import (create_account,
                          login_required_admin,
                          change_password,
                          init_course_confirm)
-from accoj.evaluation import rejudge
 import time
 
 from accoj.evaluation import rejudge
@@ -226,6 +225,24 @@ def release_announcement():
 @admin_bp.route('/edit_announcement', methods=['GET'])
 def edit_announcement():
     """获取编辑公告首页"""
+
+    def get_page(_page, _index=3):
+        """页码"""
+        count = mongo.db.notice.count()
+        if count % 14 or count == 0:
+            _pages = int(count / 14) + 1
+        else:
+            _pages = int(count / 14)
+        _pages = list(i for i in range(1, _pages + 1))
+        _max_page = max(_pages)
+        if (_max_page - _index) <= _page:
+            _pages_ = _pages[_page - 1:_page + 2]
+        else:
+            _pages_ = (_pages[_page - 1:_page + 2])
+        if len(_pages_) < 3:
+            _pages_ = _pages[-3:]
+        return _pages_, _max_page
+
     try:
         page = request.args.get('page', 1, int)
         pages, max_page = get_page(page)
@@ -263,11 +280,11 @@ def is_topping():
     """置顶"""
     try:
         result = request.get_json()
-        result["is_topping"] = result["is_topping"].replace(" ", "").replace("\n","")
+        result["is_topping"] = result["is_topping"].replace(" ", "").replace("\n", "")
         print(result)
         if result["is_topping"] == "置顶":
-            is_topping = mongo.db.notice.find_one({"is_topping": 1})
-            if is_topping is None:
+            _is_topping = mongo.db.notice.find_one({"is_topping": 1})
+            if _is_topping is None:
                 mongo.db.notice.update_one(dict(subject=result["notice_subject"]), {"$set": dict(is_topping=1)})
                 return jsonify(result=True, message="取消置顶")
             else:
@@ -295,24 +312,6 @@ def is_modify():
     except Exception as e:
         print(e)
         return jsonify(flag=False)
-
-
-def get_page(page, index=3):
-    """页码"""
-    count = mongo.db.notice.count()
-    if count % 14 or count == 0:
-        pages = int(count / 14) + 1
-    else:
-        pages = int(count / 14)
-    pages = list(i for i in range(1, pages + 1))
-    max_page = max(pages)
-    if (max_page - index) <= page:
-        pages_ = pages[page - 1:page + 2]
-    else:
-        pages_ = (pages[page - 1:page + 2])
-    if len(pages_) < 3:
-        pages_ = pages[-3:]
-    return pages_, max_page
 
 
 @admin_bp.before_request
