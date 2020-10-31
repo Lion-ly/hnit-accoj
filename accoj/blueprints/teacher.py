@@ -63,6 +63,14 @@ def teacher_correct():
     return render_template('teacher/teacher-correct.html')
 
 
+@teacher_bp.route('/restart_course', methods=['GET'])
+def restart_course():
+    """
+    课程重做
+    """
+    return render_template('teacher/restart-course.html')
+
+
 @teacher_bp.route('/teacher_notify_c', methods=['GET'])
 def teacher_notify_c():
     """

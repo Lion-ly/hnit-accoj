@@ -8,6 +8,7 @@
 import datetime
 import os
 import json
+import itertools
 from bson.json_util import dumps
 from flask import (Blueprint,
                    jsonify,
@@ -20,7 +21,8 @@ from accoj.utils import (parse_class_xlrd,
                          login_required,
                          send_system_message_batch,
                          create_account_from_excel,
-                         get_student_schedule)
+                         get_student_schedule,
+                         init_course_confirm)
 from accoj.extensions import mongo, redis_cli
 
 api_bp = Blueprint('api', __name__)
@@ -514,7 +516,7 @@ def teacher_notify_p():
     user = mongo.db.user.find({'student_no': student_no})
     if user:
         result = True
-        insert_doc = {'room': student_no, 'username': username, 'message_head': message_head,
+        insert_doc = {'room'        : student_no, 'username': username, 'message_head': message_head,
                       'message_body': message_body, 'time': _time}
         mongo.db.message.insert(insert_doc)
     return jsonify(result=result, data=data)
@@ -548,11 +550,16 @@ def get_notice():
 @api_bp.route('/get_class_name_list', methods=['POST'])
 def get_class_name_list():
     """获取班级名称列表"""
-    result, data = False, None
-    classes = mongo.db.classes.find({}, dict(_id=0, class_name=1))
+    result, data, _classes = False, None, []
+    role = session.get('role')
+    classes = mongo.db.classes.find({}, dict(_id=0, class_name=1, teacher=1))
     if classes:
-        classes = [c.get('class_name') for c in classes]
-        result, data = True, dumps(classes)
+        if role == 'teacher':
+            teacher = session.get('username')
+            _classes = [c.get('class_name') for c in filter(lambda x: x.get("teacher") == teacher, classes)]
+        elif role == 'admin':
+            _classes = [c.get('class_name') for c in classes]
+        result, data = True, dumps(_classes)
     return jsonify(result=result, data=data)
 
 
@@ -573,3 +580,27 @@ def get_class_name():
             class_name = [_class.get('class_name') for _class in classes]
             result, data['class_name'] = True, class_name
     return jsonify(result=result, data=data)
+
+
+@api_bp.route('/course_redo', methods=['POST'])
+def course_redo():
+    """题目重做"""
+    data = request.get_json()
+    course_no = int(data.get('course_no'))
+    class_name = data.get('class_name')
+    student_no = data.get('student_no')
+    flag, role = False, session.get('role')
+    if role == 'admin':
+        flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+    elif role == 'teacher':
+        classes = mongo.db.classes.find({'teacher': session.get('username')}, {'class_name': True, 'students': True})
+        if class_name != "0" and student_no == "0":
+            have_class = True if class_name in [c.get('class_name') for c in classes] else False
+            if have_class:
+                flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+        elif class_name == "0" and student_no != "0":
+            students = list(itertools.chain(*[c.get("students") for c in classes]))
+            if student_no in students:
+                flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+    message = "操作成功！" if flag else "操作失败!"
+    return jsonify(result=flag, data=None, message=message)

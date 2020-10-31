@@ -5,7 +5,7 @@ $(document).ready(function () {
 function _init_() {
     getClassNameList();
     bindButton($("#rejudge-button"), "/admin/submit_rejudge");
-    bindButton($("#course-redo-button"), "/admin/course_redo");
+    bindButton($("#course-redo-button"), "/api/course_redo");
 }
 
 function bindButton(button, url) {
