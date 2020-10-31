@@ -150,8 +150,8 @@ function showNewMessage(_data) {
     let messages = "",
         message_body = _data.message_body,
         username = _data.username,
-        student_name = _data[i].student_name,
-        nick_name = _data[i].nick_name,
+        student_name = _data.student_name,
+        nick_name = _data.nick_name,
         time = _data.time.$date;
 
     message_body = unicodeToChar(message_body);

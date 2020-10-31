@@ -18,8 +18,7 @@ from accoj.extensions import (mongo,
                               redis_cli)
 from accoj.utils import (create_account,
                          login_required_admin,
-                         change_password,
-                         init_course_confirm)
+                         change_password)
 import time
 
 from accoj.evaluation import rejudge
@@ -156,18 +155,6 @@ def submit_rejudge():
     rejudge.delay(course_no, class_name, student_no)
     message = "操作成功！"
     return jsonify(result=True, data=None, message=message)
-
-
-@admin_bp.route('/course_redo', methods=['POST'])
-def course_redo():
-    """题目重做"""
-    data = request.get_json()
-    course_no = int(data.get('course_no'))
-    class_name = data.get('class_name')
-    student_no = data.get('student_no')
-    flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
-    message = "操作成功！" if flag else "操作失败!"
-    return jsonify(result=flag, data=None, message=message)
 
 
 @admin_bp.route('/log_backup', methods=['GET'])
