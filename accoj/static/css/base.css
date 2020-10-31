@@ -301,6 +301,65 @@ body {
 }
 
 /*
+==================== SLIDER START ====================
+ */
+#slider {
+  margin: 20px auto;
+  width: 70%;
+  height: 40px;
+  position: relative;
+  border-radius: 2px;
+  background-color: #dae2d0;
+  overflow: hidden;
+  text-align: center;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+#slider_bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: rgba(25,145,250,0.2);
+  z-index: 1;
+}
+
+#label {
+  width: 46px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 38px;
+  line-height: 38px;
+  border: 1px solid #cccccc;
+  background: #fff;
+  z-index: 3;
+  cursor: move;
+  color: rgb(204,204,204);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+#labelTip {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+  font-family: 'Microsoft Yahei', serif;
+  color: #fff;
+  line-height: 38px;
+  text-align: center;
+  z-index: 2;
+}
+
+/*
+==================== SLIDER END ====================
+ */
+
+/*
 ==================== NOTICE END ====================
  */
 /*# sourceMappingURL=base.css.map */

@@ -11,8 +11,8 @@
     <script src="http://cdn.accoj.top/static/accoj-1.0.0/jquery.base64.js" charset="UTF-8"></script>
 
     <script type="module" src="http://cdn.accoj.top/static/cdn/1.16.1.popper.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.slideunlock.js') }}" charset="UTF-8"></script>
 
-    <script src="{{ url_for('static', filename='js/Sliding_Validation_Gu.js') }}" charset="UTF-8"></script>
     <!-- bootstrap -->
     <link href="http://cdn.accoj.top/static/cdn/3.3.7.bootstrap.css" rel="stylesheet">
     <script src="http://cdn.accoj.top/static/cdn/3.3.7.bootstrap.js" charset="UTF-8"></script>
@@ -21,6 +21,7 @@
     <!-- base -->
     <!--<link href="http://cdn.accoj.top/static/accoj-1.0.0/base.css" rel="stylesheet">-->
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
+
     <script type="text/javascript" charset="UTF-8">
         function get_csrf_token() {
             return "{{ csrf_token() }}";
@@ -123,7 +124,7 @@
                     <div class="btn-group btn-group-sm" role="group" aria-label="..."
                          id="not_logged_in">
                         <button type="button" class="btn btn-default" data-toggle="modal"
-                                data-target="#signin">登录
+                                data-target="#signin" id="modal_button">登录
                         </button>
                         <button type="button" class="btn btn-default" data-toggle="modal"
                                 data-target="#findpwd">忘记了
@@ -162,7 +163,10 @@
                                 </button>
                             </span>
                         </div>
-                        <div id="slider"></div>
+                        <div id="slider">
+                            <div id="slider_bg"></div>
+                            <span id="label">>></span> <span id="labelTip">拖动滑块验证</span>
+                        </div>
                         <label for="signin-rememberme">
                             <input id="signin-rememberme" type="checkbox" name="rememberme">&nbsp;&nbsp;记住我
                         </label>
