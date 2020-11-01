@@ -82,7 +82,6 @@ $(function () {
     if (rem) {
         $("#signin-rememberme").prop("checked", true);
         $("#signin-studentid").val($.cookie("studentid"));
-        $("#signin-password").val($.base64.decode($.cookie("psw")));
     }
 
 });
@@ -93,16 +92,13 @@ $(function () {
 
 function save_cookies() {
     if ($("#signin-rememberme").prop("checked")) {
-        var stu = $("#signin-studentid").val();
-        var psw = $.base64.encode($("#signin-password").val());
+        let stu = $("#signin-studentid").val();
 
         $.cookie("remember", "true", {expires: 7});
         $.cookie("studentid", stu, {expires: 7});
-        $.cookie("psw", psw, {expires: 7});
     } else {
         $.cookie("remember", "false", {expires: -1});
         $.cookie("studentid", "", {expires: -1});
-        $.cookie("psw", "", {expires: -1});
     }
 }
 
@@ -186,11 +182,21 @@ $(function () {
 });
 
 $(function () {
-        slider_Verification();
-        $('#signin_button').click(function () {
-            save_cookies();
-            data = $('#signin_form').serialize();
-            if ($('#signin_button').prop("disabled") == false) {
+
+
+    }
+)
+
+$(function () {
+    $("#modal_button").click(function () {
+        $("#signin-password").val("");
+
+        var slider = new SliderUnlock("#slider", {
+            successLabelTip: "验证成功"
+        }, function () {
+            $('#signin_button').click(function () {
+                save_cookies();
+                data = $('#signin_form').serialize();
                 $.ajax({
                     url: "/signin",
                     type: "post",
@@ -202,54 +208,26 @@ $(function () {
                             show_message("signin_form", "登陆成功 1s后自动跳转", "info", 1000);
                             setTimeout("location.href='localhost:80';location.reload();", 1000);
                         } else {
+                            slider.init();
+                            slider.reset()
+                            $("#label").text(">>");
                             show_message("signin_form", data["message"], "danger", 1000);
-                            $('#signin_button').attr("disabled", true)
-                            $('#slider').empty();
-                            slider_Verification();
+
                         }
                     },
                     error: function (err) {
                         console.log(err.statusText + "异常");
                     }
                 })
-            }
-        })
+            })
 
-    }
-)
-
-
-function slider_Verification() {
-    var system = {
-        win: false,
-        mac: false,
-        x11: false,
-        ipad: false
-    };
-
-    let p = navigator.platform;
-    system.win = p.indexOf("Win") == 0;
-    system.mac = p.indexOf("Mac") == 0;
-    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+        });
+        $("#label").text(">>");
+        slider.init();
+    })
+});
 
 
-    if (system.win || system.mac || system.x11) {
-        let sliding_validation = SlidingValidation.create($('#slider'),
-            {
-                progress_bg: 'rgba(25,145,250,0.2)',
-                success_slider_wrapper_bg: 'rgb(210,244,239)',
-                slide_block_wrapper_width: "70%",
-                margin: "20px 0 20px 0",
-                left: "13%"
-            }, function () {
-                $('#signin_button').attr("disabled", false);
 
 
-            });
 
-    } else {
-
-    }
-
-
-}
