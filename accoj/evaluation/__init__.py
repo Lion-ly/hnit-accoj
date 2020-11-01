@@ -651,20 +651,16 @@ def _cal_balance(info, info_cp, t_score_point, t_total_point):
     :return:
     """
     info_len = len(info_cp)
-    for i in range(0, info_len):
-        t_score_point = 0
-        t_total_point += info_len * 7
-        for t1_info in info_cp:
-            for t2_info in info:
-                subject, subject_cp = t1_info.get("subject"), t2_info.get("subject")
-                if subject != subject_cp:
-                    continue
+    t_total_point += info_len * 7 - 1  # ‘合计’科目不计分
+    for t1_info in info_cp:
+        for t2_info in info:
+            subject, subject_cp = t1_info.get("subject"), t2_info.get("subject")
+            if subject == subject_cp:
                 if subject != "sum":
-                    t_total_point += 1
+                    t_score_point += 1
                 keys = ["borrow_1", "lend_1", "borrow_2", "lend_2", "borrow_3", "lend_3"]
                 t_score_point += sum([1 if t1_info.get(key) == t2_info.get(key) else 0 for key in keys])
                 break
-    t_total_point -= 1  # ‘合计’科目不计分
     return t_score_point, t_total_point
 
 
