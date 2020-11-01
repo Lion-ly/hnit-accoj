@@ -145,7 +145,7 @@ function v2PaddingData(data, isFromButton) {
             accounting_period_2_cp = "",
             error_pos = Array();
         if (isFromButton === 1) {
-            accounting_period_1_cp = answer_infos["accounting_period_2"];
+            accounting_period_1_cp = answer_infos["accounting_period_1"];
             accounting_period_2_cp = answer_infos["accounting_period_2"];
         }
         // 创建行
@@ -184,18 +184,14 @@ function v2PaddingData(data, isFromButton) {
             $thisInputs.each(function (t_index, item) {
                 let $item = $(item),
                     value = info[index][keys[inputIndex]],
-                    value_cp = "";
+                    value_cp = t_info_cp ? t_info_cp[keys[inputIndex]] : "";
                 if (subject === "sum" && t_index === 0) {
                     $item.val(value);
-                    if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex];
-                        if (value_cp != value) error_pos.push($item);
-                    }
+                    if (value_cp != value) error_pos.push($item);
                     inputIndex++;
                 } else if (t_index !== 0) {
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex];
                         if (value_cp != value) error_pos.push($item);
                     } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
                     inputIndex++;
