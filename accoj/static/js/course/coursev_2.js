@@ -191,6 +191,7 @@ function v2PaddingData(data, isFromButton) {
                         value_cp = t_info_cp[inputIndex];
                         if (value_cp != value) error_pos.push($item);
                     }
+                    inputIndex++;
                 } else if (t_index !== 0) {
                     $item.val(value);
                     if (t_info_cp) {
