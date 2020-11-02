@@ -95,4 +95,7 @@ def periodic_run_news_spider():
 
 @celery.task
 def periodic_run_news_spider():
-    new_spider_start()
+    try:
+        new_spider_start()
+    except requests.exceptions.ConnectionError as e:
+        print(e)
