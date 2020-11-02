@@ -50,12 +50,6 @@
             var e = event || window.event;
             me.lableIndex = e.clientX - this.offsetLeft;
             me.handerIn();
-        }).on("mousemove", function (event) {
-            me.handerMove(event);
-        }).on("mouseup", function (event) {
-            me.handerOut();
-        }).on("mouseout", function (event) {
-            me.handerOut();
         }).on("touchstart", function (event) {
             var e = event || window.event;
             me.lableIndex = e.originalEvent.touches[0].pageX - this.offsetLeft;
@@ -66,6 +60,18 @@
             me.handerOut();
         });
         $('#signin_button').prop("disabled",true);
+        $(document).on("mouseup", function (event) {
+            me.handerOut(event);
+        })
+        $("#signin_form").on("mouseout", function (event) {
+            me.handerMove(event);
+        })
+
+        $(document).on("mousemove", function (event) {
+            me.handerMove(event);
+        })
+
+        // mouseout 代表从当前元素移除 mouseup 释放  mousedown 按下
 
     };
 
@@ -87,7 +93,7 @@
         //停止
         me.swipestart = false;
         //me.move();
-        if (me.index < me.max) {
+        if (me.index+me.labelWidth+2 < me.max ) {
             me.reset();
         }
     };
@@ -134,7 +140,7 @@
         if (me.index+me.labelWidth+2 == me.max && me.max > 0 && me.isOk) {
             //解锁默认操作
             $('#label').unbind().next('#labelTip').
-            text(me.opts.successLabelTip).css({'color': '#fff'});
+            text(me.opts.successLabelTip).css({'color': '#45494c'});
 
             me.success();
         }
