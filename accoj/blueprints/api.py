@@ -593,14 +593,13 @@ def course_redo():
     if role == 'admin':
         flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
     elif role == 'teacher':
-        classes = mongo.db.classes.find({'teacher': session.get('username')}, {'class_name': True, 'students': True})
         if class_name != "0" and student_no == "0":
-            have_class = True if class_name in [c.get('class_name') for c in classes] else False
-            if have_class:
-                flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+            classes = mongo.db.classes.find({'teacher': session.get('username'), 'class_name': class_name})
+            flag = init_course_confirm(course_no=course_no, class_name=class_name,
+                                       student_no=student_no) if classes else False
         elif class_name == "0" and student_no != "0":
-            students = list(itertools.chain(*[c.get("students") for c in classes]))
-            if student_no in students:
-                flag = init_course_confirm(course_no=course_no, class_name=class_name, student_no=student_no)
+            users = mongo.db.user.find({'student_no': student_no, 'teacher': session.get('username')})
+            flag = init_course_confirm(course_no=course_no, class_name=class_name,
+                                       student_no=student_no) if users else False
     message = "操作成功！" if flag else "操作失败!"
     return jsonify(result=flag, data=None, message=message)
