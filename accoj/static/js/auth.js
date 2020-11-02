@@ -211,6 +211,7 @@ $(function () {
                             slider.init();
                             slider.reset()
                             $("#label").text(">>");
+                            $("#labelTip").text("拖动滑块验证")
                             show_message("signin_form", data["message"], "danger", 1000);
 
                         }
@@ -223,6 +224,7 @@ $(function () {
 
         });
         $("#label").text(">>");
+        $("#labelTip").text("拖动滑块验证")
         slider.init();
     })
 });
