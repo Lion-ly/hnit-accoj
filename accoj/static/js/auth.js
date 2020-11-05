@@ -188,7 +188,17 @@ $(function () {
 )
 
 $(function () {
-    $("#modal_button").click(function () {
+    if($("#modal_button").length){
+        click_slider(modal_button);
+    }
+    if($("#traver_id").length) {
+        click_slider(traver_id);
+    }
+
+});
+
+function click_slider(id_name) {
+    $(id_name).click(function () {
         $("#signin-password").val("");
 
         var slider = new SliderUnlock("#slider", {
@@ -227,7 +237,10 @@ $(function () {
         $("#labelTip").text("拖动滑块验证")
         slider.init();
     })
-});
+
+}
+
+
 
 
 
