@@ -161,12 +161,10 @@ function map_subsidiary_account_info(data, isFromButton) {
  * @param submit_type confirm or save
  */
 function submit_acc_balance_sheet_info(submit_type) {
-    alert("dao");
     let data = vii2GetInput();
     data["submit_type"] = submit_type;
 
     data = JSON.stringify(data);
-    console.log(data);
 
     // 提交数据
     let url = "/submit_acc_balance_sheet_info",
