@@ -1,8 +1,10 @@
-<html lang="zh-cmn-Hans">
-<head>
+
+    <html lang="zh-cmn-Hans">
+    <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+    <link type="text/css" rel="stylesheet" href="code.css"/>
     <style>
         .markdown-body {
             box-sizing: border-box;
@@ -19,602 +21,348 @@
         }
     </style>
     <title>AccOJ MongoDB</title>
-</head>
-<body>
-<article class="markdown-body">
+    </head>
+    <body>
+    <article class="markdown-body">
+    <h1 id="accoj-mongodb">AccOj-MongoDB数据库结构</h1>
+<h2 id="1">1 前言</h2>
+<p>Flask-PyMongo见https://flask-pymongo.readthedocs.io/en/latest/</p>
+<p>建议用notepad++打开.</p>
+<p>new Date()在python中为<code>datetime.datetime</code>对象，获取当前时间datetime.datetime.now().</p>
+<h2 id="2">2 用户集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.users.insert({&quot;student_no&quot;: &quot;17020340111&quot;,     # 学号</span>
+<span class="err">                       &quot;role&quot;: string,                  # 角色(&quot;root&quot;, &quot;admin&quot;, &quot;teacher&quot;, &quot;student&quot;)</span>
+<span class="err">                       &quot;student_name&quot;: &quot;郭雄&quot;,        # 姓名</span>
+<span class="err">                       &quot;teacher&quot;: &quot;&quot;,                   # 教师工号</span>
+<span class="err">                       &quot;nick_name&quot;=&quot;&quot;,                  # 昵称</span>
+<span class="err">                       &quot;student_school&quot;=&quot;&quot;,             # 学校</span>
+<span class="err">                       &quot;personalized_signature&quot;=&quot;&quot;,     # 个性签名</span>
+<span class="err">                       &quot;student_faculty&quot;: &quot;计算机与信息科学学院&quot;, # 学院</span>
+<span class="err">                       &quot;student_class&quot;: &quot;网络1701&quot;        # 班级</span>
+<span class="err">                       &quot;student_phone&quot;: &quot;17674549805&quot;,  # 手机号</span>
+<span class="err">                       &quot;student_sex&quot;: &quot;男&quot;,              # 性别</span>
+<span class="err">                       &quot;student_borth&quot;: &quot;1998-05-05&quot;,   # 生日</span>
+<span class="err">                       &quot;password&quot;: &quot;...&quot;,               # 密码</span>
+<span class="err">                       &quot;email&quot;: &quot;1848600800@qq.com&quot;     # 邮箱</span>
+<span class="err">                      })</span>
+</code></pre></div>
 
+<h2 id="3">3 消息集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.message.insert({&quot;room&quot;: [&quot;&quot;],                  # 房间号</span>
+<span class="err">                         &quot;username&quot;: &quot;&quot;,                # 发送者</span>
+<span class="err">                         &quot;student_name&quot;: &quot;&quot;,            # 真实姓名</span>
+<span class="err">                         &quot;nick_name&quot;: &quot;&quot;,               # 昵称</span>
+<span class="err">                         &quot;message_head&quot;: &quot;&quot;,            # 消息头</span>
+<span class="err">                         &quot;message_body&quot;: &quot;&quot;,            # 消息主题</span>
+<span class="err">                         &quot;time&quot;: &quot;&quot;                     # 时间</span>
+<span class="err">                        })</span>
+</code></pre></div>
 
-    <h1 id="accoj-mongodb-">AccOj-MongoDB数据库结构</h1>
-    <h2 id="1-">1 前言</h2>
-    <p>Flask-PyMongo见<a href="https://flask-pymongo.readthedocs.io/en/latest/">https://flask-pymongo.readthedocs.io/en/latest/</a>
-    </p>
-    <p>建议用notepad++打开.</p>
-    <p>new Date()在python中为<code>datetime.datetime</code>对象，获取当前时间datetime.datetime.now().</p>
-    <h2 id="2-">2 用户集合</h2>
-    <pre><code>db.accoj.users.insert({<span class="hljs-string">"student_no"</span>: <span class="hljs-string">"17020340111"</span>,     <span
-            class="hljs-meta"># 学号</span>
-                       <span class="hljs-string">"role"</span>: <span class="hljs-built_in">string</span>,                  <span
-                class="hljs-meta"># 角色(<span class="hljs-string">"root"</span>, <span class="hljs-string">"admin"</span>, <span
-                class="hljs-string">"teacher"</span>, <span class="hljs-string">"student"</span>)</span>
-                       <span class="hljs-string">"student_name"</span>: <span class="hljs-string">"郭雄"</span>,          <span
-                class="hljs-meta"># 姓名</span>
-                       <span class="hljs-string">"teacher"</span>: <span class="hljs-string">""</span>,                   <span
-                class="hljs-meta"># 教师工号</span>
-                       <span class="hljs-string">"nick_name"</span>=<span class="hljs-string">""</span>,                  <span
-                class="hljs-meta"># 昵称</span>
-                       <span class="hljs-string">"student_school"</span>=<span class="hljs-string">""</span>,             <span
-                class="hljs-meta"># 学校</span>
-                       <span class="hljs-string">"personalized_signature"</span>=<span class="hljs-string">""</span>,     <span
-                class="hljs-meta"># 个性签名</span>
-                       <span class="hljs-string">"student_faculty"</span>: <span class="hljs-string">"计算机与信息科学学院"</span>, <span
-                class="hljs-meta"># 学院</span>
-                       <span class="hljs-string">"student_class"</span>: <span class="hljs-string">"网络1701"</span>        <span
-                class="hljs-meta"># 班级</span>
-                       <span class="hljs-string">"student_phone"</span>: <span class="hljs-string">"17674549805"</span>,  <span
-                class="hljs-meta"># 手机号</span>
-                       <span class="hljs-string">"student_sex"</span>: <span class="hljs-string">"男"</span>,                <span
-                class="hljs-meta"># 性别</span>
-                       <span class="hljs-string">"student_borth"</span>: <span class="hljs-string">"1998-05-05"</span>,   <span
-                class="hljs-meta"># 生日</span>
-                       <span class="hljs-string">"password"</span>: <span class="hljs-string">"..."</span>,                 <span
-                class="hljs-meta"># 密码</span>
-                       <span class="hljs-string">"email"</span>: <span class="hljs-string">"1848600800@qq.com"</span>        <span
-                class="hljs-meta"># 邮箱</span>
-                      })
-</code></pre>
-    <h2 id="3-">3 消息集合</h2>
-    <pre><code>db.accoj.<span class="hljs-keyword">message</span>.insert({<span
-            class="hljs-string">"room"</span>: [<span class="hljs-string">""</span>],                  <span
-            class="hljs-comment"># 房间号</span>
-                         <span class="hljs-string">"username"</span>: <span class="hljs-string">""</span>,                <span
-                class="hljs-comment"># 发送者</span>
-                         <span class="hljs-string">"student_name"</span>: <span class="hljs-string">""</span>,            <span
-                class="hljs-comment"># 真实姓名</span>
-                         <span class="hljs-string">"nick_name"</span>: <span class="hljs-string">""</span>,               <span
-                class="hljs-comment"># 昵称</span>
-                         <span class="hljs-string">"message_head"</span>: <span class="hljs-string">""</span>,            <span
-                class="hljs-comment"># 消息头</span>
-                         <span class="hljs-string">"message_body"</span>: <span class="hljs-string">""</span>,            <span
-                class="hljs-comment"># 消息主题</span>
-                         <span class="hljs-string">"time"</span>: <span class="hljs-string">""</span>                     <span
-                class="hljs-comment"># 时间</span>
-                        })
-</code></pre>
-    <h2 id="4-">4 班级集合</h2>
-    <pre><code>db.accoj.classes.insert({<span class="hljs-string">"class_name"</span>: <span
-            class="hljs-string">""</span>               <span class="hljs-meta"># 班级名(学校-班级，例<span class="hljs-string">'湖南工学院-网络1701'</span>)</span>
-                         <span class="hljs-string">"teacher"</span>: <span class="hljs-string">""</span>                    <span
-                class="hljs-meta"># 教师</span>
-                         <span class="hljs-string">"students"</span>: [<span class="hljs-string">""</span>]                 <span
-                class="hljs-meta"># 学生</span>
-                         <span class="hljs-string">"time"</span>: {<span class="hljs-string">"1"</span>: {<span
-                class="hljs-string">"start"</span>: <span class="hljs-string">"utc time"</span>, <span
-                class="hljs-string">"end"</span>: <span class="hljs-string">"utc time"</span>, <span
-                class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},<span class="hljs-meta"># 时间管理</span>
-                                  <span class="hljs-string">"2"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"3"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"4"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"5"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"6"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"7"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"8"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"9"</span>: {<span class="hljs-string">"start"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"end"</span>: <span
-                class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span class="hljs-literal">false</span>},
-                                  <span class="hljs-string">"10"</span>: {<span
-                class="hljs-string">"start"</span>: <span class="hljs-string">""</span>, <span
-                class="hljs-string">"end"</span>: <span class="hljs-string">""</span>, <span class="hljs-string">"is_open"</span>: <span
-                class="hljs-literal">false</span>}
-                                }
-                      })
-</code></pre>
-    <h2 id="5-">5 科目库集合</h2>
-    <pre><code>db.accoj.subject.insert({<span class="hljs-string">"subject_no"</span>: <span
-            class="hljs-built_in">int</span>,                <span class="hljs-meta"># 科目编号</span>
-                         <span class="hljs-string">"subject_name"</span>: <span class="hljs-built_in">string</span>,        <span
-                class="hljs-meta"># 科目名称</span>
-                         <span class="hljs-string">"subject_type"</span>: <span class="hljs-built_in">string</span>            <span
-                class="hljs-meta"># 科目类别（资产类，权益类，成本类，费用类，收入类，利润类）</span>
-                        })
-</code></pre>
-    <h2 id="6-">6 上传的文件集合</h2>
-    <pre><code>db.accoj.<span class="hljs-built_in">file</span>.insert({<span
-            class="hljs-string">"document_no"</span>:<span class="hljs-built_in">string</span>, <span
-            class="hljs-comment"># 学号名+业务索引号(在company集合中businesses的下标)</span>
-                      <span class="hljs-string">"filename"</span>: <span class="hljs-built_in">string</span>,    <span
-                class="hljs-comment"># 文件名</span>
-                      <span class="hljs-string">"content"</span>: <span class="hljs-built_in">string</span>,    <span
-                class="hljs-comment"># 内容</span>
-                    })
-</code></pre>
-    <h2 id="7-">7 排行榜成绩集合</h2>
-    <pre><code>db.accoj.rank.insert({<span class="hljs-string">"student_no"</span>:<span
-            class="hljs-keyword">string</span>, <span class="hljs-meta"># 学号名</span>
-                      <span class="hljs-string">"student_class"</span>: <span
-                class="hljs-keyword">string</span>,    <span class="hljs-meta"># 班级</span>
-                      <span class="hljs-string">"student_name"</span>: <span
-                class="hljs-keyword">string</span>,    <span class="hljs-meta"># 姓名</span>
-                      <span class="hljs-string">"sum_score"</span>:<span class="hljs-keyword">double</span>,  <span
-                class="hljs-meta">#总分,</span>
-                      <span class="hljs-string">"one"</span>,  <span class="hljs-meta">#第一部分成绩</span>
-                      <span class="hljs-string">"two"</span>,  <span class="hljs-meta">#第二部分成绩</span>
-                      <span class="hljs-string">"three"</span>,  <span class="hljs-meta">#第三部分成绩</span>
-                      <span class="hljs-string">"four"</span>,  <span class="hljs-meta">#第四部分成绩</span>
-                      <span class="hljs-string">"five"</span>,  <span class="hljs-meta">#第五部分成绩</span>
-                      <span class="hljs-string">"six"</span>,  <span class="hljs-meta">#第六部分成绩</span>
-                      <span class="hljs-string">"seven"</span>,  <span class="hljs-meta">#第七部分成绩</span>
-                      <span class="hljs-string">"eight"</span>,  <span class="hljs-meta">#第八部分成绩</span>
-                      <span class="hljs-string">"nine"</span>,  <span class="hljs-meta">#第九部分成绩</span>
-                      <span class="hljs-string">"ten"</span>,  <span class="hljs-meta">#第十部分成绩</span>
-                    })
-</code></pre>
-    <h2 id="8-">8 题库集合</h2>
-    <pre><code>db.accoj.question.insert({<span class="hljs-string">"questions_no"</span>: int，             <span
-            class="hljs-meta"># 题库号</span>
-                         <span class="hljs-string">"question_no"</span>: int,                <span class="hljs-meta"># 题目编号</span>
-                         <span class="hljs-string">"content"</span>: string,                 <span class="hljs-meta"># 内容</span>
-                         <span class="hljs-string">"business_type"</span>: string,            <span class="hljs-meta"># 业务类型（筹资活动、投资活动、经营活动）</span>
-                         <span class="hljs-string">"affect_type"</span>: int,                <span class="hljs-meta"># 对会计等式影响类型</span>
-                         <span class="hljs-string">"values"</span>: [{<span
-                class="hljs-string">"value_type"</span>: <span
-                class="hljs-string">"common/asset/num/percent"</span>, <span class="hljs-string">"value"</span>: double, is_random<span
-                class="hljs-string">": Boolean, "</span>low<span class="hljs-string">": double, "</span>high<span
-                class="hljs-string">": double}] # 变量列表，变量类型，值，是否是数字变量，如果是，最低值，最高值，0，0代表不变</span>
-                         <span class="hljs-string">"key_element_infos"</span>: [                            <span
-                class="hljs-meta"># 会计要素信息列表</span>
-                                              {<span class="hljs-string">"key_element"</span>: string,    <span
-                class="hljs-meta"># 会计要素</span>
-                                               <span class="hljs-string">"value_index"</span>: string,     <span
-                class="hljs-meta"># 在上述values的位置, 下标或四则运算表达式</span>
-                                               <span class="hljs-string">"is_up"</span>: Boolean            <span
-                class="hljs-meta"># 正负判定</span>
-                                              }]
-                         <span class="hljs-string">"subjects_infos"</span>: [                    <span
-                class="hljs-meta"># 科目列表</span>
-                                     {<span class="hljs-string">"subject"</span>: string,        <span
-                class="hljs-meta"># 科目</span>
-                                      <span class="hljs-string">"value_index"</span>: string,     <span
-                class="hljs-meta"># 在上述values的位置, 下标或四则运算表达式</span>
-                                      <span class="hljs-string">"is_up"</span>: Boolean            <span
-                class="hljs-meta"># 增减判定</span>
-                                     }]
-                        })
-</code></pre>
-    <h2 id="9-">9 公司集合</h2>
-    <p>用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为&quot;student_no_cp&quot;</p>
-    <pre><code>db.accoj.company.insert({<span class="hljs-string">"student_no"</span>: student_no,            <span
-            class="hljs-comment"># 用户ID</span>
-                         <span class="hljs-string">"com_name"</span>: string,                  <span
-                class="hljs-comment"># 公司名称</span>
-                         <span class="hljs-string">"com_address"</span>: string,                  <span
-                class="hljs-comment"># 公司地址</span>
-                         <span class="hljs-string">"com_business_addr"</span>: string,        <span
-                class="hljs-comment"># 公司经营地址</span>
-                         <span class="hljs-string">"com_legal_rep"</span>: string,            <span
-                class="hljs-comment"># 法人</span>
-                         <span class="hljs-string">"com_regist_cap"</span>: <span class="hljs-keyword">double</span>,            <span
-                class="hljs-comment"># 注册资本</span>
-                         <span class="hljs-string">"com_operate_period: string,        # 经营期限
-                         "</span>com_business_scope<span class="hljs-string">": string,        # 经营范围
-                         "</span>com_shareholder<span class="hljs-string">": [string],        # 股东姓名
-                         "</span>com_bank_savings<span class="hljs-string">": double,        # 公司银行存款
-                         "</span>com_cash<span class="hljs-string">": double,                # 公司现金存量
-                         "</span>com_assets: [{<span class="hljs-string">"asset_name"</span>: string, <span
-                class="hljs-string">"market_value"</span>: <span class="hljs-keyword">double</span>, <span
-                class="hljs-string">"question_no"</span>: <span class="hljs-keyword">int</span>}],    <span
-                class="hljs-comment"># 公司资产列表</span>
-                         <span class="hljs-string">"business_num"</span>: <span class="hljs-keyword">int</span>,                <span
-                class="hljs-comment"># 公司业务数</span>
-                         <span class="hljs-comment"># 所有业务涉及的科目列表</span>
-                         <span class="hljs-string">"involve_subjects"</span>: {<span class="hljs-string">"involve_subjects_1"</span>:[string], 会计期间一
-                                              <span class="hljs-string">"involve_subjects_2"</span>:[string]},会计期间二
-                         <span class="hljs-comment"># 课程确认进度</span>
-                         <span class="hljs-string">"schedule_confirm"</span>: {
-                                            <span class="hljs-string">"business_confirm"</span>: <span
-                class="hljs-keyword">Boolean</span>,                <span class="hljs-comment"># 增加业务部分是否完成</span>
-                                            <span class="hljs-string">"key_element_confirm"</span>: [<span
-                class="hljs-keyword">int</span>],                <span class="hljs-comment"># 会计要素部分进度</span>
-                                            <span class="hljs-string">"subject_confirm"</span>: [<span
-                class="hljs-keyword">int</span>],                    <span class="hljs-comment"># 会计科目部分进度</span>
-                                            <span class="hljs-string">"entry_confirm"</span>: [<span
-                class="hljs-keyword">int</span>],                        <span class="hljs-comment"># 会计分录部分进度</span>
-                                            <span class="hljs-string">"ledger_confirm"</span>: {<span
-                class="hljs-string">"ledger1_confirm"</span>: [string],<span class="hljs-comment"># 会计账户部分进度</span>
-                                                               <span class="hljs-string">"ledger2_confirm"</span>: [string]},
-                                            <span class="hljs-string">"balance_sheet_confirm"</span>: <span
-                class="hljs-keyword">Boolean</span>,            <span class="hljs-comment"># 会计平衡表部分进度</span>
-                                            <span class="hljs-string">"acc_document_confirm"</span>: [<span
-                class="hljs-keyword">int</span>],                 <span class="hljs-comment"># 会计凭证部分进度</span>
-                                            <span class="hljs-string">"subsidiary_account_confirm"</span>: [string],     <span
-                class="hljs-comment"># 会计明细账部分进度</span>
-                                            <span class="hljs-string">"acc_balance_sheet_confirm"</span>: <span
-                class="hljs-keyword">Boolean</span>,         <span class="hljs-comment"># 科目余额表部分进度</span>
-                                            <span class="hljs-string">"new_balance_sheet_confirm"</span>: <span
-                class="hljs-keyword">Boolean</span>,         <span class="hljs-comment"># 资产负债表部分进度</span>
-                                            <span class="hljs-string">"profit_statement_confirm"</span>: <span
-                class="hljs-keyword">Boolean</span>,          <span class="hljs-comment"># 利润表部分进度</span>
-                                            <span class="hljs-string">"trend_analysis_confirm"</span>:{<span
-                class="hljs-string">"first"</span>: <span class="hljs-keyword">Boolean</span>, <span
-                class="hljs-string">"second"</span>: <span class="hljs-keyword">Boolean</span>},
-                                            <span class="hljs-string">"common_ratio_analysis_confirm"</span>:{<span
-                class="hljs-string">"first"</span>: <span class="hljs-keyword">Boolean</span>, <span
-                class="hljs-string">"second"</span>: <span class="hljs-keyword">Boolean</span>},
-                                            <span class="hljs-string">"ratio_analysis_confirm"</span>:<span
-                class="hljs-keyword">Boolean</span>,
-                                            <span class="hljs-string">"dupont_analysis_confirm"</span>:<span
-                class="hljs-keyword">Boolean</span>
-                                            },
+<h2 id="4">4 班级集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.classes.insert({&quot;class_name&quot;: &quot;&quot;               # 班级名(学校-班级，例&#39;湖南工学院-网络1701&#39;)</span>
+<span class="err">                         &quot;teacher&quot;: &quot;&quot;                    # 教师</span>
+<span class="err">                         &quot;students&quot;: [&quot;&quot;]                 # 学生</span>
+<span class="err">                         &quot;time&quot;: {&quot;1&quot;: {&quot;start&quot;: &quot;utc time&quot;, &quot;end&quot;: &quot;utc time&quot;, &quot;is_open&quot;: false},# 时间管理</span>
+<span class="err">                                  &quot;2&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;3&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;4&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;5&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;6&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;7&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;8&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;9&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false},</span>
+<span class="err">                                  &quot;10&quot;: {&quot;start&quot;: &quot;&quot;, &quot;end&quot;: &quot;&quot;, &quot;is_open&quot;: false}</span>
+<span class="err">                                }</span>
+<span class="err">                      })</span>
+</code></pre></div>
 
-                         <span class="hljs-comment"># 课程保存进度</span>
-                         <span class="hljs-string">"schedule_saved"</span>: {
-                                            <span class="hljs-string">"business_saved"</span>: <span
-                class="hljs-keyword">Boolean</span>,                <span class="hljs-comment"># 增加业务部分是否完成</span>
-                                            <span class="hljs-string">"key_element_saved"</span>: [<span
-                class="hljs-keyword">int</span>],                <span class="hljs-comment"># 会计要素部分进度</span>
-                                            <span class="hljs-string">"subjects_saved"</span>: [<span
-                class="hljs-keyword">int</span>],                <span class="hljs-comment"># 会计科目部分进度</span>
-                                            <span class="hljs-string">"entry_saved"</span>: [<span class="hljs-keyword">int</span>],                    <span
-                class="hljs-comment"># 会计分录部分进度</span>
-                                            <span class="hljs-string">"ledger_saved"</span>: {<span class="hljs-string">"ledger1_saved"</span>: [string],<span
-                class="hljs-comment"># 会计账户部分进度</span>
-                                                             <span class="hljs-string">"ledger2_saved"</span>: [string]},
-                                            <span class="hljs-string">"balance_sheet_saved"</span>: <span
-                class="hljs-keyword">Boolean</span>,            <span class="hljs-comment"># 会计平衡表部分进度</span>
-                                            <span class="hljs-string">"acc_document_saved"</span>: [<span
-                class="hljs-keyword">int</span>],            <span class="hljs-comment"># 会计凭证部分进度</span>
-                                            <span class="hljs-string">"subsidiary_account_saved"</span>: [string],    <span
-                class="hljs-comment"># 会计明细账部分进度</span>
-                                            <span class="hljs-string">"acc_balance_sheet_saved"</span>: <span
-                class="hljs-keyword">Boolean</span>,        <span class="hljs-comment"># 科目余额表部分进度</span>
-                                            <span class="hljs-string">"new_balance_sheet_saved"</span>: <span
-                class="hljs-keyword">Boolean</span>,        <span class="hljs-comment"># 资产负债表部分进度</span>
-                                            <span class="hljs-string">"profit_statement_saved"</span>: <span
-                class="hljs-keyword">Boolean</span>,        <span class="hljs-comment"># 利润表部分进度</span>
-                                            <span class="hljs-string">"trend_analysis_saved"</span>:{<span
-                class="hljs-string">"first"</span>: <span class="hljs-keyword">Boolean</span>, <span
-                class="hljs-string">"second"</span>: <span class="hljs-keyword">Boolean</span>},
-                                            <span class="hljs-string">"common_ratio_analysis_saved"</span>:{<span
-                class="hljs-string">"first"</span>: <span class="hljs-keyword">Boolean</span>, <span
-                class="hljs-string">"second"</span>: <span class="hljs-keyword">Boolean</span>},
-                                            <span class="hljs-string">"ratio_analysis_saved"</span>:<span
-                class="hljs-keyword">Boolean</span>,
-                                            <span class="hljs-string">"dupont_analysis_saved"</span>:<span
-                class="hljs-keyword">Boolean</span>
-                                            },
-                         <span class="hljs-comment"># 课程评分</span>
-                         <span class="hljs-string">"evaluation"</span>: {
-                                        <span class="hljs-string">"key_element_score"</span>: [<span
-                class="hljs-keyword">double</span>],            <span class="hljs-comment"># 会计要素部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')</span>
-                                        <span class="hljs-string">"subjects_score"</span>: [<span class="hljs-keyword">double</span>],                <span
-                class="hljs-comment"># 会计科目部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')</span>
-                                        <span class="hljs-string">"entry_score"</span>: [<span class="hljs-keyword">double</span>],                <span
-                class="hljs-comment"># 会计分录部分评分(下标为偶数存储用户本题得分，奇数为本题总分，数组最后一个元素用来存储'本次课程得分和')</span>
-                                        <span class="hljs-string">"ledger_score"</span>: {<span class="hljs-string">"first"</span>: <span
-                class="hljs-keyword">double</span>,<span class="hljs-comment"># 会计账户部分评分(科目名为键，分数为值)</span>
-                                                         <span class="hljs-string">"second"</span>: <span
-                class="hljs-keyword">double</span>},
-                                        <span class="hljs-string">"balance_sheet_score"</span>: <span
-                class="hljs-keyword">double</span>,            <span class="hljs-comment"># 会计平衡表部分评分</span>
-                                        <span class="hljs-string">"acc_document_score"</span>: [<span
-                class="hljs-keyword">double</span>],            <span class="hljs-comment"># 会计凭证部分评分([0,1,2...]下标0存储用户本题得分，1为本题教师评分（值为-1则表示未评分）,2为本题总分，以此类推共20道题，数组最后一个元素用来存储'本次课程得分和'，数组长度为61=20*3+1)</span>
-                                        <span class="hljs-string">"subsidiary_account_score"</span>: {subjectName: <span
-                class="hljs-keyword">double</span>},        <span class="hljs-comment"># 会计明细账部分评分</span>
-                                        <span class="hljs-string">"acc_balance_sheet_score"</span>: <span
-                class="hljs-keyword">double</span>,        <span class="hljs-comment"># 科目余额表部分评分</span>
-                                        <span class="hljs-string">"new_balance_sheet_score"</span>: <span
-                class="hljs-keyword">double</span>,        <span class="hljs-comment"># 资产负债表部分评分</span>
-                                        <span class="hljs-string">"profit_statement_score"</span>: <span
-                class="hljs-keyword">double</span>,        <span class="hljs-comment"># 利润表部分评分</span>
-                                        <span class="hljs-string">"trend_analysis_score"</span>:{<span
-                class="hljs-string">"first"</span>: {<span class="hljs-string">"student_score"</span>: <span
-                class="hljs-keyword">double</span>, <span class="hljs-string">"teacher_score"</span>: <span
-                class="hljs-keyword">double</span>}, <span class="hljs-string">"second"</span>: {<span
-                class="hljs-string">"student"</span>: <span class="hljs-keyword">double</span>, <span
-                class="hljs-string">"teacher_score"</span>: <span class="hljs-keyword">double</span>}}, <span
-                class="hljs-comment"># "student_score"表示学生得分，"teacher_score"表示教师评分(-1表示未评分)，后述亦同</span>
-                                        <span class="hljs-string">"common_ratio_analysis_score"</span>:{<span
-                class="hljs-string">"first"</span>: {<span class="hljs-string">"student_score"</span>: <span
-                class="hljs-keyword">double</span>, <span class="hljs-string">"teacher_score"</span>: <span
-                class="hljs-keyword">double</span>}, <span class="hljs-string">"second"</span>: {<span
-                class="hljs-string">"student_score"</span>: <span class="hljs-keyword">double</span>, <span
-                class="hljs-string">"teacher_score"</span>: <span class="hljs-keyword">double</span>}},
-                                        <span class="hljs-string">"ratio_analysis_score"</span>: {<span
-                class="hljs-string">"student_score"</span>: <span class="hljs-keyword">double</span>, <span
-                class="hljs-string">"teacher_score"</span>: <span class="hljs-keyword">double</span>},
-                                        <span class="hljs-string">"dupont_analysis_score"</span>: {<span
-                class="hljs-string">"student_score"</span>: <span class="hljs-keyword">double</span>, <span
-                class="hljs-string">"teacher_score"</span>: <span class="hljs-keyword">double</span>}
-                                        },
-                         <span class="hljs-comment"># 公司业务</span>
-                         <span class="hljs-string">"businesses"</span>: [{<span
-                class="hljs-string">"questions_no"</span>: <span class="hljs-keyword">int</span>，             <span
-                class="hljs-comment"># 题库号</span>
-                                         <span class="hljs-string">"question_no"</span>: <span
-                class="hljs-keyword">int</span>,            <span class="hljs-comment"># 题目编号</span>
-                                         <span class="hljs-string">"content"</span>: string,             <span
-                class="hljs-comment"># 内容</span>
-                                         <span class="hljs-string">"date"</span>: <span class="hljs-keyword">new</span> Date(),              <span
-                class="hljs-comment"># 日期</span>
-                                         <span class="hljs-string">"business_type"</span>: string,        <span
-                class="hljs-comment"># 业务类型（筹资活动、投资活动、经营活动）</span>
-                                       }]
+<h2 id="5">5 科目库集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.subject.insert({&quot;subject_no&quot;: int,             # 科目编号</span>
+<span class="err">                         &quot;subject_name&quot;: string,        # 科目名称</span>
+<span class="err">                         &quot;subject_type&quot;: string         # 科目类别（资产类，权益类，成本类，费用类，收入类，利润类）</span>
+<span class="err">                        })</span>
+</code></pre></div>
 
-                         <span class="hljs-comment"># 会计要素信息（数组顺序即业务顺序）</span>
-                         <span class="hljs-string">"key_element_infos"</span>: [{
-                                                <span class="hljs-string">"affect_type"</span>: <span
-                class="hljs-keyword">int</span>,                <span class="hljs-comment"># 对会计等式影响类型</span>
-                                                <span class="hljs-string">"info"</span>:[{<span class="hljs-string">"key_element"</span>: string,    <span
-                class="hljs-comment"># 会计要素</span>
-                                                        <span class="hljs-string">"money"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 金额</span>
-                                                        <span class="hljs-string">"is_up"</span>: <span
-                class="hljs-keyword">Boolean</span>        <span class="hljs-comment"># 正负判定</span>
-                                                        }]
-                                              }],
-                         <span class="hljs-comment"># 会计科目（数组顺序即业务顺序）</span>
-                         <span class="hljs-string">"subjects_infos"</span>: [[{<span
-                class="hljs-string">"subject"</span>: string,        <span class="hljs-comment"># 科目</span>
-                                             <span class="hljs-string">"money"</span>: <span
-                class="hljs-keyword">double</span>,            <span class="hljs-comment"># 金额</span>
-                                             <span class="hljs-string">"is_up"</span>: <span class="hljs-keyword">Boolean</span>            <span
-                class="hljs-comment"># 增减判定</span>
-                                            }]],
-                         <span class="hljs-comment"># 会计分录（数组顺序即业务顺序）</span>
-                         <span class="hljs-string">"entry_infos"</span>: [[{<span class="hljs-string">"subject"</span>: string,            <span
-                class="hljs-comment"># 科目</span>
-                                          <span class="hljs-string">"money"</span>: <span
-                class="hljs-keyword">double</span>,                <span class="hljs-comment"># 金额</span>
-                                          <span class="hljs-string">"is_dr"</span>: <span
-                class="hljs-keyword">Boolean</span>,                <span class="hljs-comment"># 是否借记</span>
-                                        }]],
-                         <span class="hljs-comment"># 会计凭证（数组顺序即业务顺序）</span>
-                         <span class="hljs-string">"acc_document_infos"</span>: [{
-                                                <span class="hljs-string">"document_no"</span>: string,                    <span
-                class="hljs-comment"># 学号名+业务索引号(在company集合中businesses的下标)</span>
-                                                <span class="hljs-string">"filename"</span>: string,                        <span
-                class="hljs-comment"># 文件名</span>
-                                                <span class="hljs-string">"doc_no"</span>: <span class="hljs-keyword">int</span>,                             <span
-                class="hljs-comment"># 会计凭证记号</span>
-                                                <span class="hljs-string">"date"</span>: <span
-                class="hljs-keyword">new</span> Date(),                         <span class="hljs-comment"># 日期</span>
-                                                <span class="hljs-string">"doc_nums"</span>: <span class="hljs-keyword">int</span>,                         <span
-                class="hljs-comment"># 单据数量</span>
-                                                <span class="hljs-string">"contents"</span>:[{
-                                                             <span class="hljs-string">"summary"</span>: string,                     <span
-                class="hljs-comment"># 摘要</span>
-                                                             <span class="hljs-string">"general_account"</span>: subject,        <span
-                class="hljs-comment"># 总账科目</span>
-                                                             <span class="hljs-string">"detail_account"</span>: string,             <span
-                class="hljs-comment"># 明细科目</span>
-                                                             <span class="hljs-string">"dr_money"</span>: <span
-                class="hljs-keyword">double</span>,                 <span class="hljs-comment"># 借方金额</span>
-                                                             <span class="hljs-string">"cr_money"</span>: <span
-                class="hljs-keyword">double</span>                     <span class="hljs-comment"># 贷方金额</span>
-                                                             }]
-                                               }]
-                         <span class="hljs-comment"># 会计账户</span>
-                         <span class="hljs-string">"ledger_infos"</span>: {<span
-                class="hljs-string">"ledger_infos_1"</span>: {<span class="hljs-string">"subject_name"</span>:                    <span
-                class="hljs-comment"># 科目名即账户名作为键</span>
-                                                                            {
-                                                                           <span class="hljs-string">"subject"</span>: string,                            <span
-                class="hljs-comment"># 科目名</span>
-                                                                           <span class="hljs-string">"opening_balance"</span>: <span
-                class="hljs-keyword">double</span>,                     <span class="hljs-comment"># 期初余额</span>
-                                                                           <span class="hljs-string">"dr"</span>: [{<span
-                class="hljs-string">"business_no"</span>: <span class="hljs-keyword">int</span>, <span
-                class="hljs-string">"money"</span>: <span class="hljs-keyword">double</span>}],     <span
-                class="hljs-comment"># 借方额</span>
-                                                                           <span class="hljs-string">"current_amount_dr"</span>: <span
-                class="hljs-keyword">double</span>,                    <span class="hljs-comment"># 本期借方发生额</span>
-                                                                           <span class="hljs-string">"current_amount_cr"</span>: <span
-                class="hljs-keyword">double</span>,                    <span class="hljs-comment"># 本期贷方发生额</span>
-                                                                           <span class="hljs-string">"ending_balance"</span>: <span
-                class="hljs-keyword">double</span>,                    <span class="hljs-comment"># 期末余额</span>
-                                                                           <span class="hljs-string">"cr"</span>: [{<span
-                class="hljs-string">"business_no"</span>: <span class="hljs-keyword">int</span>, <span
-                class="hljs-string">"money"</span>: <span class="hljs-keyword">double</span>}]<span
-                class="hljs-comment"># 贷方额</span>
-                                                                           <span class="hljs-string">"is_left"</span>: <span
-                class="hljs-keyword">Boolean</span>                            <span class="hljs-comment"># 是否左T表</span>
-                                                                           }
-                                                            }
-                                          <span class="hljs-string">"ledger_infos_2"</span>: {<span class="hljs-string">"subject_name"</span>:                    <span
-                class="hljs-comment"># 科目名即账户名作为键</span>
-                                                                            {
-                                                                           <span class="hljs-string">"subject"</span>: string,                            <span
-                class="hljs-comment"># 科目名</span>
-                                                                           <span class="hljs-string">"opening_balance"</span>: <span
-                class="hljs-keyword">double</span>,                     <span class="hljs-comment"># 期初余额</span>
-                                                                           <span class="hljs-string">"dr"</span>: [{<span
-                class="hljs-string">"business_no"</span>: <span class="hljs-keyword">int</span>, <span
-                class="hljs-string">"money"</span>: <span class="hljs-keyword">double</span>}],     <span
-                class="hljs-comment"># 借方额</span>
-                                                                           <span class="hljs-string">"current_amount_dr"</span>: <span
-                class="hljs-keyword">double</span>,                    <span class="hljs-comment"># 本期借方发生额</span>
-                                                                           <span class="hljs-string">"current_amount_cr"</span>: <span
-                class="hljs-keyword">double</span>,                    <span class="hljs-comment"># 本期贷方发生额</span>
-                                                                           <span class="hljs-string">"ending_balance"</span>: <span
-                class="hljs-keyword">double</span>,                    <span class="hljs-comment"># 期末余额</span>
-                                                                           <span class="hljs-string">"cr"</span>: [{<span
-                class="hljs-string">"business_no"</span>: <span class="hljs-keyword">int</span>, <span
-                class="hljs-string">"money"</span>: <span class="hljs-keyword">double</span>}]    <span
-                class="hljs-comment"># 贷方额</span>
-                                                                           <span class="hljs-string">"is_left"</span>: <span
-                class="hljs-keyword">Boolean</span>                            <span class="hljs-comment"># 是否左T表</span>
-                                                                           }
-                                                            }
-                                         }
-                         <span class="hljs-comment"># 试算平衡集合</span>
-                         <span class="hljs-string">"balance_sheet_infos"</span>: {
-                                                <span class="hljs-string">"accounting_period_1"</span>: [{                                    <span
-                class="hljs-comment"># 第一个会计期间</span>
-                                                                       <span class="hljs-string">"subject"</span>: subject,                     <span
-                class="hljs-comment"># 会计科目</span>
-                                                                       <span class="hljs-string">"borrow_1"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方期初余额</span>
-                                                                       <span class="hljs-string">"lend_1"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 贷方期初余额</span>
-                                                                       <span class="hljs-string">"borrow_2"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方本期发生额</span>
-                                                                       <span class="hljs-string">"lend_2"</span>: <span
-                class="hljs-keyword">double</span>,                             <span
-                class="hljs-comment"># 贷方本期发生额</span>
-                                                                       <span class="hljs-string">"borrow_3"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方期末余额</span>
-                                                                       <span class="hljs-string">"lend_3"</span>: <span
-                class="hljs-keyword">double</span>                             <span
-                class="hljs-comment"># 贷方期末余额</span>
-                                                                       }]
-                                                 <span class="hljs-string">"accounting_period_2"</span>: [{                                        <span
-                class="hljs-comment"># 第二个会计期间</span>
-                                                                       <span class="hljs-string">"subject"</span>: subject,                         <span
-                class="hljs-comment"># 会计科目</span>
-                                                                       <span class="hljs-string">"borrow_1"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方期初余额</span>
-                                                                       <span class="hljs-string">"lend_1"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 贷方期初余额</span>
-                                                                       <span class="hljs-string">"borrow_2"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方本期发生额</span>
-                                                                       <span class="hljs-string">"lend_2"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 贷方本期发生额</span>
-                                                                       <span class="hljs-string">"borrow_3"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方期末余额</span>
-                                                                       <span class="hljs-string">"lend_3"</span>: <span
-                class="hljs-keyword">double</span>                             <span
-                class="hljs-comment"># 贷方期末余额</span>
-                                                                       }]
-                                                }
-                        <span class="hljs-comment"># 账户明细账</span>
-                        <span class="hljs-string">"subsidiary_account_infos"</span>: {<span class="hljs-string">"subject_name"</span>:                            <span
-                class="hljs-comment"># 科目名即账户名作为键（动态变化）</span>
-                                                                    [{<span class="hljs-string">"date"</span>: <span
-                class="hljs-string">"1998-05-05"</span>,        <span class="hljs-comment"># 日期</span>
-                                                                      <span class="hljs-string">"word"</span>: string,            <span
-                class="hljs-comment"># 字</span>
-                                                                      <span class="hljs-string">"no"</span>:    <span
-                class="hljs-keyword">int</span>,                <span class="hljs-comment"># 号</span>
-                                                                      <span class="hljs-string">"summary"</span>: string,        <span
-                class="hljs-comment"># 摘要</span>
-                                                                      <span class="hljs-string">"dr_money"</span>: <span
-                class="hljs-keyword">double</span>,        <span class="hljs-comment"># 借方金额</span>
-                                                                      <span class="hljs-string">"cr_money"</span>: <span
-                class="hljs-keyword">double</span>,        <span class="hljs-comment"># 贷方金额</span>
-                                                                      <span class="hljs-string">"orientation"</span>: string,     <span
-                class="hljs-comment"># 方向</span>
-                                                                      <span class="hljs-string">"balance_money"</span>: <span
-                class="hljs-keyword">double</span>,    <span class="hljs-comment"># 余额</span>
-                                                                    }]
-                                                    }
-                        <span class="hljs-comment"># 科目余额表</span>
-                        <span class="hljs-string">"acc_balance_sheet_infos"</span>: [{
-                                                    <span class="hljs-string">"subject"</span>: subject,                         <span
-                class="hljs-comment"># 会计科目</span>
-                                                    <span class="hljs-string">"borrow_1"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方期初余额</span>
-                                                    <span class="hljs-string">"lend_1"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 贷方期初余额</span>
-                                                    <span class="hljs-string">"borrow_2"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方本期发生额</span>
-                                                    <span class="hljs-string">"lend_2"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 贷方本期发生额</span>
-                                                    <span class="hljs-string">"borrow_3"</span>: <span
-                class="hljs-keyword">double</span>,                         <span class="hljs-comment"># 借方期末余额</span>
-                                                    <span class="hljs-string">"lend_3"</span>: <span
-                class="hljs-keyword">double</span>                             <span
-                class="hljs-comment"># 贷方期末余额</span>
-                                                    }]
-                        <span class="hljs-comment"># 资产负债表</span>
-                        <span class="hljs-string">"new_balance_sheet_infos"</span>: {<span
-                class="hljs-string">"project"</span>:                                 <span class="hljs-comment"># 'project'为项目名（动态变化），后述亦同</span>
-                                                              {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 期末余额</span>
-                                                               <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}        <span class="hljs-comment"># 上期余额</span>
-                                                    }
-                        <span class="hljs-comment"># 利润表</span>
-                        <span class="hljs-string">"profit_statement_infos"</span>: {<span
-                class="hljs-string">"project"</span>:
-                                                            {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,             <span class="hljs-comment"># 本期金额</span>
-                                                             <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}            <span class="hljs-comment"># 上期金额</span>
-                                                  }
-                        <span class="hljs-comment"># 趋势分析法</span>
-                        <span class="hljs-string">"trend_analysis_infos"</span>: {<span class="hljs-string">"new_balance_sheet_infos"</span>:             <span
-                class="hljs-comment"># 分析资产负债表，后述亦同</span>
-                                                                            {<span class="hljs-string">"project"</span>:
-                                                                                        {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 本期比上期增加额</span>
-                                                                                         <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}        <span class="hljs-comment"># 本期比上期增加率</span>
-                                                                             <span class="hljs-string">"conclusion"</span>: string,                    <span
-                class="hljs-comment"># 结论</span>
-                                                                            }
-                                                 <span class="hljs-string">"profit_statement_infos"</span>:                 <span
-                class="hljs-comment"># 分析利润表，后述亦同</span>
-                                                                            {<span class="hljs-string">"project"</span>:
-                                                                                        {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 本期比上期增加额</span>
-                                                                                        <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}        <span class="hljs-comment"># 本期比上期增加率</span>
-                                                                             <span class="hljs-string">"conclusion"</span>: string,                    <span
-                class="hljs-comment"># 结论</span>
-                                                                           }
-                                                }
-                        <span class="hljs-comment"># 共同比分析法</span>
-                        <span class="hljs-string">"common_ratio_analysis_infos"</span>: {<span class="hljs-string">"new_balance_sheet_infos"</span>:
-                                                                                 {<span
-                class="hljs-string">"project"</span>:
-                                                                                            {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 本期占资产/负债总额百分比</span>
-                                                                                             <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}        <span class="hljs-comment"># 上期占资产/负债总额百分比</span>
-                                                                                  <span class="hljs-string">"conclusion"</span>: string,                    <span
-                class="hljs-comment"># 结论</span>
-                                                                                 }
-                                                        <span class="hljs-string">"profit_statement_infos"</span>:
-                                                                                 {<span
-                class="hljs-string">"project"</span>:
-                                                                                            {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 本期占收入百分比</span>
-                                                                                             <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}        <span class="hljs-comment"># 上期占收入百分比</span>
-                                                                                  <span class="hljs-string">"conclusion"</span>: string,                    <span
-                class="hljs-comment"># 结论</span>
-                                                                                 }
-                                                       }
-                        <span class="hljs-comment"># 比率分析法</span>
-                        <span class="hljs-string">"ratio_analysis_infos"</span>: {<span
-                class="hljs-string">"project"</span>:
-                                                            {<span class="hljs-string">"period_end"</span>: <span
-                class="hljs-keyword">double</span>,         <span class="hljs-comment"># 本期</span>
-                                                             <span class="hljs-string">"period_last"</span>: <span
-                class="hljs-keyword">double</span>}        <span class="hljs-comment"># 上期</span>
-                                                }
-                        <span class="hljs-comment"># 杜邦分析法</span>
-                        <span class="hljs-string">"dupont_analysis_infos"</span>: {<span
-                class="hljs-string">"project"</span>: <span class="hljs-keyword">double</span>,
-                                                  <span class="hljs-string">"conclusion"</span>: string
-                                                 }
-                        })
-</code></pre>
+<h2 id="6">6 上传的文件集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.file.insert({&quot;document_no&quot;:string, # 学号名+业务索引号(在company集合中businesses的下标)</span>
+<span class="err">                      &quot;filename&quot;: string,   # 文件名</span>
+<span class="err">                      &quot;content&quot;: string,    # 内容</span>
+<span class="err">                    })</span>
+</code></pre></div>
 
+<h2 id="7">7 排行榜成绩集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.rank.insert({&quot;student_no&quot;:string, # 学号名</span>
+<span class="err">                      &quot;student_class&quot;: string,  # 班级</span>
+<span class="err">                      &quot;student_name&quot;: string,   # 姓名</span>
+<span class="err">                      &quot;sum_score&quot;:double,  #总分,</span>
+<span class="err">                      &quot;one&quot;,  #第一部分成绩</span>
+<span class="err">                      &quot;two&quot;,  #第二部分成绩</span>
+<span class="err">                      &quot;three&quot;,  #第三部分成绩</span>
+<span class="err">                      &quot;four&quot;,  #第四部分成绩</span>
+<span class="err">                      &quot;five&quot;,  #第五部分成绩</span>
+<span class="err">                      &quot;six&quot;,  #第六部分成绩</span>
+<span class="err">                      &quot;seven&quot;,  #第七部分成绩</span>
+<span class="err">                      &quot;eight&quot;,  #第八部分成绩</span>
+<span class="err">                      &quot;nine&quot;,  #第九部分成绩</span>
+<span class="err">                      &quot;ten&quot;,  #第十部分成绩</span>
+<span class="err">                    })</span>
+</code></pre></div>
 
-</article>
-</body>
-</html>
+<h2 id="8">8 题库集合</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">db.accoj.question.insert({&quot;questions_no&quot;: int，          # 题库号</span>
+<span class="err">                         &quot;question_no&quot;: int,                # 题目编号</span>
+<span class="err">                         &quot;content&quot;: string,                 # 内容</span>
+<span class="err">                         &quot;business_type&quot;: string,           # 业务类型（筹资活动、投资活动、经营活动）</span>
+<span class="err">                         &quot;affect_type&quot;: int,                # 对会计等式影响类型</span>
+<span class="err">                         &quot;values&quot;: [{&quot;value_type&quot;: &quot;common/asset/num/percent&quot;, &quot;value&quot;: double, is_random&quot;: Boolean, &quot;low&quot;: double, &quot;high&quot;: double}] # 变量列表，变量类型，值，是否是数字变量，如果是，最低值，最高值，0，0代表不变</span>
+<span class="err">                         &quot;key_element_infos&quot;: [                         # 会计要素信息列表</span>
+<span class="err">                                              {&quot;key_element&quot;: string,   # 会计要素</span>
+<span class="err">                                               &quot;value_index&quot;: string,   # 在上述values的位置, 下标或四则运算表达式</span>
+<span class="err">                                               &quot;is_up&quot;: Boolean         # 正负判定</span>
+<span class="err">                                              }]</span>
+<span class="err">                         &quot;subjects_infos&quot;: [                    # 科目列表</span>
+<span class="err">                                     {&quot;subject&quot;: string,        # 科目</span>
+<span class="err">                                      &quot;value_index&quot;: string,    # 在上述values的位置, 下标或四则运算表达式</span>
+<span class="err">                                      &quot;is_up&quot;: Boolean          # 增减判定</span>
+<span class="err">                                     }]</span>
+<span class="err">                        })</span>
+</code></pre></div>
+
+<h2 id="9">9 公司集合</h2>
+<p>用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为"student_no_cp"</p>
+<div class="codehilite"><pre><span></span><code><span class="n">db</span><span class="p">.</span><span class="n">accoj</span><span class="p">.</span><span class="n">company</span><span class="p">.</span><span class="k">insert</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;student_no&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">student_no</span><span class="p">,</span><span class="w">          </span><span class="err">#</span><span class="w"> </span><span class="n">用户ID</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;com_name&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">公司名称</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;com_address&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">             </span><span class="err">#</span><span class="w"> </span><span class="n">公司地址</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;com_business_addr&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">公司经营地址</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;com_legal_rep&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">           </span><span class="err">#</span><span class="w"> </span><span class="n">法人</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;com_regist_cap&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">          </span><span class="err">#</span><span class="w"> </span><span class="n">注册资本</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;com_operate_period: string,       # 经营期限</span>
+<span class="ss">                         &quot;</span><span class="n">com_business_scope</span><span class="ss">&quot;: string,      # 经营范围</span>
+<span class="ss">                         &quot;</span><span class="n">com_shareholder</span><span class="ss">&quot;: [string],       # 股东姓名</span>
+<span class="ss">                         &quot;</span><span class="n">com_bank_savings</span><span class="ss">&quot;: double,        # 公司银行存款</span>
+<span class="ss">                         &quot;</span><span class="n">com_cash</span><span class="ss">&quot;: double,                # 公司现金存量</span>
+<span class="ss">                         &quot;</span><span class="nl">com_assets</span><span class="p">:</span><span class="w"> </span><span class="o">[</span><span class="n">{&quot;asset_name&quot;: string, &quot;market_value&quot;: double, &quot;question_no&quot;: int}</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">公司资产列表</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;business_num&quot;</span><span class="err">:</span><span class="w"> </span><span class="nc">int</span><span class="p">,</span><span class="w">               </span><span class="err">#</span><span class="w"> </span><span class="n">公司业务数</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">所有业务涉及的科目列表</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;involve_subjects&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;involve_subjects_1&quot;</span><span class="err">:</span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">会计期间一</span><span class="w"></span>
+<span class="w">                                              </span><span class="ss">&quot;involve_subjects_2&quot;</span><span class="err">:</span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="err">}</span><span class="p">,</span><span class="n">会计期间二</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">课程确认进度</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;schedule_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;business_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">增加业务部分是否完成</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;key_element_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">               </span><span class="err">#</span><span class="w"> </span><span class="n">会计要素部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;subject_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">                   </span><span class="err">#</span><span class="w"> </span><span class="n">会计科目部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;entry_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">                     </span><span class="err">#</span><span class="w"> </span><span class="n">会计分录部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;ledger_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;ledger1_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="p">,</span><span class="err">#</span><span class="w"> </span><span class="n">会计账户部分进度</span><span class="w"></span>
+<span class="w">                                                               </span><span class="ss">&quot;ledger2_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;balance_sheet_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">           </span><span class="err">#</span><span class="w"> </span><span class="n">会计平衡表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;acc_document_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">              </span><span class="err">#</span><span class="w"> </span><span class="n">会计凭证部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;subsidiary_account_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="p">,</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">会计明细账部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;acc_balance_sheet_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">科目余额表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;new_balance_sheet_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">资产负债表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;profit_statement_confirm&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="n">利润表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;trend_analysis_confirm&quot;</span><span class="err">:{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;common_ratio_analysis_confirm&quot;</span><span class="err">:{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;ratio_analysis_confirm&quot;</span><span class="err">:</span><span class="k">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;dupont_analysis_confirm&quot;</span><span class="err">:</span><span class="k">Boolean</span><span class="w"></span>
+<span class="w">                                            </span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">课程保存进度</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;schedule_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;business_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">              </span><span class="err">#</span><span class="w"> </span><span class="n">增加业务部分是否完成</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;key_element_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">             </span><span class="err">#</span><span class="w"> </span><span class="n">会计要素部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;subjects_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">会计科目部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;entry_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">                   </span><span class="err">#</span><span class="w"> </span><span class="n">会计分录部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;ledger_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;ledger1_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="p">,</span><span class="err">#</span><span class="w"> </span><span class="n">会计账户部分进度</span><span class="w"></span>
+<span class="w">                                                             </span><span class="ss">&quot;ledger2_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;balance_sheet_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">         </span><span class="err">#</span><span class="w"> </span><span class="n">会计平衡表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;acc_document_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="p">,</span><span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">会计凭证部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;subsidiary_account_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="p">,</span><span class="w">   </span><span class="err">#</span><span class="w"> </span><span class="n">会计明细账部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;acc_balance_sheet_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">科目余额表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;new_balance_sheet_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">资产负债表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;profit_statement_saved&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">利润表部分进度</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;trend_analysis_saved&quot;</span><span class="err">:{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;common_ratio_analysis_saved&quot;</span><span class="err">:{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;ratio_analysis_saved&quot;</span><span class="err">:</span><span class="k">Boolean</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                            </span><span class="ss">&quot;dupont_analysis_saved&quot;</span><span class="err">:</span><span class="k">Boolean</span><span class="w"></span>
+<span class="w">                                            </span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">课程评分</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;evaluation&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;key_element_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">double</span><span class="o">]</span><span class="p">,</span><span class="w">          </span><span class="err">#</span><span class="w"> </span><span class="n">会计要素部分评分</span><span class="p">(</span><span class="n">下标为偶数存储用户本题得分</span><span class="err">，</span><span class="n">奇数为本题总分</span><span class="err">，</span><span class="n">数组最后一个元素用来存储</span><span class="s1">&#39;本次课程得分和&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;subjects_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">double</span><span class="o">]</span><span class="p">,</span><span class="w">             </span><span class="err">#</span><span class="w"> </span><span class="n">会计科目部分评分</span><span class="p">(</span><span class="n">下标为偶数存储用户本题得分</span><span class="err">，</span><span class="n">奇数为本题总分</span><span class="err">，</span><span class="n">数组最后一个元素用来存储</span><span class="s1">&#39;本次课程得分和&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;entry_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">double</span><span class="o">]</span><span class="p">,</span><span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">会计分录部分评分</span><span class="p">(</span><span class="n">下标为偶数存储用户本题得分</span><span class="err">，</span><span class="n">奇数为本题总分</span><span class="err">，</span><span class="n">数组最后一个元素用来存储</span><span class="s1">&#39;本次课程得分和&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;ledger_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="err">#</span><span class="w"> </span><span class="n">会计账户部分评分</span><span class="p">(</span><span class="n">科目名为键</span><span class="err">，</span><span class="n">分数为值</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                         </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;balance_sheet_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">          </span><span class="err">#</span><span class="w"> </span><span class="n">会计平衡表部分评分</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;acc_document_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">double</span><span class="o">]</span><span class="p">,</span><span class="w">         </span><span class="err">#</span><span class="w"> </span><span class="n">会计凭证部分评分</span><span class="p">(</span><span class="o">[</span><span class="n">0,1,2...</span><span class="o">]</span><span class="n">下标0存储用户本题得分</span><span class="err">，</span><span class="mi">1</span><span class="n">为本题教师评分</span><span class="err">（</span><span class="n">值为</span><span class="o">-</span><span class="mi">1</span><span class="n">则表示未评分</span><span class="err">）</span><span class="p">,</span><span class="mi">2</span><span class="n">为本题总分</span><span class="err">，</span><span class="n">以此类推共20道题</span><span class="err">，</span><span class="n">数组最后一个元素用来存储</span><span class="s1">&#39;本次课程得分和&#39;</span><span class="err">，</span><span class="n">数组长度为61</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;subsidiary_account_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="nl">subjectName</span><span class="p">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">会计明细账部分评分</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;acc_balance_sheet_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">科目余额表部分评分</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;new_balance_sheet_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">资产负债表部分评分</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;profit_statement_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">利润表部分评分</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;trend_analysis_score&quot;</span><span class="err">:{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;student_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;teacher_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;student&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;teacher_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}}</span><span class="p">,</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="ss">&quot;student_score&quot;</span><span class="n">表示学生得分</span><span class="err">，</span><span class="ss">&quot;teacher_score&quot;</span><span class="n">表示教师评分</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">表示未评分</span><span class="p">)</span><span class="err">，</span><span class="n">后述亦同</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;common_ratio_analysis_score&quot;</span><span class="err">:{</span><span class="ss">&quot;first&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;student_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;teacher_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;second&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;student_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;teacher_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;ratio_analysis_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;student_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;teacher_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="ss">&quot;dupont_analysis_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;student_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;teacher_score&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w"></span>
+<span class="w">                                        </span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">公司业务</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;businesses&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{&quot;questions_no&quot;: int，           # 题库号</span>
+<span class="n">                                         &quot;question_no&quot;: int,            # 题目编号</span>
+<span class="n">                                         &quot;content&quot;: string,             # 内容</span>
+<span class="n">                                         &quot;date&quot;: new Date(),            # 日期</span>
+<span class="n">                                         &quot;business_type&quot;: string,       # 业务类型（筹资活动、投资活动、经营活动）</span>
+<span class="n">                                       }</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">会计要素信息</span><span class="err">（</span><span class="n">数组顺序即业务顺序</span><span class="err">）</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;key_element_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{</span>
+<span class="n">                                                &quot;affect_type&quot;: int,             # 对会计等式影响类型</span>
+<span class="n">                                                &quot;info&quot;:[{&quot;key_element&quot;: string, # 会计要素</span>
+<span class="n">                                                        &quot;money&quot;: double,        # 金额</span>
+<span class="n">                                                        &quot;is_up&quot;: Boolean        # 正负判定</span>
+<span class="n">                                                        }</span><span class="o">]</span><span class="w"></span>
+<span class="w">                                              </span><span class="err">}]</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">会计科目</span><span class="err">（</span><span class="n">数组顺序即业务顺序</span><span class="err">）</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;subjects_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">[{&quot;subject&quot;: string,        # 科目</span>
+<span class="n">                                             &quot;money&quot;: double,           # 金额</span>
+<span class="n">                                             &quot;is_up&quot;: Boolean           # 增减判定</span>
+<span class="n">                                            }</span><span class="o">]</span><span class="err">]</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">会计分录</span><span class="err">（</span><span class="n">数组顺序即业务顺序</span><span class="err">）</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;entry_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">[{&quot;subject&quot;: string,           # 科目</span>
+<span class="n">                                          &quot;money&quot;: double,              # 金额</span>
+<span class="n">                                          &quot;is_dr&quot;: Boolean,             # 是否借记</span>
+<span class="n">                                        }</span><span class="o">]</span><span class="err">]</span><span class="p">,</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">会计凭证</span><span class="err">（</span><span class="n">数组顺序即业务顺序</span><span class="err">）</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;acc_document_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{</span>
+<span class="n">                                                &quot;document_no&quot;: string,                  # 学号名+业务索引号(在company集合中businesses的下标)</span>
+<span class="n">                                                &quot;filename&quot;: string,                     # 文件名</span>
+<span class="n">                                                &quot;doc_no&quot;: int,                          # 会计凭证记号</span>
+<span class="n">                                                &quot;date&quot;: new Date(),                     # 日期</span>
+<span class="n">                                                &quot;doc_nums&quot;: int,                        # 单据数量</span>
+<span class="n">                                                &quot;contents&quot;:[{</span>
+<span class="n">                                                             &quot;summary&quot;: string,                 # 摘要</span>
+<span class="n">                                                             &quot;general_account&quot;: subject,        # 总账科目</span>
+<span class="n">                                                             &quot;detail_account&quot;: string,          # 明细科目</span>
+<span class="n">                                                             &quot;dr_money&quot;: double,                # 借方金额</span>
+<span class="n">                                                             &quot;cr_money&quot;: double                 # 贷方金额</span>
+<span class="n">                                                             }</span><span class="o">]</span><span class="w"></span>
+<span class="w">                                               </span><span class="err">}]</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">会计账户</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;ledger_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;ledger_infos_1&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;subject_name&quot;</span><span class="err">:</span><span class="w">                    </span><span class="err">#</span><span class="w"> </span><span class="n">科目名即账户名作为键</span><span class="w"></span>
+<span class="w">                                                                            </span><span class="err">{</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;subject&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                           </span><span class="err">#</span><span class="w"> </span><span class="n">科目名</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;opening_balance&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                   </span><span class="err">#</span><span class="w"> </span><span class="n">期初余额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;dr&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{&quot;business_no&quot;: int, &quot;money&quot;: double}</span><span class="o">]</span><span class="p">,</span><span class="w">   </span><span class="err">#</span><span class="w"> </span><span class="n">借方额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;current_amount_dr&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                 </span><span class="err">#</span><span class="w"> </span><span class="n">本期借方发生额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;current_amount_cr&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                 </span><span class="err">#</span><span class="w"> </span><span class="n">本期贷方发生额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;ending_balance&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                    </span><span class="err">#</span><span class="w"> </span><span class="n">期末余额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;cr&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{&quot;business_no&quot;: int, &quot;money&quot;: double}</span><span class="o">]</span><span class="err">#</span><span class="w"> </span><span class="n">贷方额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;is_left&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="w">                           </span><span class="err">#</span><span class="w"> </span><span class="n">是否左T表</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                                            </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                          </span><span class="ss">&quot;ledger_infos_2&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;subject_name&quot;</span><span class="err">:</span><span class="w">                    </span><span class="err">#</span><span class="w"> </span><span class="n">科目名即账户名作为键</span><span class="w"></span>
+<span class="w">                                                                            </span><span class="err">{</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;subject&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                           </span><span class="err">#</span><span class="w"> </span><span class="n">科目名</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;opening_balance&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                   </span><span class="err">#</span><span class="w"> </span><span class="n">期初余额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;dr&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{&quot;business_no&quot;: int, &quot;money&quot;: double}</span><span class="o">]</span><span class="p">,</span><span class="w">   </span><span class="err">#</span><span class="w"> </span><span class="n">借方额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;current_amount_dr&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                 </span><span class="err">#</span><span class="w"> </span><span class="n">本期借方发生额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;current_amount_cr&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                 </span><span class="err">#</span><span class="w"> </span><span class="n">本期贷方发生额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;ending_balance&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">                    </span><span class="err">#</span><span class="w"> </span><span class="n">期末余额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;cr&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{&quot;business_no&quot;: int, &quot;money&quot;: double}</span><span class="o">]</span><span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="n">贷方额</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="ss">&quot;is_left&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">Boolean</span><span class="w">                           </span><span class="err">#</span><span class="w"> </span><span class="n">是否左T表</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                                            </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                         </span><span class="err">}</span><span class="w"></span>
+<span class="w">                         </span><span class="err">#</span><span class="w"> </span><span class="n">试算平衡集合</span><span class="w"></span>
+<span class="w">                         </span><span class="ss">&quot;balance_sheet_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                                                </span><span class="ss">&quot;accounting_period_1&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{                                   # 第一个会计期间</span>
+<span class="n">                                                                       &quot;subject&quot;: subject,                  # 会计科目</span>
+<span class="n">                                                                       &quot;borrow_1&quot;: double,                      # 借方期初余额</span>
+<span class="n">                                                                       &quot;lend_1&quot;: double,                        # 贷方期初余额</span>
+<span class="n">                                                                       &quot;borrow_2&quot;: double,                      # 借方本期发生额</span>
+<span class="n">                                                                       &quot;lend_2&quot;: double,                            # 贷方本期发生额</span>
+<span class="n">                                                                       &quot;borrow_3&quot;: double,                      # 借方期末余额</span>
+<span class="n">                                                                       &quot;lend_3&quot;: double                         # 贷方期末余额</span>
+<span class="n">                                                                       }</span><span class="o">]</span><span class="w"></span>
+<span class="w">                                                 </span><span class="ss">&quot;accounting_period_2&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{                                      # 第二个会计期间</span>
+<span class="n">                                                                       &quot;subject&quot;: subject,                      # 会计科目</span>
+<span class="n">                                                                       &quot;borrow_1&quot;: double,                      # 借方期初余额</span>
+<span class="n">                                                                       &quot;lend_1&quot;: double,                        # 贷方期初余额</span>
+<span class="n">                                                                       &quot;borrow_2&quot;: double,                      # 借方本期发生额</span>
+<span class="n">                                                                       &quot;lend_2&quot;: double,                        # 贷方本期发生额</span>
+<span class="n">                                                                       &quot;borrow_3&quot;: double,                      # 借方期末余额</span>
+<span class="n">                                                                       &quot;lend_3&quot;: double                         # 贷方期末余额</span>
+<span class="n">                                                                       }</span><span class="o">]</span><span class="w"></span>
+<span class="w">                                                </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">账户明细账</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;subsidiary_account_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;subject_name&quot;</span><span class="err">:</span><span class="w">                            </span><span class="err">#</span><span class="w"> </span><span class="n">科目名即账户名作为键</span><span class="err">（</span><span class="n">动态变化</span><span class="err">）</span><span class="w"></span>
+<span class="w">                                                                    </span><span class="o">[</span><span class="n">{&quot;date&quot;: &quot;1998-05-05&quot;,     # 日期</span>
+<span class="n">                                                                      &quot;word&quot;: string,           # 字</span>
+<span class="n">                                                                      &quot;no&quot;: int,                # 号</span>
+<span class="n">                                                                      &quot;summary&quot;: string,        # 摘要</span>
+<span class="n">                                                                      &quot;dr_money&quot;: double,       # 借方金额</span>
+<span class="n">                                                                      &quot;cr_money&quot;: double,       # 贷方金额</span>
+<span class="n">                                                                      &quot;orientation&quot;: string,    # 方向</span>
+<span class="n">                                                                      &quot;balance_money&quot;: double,  # 余额</span>
+<span class="n">                                                                    }</span><span class="o">]</span><span class="w"></span>
+<span class="w">                                                    </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">科目余额表</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;acc_balance_sheet_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="o">[</span><span class="n">{</span>
+<span class="n">                                                    &quot;subject&quot;: subject,                     # 会计科目</span>
+<span class="n">                                                    &quot;borrow_1&quot;: double,                     # 借方期初余额</span>
+<span class="n">                                                    &quot;lend_1&quot;: double,                       # 贷方期初余额</span>
+<span class="n">                                                    &quot;borrow_2&quot;: double,                     # 借方本期发生额</span>
+<span class="n">                                                    &quot;lend_2&quot;: double,                       # 贷方本期发生额</span>
+<span class="n">                                                    &quot;borrow_3&quot;: double,                     # 借方期末余额</span>
+<span class="n">                                                    &quot;lend_3&quot;: double                            # 贷方期末余额</span>
+<span class="n">                                                    }</span><span class="o">]</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">资产负债表</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;new_balance_sheet_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w">                              </span><span class="err">#</span><span class="w"> </span><span class="s1">&#39;project&#39;</span><span class="n">为项目名</span><span class="err">（</span><span class="n">动态变化</span><span class="err">），</span><span class="n">后述亦同</span><span class="w"></span>
+<span class="w">                                                              </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="n">期末余额</span><span class="w"></span>
+<span class="w">                                                               </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="n">上期余额</span><span class="w"></span>
+<span class="w">                                                    </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">利润表</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;profit_statement_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                            </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">          </span><span class="err">#</span><span class="w"> </span><span class="n">本期金额</span><span class="w"></span>
+<span class="w">                                                             </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">         </span><span class="err">#</span><span class="w"> </span><span class="n">上期金额</span><span class="w"></span>
+<span class="w">                                                  </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">趋势分析法</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;trend_analysis_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;new_balance_sheet_infos&quot;</span><span class="err">:</span><span class="w">             </span><span class="err">#</span><span class="w"> </span><span class="n">分析资产负债表</span><span class="err">，</span><span class="n">后述亦同</span><span class="w"></span>
+<span class="w">                                                                            </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                                                        </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">本期比上期增加额</span><span class="w"></span>
+<span class="w">                                                                                         </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">本期比上期增加率</span><span class="w"></span>
+<span class="w">                                                                             </span><span class="ss">&quot;conclusion&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                  </span><span class="err">#</span><span class="w"> </span><span class="n">结论</span><span class="w"></span>
+<span class="w">                                                                            </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                                 </span><span class="ss">&quot;profit_statement_infos&quot;</span><span class="err">:</span><span class="w">              </span><span class="err">#</span><span class="w"> </span><span class="n">分析利润表</span><span class="err">，</span><span class="n">后述亦同</span><span class="w"></span>
+<span class="w">                                                                            </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                                                        </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">本期比上期增加额</span><span class="w"></span>
+<span class="w">                                                                                        </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">本期比上期增加率</span><span class="w"></span>
+<span class="w">                                                                             </span><span class="ss">&quot;conclusion&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                  </span><span class="err">#</span><span class="w"> </span><span class="n">结论</span><span class="w"></span>
+<span class="w">                                                                           </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                                </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">共同比分析法</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;common_ratio_analysis_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;new_balance_sheet_infos&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                                                 </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                                                            </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">本期占资产</span><span class="o">/</span><span class="n">负债总额百分比</span><span class="w"></span>
+<span class="w">                                                                                             </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">上期占资产</span><span class="o">/</span><span class="n">负债总额百分比</span><span class="w"></span>
+<span class="w">                                                                                  </span><span class="ss">&quot;conclusion&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                 </span><span class="err">#</span><span class="w"> </span><span class="n">结论</span><span class="w"></span>
+<span class="w">                                                                                 </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                                        </span><span class="ss">&quot;profit_statement_infos&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                                                 </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                                                            </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">本期占收入百分比</span><span class="w"></span>
+<span class="w">                                                                                             </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">上期占收入百分比</span><span class="w"></span>
+<span class="w">                                                                                  </span><span class="ss">&quot;conclusion&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">                 </span><span class="err">#</span><span class="w"> </span><span class="n">结论</span><span class="w"></span>
+<span class="w">                                                                                 </span><span class="err">}</span><span class="w"></span>
+<span class="w">                                                       </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">比率分析法</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;ratio_analysis_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"></span>
+<span class="w">                                                            </span><span class="err">{</span><span class="ss">&quot;period_end&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">本期</span><span class="w"></span>
+<span class="w">                                                             </span><span class="ss">&quot;period_last&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="err">}</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="n">上期</span><span class="w"></span>
+<span class="w">                                                </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">#</span><span class="w"> </span><span class="n">杜邦分析法</span><span class="w"></span>
+<span class="w">                        </span><span class="ss">&quot;dupont_analysis_infos&quot;</span><span class="err">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;project&quot;</span><span class="err">:</span><span class="w"> </span><span class="k">double</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                                  </span><span class="ss">&quot;conclusion&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">string</span><span class="w"></span>
+<span class="w">                                                 </span><span class="err">}</span><span class="w"></span>
+<span class="w">                        </span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+    </article>
+    </body>
+    </html>
+    

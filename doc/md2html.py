@@ -12,7 +12,7 @@ import markdown
 
 
 def md2html(mdstr):
-    exts = ['markdown.extensions.extra', 'markdown.extensions.codehilite',
+    exts = ['markdown.extensions.fenced_code', 'markdown.extensions.codehilite',
             'markdown.extensions.tables', 'markdown.extensions.toc']
     html = '''
     <html lang="zh-cmn-Hans">
@@ -20,6 +20,7 @@ def md2html(mdstr):
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+    <link type="text/css" rel="stylesheet" href="code.css"/>
     <style>
         .markdown-body {
             box-sizing: border-box;
