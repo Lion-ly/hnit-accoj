@@ -1,0 +1,269 @@
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+    </style>
+    <title>AccOJ Conf</title>
+</head>
+<body>
+
+
+<article class="markdown-body">
+    <h1 id="accoj-">Accoj服务器配置</h1>
+    <h2 id="1-centos-7">1 安装Centos 7</h2>
+    <p>安装完成后将<code>/etc/sysconfig/network-scripts/ifcfg-....</code>对应网卡名，文件配置的ONBOOT从no修改为yes。</p>
+    <h2 id="2-">2 安装图形界面</h2>
+    <p><code>yum install epel-release</code></p>
+    <p><a href="https://www.cnblogs.com/coodyz/p/13648399.html">https://www.cnblogs.com/coodyz/p/13648399.html</a></p>
+    <h2 id="3-">3 防火墙开启端口</h2>
+    <pre><code><span class="hljs-comment"># 开启端口，开启后需要重启防火墙</span>
+firewall-<span class="hljs-keyword">cmd</span><span class="bash"> --zone=public --add-port=80/tcp --permanent
+</span>firewall-<span class="hljs-keyword">cmd</span><span class="bash"> --zone=public --add-port=443/tcp --permanent
+</span>
+<span class="hljs-comment"># 启动防火墙</span>
+systemctl start firewalld
+
+<span class="hljs-comment"># 重启防火墙</span>
+firewall-<span class="hljs-keyword">cmd</span><span class="bash"> --reload
+</span>
+<span class="hljs-comment"># 禁用防火墙</span>
+systemctl stop firewalld
+
+<span class="hljs-comment"># 关闭SElinux</span>
+setenforce <span class="hljs-number">0</span>
+<span class="hljs-comment"># 永久关闭,将 "SELINUX=enforcing" 改为 "SELINUX=disabled"，保存后退出，注意重启才会生效</span>
+vim /etc/selinux/config
+</code></pre>
+    <h2 id="4-mongodb-redis-nginx">4 安装MongoDB,Redis,nginx</h2>
+    <pre><code><span class="hljs-meta"># https://www.cnblogs.com/coodyz/p/12219823.html</span>
+<span class="hljs-meta"># https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/</span>
+<span class="hljs-meta"># 安装MongoDB</span>
+sudo yum install -y mongodb-org
+mongo
+<span class="hljs-meta"># 启动服务</span>
+systemctl start mongod
+systemctl enable mongod
+<span class="hljs-meta"># 在mongo shell中配置账密</span>
+db.createUser(
+  { user: <span class="hljs-string">"admin"</span>,
+    customData: {description: <span class="hljs-string">"superuser"</span>},
+    pwd: <span class="hljs-string">"ag9JtXMW1TVqsOXF"</span>,
+    roles: [ { role: <span class="hljs-string">"userAdminAnyDatabase"</span>, db: <span
+                class="hljs-string">"admin"</span> } ]
+  }
+);
+
+db.createUser(
+    {
+        user:<span class="hljs-string">"root"</span>,
+        pwd:<span class="hljs-string">"ag9JtXMW1TVqsOXF"</span>,
+        roles:[<span class="hljs-string">"root"</span>]
+    }
+);
+
+db.createUser(
+    {
+        user:<span class="hljs-string">"accojAdmin"</span>,
+        pwd:<span class="hljs-string">"ag9JtXMW1TVqsOXF"</span>,
+        roles:[<span class="hljs-string">"dbOwner"</span>]
+    }
+);
+
+<span class="hljs-meta"># /var/lib/mongo 数据目录</span>
+<span class="hljs-meta"># /var/log/mongodb 日志目录</span>
+<span class="hljs-meta"># 更改配置文件 mongodb配置文件位置 /etc/mongo.conf</span>
+<span class="hljs-meta"># 内容如下</span>
+security:
+    authorization: enabled
+
+<span class="hljs-meta"># 重新启动</span>
+systemctl restart mongod
+
+<span class="hljs-meta"># 安装Redis</span>
+yum -y install epel-release yum-utils
+yum -y install http:<span class="hljs-comment">//rpms.remirepo.net/enterprise/remi-release-7.rpm</span>
+yum-config-manager --enable remi
+yum -y install redis
+<span class="hljs-meta"># 更改配置文件，加上requirepass yourpassword</span>
+<span class="hljs-meta"># 配置文件位置 /etc/redis.conf</span>
+<span class="hljs-meta"># 启动服务</span>
+systemctl start redis
+systemctl enable redis
+<span class="hljs-meta"># 安装Nginx</span>
+yum -y install nginx
+<span class="hljs-meta"># 更改nginx配置 配置文件位置 /etc/nginx/conf.d/accoj.conf</span>
+<span class="hljs-meta"># 内容如下</span>
+<span class="hljs-meta"># /etc/nginx/conf.d/accoj.conf</span>
+server{
+    listen <span class="hljs-number">80</span>; #监听的端口
+    server_name <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span
+                class="hljs-number">.1</span> accoj.hnit.edu.cn <span class="hljs-number">10.20</span><span
+                class="hljs-number">.12</span><span class="hljs-number">.35</span> <span
+                class="hljs-number">59.51</span><span class="hljs-number">.114</span><span
+                class="hljs-number">.203</span>;
+    location / {
+      proxy_pass http:<span class="hljs-comment">//127.0.0.1:5000;</span>
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header REMOTE-HOST $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+    location /<span class="hljs-keyword">static</span> {
+      alias /home/hnit-accoj/accoj/<span class="hljs-keyword">static</span>;
+    }
+}
+<span class="hljs-meta"># 启动</span>
+systemctl start nginx
+systemctl enable nginx
+</code></pre>
+    <h2 id="5-python3-7-1-">5 python3.7.1安装</h2>
+    <p>更改pip源</p>
+    <pre><code><span class="hljs-built_in">mkdir</span> ~/.pip
+<span class="hljs-keyword">cd</span> ~/.pip &amp;&amp; <span class="hljs-keyword">vim</span> pip.<span
+                class="hljs-keyword">conf</span>
+# 内容如下
+[<span class="hljs-keyword">global</span>]
+<span class="hljs-built_in">index</span>-url = http://mirrors.aliyun.<span class="hljs-keyword">com</span>/pypi/simple/
+[install]
+trusted-host=mirrors.aliyun.<span class="hljs-keyword">com</span>
+</code></pre>
+    <p><a href="https://segmentfault.com/a/1190000015628625">https://segmentfault.com/a/1190000015628625</a></p>
+    <pre><code>yum -y <span class="hljs-keyword">install</span> epel-<span class="hljs-keyword">release</span>
+yum -y <span class="hljs-keyword">install</span> libffi-devel bzip2-devel sqlite-devel
+yum -y <span class="hljs-keyword">install</span> gcc-c++
+yum -y <span class="hljs-keyword">install</span> python-pip
+yum -y <span class="hljs-keyword">install</span> zlib-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make
+./configure prefix=/usr/<span class="hljs-keyword">local</span>/python3
+make &amp;&amp; make <span class="hljs-keyword">install</span>
+<span class="hljs-keyword">ln</span> -s /usr/<span class="hljs-keyword">local</span>/python3/<span class="hljs-keyword">bin</span>/python3 /usr/<span
+                class="hljs-keyword">bin</span>/python3
+<span class="hljs-keyword">ln</span> -s /usr/<span class="hljs-keyword">local</span>/python3/<span class="hljs-keyword">bin</span>/pip3 /usr/<span
+                class="hljs-keyword">bin</span>/pip3
+pip3 <span class="hljs-keyword">uninstall</span> setuptools
+pip3 <span class="hljs-keyword">install</span> <span class="hljs-string">'setuptools&lt;20.2'</span>
+pip3 <span class="hljs-keyword">install</span> pip==<span class="hljs-number">20.2</span><span
+                class="hljs-number">.4</span>
+python -V
+</code></pre>
+    <h2 id="6-">6 项目安装</h2>
+    <pre><code>git clone http<span class="hljs-variable">s:</span>//github.<span class="hljs-keyword">com</span>/HNIT-ACCOJ/hnit-accoj.git /home
+<span class="hljs-keyword">cd</span> /home/hnit-accoj
+pip install pipenv
+<span class="hljs-keyword">python3</span> -<span class="hljs-keyword">m</span> pipenv pip install -r requirement.txt
+</code></pre>
+    <h2 id="7-">7 修改项目配置文件</h2>
+    <p><code># setting.py</code></p>
+    <ol>
+        <li>username 和 password为mongodb的密码</li>
+        <li>DEBUG = True # 修改为False</li>
+        <li>PORT = 80 # 修改为5000</li>
+        <li>REDIS_URL CELERY_BROKER_URL CELERY_RESULT_BACKEND 三个参数为redis URI，将&#39;:&#39;和&#39;@&#39;中间的密码修改为redis密码即可
+        </li>
+        <li>生产环境需将SECRET_KEY更改</li>
+    </ol>
+    <h2 id="8-celery-wsgi">8 启动celery 和 wsgi</h2>
+    <pre><code>cd /home/hnit-accoj
+chmod +x runCelery<span class="hljs-selector-class">.sh</span>
+chmod +x ./run<span class="hljs-selector-class">.sh</span>
+python3 -m pipenv run nohup ./runCelery<span class="hljs-selector-class">.sh</span> &gt;&gt; celery<span
+                class="hljs-selector-class">.log</span> &amp;
+python3 -m pipenv run nohup ./run<span class="hljs-selector-class">.sh</span> &gt;&gt; accoj<span
+                class="hljs-selector-class">.log</span> &amp;
+</code></pre>
+    <h2 id="9-gunicorn-flask-gevent">9 gunicorn运行Flask / 或gevent</h2>
+    <p>忽略此处</p>
+    <pre><code><span class="hljs-string">pip </span><span class="hljs-string">install </span><span class="hljs-string">gunicorn
+</span><span class="hljs-comment"># workers数=核心数*2-1</span>
+<span class="hljs-string">gunicorn </span><span class="hljs-built_in">--workers</span> 7 <span class="hljs-built_in">--bind</span> 0.0.0.<span
+                class="hljs-string">0:5000 </span><span class="hljs-string">wsgi:app </span><span class="hljs-built_in">--timeout</span> <span
+                class="hljs-string">120
+</span><span class="hljs-comment"># gevent</span>
+<span class="hljs-string">nohup </span><span class="hljs-string">python </span><span
+                class="hljs-string">wsgi.</span><span class="hljs-string">py </span>&gt; <span class="hljs-string">accoj.</span><span
+                class="hljs-string">log </span>&amp;
+</code></pre>
+    <h2 id="10-">10 结束应用</h2>
+    <pre><code>pkill <span class="hljs-number">-9</span> <span
+            class="hljs-string">"python"</span> &amp;&amp; pkill <span class="hljs-number">-9</span> <span
+            class="hljs-string">"celery"</span>
+</code></pre>
+    <h2 id="11-">11 重启应用</h2>
+    <pre><code>pkill -<span class="hljs-number">9</span> <span
+            class="hljs-string">"python"</span> &amp;&amp; pkill -<span class="hljs-number">9</span> <span
+            class="hljs-string">"celery"</span>
+cd /home/hnit-accoj
+chmod +x runCelery<span class="hljs-selector-class">.sh</span>
+chmod +x ./run<span class="hljs-selector-class">.sh</span>
+python3 -m pipenv run nohup ./runCelery<span class="hljs-selector-class">.sh</span> &gt;&gt; celery<span
+                class="hljs-selector-class">.log</span> &amp;
+python3 -m pipenv run nohup ./run<span class="hljs-selector-class">.sh</span> &gt;&gt; accoj<span
+                class="hljs-selector-class">.log</span> &amp;
+</code></pre>
+    <h2 id="12-">12 备份与恢复</h2>
+    <pre><code><span class="hljs-comment"># mongo</span>
+<span class="hljs-comment"># 备份</span>
+<span class="hljs-string">mongodump </span><span class="hljs-built_in">--username</span> <span class="hljs-string">accojOwner </span><span
+                class="hljs-built_in">--password</span> <span class="hljs-string">Love199805#</span> <span
+                class="hljs-built_in">--db</span> <span class="hljs-string">accoj </span>-o C:\<span
+                class="hljs-string">Users\</span><span class="hljs-string">frank\</span><span class="hljs-string">Desktop\</span><span
+                class="hljs-string">tmp
+</span><span class="hljs-string">mongodump </span><span class="hljs-built_in">--username</span> <span
+                class="hljs-string">accojAdmin </span><span class="hljs-built_in">--password</span> <span
+                class="hljs-string">ag9JtXMW1TVqsOXF </span><span class="hljs-built_in">--db</span> <span
+                class="hljs-string">accoj </span>-o /<span class="hljs-string">home/</span><span class="hljs-string">dump/</span><span
+                class="hljs-string">accoj-2020-</span><span class="hljs-string">10-26-</span><span class="hljs-string">bk/</span><span
+                class="hljs-string">accoj-mongo-</span><span class="hljs-string">2020-10-</span><span
+                class="hljs-string">26-bk
+</span><span class="hljs-string">mongodump </span><span class="hljs-built_in">--username</span> <span
+                class="hljs-string">accojAdmin </span><span class="hljs-built_in">--password</span> <span
+                class="hljs-string">ag9JtXMW1TVqsOXF </span><span class="hljs-built_in">--db</span> <span
+                class="hljs-string">accoj </span>-o /<span class="hljs-string">home/</span><span class="hljs-string">tmp
+</span>
+<span class="hljs-comment"># 恢复</span>
+<span class="hljs-string">mongorestore </span><span class="hljs-built_in">--username</span> <span class="hljs-string">accojOwner </span><span
+                class="hljs-built_in">--password</span> <span class="hljs-string">Love199805#</span> <span
+                class="hljs-built_in">--authenticationDatabase</span> <span class="hljs-string">accoj </span>C:\<span
+                class="hljs-string">Users\</span><span class="hljs-string">frank\</span><span class="hljs-string">Desktop\</span><span
+                class="hljs-string">tmp
+</span><span class="hljs-string">mongorestore </span><span class="hljs-built_in">--username</span> <span
+                class="hljs-string">accojAdmin </span><span class="hljs-built_in">--password</span> <span
+                class="hljs-string">ag9JtXMW1TVqsOXF </span><span class="hljs-built_in">--authenticationDatabase</span> <span
+                class="hljs-string">accoj </span>/<span class="hljs-string">home/</span><span class="hljs-string">accoj-2020-</span><span
+                class="hljs-string">10-15-</span><span class="hljs-string">bk
+</span><span class="hljs-string">mongorestore </span><span class="hljs-built_in">--username</span> <span
+                class="hljs-string">accojOwner </span><span class="hljs-built_in">--password</span> <span
+                class="hljs-string">Love199805#</span> <span class="hljs-built_in">--authenticationDatabase</span> <span
+                class="hljs-string">accoj </span>~/<span class="hljs-string">dump
+</span>
+<span class="hljs-comment"># redis</span>
+<span class="hljs-string">cp </span>/<span class="hljs-string">var/</span><span class="hljs-string">lib/</span><span
+                class="hljs-string">redis/</span><span class="hljs-string">dump.</span><span
+                class="hljs-string">rdb </span>/<span class="hljs-string">home/</span><span
+                class="hljs-string">dump/</span><span class="hljs-string">accoj-2020-</span><span class="hljs-string">10-26-</span><span
+                class="hljs-string">bk/</span><span class="hljs-string">accoj-redis-</span><span class="hljs-string">2020-10-</span><span
+                class="hljs-string">26-bk</span>
+</code></pre>
+    <h2 id="13-ssh">13 安装ssh</h2>
+    <pre><code>yum <span class="hljs-keyword">install</span> -y openssl-devel
+systemctl <span class="hljs-keyword">start</span> sshd
+</code></pre>
+</article>
+
+
+</body>
+</html>
