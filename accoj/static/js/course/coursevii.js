@@ -51,6 +51,7 @@ function submit_subsidiary_account_info(submit_type) {
     let data = vii1GetInput();
     data["submit_type"] = submit_type;
     data = JSON.stringify(data);
+    console.log(data);
     // 提交数据
     let url = "/submit_subsidiary_account_info",
         messageDivID = "course_vii1_message",
@@ -255,11 +256,12 @@ function vii1GetInput() {
         let orientation = $(thisInput[index++]).val(),
             balance_money = "";
         for (; index < 36; index++) {
-            balance_money += $(thisInput[index]);
+            balance_money += $(thisInput[index]).val();
         }
         let date = year + "-" + month + "-" + day;
         dr_money = dr_money ? parseFloat(dr_money) / 100 : dr_money;
         cr_money = cr_money ? parseFloat(cr_money) / 100 : cr_money;
+
         balance_money = balance_money ? parseFloat(balance_money) / 100 : balance_money;
         subsidiary_account_info.push({
             "date": date,

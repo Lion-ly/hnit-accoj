@@ -236,8 +236,8 @@ function viPaddingData(data, isFromButton) {
                     push_err_pos(thisId, flag);
                 }
 
-                dr_money = dr_money ? dr_money * 100 : dr_money;
-                cr_money = cr_money ? cr_money * 100 : cr_money;
+                dr_money = dr_money ? dr_money * 1000/10 : dr_money;
+                cr_money = cr_money ? cr_money * 1000/10 : cr_money;
                 dr_money = dr_money ? parseInt(dr_money).toString() : dr_money;
                 cr_money = cr_money ? parseInt(cr_money).toString() : cr_money;
                 dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
