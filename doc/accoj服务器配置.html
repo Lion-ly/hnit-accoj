@@ -1,0 +1,225 @@
+
+    <html lang="zh-cmn-Hans">
+    <head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+    <link type="text/css" rel="stylesheet" href="code.css"/>
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+    </style>
+    <title>AccOJ MongoDB</title>
+    </head>
+    <body>
+    <article class="markdown-body">
+    <h1 id="accoj">Accoj服务器配置</h1>
+<h2 id="1-centos-7">1 安装Centos 7</h2>
+<p>安装完成后将<code>/etc/sysconfig/network-scripts/ifcfg-....</code>对应网卡名，文件配置的ONBOOT从no修改为yes。</p>
+<h2 id="2">2 安装图形界面</h2>
+<p><code>yum install epel-release</code></p>
+<p>https://www.cnblogs.com/coodyz/p/13648399.html</p>
+<h2 id="3">3 防火墙开启端口</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 开启端口，开启后需要重启防火墙</span>
+<span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">zone</span><span class="o">=</span><span class="n">public</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">port</span><span class="o">=</span><span class="mi">80</span><span class="o">/</span><span class="n">tcp</span> <span class="o">--</span><span class="n">permanent</span>
+<span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">zone</span><span class="o">=</span><span class="n">public</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">port</span><span class="o">=</span><span class="mi">443</span><span class="o">/</span><span class="n">tcp</span> <span class="o">--</span><span class="n">permanent</span>
+
+<span class="c1"># 启动防火墙</span>
+<span class="n">systemctl</span> <span class="n">start</span> <span class="n">firewalld</span>
+
+<span class="c1"># 重启防火墙</span>
+<span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+
+<span class="c1"># 禁用防火墙</span>
+<span class="n">systemctl</span> <span class="n">stop</span> <span class="n">firewalld</span>
+
+<span class="c1"># 关闭SElinux</span>
+<span class="n">setenforce</span> <span class="mi">0</span>
+<span class="c1"># 永久关闭,将 &quot;SELINUX=enforcing&quot; 改为 &quot;SELINUX=disabled&quot;，保存后退出，注意重启才会生效</span>
+<span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">selinux</span><span class="o">/</span><span class="n">config</span> 
+</code></pre></div>
+
+<h2 id="4-mongodbredisnginx">4 安装MongoDB,Redis,nginx</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># https://www.cnblogs.com/coodyz/p/12219823.html</span>
+<span class="c1"># https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/</span>
+<span class="c1"># 安装MongoDB</span>
+<span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">mongodb</span><span class="o">-</span><span class="n">org</span>
+<span class="n">mongo</span>
+<span class="c1"># 启动服务</span>
+<span class="n">systemctl</span> <span class="n">start</span> <span class="n">mongod</span>
+<span class="n">systemctl</span> <span class="n">enable</span> <span class="n">mongod</span>
+<span class="c1"># 在mongo shell中配置账密</span>
+<span class="n">db</span><span class="o">.</span><span class="n">createUser</span><span class="p">(</span>
+  <span class="p">{</span> <span class="n">user</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span>
+    <span class="n">customData</span><span class="p">:</span> <span class="p">{</span><span class="n">description</span><span class="p">:</span> <span class="s2">&quot;superuser&quot;</span><span class="p">},</span>
+    <span class="n">pwd</span><span class="p">:</span> <span class="s2">&quot;ag9JtXMW1TVqsOXF&quot;</span><span class="p">,</span>
+    <span class="n">roles</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span> <span class="n">role</span><span class="p">:</span> <span class="s2">&quot;userAdminAnyDatabase&quot;</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="s2">&quot;admin&quot;</span> <span class="p">}</span> <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">createUser</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="n">user</span><span class="p">:</span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
+        <span class="n">pwd</span><span class="p">:</span><span class="s2">&quot;ag9JtXMW1TVqsOXF&quot;</span><span class="p">,</span>
+        <span class="n">roles</span><span class="p">:[</span><span class="s2">&quot;root&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">createUser</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="n">user</span><span class="p">:</span><span class="s2">&quot;accojAdmin&quot;</span><span class="p">,</span>
+        <span class="n">pwd</span><span class="p">:</span><span class="s2">&quot;ag9JtXMW1TVqsOXF&quot;</span><span class="p">,</span>
+        <span class="n">roles</span><span class="p">:[</span><span class="s2">&quot;dbOwner&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="c1"># /var/lib/mongo 数据目录</span>
+<span class="c1"># /var/log/mongodb 日志目录</span>
+<span class="c1"># 更改配置文件 mongodb配置文件位置 /etc/mongo.conf</span>
+<span class="c1"># 内容如下</span>
+<span class="n">security</span><span class="p">:</span>
+    <span class="n">authorization</span><span class="p">:</span> <span class="n">enabled</span>
+
+<span class="c1"># 重新启动</span>
+<span class="n">systemctl</span> <span class="n">restart</span> <span class="n">mongod</span>
+
+<span class="c1"># 安装Redis</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">epel</span><span class="o">-</span><span class="n">release</span> <span class="n">yum</span><span class="o">-</span><span class="n">utils</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">rpms</span><span class="o">.</span><span class="n">remirepo</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">enterprise</span><span class="o">/</span><span class="n">remi</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="mf">7.</span><span class="n">rpm</span>
+<span class="n">yum</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">manager</span> <span class="o">--</span><span class="n">enable</span> <span class="n">remi</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">redis</span>
+<span class="c1"># 更改配置文件，加上requirepass yourpassword</span>
+<span class="c1"># 配置文件位置 /etc/redis.conf</span>
+<span class="c1"># 启动服务</span>
+<span class="n">systemctl</span> <span class="n">start</span> <span class="n">redis</span>
+<span class="n">systemctl</span> <span class="n">enable</span> <span class="n">redis</span>
+<span class="c1"># 安装Nginx</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">nginx</span>
+<span class="c1"># 更改nginx配置 配置文件位置 /etc/nginx/conf.d/accoj.conf</span>
+<span class="c1"># 内容如下</span>
+<span class="c1"># /etc/nginx/conf.d/accoj.conf</span>
+<span class="n">server</span><span class="p">{</span>
+    <span class="n">listen</span> <span class="mi">80</span><span class="p">;</span> <span class="c1">#监听的端口</span>
+    <span class="n">server_name</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="n">accoj</span><span class="o">.</span><span class="n">hnit</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span> <span class="mf">10.20</span><span class="o">.</span><span class="mf">12.35</span> <span class="mf">59.51</span><span class="o">.</span><span class="mf">114.203</span><span class="p">;</span>
+    <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
+      <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5000</span><span class="p">;</span>
+      <span class="n">proxy_set_header</span> <span class="n">Host</span> <span class="o">$</span><span class="n">host</span><span class="p">;</span>
+      <span class="n">proxy_set_header</span> <span class="n">X</span><span class="o">-</span><span class="n">Real</span><span class="o">-</span><span class="n">IP</span> <span class="o">$</span><span class="n">remote_addr</span><span class="p">;</span>
+      <span class="n">proxy_set_header</span> <span class="n">REMOTE</span><span class="o">-</span><span class="n">HOST</span> <span class="o">$</span><span class="n">remote_addr</span><span class="p">;</span>
+      <span class="n">proxy_set_header</span> <span class="n">X</span><span class="o">-</span><span class="n">Forwarded</span><span class="o">-</span><span class="n">For</span> <span class="o">$</span><span class="n">proxy_add_x_forwarded_for</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">location</span> <span class="o">/</span><span class="k">static</span> <span class="p">{</span>
+      <span class="n">alias</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hnit</span><span class="o">-</span><span class="n">accoj</span><span class="o">/</span><span class="n">accoj</span><span class="o">/</span><span class="k">static</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1"># 启动</span>
+<span class="n">systemctl</span> <span class="n">start</span> <span class="n">nginx</span>
+<span class="n">systemctl</span> <span class="n">enable</span> <span class="n">nginx</span>
+</code></pre></div>
+
+<h2 id="5-python371">5 python3.7.1安装</h2>
+<p>更改pip源</p>
+<div class="codehilite"><pre><span></span><code><span class="n">mkdir</span><span class="w"> </span><span class="o">~/</span><span class="p">.</span><span class="n">pip</span><span class="w"></span>
+<span class="n">cd</span><span class="w"> </span><span class="o">~/</span><span class="p">.</span><span class="n">pip</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vim</span><span class="w"> </span><span class="n">pip</span><span class="p">.</span><span class="n">conf</span><span class="w"></span>
+<span class="err">#</span><span class="w"> </span><span class="n">内容如下</span><span class="w"></span>
+<span class="o">[</span><span class="n">global</span><span class="o">]</span><span class="w"></span>
+<span class="k">index</span><span class="o">-</span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nl">http</span><span class="p">:</span><span class="o">//</span><span class="n">mirrors</span><span class="p">.</span><span class="n">aliyun</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">pypi</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span><span class="w"></span>
+<span class="o">[</span><span class="n">install</span><span class="o">]</span><span class="w"></span>
+<span class="n">trusted</span><span class="o">-</span><span class="k">host</span><span class="o">=</span><span class="n">mirrors</span><span class="p">.</span><span class="n">aliyun</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
+</code></pre></div>
+
+<p>https://segmentfault.com/a/1190000015628625</p>
+<div class="codehilite"><pre><span></span><code><span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">epel</span><span class="o">-</span><span class="n">release</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">libffi</span><span class="o">-</span><span class="n">devel</span> <span class="n">bzip2</span><span class="o">-</span><span class="n">devel</span> <span class="n">sqlite</span><span class="o">-</span><span class="n">devel</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">gcc</span><span class="o">-</span><span class="n">c</span><span class="o">++</span> 
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">zlib</span><span class="o">-</span><span class="n">devel</span> <span class="n">openssl</span><span class="o">-</span><span class="n">devel</span> <span class="n">ncurses</span><span class="o">-</span><span class="n">devel</span> <span class="n">sqlite</span><span class="o">-</span><span class="n">devel</span> <span class="n">readline</span><span class="o">-</span><span class="n">devel</span> <span class="n">tk</span><span class="o">-</span><span class="n">devel</span> <span class="n">gcc</span> <span class="n">make</span>
+<span class="o">./</span><span class="n">configure</span> <span class="n">prefix</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">python3</span> 
+<span class="n">make</span> <span class="o">&amp;&amp;</span> <span class="n">make</span> <span class="n">install</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">python3</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">python3</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">python3</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">python3</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">pip3</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">pip3</span>
+<span class="n">pip3</span> <span class="n">uninstall</span> <span class="n">setuptools</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="s1">&#39;setuptools&lt;20.2&#39;</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="n">pip</span><span class="o">==</span><span class="mf">20.2</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">V</span>
+</code></pre></div>
+
+<h2 id="6">6 项目安装</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">git clone https://github.com/HNIT-ACCOJ/hnit-accoj.git /home</span>
+<span class="err">cd /home/hnit-accoj</span>
+<span class="err">pip install pipenv</span>
+<span class="err">python3 -m pipenv pip install -r requirement.txt</span>
+</code></pre></div>
+
+<h2 id="7">7 修改项目配置文件</h2>
+<p><code># setting.py</code>
+1. username 和 password为mongodb的密码
+2. DEBUG = True # 修改为False
+3. PORT = 80 # 修改为5000
+4. REDIS_URL CELERY_BROKER_URL CELERY_RESULT_BACKEND 三个参数为redis URI，将':'和'@'中间的密码修改为redis密码即可
+5. 生产环境需将SECRET_KEY更改</p>
+<h2 id="8-celery-wsgi">8 启动celery 和 wsgi</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">cd /home/hnit-accoj</span>
+<span class="err">chmod +x runCelery.sh</span>
+<span class="err">chmod +x ./run.sh</span>
+<span class="err">python3 -m pipenv run nohup ./runCelery.sh &gt;&gt; celery.log &amp;</span>
+<span class="err">python3 -m pipenv run nohup ./run.sh &gt;&gt; accoj.log &amp;</span>
+</code></pre></div>
+
+<h2 id="9-gunicornflask-gevent">9 gunicorn运行Flask / 或gevent</h2>
+<p>忽略此处</p>
+<div class="codehilite"><pre><span></span><code><span class="err">pip install gunicorn</span>
+<span class="err"># workers数=核心数*2-1</span>
+<span class="err">gunicorn --workers 7 --bind 0.0.0.0:5000 wsgi:app --timeout 120</span>
+<span class="err"># gevent</span>
+<span class="err">nohup python wsgi.py &gt; accoj.log &amp;</span>
+</code></pre></div>
+
+<h2 id="10">10 结束应用</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">pkill -9 &quot;python&quot; &amp;&amp; pkill -9 &quot;celery&quot;</span>
+</code></pre></div>
+
+<h2 id="11">11 重启应用</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">pkill -9 &quot;python&quot; &amp;&amp; pkill -9 &quot;celery&quot;</span>
+<span class="err">cd /home/hnit-accoj</span>
+<span class="err">chmod +x runCelery.sh</span>
+<span class="err">chmod +x ./run.sh</span>
+<span class="err">python3 -m pipenv run nohup ./runCelery.sh &gt;&gt; celery.log &amp;</span>
+<span class="err">python3 -m pipenv run nohup ./run.sh &gt;&gt; accoj.log &amp;</span>
+</code></pre></div>
+
+<h2 id="12">12 备份与恢复</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># mongo</span>
+<span class="c1"># 备份</span>
+<span class="n">mongodump</span> <span class="o">--</span><span class="n">username</span> <span class="n">accojOwner</span> <span class="o">--</span><span class="n">password</span> <span class="n">Love199805</span><span class="c1"># --db accoj -o C:\Users\frank\Desktop\tmp</span>
+<span class="n">mongodump</span> <span class="o">--</span><span class="n">username</span> <span class="n">accojAdmin</span> <span class="o">--</span><span class="n">password</span> <span class="n">ag9JtXMW1TVqsOXF</span> <span class="o">--</span><span class="n">db</span> <span class="n">accoj</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">dump</span><span class="o">/</span><span class="n">accoj</span><span class="o">-</span><span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">26</span><span class="o">-</span><span class="n">bk</span><span class="o">/</span><span class="n">accoj</span><span class="o">-</span><span class="n">mongo</span><span class="o">-</span><span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">26</span><span class="o">-</span><span class="n">bk</span>
+<span class="n">mongodump</span> <span class="o">--</span><span class="n">username</span> <span class="n">accojAdmin</span> <span class="o">--</span><span class="n">password</span> <span class="n">ag9JtXMW1TVqsOXF</span> <span class="o">--</span><span class="n">db</span> <span class="n">accoj</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">tmp</span>
+
+<span class="c1"># 恢复</span>
+<span class="n">mongorestore</span> <span class="o">--</span><span class="n">username</span> <span class="n">accojOwner</span> <span class="o">--</span><span class="n">password</span> <span class="n">Love199805</span><span class="c1"># --authenticationDatabase accoj C:\Users\frank\Desktop\tmp</span>
+<span class="n">mongorestore</span> <span class="o">--</span><span class="n">username</span> <span class="n">accojAdmin</span> <span class="o">--</span><span class="n">password</span> <span class="n">ag9JtXMW1TVqsOXF</span> <span class="o">--</span><span class="n">authenticationDatabase</span> <span class="n">accoj</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">accoj</span><span class="o">-</span><span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">15</span><span class="o">-</span><span class="n">bk</span>
+<span class="n">mongorestore</span> <span class="o">--</span><span class="n">username</span> <span class="n">accojOwner</span> <span class="o">--</span><span class="n">password</span> <span class="n">Love199805</span><span class="c1"># --authenticationDatabase accoj ~/dump</span>
+
+<span class="c1"># redis</span>
+<span class="n">cp</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">redis</span><span class="o">/</span><span class="n">dump</span><span class="o">.</span><span class="n">rdb</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">dump</span><span class="o">/</span><span class="n">accoj</span><span class="o">-</span><span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">26</span><span class="o">-</span><span class="n">bk</span><span class="o">/</span><span class="n">accoj</span><span class="o">-</span><span class="n">redis</span><span class="o">-</span><span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">26</span><span class="o">-</span><span class="n">bk</span>
+</code></pre></div>
+
+<h2 id="13-ssh">13 安装ssh</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">yum install -y openssl-devel</span>
+<span class="err">systemctl start sshd</span>
+</code></pre></div>
+    </article>
+    </body>
+    </html>
+    
