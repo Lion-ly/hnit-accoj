@@ -51,7 +51,6 @@ function submit_subsidiary_account_info(submit_type) {
     let data = vii1GetInput();
     data["submit_type"] = submit_type;
     data = JSON.stringify(data);
-    console.log(data);
     // 提交数据
     let url = "/submit_subsidiary_account_info",
         messageDivID = "course_vii1_message",
@@ -332,9 +331,9 @@ function vii1PaddingData(data, isFromButton) {
             let month = date[1],
                 day = date[2],
                 prefix = "0000000000";
-            dr_money = dr_money ? dr_money * 100 : dr_money;
-            cr_money = cr_money ? cr_money * 100 : cr_money;
-            balance_money = balance_money ? balance_money * 100 : balance_money;
+            dr_money = dr_money ? dr_money * 1000/10 : dr_money;
+            cr_money = cr_money ? cr_money * 1000/10 : cr_money;
+            balance_money = balance_money ? balance_money * 1000/10 : balance_money;
             dr_money = parseInt(dr_money);
             cr_money = parseInt(cr_money);
             balance_money = parseInt(balance_money);
