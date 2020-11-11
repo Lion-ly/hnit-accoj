@@ -11,6 +11,8 @@ from accoj.utils import (update_rank,
                          is_confirmed)
 from accoj import celery
 
+import math
+
 TotalScore = [9, 10, 10, 10, 9, 10, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 10, 10,
               10, 10, 10, 10, 13.5, 13.5, 13.5, 13.5, 10, 10, 9, 10, 10, 10, 10, 10, 0]
 
@@ -88,14 +90,14 @@ def rejudge(course_no: int = 0, class_name: str = "", student_no: str = ""):
         companies = mongo.db.company.find({"student_no": {"$regex": r"^{}".format(student_no)}})
         rejudge_course(companies)
 
-    c_dict = {2 : ["key_element"],
-              3 : ["subject"],
-              4 : ["entry"],
-              5 : ["ledger", "balance_sheet"],
-              6 : ["acc_document"],
-              7 : ["subsidiary_account", "acc_balance_sheet"],
-              8 : ["new_balance_sheet", "profit_statement"],
-              9 : ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
+    c_dict = {2: ["key_element"],
+              3: ["subject"],
+              4: ["entry"],
+              5: ["ledger", "balance_sheet"],
+              6: ["acc_document"],
+              7: ["subsidiary_account", "acc_balance_sheet"],
+              8: ["new_balance_sheet", "profit_statement"],
+              9: ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
               10: ["dupont_analysis"]}
     if course_no not in [i for i in range(2, 11)]:
         return False
@@ -116,20 +118,20 @@ def evaluate(infos_name, company, company_cp):
     :param company_cp:
     :return:
     """
-    evaluate_func = {"key_element"          : evaluate_key_element,
-                     "subject"              : evaluate_subject,
-                     "entry"                : evaluate_entry,
-                     "ledger"               : evaluate_ledger,
-                     "balance_sheet"        : evaluate_balance_sheet,
-                     "acc_document"         : evaluate_acc_document,
-                     "subsidiary_account"   : evaluate_subsidiary_account,
-                     "acc_balance_sheet"    : evaluate_acc_balance_sheet,
-                     "new_balance_sheet"    : evaluate_new_balance_sheet,
-                     "profit_statement"     : evaluate_profit_statement,
-                     "trend_analysis"       : evaluate_trend_analysis,
+    evaluate_func = {"key_element": evaluate_key_element,
+                     "subject": evaluate_subject,
+                     "entry": evaluate_entry,
+                     "ledger": evaluate_ledger,
+                     "balance_sheet": evaluate_balance_sheet,
+                     "acc_document": evaluate_acc_document,
+                     "subsidiary_account": evaluate_subsidiary_account,
+                     "acc_balance_sheet": evaluate_acc_balance_sheet,
+                     "new_balance_sheet": evaluate_new_balance_sheet,
+                     "profit_statement": evaluate_profit_statement,
+                     "trend_analysis": evaluate_trend_analysis,
                      "common_ratio_analysis": evaluate_common_ratio_analysis,
-                     "ratio_analysis"       : evaluate_ratio_analysis,
-                     "dupont_analysis"      : evaluate_dupont_analysis}
+                     "ratio_analysis": evaluate_ratio_analysis,
+                     "dupont_analysis": evaluate_dupont_analysis}
     scores = evaluate_func[infos_name](company, company_cp)
     return scores
 
@@ -428,6 +430,8 @@ def evaluate_acc_document(company, company_cp):
                 cr_money = t2_info.get("cr_money")
                 dr_money_cp = t1_info.get("dr_money")
                 cr_money_cp = t1_info.get("cr_money")
+                cr_money = 0 if cr_money == '' else cr_money
+                dr_money = 0 if dr_money == '' else dr_money
                 if general_account == general_account_cp:
                     if general_account != "sum":
                         score_point += 1
@@ -549,7 +553,7 @@ def evaluate_trend_analysis(company, company_cp):
     username = company.get("student_no")
     score1 = _statement_func("trend_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
     score2 = _statement_func("trend_analysis_infos.profit_statement_infos", company, company_cp, total_score)
-    scores = {"first" : {"student_score": score1, "teacher_score": teacher_score},
+    scores = {"first": {"student_score": score1, "teacher_score": teacher_score},
               "second": {"student_score": score2, "teacher_score": teacher_score}}
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.{}_score".format("trend_analysis"): scores}}, multi=True)
@@ -565,7 +569,7 @@ def evaluate_common_ratio_analysis(company, company_cp):
     username = company.get("student_no")
     score1 = _statement_func("common_ratio_analysis_infos.new_balance_sheet_infos", company, company_cp, total_score)
     score2 = _statement_func("common_ratio_analysis_infos.profit_statement_infos", company, company_cp, total_score)
-    scores = {"first" : {"student_score": score1, "teacher_score": teacher_score},
+    scores = {"first": {"student_score": score1, "teacher_score": teacher_score},
               "second": {"student_score": score2, "teacher_score": teacher_score}}
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.{}_score".format("common_ratio_analysis"): scores}}, multi=True)
