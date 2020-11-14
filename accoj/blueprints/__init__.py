@@ -298,6 +298,7 @@ def get_data(type_num, infos_name, info_keys):
     confirm_flag = False
     infos, answer_infos, confirmed, saved, company, company_cp = _get_infos(infos_name=infos_name)
     evaluation = company_cp.get("evaluation")
+
     if type_num == 1:
         # 1.“二三四”以及“六的会计凭证部分”
         if len(confirmed) == MAX_BUSINESS_NO:
@@ -330,6 +331,7 @@ def get_data(type_num, infos_name, info_keys):
             if ledger1_confirm and ledger2_confirm:
                 if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(ledger2_confirm):
                     if not evaluation or not evaluation.get("{}_score".format(infos_name)):
+
                         scores = evaluate(infos_name=infos_name, company=company, company_cp=company_cp)
                         update_rank(infos_name, scores)
                     else:
