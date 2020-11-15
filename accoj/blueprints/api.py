@@ -22,7 +22,9 @@ from accoj.utils import (parse_class_xlrd,
                          send_system_message_batch,
                          create_account_from_excel,
                          get_student_schedule,
-                         init_course_confirm)
+                         init_course_confirm,
+                         manage_team_infos,
+                         all_course_time_open_required)
 from accoj.extensions import mongo, redis_cli
 
 api_bp = Blueprint('api', __name__)
@@ -119,12 +121,23 @@ def profile_api():
             print('no score')
         return jsonify(result=result, data=data)
 
+    def get_team_info():
+        result, data = False, None
+        user = mongo.db.user.find_one(dict(student_no=student_no),
+                                      dict(_id=0, password=0, role=0))
+        team = mongo.db.teams.find_One(dict(team_no=user['team_no']),
+                                       dict(_id=0, team_no=0))
+        if team:
+            result, data = True, team
+        return jsonify(result=result, data=data)
+
     json_data = request.get_json()
     _api = json_data.get('api')
     get_api_dict = dict(get_manage_time_info=get_manage_time_info,
                         get_user_profile=get_user_profile,
                         get_user_schedule=get_user_schedule,
-                        get_user_score=get_user_score)
+                        get_user_score=get_user_score,
+                        get_team_info=get_team_info)
     submit_api_dict = dict(submit_user_profile=submit_user_profile)
     student_no = session.get('username')
     if _api in get_api_dict:
@@ -181,6 +194,37 @@ def teacher_api():
             result, data = True, class_info
         return jsonify(result=result, data=data)
 
+    def no_group_student(_data: dict):
+        """分班級，获取未分组的同学"""
+        result, data = False, None
+        class_name = _data.get('class_name')
+        data_ = mongo.db.user.find(dict(class_name=class_name, team_no=''),
+                                   dict(_id=0, student_name=1, student_no=1))
+        data_.update(mongo.db.teams.find(dict(class_name=class_name),
+                                         dict(_id=0, leader=1, members=1)))
+        if data_:
+            result, data = True, data_
+        return jsonify(result=result, data=data)
+
+    def submit_manage_group_info(_data: dict):
+        """提交班级分组信息"""
+
+        @all_course_time_open_required
+        def intermediate_functions(flag=True):
+            result, data, message = False, None, "保存失败！"
+            if not flag:
+                data, message = _data, "保存失败，课程已开始或已结束！"
+                return jsonify(result=result, data=data, message=message)
+            class_name = _data.get("class_name")
+            teams = _data.get("team_infos")
+            team_infos = manage_team_infos(class_name=class_name, teams=teams, teacher=teacher)
+            result, data, message = True, team_infos, "保存成功！"
+            data.update(dict(class_name=class_name))
+            return jsonify(result, data, message)
+
+        session["class_name"] = _data.get("class_name")
+        return intermediate_functions()
+
     def correct_homework(_data: dict):
         """批改作业"""
         result, data, message = False, {}, "学号不存在或输入的用户未注册公司！"
@@ -197,6 +241,7 @@ def teacher_api():
             else:
                 message = "输入的学号班级错误！"
         message = "" if result else message
+        data["role"] = session["role"]
         return jsonify(result=result, data=data, message=message)
 
     def submit_manage_time_info(_data: dict):
@@ -238,9 +283,9 @@ def teacher_api():
             message_body = "To: " + str(_classes) + 4 * ' ' + "消息内容: " + message_body
             messages = [
                 {'message_head': teacher_message_head, 'message_body': message_body, 'room': [teacher],
-                 'username'    : 'system'},
+                 'username': 'system'},
                 {'message_head': student_message_head, 'message_body': message_body, 'room': students,
-                 'username'    : username2}]
+                 'username': username2}]
             send_system_message_batch(messages)
             message, result = '发送通知成功！', True
         else:
@@ -260,9 +305,9 @@ def teacher_api():
             message_body = "To: " + str(students) + 4 * ' ' + "消息内容: " + message_body
             messages = [
                 {'message_head': teacher_message_head, 'message_body': message_body, 'room': [teacher],
-                 'username'    : 'system'},
+                 'username': 'system'},
                 {'message_head': student_message_head, 'message_body': message_body, 'room': students,
-                 'username'    : teacher}]
+                 'username': teacher}]
             send_system_message_batch(messages)
             message, result = '发送通知成功！', True
         else:
@@ -276,7 +321,9 @@ def teacher_api():
     submit_api_dict = dict(correct_homework=correct_homework,
                            submit_manage_time_info=submit_manage_time_info,
                            send_class_notify=send_class_notify,
-                           send_personal_notify=send_personal_notify)
+                           send_personal_notify=send_personal_notify,
+                           no_group_student=no_group_student,
+                           submit_manage_group_info=submit_manage_group_info)
     teacher = session.get('username')
     if _api in get_api_dict:
         return get_api_dict[_api]()
@@ -377,7 +424,7 @@ def get_student_info_correct():
         for i in range(0, scores_infos_len):
             scores_info[i]['rank'] = i + 1
             scores_info[i]['correct_schedule'] = "0%"
-        scores_info = list(filter(lambda x: classes_dict[x['student_class']] == teacher, scores_info))
+        scores_info = list(filter(lambda x: classes_dict.get(x['student_class']) == teacher, scores_info))
         result, data = True, scores_info
     return jsonify(result=result, data=data)
 
@@ -516,7 +563,7 @@ def teacher_notify_p():
     user = mongo.db.user.find({'student_no': student_no})
     if user:
         result = True
-        insert_doc = {'room'        : student_no, 'username': username, 'message_head': message_head,
+        insert_doc = {'room': student_no, 'username': username, 'message_head': message_head,
                       'message_body': message_body, 'time': _time}
         mongo.db.message.insert(insert_doc)
     return jsonify(result=result, data=data)

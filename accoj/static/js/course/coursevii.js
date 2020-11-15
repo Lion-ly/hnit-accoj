@@ -331,9 +331,9 @@ function vii1PaddingData(data, isFromButton) {
             let month = date[1],
                 day = date[2],
                 prefix = "0000000000";
-            dr_money = dr_money ? dr_money * 1000/10 : dr_money;
-            cr_money = cr_money ? cr_money * 1000/10 : cr_money;
-            balance_money = balance_money ? balance_money * 1000/10 : balance_money;
+            dr_money = dr_money ? dr_money * 1000 / 10 : dr_money;
+            cr_money = cr_money ? cr_money * 1000 / 10 : cr_money;
+            balance_money = balance_money ? balance_money * 1000 / 10 : balance_money;
             dr_money = parseInt(dr_money);
             cr_money = parseInt(cr_money);
             balance_money = parseInt(balance_money);
@@ -377,9 +377,9 @@ function vii1PaddingData(data, isFromButton) {
     data = data[subject];
     if (isFromButton) {
         removeAllError();
-        let nowTotalScore = 40,
+        let nowTotalScore = 60,
             totalScore = 100;
-        showScoreEm(scores1, nowTotalScore, totalScore, 1, 1);
+        showScoreEm(scores1, nowTotalScore, scores1, 1, 1);
         vii1ResetInfo();
     }
     padding();
@@ -457,19 +457,20 @@ function vii2PaddingData(data, isFromButton) {
             $thisInputs.each(function (t_index, item) {
                 let $item = $(item),
                     value = info[index][keys[inputIndex]],
-                    value_cp = "";
+                    value_cp = t_info_cp ? t_info_cp[keys[inputIndex]] : "";
+                value = value ? value : 0;
                 if (subject === "sum" && t_index === 0) {
                     $item.val(value);
-                    if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex++];
-                        if (value_cp != value) error_pos.push($item);
-                    }
+                    if (value_cp != value) error_pos.push($item);
+                    //if (value_cp == 0 && !value) error_pos.pop();
+                    inputIndex++;
                 } else if (t_index !== 0) {
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex++];
                         if (value_cp != value) error_pos.push($item);
+                        //if (value_cp == 0 && !value) error_pos.pop();
                     } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
+                    inputIndex++;
                 }
             });
             index++;
@@ -482,9 +483,8 @@ function vii2PaddingData(data, isFromButton) {
         vii2ResetInfo();
         let nowTotalScore = 40,
             totalScore = 100;
-        showScoreEm(scores2, nowTotalScore, totalScore, 2, 2);
+        showScoreEm(scores2, nowTotalScore, scores2, 2, 2);
     }
-    console.log("padding!");
     padding();
 }
 

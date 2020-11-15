@@ -97,5 +97,5 @@ def periodic_run_news_spider():
 def periodic_run_news_spider():
     try:
         new_spider_start()
-    except requests.exceptions.ConnectionError as e:
+    except Exception as e:
         print(e)

@@ -7,6 +7,7 @@
 # @Software: PyCharm
 import json
 import datetime
+import random
 from typing import List
 from bson.json_util import dumps
 from functools import wraps
@@ -23,7 +24,7 @@ from accoj.extensions import (mongo,
                               redis_cli)
 from accoj.exception import CreatAccountError
 
-ALLOWED_EXTENSIONS = {'zip', 'rar'}
+ALLOWED_EXTENSIONS = {'zip', 'rar', 'png', 'jpg'}
 MAX_BUSINESS_NO = 20
 
 
@@ -120,6 +121,24 @@ def course_time_open_required(course_no: int):
         return wrapper
 
     return func_wrapper
+
+
+def all_course_time_open_required(func):
+    """
+    需要所有课程时间还未开启
+    :return:
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        for i in range(1, 11):
+            flag = is_course_time_open(i)
+            if flag != 0:
+                flag = False
+                return func(flag=flag)
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 def course_time_not_end_required(course_no: int):
@@ -319,7 +338,7 @@ def parse_class_xlrd(class_xlrd: object):
 
 def create_account(student_no: str, student_name: str, password: str = "123", role: str = "student",
                    student_faculty: str = "", student_class: str = "", student_school: str = "",
-                   student_phone: str = "", teacher: str = ""):
+                   student_phone: str = "", teacher: str = "", team_no: str = ""):
     """
     创建账号
 
@@ -332,6 +351,7 @@ def create_account(student_no: str, student_name: str, password: str = "123", ro
     :param student_school:
     :param student_phone:
     :param teacher:
+    :param team_no:
     :return:
     """
     if student_no.encode('utf-8') in redis_cli.smembers('user'):
@@ -347,7 +367,8 @@ def create_account(student_no: str, student_name: str, password: str = "123", ro
                        student_class=student_class,
                        student_phone=student_phone,
                        password=generate_password_hash(password, salt_length=24),
-                       status="通过审核")
+                       status="通过审核",
+                       team_no=team_no)
     mongo.db.user.update(dict(student_no=student_no),
                          {'$setOnInsert': insert_dict},
                          upsert=True)
@@ -414,15 +435,15 @@ def create_account_from_excel(filename: str, user_infos=None, teacher: str = 'te
 
 
 def create_class(class_name: str, students: list, teacher: str = 'teacher'):
-    _time = {"1" : {"start": "", "end": "", "is_open": False},
-             "2" : {"start": "", "end": "", "is_open": False},
-             "3" : {"start": "", "end": "", "is_open": False},
-             "4" : {"start": "", "end": "", "is_open": False},
-             "5" : {"start": "", "end": "", "is_open": False},
-             "6" : {"start": "", "end": "", "is_open": False},
-             "7" : {"start": "", "end": "", "is_open": False},
-             "8" : {"start": "", "end": "", "is_open": False},
-             "9" : {"start": "", "end": "", "is_open": False},
+    _time = {"1": {"start": "", "end": "", "is_open": False},
+             "2": {"start": "", "end": "", "is_open": False},
+             "3": {"start": "", "end": "", "is_open": False},
+             "4": {"start": "", "end": "", "is_open": False},
+             "5": {"start": "", "end": "", "is_open": False},
+             "6": {"start": "", "end": "", "is_open": False},
+             "7": {"start": "", "end": "", "is_open": False},
+             "8": {"start": "", "end": "", "is_open": False},
+             "9": {"start": "", "end": "", "is_open": False},
              "10": {"start": "", "end": "", "is_open": False}}
     mongo.db.classes.update(dict(class_name=class_name),
                             {'$setOnInsert': dict(teacher=teacher,
@@ -826,28 +847,28 @@ def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: st
         if students == [] or course_no not in [i for i in range(2, 11)]:
             return False
 
-        schedule_dic = {format_key("key_element")          : [],
-                        format_key("subject")              : [],
-                        format_key("entry")                : [],
-                        format_key("ledger")               : {format_key("ledger1"): [], format_key("ledger2"): []},
-                        format_key("balance_sheet")        : False,
-                        format_key("acc_document")         : [],
-                        format_key("subsidiary_account")   : [],
-                        format_key("acc_balance_sheet")    : False,
-                        format_key("new_balance_sheet")    : False,
-                        format_key("profit_statement")     : False,
-                        format_key("trend_analysis")       : {"first": False, "second": False},
+        schedule_dic = {format_key("key_element"): [],
+                        format_key("subject"): [],
+                        format_key("entry"): [],
+                        format_key("ledger"): {format_key("ledger1"): [], format_key("ledger2"): []},
+                        format_key("balance_sheet"): False,
+                        format_key("acc_document"): [],
+                        format_key("subsidiary_account"): [],
+                        format_key("acc_balance_sheet"): False,
+                        format_key("new_balance_sheet"): False,
+                        format_key("profit_statement"): False,
+                        format_key("trend_analysis"): {"first": False, "second": False},
                         format_key("common_ratio_analysis"): {"first": False, "second": False},
-                        format_key("ratio_analysis")       : False,
-                        format_key("dupont_analysis")      : False, }
-        c_dict = {2 : ["key_element"],
-                  3 : ["subject"],
-                  4 : ["entry"],
-                  5 : ["ledger", "balance_sheet"],
-                  6 : ["acc_document"],
-                  7 : ["subsidiary_account", "acc_balance_sheet"],
-                  8 : ["new_balance_sheet", "profit_statement"],
-                  9 : ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
+                        format_key("ratio_analysis"): False,
+                        format_key("dupont_analysis"): False, }
+        c_dict = {2: ["key_element"],
+                  3: ["subject"],
+                  4: ["entry"],
+                  5: ["ledger", "balance_sheet"],
+                  6: ["acc_document"],
+                  7: ["subsidiary_account", "acc_balance_sheet"],
+                  8: ["new_balance_sheet", "profit_statement"],
+                  9: ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
                   10: ["dupont_analysis"]}
         num_dic = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
         users, set_dict, unset_dict = [], {}, {}
@@ -871,7 +892,7 @@ def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: st
                                   "$inc": {"sum_score": -old_score}})
 
         mongo.db.company.update_many({"student_no": {"$in": users}},
-                                     {"$set"  : set_dict,
+                                     {"$set": set_dict,
                                       "$unset": unset_dict})
         return True
 
@@ -912,14 +933,13 @@ def is_confirmed(course_no: int, company, infos_name) -> bool:
     :param infos_name:
     :return:
     """
-    confirm_flag = False
     schedule_confirm = company.get("schedule_confirm")
     confirmed = schedule_confirm.get("{}_confirm".format(infos_name))
 
     if course_no in [2, 3, 4, 6]:
         # 1.第二三四六次课6
         if len(confirmed) == MAX_BUSINESS_NO:
-            confirm_flag = True
+            return True
     elif infos_name in {"ledger", "subsidiary_account"}:
         # 2.“账户和明细账部分”
         involve_subjects = company.get("involve_subjects")
@@ -929,16 +949,273 @@ def is_confirmed(course_no: int, company, infos_name) -> bool:
             ledger1_confirm = confirmed.get("ledger1_confirm")
             ledger2_confirm = confirmed.get("ledger2_confirm")
             if ledger1_confirm and ledger2_confirm:
-                if set(involve_subjects_1) == set(ledger1_confirm) and set(involve_subjects_2) == set(
-                        ledger2_confirm):
-                    confirm_flag = True
+                if set(involve_subjects_1) == set(ledger1_confirm) and \
+                        set(involve_subjects_2) == set(ledger2_confirm):
+                    return True
         elif infos_name == "subsidiary_account":
             if set(confirmed) == set(involve_subjects_2):
-                confirm_flag = True
+                return True
     else:
         # 3.其余部分
+        # 平衡表
+        if infos_name == "balance_sheet":
+            if is_confirmed(5, company, "ledger") and confirmed:
+                return True
+            else:
+                return False
+        # 余额表
+        elif infos_name == "acc_balance_sheet" and confirmed:
+            if is_confirmed(7, company, "subsidiary_account"):
+                return True
+            else:
+                return False
+        # 利润表
+        elif infos_name == "profit_statement" and confirmed:
+            if is_confirmed(8, company, "new_balance_sheet"):
+                return True
+            else:
+                return False
         td = {"trend_analysis", "common_ratio_analysis"}
         td = infos_name in td
         if (td and confirmed.get("first") and confirmed.get("second")) or (not td and confirmed):
-            confirm_flag = True
-    return confirm_flag
+            return True
+    return False
+
+
+# -----------------------------------------创建团队------------------------------------------------
+def manage_team_infos(class_name: str, teacher: str, teams: dict = None):
+    """
+    管理保存团队信息:
+    创建team：
+
+    :param teams:{ leader_name:
+                   leader_no:
+                   members:[["",""],["",""],["",""],["",""]]}
+    计算得：   team_no,
+             team_name:
+    :param class_name:
+    :param teacher:
+
+    创建团队时，同步插入团队成绩：
+    return 团队信息
+    """
+
+    def update_user_team_infos(class_name: str):
+        mongo.db.user.update_Many({"class_name": class_name}, {"$set": {"team_no": ""}})
+
+    def insert_rank_team_infos(team_no, team_name, score_infos):
+        infos = {"team_no": team_no, "team_class": class_name, "team_name": team_name}
+        infos.update(score_infos)
+        mongo.db.rank_team.insert(infos)
+
+    score_keys = ['sum_score', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+    score = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    score_infos = dict(zip(score_keys, score))
+
+    update_user_team_infos(class_name=class_name)
+    mongo.db.teams.dalete_Many({"class_name": class_name, "school_name": session["school_name"]})
+    mongo.db.rank_team.delete_Many({"team_class": class_name})
+    school_name = session["school_name"]
+    for team in teams:
+        leader_name = team.get("leader_name")
+        leader_no = team.get("leader_no")
+        members = team.get("members")
+        team_no = 1
+        for member in members:
+            team_no *= int(member[1][-3:])
+        team_no = str(team_no)
+        team_name = team_no
+        mongo.db.teams.insert(dict(leader_name=leader_name,
+                                   leader_no=leader_no,
+                                   members=members,
+                                   team_no=team_no,
+                                   team_name=team_name,
+                                   class_name=class_name,
+                                   school_name=school_name,
+                                   teacher=teacher))
+        insert_rank_team_infos(team_no=team_no, team_name=team_name, score_infos=score_infos)
+    data = mongo.db.teams.find()
+    return data
+
+
+def availability_of_the_team(func):
+    """
+    是否组队
+    :return:
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get("team_no") is None:
+            return jsonify(result=False, message="未组队，无法进入！")
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def is_leader(func):
+    """
+    第一个模块由队长(leader)执行
+    :return:
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        leader_no = mongo.db.teams.find({"team_no": "{}".format(session.get("team_no"))},
+                                        dict(_id=0, leader_no=1))
+        if session.get("username") != leader_no:
+            return jsonify(result=False, message="leader 才能提交！")
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+# -----------------------------------------题目权限------------------------------------------------
+def manage_exercises_permission(team_no: str):
+    """
+    "key_element_permission": [int],							# 会计要素部分进度	II
+    "subject_permission": [int],								# 会计科目部分进度	III
+    "entry_permission": [int],									# 会计分录部分进度	IV
+    "ledger_permission": {"ledger1_permission": [string],		# 会计账户部分进度	V
+                       "ledger2_permission": [string]},
+    "balance_sheet_permission": Boolean,						# 会计平衡表部分进度 V
+    "acc_document_permission": [int], 							# 会计凭证部分进度	VI
+    "subsidiary_account_permission": [string], 				    # 会计明细账部分进度 VII
+    "acc_balance_sheet_permission": Boolean, 					# 科目余额表部分进度 VII
+    "new_balance_sheet_permission": Boolean, 					# 资产负债表部分进度 VIII
+    "profit_statement_permission": Boolean,  					# 利润表部分进度 VIII
+    "trend_analysis_permission":{"first": Boolean,				# 趋势分析法 IX
+                              "second": Boolean},
+    "common_ratio_analysis_permission":{"first": Boolean, 		# 共同比分析法 IX
+                                     "second": Boolean},
+    "ratio_analysis_permission":Boolean,						# 比率分析法 IX
+    "dupont_analysis_permission":Boolean						# 杜邦分析 X
+    """
+    array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    # exercises = ["key_element_permission", "subject_permission", "entry_permission", "ledger_permission",
+    #              "balance_sheet_permission", "acc_document_permission", "subsidiary_account_permission",
+    #              "acc_balance_sheet_permission", "new_balance_sheet_permission", "profit_statement_permission",
+    #              "trend_analysis_permission", "common_ratio_analysis_permission", "ratio_analysis_permission",
+    #              "dupont_analysis_permission"]
+    # exercise_list_int = ["key_element_permission", "subject_permission", "entry_permission","acc_document_permission"]
+    # exercise_other = ["ledger_permission", "balance_sheet_permission", "subsidiary_account_permission",
+    #                   "acc_balance_sheet_permission", "new_balance_sheet_permission", "profit_statement_permission",
+    #                   "trend_analysis_permission", "common_ratio_analysis_permission", "ratio_analysis_permission",
+    #                   "dupont_analysis_permission"]
+    team_info = mongo.db.teams.find(dict(team_no=team_no))
+    members = team_info["members"]
+    member_length = len(members)
+    permission = {}
+    team_no_permission = {"key_element_permission": array,
+                          "subject_permission": array,
+                          "entry_permission": array,
+                          "ledger_permission": {"ledger1_permission": 1,  # 会计账户部分进度	V
+                                                "ledger2_permission": 1},
+                          "balance_sheet_permission": 1,
+                          "acc_document_permission": array,
+                          "subsidiary_account_permission": 1,
+                          "acc_balance_sheet_permission": 1,
+                          "new_balance_sheet_permission": 1,
+                          "profit_statement_permission": 1,
+                          "trend_analysis_permission": {"first": 1,
+                                                        "second": 1},
+                          "common_ratio_analysis_permission": {"first": 1,
+                                                               "second": 1},
+                          "ratio_analysis_permission": 1,
+                          "dupont_analysis_permission": 1}
+
+    def get_schedule_dict(schedule_type, i):
+        def format_key(t_key):
+            return "{}_{}".format(t_key, schedule_type)
+
+        return {format_key("key_element"): array_all[2][i],
+                format_key("subject"): array_all[3][i],
+                format_key("entry"): array_all[4][i],
+                format_key("ledger"): {format_key("ledger1"): array_all[5][i][0],
+                                       format_key("ledger2"): array_all[5][i][1]},
+                format_key("balance_sheet"): array_all[5][i][2],
+                format_key("acc_document"): array_all[6][i],
+                format_key("subsidiary_account"): array_all[7][i][0],
+                format_key("acc_balance_sheet"): array_all[7][i][1],
+                format_key("new_balance_sheet"): array_all[8][i][0],
+                format_key("profit_statement"): array_all[8][i][1],
+                format_key("trend_analysis"): {"first": array_all[9][i][0], "second": array_all[9][i][1]},
+                format_key("common_ratio_analysis"): {"first": array_all[9][i][2], "second": array_all[9][i][3]},
+                format_key("ratio_analysis"): 1,
+                format_key("dupont_analysis"): 1, }
+
+    def first_allocation():
+        """
+        II、III、IV、VI
+        """
+        arr = []
+        j = 0
+        random.shuffle(array)
+        for i in array:
+            arr[j % member_length].append(i)
+            j += 1
+        return arr
+
+    def second_allocation():
+        """
+        V
+        """
+        arr = []
+        j = 0
+        a = []
+        for i in range(member_length):
+            a.append(i)
+            for k in range(3):
+                arr[i][k] = 0
+        random.shuffle(a)
+        for i in a:
+            arr[i][j] = 1
+            if j < 2:
+                j += 1
+        return arr
+
+    def third_permission():
+        """
+        VII、VIII
+        """
+        arr = []
+        j = 0
+        a = []
+        for i in range(member_length):
+            a.append(i)
+            for k in range(2):
+                arr[i][k] = 0
+        random.shuffle(a)
+        for i in a:
+            arr[i][j] = 1
+            if j == (member_length - 1) / 2:
+                j += 1
+        return arr
+
+    def fourth_permission():
+        """
+        IX
+        """
+        arr = []
+        j = 0
+        a = []
+        for i in range(member_length):
+            a.append(i)
+            for k in range(4):
+                arr[i][k] = 0
+        random.shuffle(a)
+        for i in range(4):
+            arr[a[i]][i] = 1
+        return arr
+
+    array_all = [None, None]
+    array_function = [first_allocation, first_allocation, first_allocation, second_allocation, first_allocation,
+                      third_permission, third_permission, fourth_permission]
+    for i in array_function:
+        array_all.append(i())
+
+    for i in range(member_length):
+        permission["{}_permission".format(members[i][1])] = get_schedule_dict("permission", i)
+
+    permission.update({"{}_permission".format(team_no): team_no_permission})
+    mongo.db.teams.update_Many({"team_no": team_no}, {"$set": permission})

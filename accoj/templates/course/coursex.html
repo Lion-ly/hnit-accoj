@@ -1,17 +1,17 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<link href="http://cdn.accoj.top/static/accoj-1.0.0/coursex.css" rel="stylesheet">
-<script src="http://cdn.accoj.top/static/accoj-1.0.0/coursex.js" charset="UTF-8"></script>
-<!--第十次课程-->
-<div class="courseBody">
-    <!-- 习题主体 -->
-    <div class="container">
-        <div class="panel panel-default">
-            <!--作业要求-->
-            <div class="panel-heading">
-                <span>1、熟悉杜邦分析体系及其运用。 </span>
-                <br/>
-                <span>2、杜邦分析只分析第二期数据，所有公式均采集第二期资产负债表和利润表数据，不使用平均数。</span>
+    <link href="http://cdn.accoj.top/static/accoj-1.0.0/coursex.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/course/coursex.js') }}" charset="UTF-8"></script>
+    <!--第十次课程-->
+    <div class="courseBody">
+        <!-- 习题主体 -->
+        <div class="container">
+            <div class="panel panel-default">
+                <!--作业要求-->
+                <div class="panel-heading">
+                    <span>1、熟悉杜邦分析体系及其运用。 </span>
+                    <br/>
+                    <span>2、杜邦分析只分析第二期数据，所有公式均采集第二期资产负债表和利润表数据，不使用平均数。</span>
             </div>
             <div id="coursexData" class="panel-body">
                 <p class="acc-title">1、杜邦分析

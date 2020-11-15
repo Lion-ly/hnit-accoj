@@ -9,8 +9,8 @@ let firstChange = true,
     periodLastData = Object(),
     answer_infos1 = "",
     answer_infos2 = "",
-    scores1 = "",
-    scores2 = "";
+    scores1 = 0,
+    scores2 = 0;
 
 $(document).ready(function () {
     function init() {
@@ -80,7 +80,7 @@ function map_ix2First_info(data, isFromButton) {
     ix2First_saved = data ? data["saved"]["first"] : ix2First_saved;
     answer_infos1 = data ? data["answer_infos"] : answer_infos1;
     let scores = data ? data["scores"] : "";
-    scores1 = scores ? scores["first"] : scores1;
+    scores1 = scores ? scores["first"]["student_score"] : scores1;
 
     if (answer_infos1) {
         let $answer = $("button[data-answer-1]");
@@ -154,7 +154,8 @@ function map_ix2Second_info(data, isFromButton) {
     ix2Second_saved = data ? data["saved"]["second"] : ix2Second_saved;
     answer_infos2 = data ? data["answer_infos"] : answer_infos2;
     let scores = data ? data["scores"] : "";
-    scores2 = scores ? scores["second"] : scores2;
+    scores2 = scores ? scores["second"]["student_score"] : scores2;
+
 
     if (answer_infos2) {
         let $answer = $("button[data-answer-2]");
@@ -233,7 +234,7 @@ function Ix2PaddingData(data, isFirst, isFromButton) {
     if (isFromButton) {
         removeAllError();
         let nowTotalScore = 20,
-            totalScore = 100,
+            totalScore = scores1 + scores2,
             scores = isFirst ? scores1 : scores2,
             nowNum = isFirst ? 1 : 2;
         showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
@@ -305,6 +306,12 @@ function ix22ResetInfo() {
  * @param obj
  */
 function eventChangeIx2(obj) {
+    function dealResult(name) {
+        let v = data.hasOwnProperty(name) ? data[name] : 0;
+        v = v ? v : 0;
+        return parseFloat(v);
+    }
+
     let name = $(obj).attr("name"),
         isEnd = name.endsWith("End"),
         value = $(obj).val();
@@ -333,41 +340,44 @@ function eventChangeIx2(obj) {
     let inputName = isEnd ? "营业利润End" : "营业利润Last",
         data = isEnd ? periodEndData : periodLastData,
         result = 0;
-    result += data.hasOwnProperty("营业收入") ? data["营业收入"] : result;
-    result -= data.hasOwnProperty("营业成本") ? data["营业成本"] : result;
-    result -= data.hasOwnProperty("税金及附加") ? data["税金及附加"] : result;
-    result -= data.hasOwnProperty("销售费用") ? data["销售费用"] : result;
-    result -= data.hasOwnProperty("管理费用") ? data["管理费用"] : result;
-    result -= data.hasOwnProperty("财务费用") ? data["财务费用"] : result;
-    result -= data.hasOwnProperty("资产减值损失") ? data["资产减值损失"] : result;
-    result += data.hasOwnProperty("公允价值变动收益") ? data["公允价值变动收益"] : result;
-    result += data.hasOwnProperty("投资收益") ? data["投资收益"] : result;
+    result += dealResult("营业收入");
+    result -= dealResult("营业成本");
+    result -= dealResult("税金及附加");
+    result -= dealResult("销售费用");
+    result -= dealResult("管理费用");
+    result -= dealResult("财务费用");
+    result -= dealResult("资产减值损失");
+    result += dealResult("公允价值变动收益");
+    result += dealResult("投资收益");
     if (isEnd) {
         periodEndData["营业利润"] = result;
     } else {
         periodLastData["营业利润"] = result;
     }
+    result = result.toFixed(2) + "%";
     $("#ix2Second").find("input[name=" + inputName + "]").val(result);
 
     // 计算利润总额
     inputName = isEnd ? "利润总额End" : "利润总额Last";
     data = isEnd ? periodEndData : periodLastData;
     result = 0;
-    result += data.hasOwnProperty("营业利润") ? data["营业利润"] : result;
-    result += data.hasOwnProperty("营业外收入") ? data["营业外收入"] : result;
-    result -= data.hasOwnProperty("营业外支出") ? data["营业外支出"] : result;
+    result += dealResult("营业利润")
+    result += dealResult("营业外收入")
+    result -= dealResult("营业外支出")
     if (isEnd) {
         periodEndData["利润总额"] = result;
     } else {
         periodLastData["利润总额"] = result;
     }
+    result = result.toFixed(2) + "%";
     $("#ix2Second").find("input[name=" + inputName + "]").val(result);
 
     // 计算净利润
     inputName = isEnd ? "净利润End" : "净利润Last";
     data = isEnd ? periodEndData : periodLastData;
     result = 0;
-    result += data.hasOwnProperty("利润总额") ? data["利润总额"] : result;
-    result -= data.hasOwnProperty("所得税费用") ? data["所得税费用"] : result;
+    result += dealResult("利润总额")
+    result -= dealResult("所得税费用")
+    result = result.toFixed(2) + "%";
     $("#ix2Second").find("input[name=" + inputName + "]").val(result);
 }

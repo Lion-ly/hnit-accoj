@@ -23,7 +23,8 @@ db.accoj.users.insert({"student_no": "17020340111", 	# 学号
 					   "student_sex": "男",				# 性别
 					   "student_borth": "1998-05-05",   # 生日
 					   "password": "...", 				# 密码
-					   "email": "1848600800@qq.com"		# 邮箱
+					   "email": "1848600800@qq.com",		# 邮箱
+					   team_no: ""						# 团队号
 					  })
 ```
 
@@ -105,7 +106,7 @@ db.accoj.question.insert({"questions_no": int， 			# 题库号
 						 "content": string, 	    		# 内容
 						 "business_type": string,			# 业务类型（筹资活动、投资活动、经营活动）
 						 "affect_type": int,				# 对会计等式影响类型
-						 "values": [{"value_type": "common/asset/num/percent", "value": double, is_random": Boolean, "low": double, "high": double}] # 变量列表，变量类型，值，是否是数字变量，如果是，最低值，最高值，0，0代表不变
+						 "values": [{"value_type": "common/asset/num/percent", "value": double, “is_random": Boolean, "low": double, "high": double}] # 变量列表，变量类型，值，是否是数字变量，如果是，最低值，最高值，0，0代表不变
 						 "key_element_infos": [							# 会计要素信息列表
 											  {"key_element": string,	# 会计要素
 											   "value_index": string, 	# 在上述values的位置, 下标或四则运算表达式

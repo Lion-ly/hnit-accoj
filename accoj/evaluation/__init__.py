@@ -465,14 +465,16 @@ def evaluate_subsidiary_account(company, company_cp):
     def cal_fun(t_info, t_info_cp, t_score_point, t_total_point):
         info_len = len(t_info)
         info_cp_len = len(t_info_cp)
+        t_total_point += info_cp_len * 4  # 借，贷，方向，余额
         for i in range(0, info_cp_len):
-            t_score_point = 0
             t2_info = t_info_cp[i]
-            t_total_point += len(t2_info) * 4  # 借，贷，方向，余额
             if i >= info_len:
                 continue
             t1_info = t_info[i]
             keys = ["dr_money", "cr_money", "orientation", "balance_money"]
+            t1_info["dr_money"] = t1_info["dr_money"] if t1_info["dr_money"] else 0
+            t1_info["cr_money"] = t1_info["cr_money"] if t1_info["cr_money"] else 0
+            t1_info["balance_money"] = t1_info["balance_money"] if t1_info["balance_money"] else 0
             t_score_point += sum([1 if t1_info.get(t_key) == t2_info.get(t_key) else 0 for t_key in keys])
         return t_score_point, t_total_point
 
@@ -489,6 +491,8 @@ def evaluate_subsidiary_account(company, company_cp):
         score_point, total_point = cal_fun(info, info_cp, score_point, total_point)
 
     scores = score_point / total_point * total_score
+    if username == "19040440215":
+        print(f"total_point:{total_point}\nscore_point: {score_point}")
     scores = round(scores, 2)
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.subsidiary_account_score": scores}}, multi=True)

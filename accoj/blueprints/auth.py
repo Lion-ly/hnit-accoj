@@ -23,7 +23,7 @@ def signin():
         student_no = form.get("studentid")
         password = form.get("password")
 
-        if student_no is "" or password is "":
+        if student_no == "" or password == "":
             message = "请确保账号密码填写不为空"
             return jsonify(result="false", message="{}".format(message))
         else:
@@ -39,7 +39,9 @@ def signin():
                 session["student_name"] = user.get("student_name")
                 session["nick_name"] = user.get("nick_name")
                 session["role"] = role
+                session["school_name"] = user.get("student_school")
                 session["class_name"] = class_name
+                session["team_no"] = user.get("team_no")
                 return jsonify(result="true")
             else:
                 message = "密码错误"
@@ -132,7 +134,7 @@ def update_password():
         origin_pwd = form["origin_pwd"]
         new_pwd = form["new_pwd"]
         new_pwd_again = form["new_pwd_again"]
-        if origin_pwd is "" or new_pwd is "" or new_pwd_again is "":
+        if origin_pwd == "" or new_pwd == "" or new_pwd_again == "":
             message = "请确保信息填写完整"
             return jsonify(result="false", message="{}".format(message))
         else:
@@ -207,10 +209,10 @@ def find_password():
         user = mongo.db.user.find_one({"student_no": student_no})
         stu = dict(student_no="{}".format(student_no))
         mail = dict(email="{}".format(email))
-        if student_no is "":
+        if student_no == "":
             message = "学号不能为空"
             return jsonify(result="false", message=message)
-        if email is "":
+        if email == "":
             message = "邮箱不能为空"
             return jsonify(result="false", message=message)
         if not user:

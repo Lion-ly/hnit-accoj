@@ -74,5 +74,5 @@ def profile_bp_before_request():
     role = session.get("role")
     if role == 'admin':
         return redirect(url_for('admin.index'))
-    elif role == 'dbadmin':
+    elif role == 'bdadmin':
         return redirect(url_for('dbadmin.index'))

@@ -270,6 +270,7 @@ function removeError(selector) {
         $this.css({"color": "", "background-color": ""});
         $this.parent().removeClass("has-error");
     }
+    $this.trigger("change");
 }
 
 /**
@@ -390,7 +391,7 @@ function RealNumber(selector) {
  * @param selector
  */
 function LimitPercent(selector) {
-    let reg = /^-?(100|[1-9]\d|\d)(.\d{1,2})?%$/,
+    let reg = /^-?([1-9]\d\d\d|[1-9]\d\d|[1-9]\d|\d)(.\d{1,2})?%$/,
         $this = $(selector),
         thisValue = $this.val();
     if (thisValue && !thisValue.match(reg)) hasError($this, "格式错误");
@@ -471,6 +472,7 @@ function submit_info(submit_type, url, data, messageDivID, successFunc, failedFu
             }
         },
         error: function (err) {
+            show_message(messageDivID, err.statusText, "danger", 1000);
             console.log(err.statusText);
         },
         complete: function () {
@@ -510,15 +512,22 @@ function get_info(data, url, successFunc, messageDivID) {
             data = data.hasOwnProperty("data") ? data["data"] : data;
             if (result === true) {
                 successFunc(data);
+
+
             } else {
-                if (messageDivID)
+                if (messageDivID) {
                     show_message(messageDivID, data["message"], "danger", 1000);
+                }
+
             }
         },
         error: function (err) {
+
+            show_message(messageDivID, err.statusText, "danger", 1000);
             console.log(err.statusText);
         }
     })
+
 }
 
 //==================================提交状态标签控制==================================//
@@ -749,8 +758,10 @@ function downloadFile(arrayBuffer, filename) {
     let tmp = filename.split(",");
     let type = tmp[tmp.length - 1];
     type = type === "zip" ? type : "x-rar-compressed";
-    let data = new Blob([arrayBuffer], {type: "application/" + type + ";charset=UTF-8"});
+    let data = new Blob([arrayBuffer], {type: "application/jpg;charset=UTF-8"});
+    console.log(data);
     let downloadUrl = window.URL.createObjectURL(data);
+    console.log(downloadUrl);
     let anchor = document.createElement("a");
     anchor.href = downloadUrl;
     anchor.download = filename;

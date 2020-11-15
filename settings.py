@@ -5,14 +5,19 @@
 # @Site    : https://github.com/coolbreeze2
 # @File    : settings.py
 # @Software: PyCharm
-import os, datetime
+import datetime
+import os
 from urllib import parse
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 MAX_BUSINESS_NO = 20
 username = parse.quote_plus("accojOwner")
+# username = parse.quote_plus("accojAdmin")
 password = parse.quote_plus("Love199805#")
+
+
+# password = parse.quote_plus("ag9JtXMW1TVqsOXF")
 
 
 class BaseConfig(object):
@@ -38,10 +43,14 @@ class BaseConfig(object):
     # 静态文件缓存过期时间，默认43200s即12hours
     # 即更新时客户端静态文件不会立即更新而是在12hours之后更新
     SEND_FILE_MAX_AGE_DEFAULT = datetime.timedelta(seconds=12 * 60 * 60)
+    # MONGO_URI = "mongodb://{}:{}@localhost:27017/accoj".format(username, password)
     MONGO_URI = "mongodb://{}:{}@localhost:27017/accoj".format(username, password)
+    # REDIS_URL = "redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@localhost:6379/0"
     REDIS_URL = "redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@localhost:6379/0"
-    CELERY_BROKER_URL = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1',
-    CELERY_RESULT_BACKEND = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1'
+    # CELERY_BROKER_URL = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1',
+    CELERY_BROKER_URL = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@localhost:6379/1',
+    # CELERY_RESULT_BACKEND = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@127.0.0.1:6379/1'
+    CELERY_RESULT_BACKEND = 'redis://:Yt7q2H93ufpoV8O8i6wJcy0HknazWFFK@localhost:6379/1'
 
     LOG_PATH = 'accoj/log/request.log'
     LOG_DEBUG_PATH = 'accoj/log/debug.log'
@@ -61,7 +70,7 @@ class ProductionConfig(BaseConfig):
 
 
 config = {
-    "development": DevelopmentConfig,
-    "testing"    : TestingConfig,
-    "production" : ProductionConfig
+    "development": DevelopmentConfig,  # 缺值
+    "testing": TestingConfig,
+    "production": ProductionConfig
 }

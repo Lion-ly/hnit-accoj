@@ -2,6 +2,7 @@
 同一类数据键命名为`数据类型名:唯一键值`<br>
 
 #集合
+
 1. classes集合：
 `{f'classes:{class_name}': json_str}`
 ```

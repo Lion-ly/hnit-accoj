@@ -14,7 +14,10 @@ from flask import (Blueprint,
 from accoj.utils import (login_required,
                          complete_required1,
                          course_time_open_required,
-                         course_time_not_end_required)
+                         course_time_not_end_required,
+                         availability_of_the_team,
+                         is_leader,
+                         manage_exercises_permission)
 from accoj.blueprints import submit_infos, get_data
 from accoj.utils import (is_number,
                          limit_content_length,
@@ -29,7 +32,8 @@ MAX_BUSINESS_NO = 20
 
 
 # 第一次课程----start-------------------------------------------------------------------------------
-@accoj_bp.route('/coursei', methods=['GET'])
+@accoj_bp.route('/coursei', methods=['GET', 'POST'])
+@availability_of_the_team
 @course_time_open_required(1)
 def coursei():
     """
@@ -43,7 +47,12 @@ def get_company_info():
     """
     获取公司信息
     """
-    company = mongo.db.company.find_one(dict(student_no=session.get("username")),
+    #         company = mongo.db.company.find_one(dict(student_no=session.get("username")),
+    #     #                                     dict(_id=0, com_name=1, com_address=1, com_business_addr=1,
+    #     #                                          com_legal_rep=1,
+    #     #                                          com_regist_cap=1, com_operate_period=1, com_business_scope=1,
+    #     #                                  com_shareholder=1))
+    company = mongo.db.company.find_one(dict(team_no=session.get("team_no")),
                                         dict(_id=0, com_name=1, com_address=1, com_business_addr=1,
                                              com_legal_rep=1,
                                              com_regist_cap=1, com_operate_period=1, com_business_scope=1,
@@ -55,6 +64,7 @@ def get_company_info():
 
 
 @accoj_bp.route('/submit_company_info', methods=['POST'])
+@is_leader
 @course_time_not_end_required(1)
 def submit_company_info():
     """
@@ -71,17 +81,18 @@ def submit_company_info():
                 format_key("entry")                : [],
                 format_key("ledger")               : {format_key("ledger1"): [], format_key("ledger2"): []},
                 format_key("balance_sheet")        : False,
-                format_key("acc_document")         : [],
-                format_key("subsidiary_account")   : [],
-                format_key("acc_balance_sheet")    : False,
-                format_key("new_balance_sheet")    : False,
-                format_key("profit_statement")     : False,
-                format_key("trend_analysis")       : {"first": False, "second": False},
+                format_key("acc_document"): [],
+                format_key("subsidiary_account"): [],
+                format_key("acc_balance_sheet"): False,
+                format_key("new_balance_sheet"): False,
+                format_key("profit_statement"): False,
+                format_key("trend_analysis"): {"first": False, "second": False},
                 format_key("common_ratio_analysis"): {"first": False, "second": False},
-                format_key("ratio_analysis")       : False,
-                format_key("dupont_analysis")      : False, }
+                format_key("ratio_analysis"): False,
+                format_key("dupont_analysis"): False, }
 
-    company = mongo.db.company.find_one({"student_no": session.get("username")})
+    # company = mongo.db.company.find_one({"student_no": session.get("username")})
+    company = mongo.db.company.find_one({"team_no": session.get("team_no")})
     if company is not None:
         return jsonify(result=False, message="已经创立过公司！")
     json_data = request.get_json()
@@ -92,7 +103,8 @@ def submit_company_info():
     data_dict["com_shareholder"] = []
     err_pos = []
 
-    data_dict["student_no"] = session.get("username")
+    # data_dict["student_no"] = session.get("username")
+    data_dict["team_no"] = session.get("team_no")
     for data_name in data_list:
         data_dict[data_name] = json_data.get(data_name)
 
@@ -156,18 +168,22 @@ def submit_company_info():
                               acc_document_infos=[]))
         data_dict_cp = data_dict.copy()
         # 副本公司同时创建
-        data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
+        # data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
+        data_dict_cp["team_no"] = "{}_cp".format(data_dict["team_no"])
         mongo.db.company.insert_many([data_dict, data_dict_cp])
         return jsonify(result=True, message="公司创建成功！")
 
 
 @accoj_bp.route('/submit_business_info', methods=['POST'])
+@is_leader
 @course_time_not_end_required(1)
 def submit_business_info():
     """
     提交业务内容信息，提交成功后不可修改
     """
-    company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
+    # company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
+    #                                     dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
+    company = mongo.db.company.find_one(dict(team_no="{}".format(session.get("team_no"))),
                                         dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
     if not company:
         return jsonify(result=False, message="公司未创立")
@@ -177,7 +193,9 @@ def submit_business_info():
     if not business_confirm:
         cal_answer()  # 计算答案
 
-        company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
+        # company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
+        #                                        dict(ledger_infos=1, _id=0))
+        company_cp = mongo.db.company.find_one(dict(team_no="{}_cp".format(session.get("team_no"))),
                                                dict(ledger_infos=1, _id=0))
         ledger_infos = company_cp.get("ledger_infos")
         ledger_infos_1 = ledger_infos.get("ledger_infos_1")
@@ -187,12 +205,19 @@ def submit_business_info():
 
         involve_subjects = dict(involve_subjects_1=subjects_tmp1, involve_subjects_2=subjects_tmp2)
 
-        mongo.db.company.update({"student_no": {"$regex": r"^{}".format(session.get("username"))}},
+        # mongo.db.company.update({"student_no": {"$regex": r"^{}".format(session.get("username"))}},
+        #                         {"$set": {"schedule_confirm.business_confirm": True,
+        #                                   "involve_subjects"                 : involve_subjects}},
+        #                         multi=True)
+        mongo.db.company.update({"team_no": {"$regex": r"^{}".format(session.get("team_no"))}},
                                 {"$set": {"schedule_confirm.business_confirm": True,
-                                          "involve_subjects"                 : involve_subjects}},
+                                          "involve_subjects": involve_subjects}},
                                 multi=True)
         # 更新成绩进排行榜集合
         update_business_rank_score()
+        # 分配题目所有权限
+        # 完成第一模块， 分配组队题目权限
+        manage_exercises_permission()
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")
@@ -203,8 +228,11 @@ def get_business_info():
     """
     获取业务内容信息
     """
-    username = session.get("username")
-    company = mongo.db.company.find_one(dict(student_no="{}".format(username)),
+    # username = session.get("username")
+    team_no = session.get("team_no")
+    # company = mongo.db.company.find_one(dict(student_no="{}".format(username)),
+    #                                     dict(businesses=1, schedule_confirm=1, _id=0))
+    company = mongo.db.company.find_one(dict(team_no="{}".format(team_no)),
                                         dict(businesses=1, schedule_confirm=1, _id=0))
     if company:
         schedule_confirm = company.get("schedule_confirm")
@@ -217,14 +245,17 @@ def get_business_info():
 
 
 @accoj_bp.route('/create_business', methods=['POST'])
+@is_leader
 @course_time_not_end_required(1)
 def create_business():
     """
     生成业务
     """
     result, message = False, "公司未创立！"
-    username = session.get("username")
-    company = mongo.db.company.find_one({"student_no": "{}".format(username)})
+    # username = session.get("username")
+    team_no = session.get("team_no")
+    # company = mongo.db.company.find_one({"student_no": "{}".format(username)})
+    company = mongo.db.company.find_one({"team_no": "{}".format(team_no)})
     if not company:
         return jsonify(result=result, message=message)
 
@@ -429,7 +460,9 @@ def delete_ledger_info():
     subject = json_data.get("subject")
     ledger_period = json_data.get("ledger_period")
     if subject:
-        company = mongo.db.company.find_one({"student_no": session.get("username")},
+        # company = mongo.db.company.find_one({"student_no": session.get("username")},
+        #                                     {"involve_subjects": 1, "schedule_confirm": 1, "_id": 0})
+        company = mongo.db.company.find_one({"team_no": session.get("team_no")},
                                             {"involve_subjects": 1, "schedule_confirm": 1, "_id": 0})
         schedule_confirm = company.get("schedule_confirm")
         involve_subjects = company.get("involve_subjects")
@@ -450,10 +483,14 @@ def delete_ledger_info():
             pull_key1 = "schedule_confirm.ledger{}_confirm.ledger_confirm".format(ledger_period)
             pull_key2 = "schedule_saved.ledger{}_saved.ledger_saved".format(ledger_period)
 
-            mongo.db.company.update({"student_no": session.get("username")},
+            # mongo.db.company.update({"student_no": session.get("username")},
+            #                         {"$unset": {unset_key: True},
+            #                          "$pull" : {pull_key1: subject,
+            #                                     pull_key2: subject}})
+            mongo.db.company.update({"team_no": session.get("team_no")},
                                     {"$unset": {unset_key: True},
-                                     "$pull" : {pull_key1: subject,
-                                                pull_key2: subject}})
+                                     "$pull": {pull_key1: subject,
+                                               pull_key2: subject}})
             return jsonify(result=True)
         else:
             return jsonify(result=False, message="科目错误！")
@@ -544,7 +581,7 @@ def get_acc_document_info():
 
 
 @accoj_bp.route('/download_acc_document_info', methods=['POST'])
-@course_time_not_end_required(6)
+# @course_time_not_end_required(6)
 def download_acc_document_info():
     """
     下载会计凭证信息
@@ -554,10 +591,14 @@ def download_acc_document_info():
     business_no_tmp = int(business_no) - 1
     if business_no_tmp > 19 or business_no_tmp < 0:
         return jsonify(result=False, message="题号不存在")
-    document_no = session["username"] + str(business_no_tmp)
+    # document_no = session["username"] + str(business_no_tmp)
+    document_no = session["team_no"] + str(business_no_tmp)
     file_cp = mongo.db.file.find_one({"document_no": "{}".format(document_no)}, dict(_id=0))
+    content = file_cp.get("content")
+    if content == "[]":
+        return jsonify(result=False, message="文件内容为空！")
     if file_cp:
-        file = dict(filename=file_cp.get("filename"), content=file_cp.get("content"))
+        file = dict(filename=file_cp.get("filename"), content=content)
         return jsonify(result=True, file=file)
     else:
         return jsonify(result=False, message="文件不存在！")
@@ -928,7 +969,9 @@ def get_business_list():
     """
     获取业务信息列表
     """
-    company = mongo.db.company.find_one({"student_no": session.get("username")},
+    # company = mongo.db.company.find_one({"student_no": session.get("username")},
+    #                                     {"businesses": 1, "involve_subjects": 1, "_id": 0})
+    company = mongo.db.company.find_one({"team_no": session.get("team_no")},
                                         {"businesses": 1, "involve_subjects": 1, "_id": 0})
     businesses = company.get("businesses")
     involve_subjects = company.get("involve_subjects")

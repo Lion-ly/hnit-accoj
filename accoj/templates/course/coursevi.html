@@ -53,7 +53,7 @@
                 </div>
                 <div class="acc-container-answer">
                     <div>
-                        <p class="acc-title">1、上传原始凭证（上传图片或文档）</p>
+                        <p class="acc-title">1、上传原始凭证（上传图片）</p>
                         <!--文件上传-->
                         <form>
                             <div class="form-group">
@@ -62,13 +62,31 @@
                                 <label for="uploadFiles">
                                     <span class="glyphicon glyphicon-upload"></span> 上传文件
                                 </label>
-                                <input style="display: inline" type="file" id="uploadFiles" accept=".zip,.rar" data-get-file>
-                                <p class="help-block">支持zip和rar格式，小于5M, 只支持上传一个附件，重复上传将会被覆盖。</p>
+                                <input style="display: inline" type="file" id="uploadFiles" accept=".jpg , .png"
+                                       multiple="multiple" data-get-file>
+                                <p class="help-block">支持jpg和png格式, 只支持上传一个附件，重复上传将会被覆盖。</p>
+
+
+                                <!-- Button trigger modal -->
+                                <button id="preview" type="button" onclick="previewpic()" data-toggle="modal">
+                                    图片预览
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog " style="width: 80% !important;">
+                                        <img id="imga" src="" alt="" width="100%">
+                                    </div>
+                                </div>
+
+
                                 <!--文件下载-->
                                 <button type="button" id="vi_downloadFile_button" data-download-file
                                         style="display: none">下载附件
                                 </button>&nbsp;&nbsp;
                                 <span id="vi_downloadSpan"></span>
+                                <div id="download_message"></div>
                                 {% if role == "教师" %}
                                     <div class="input-group col-lg-2">
                                         <input name="score" type="text" class="form-control" placeholder="满分3">
