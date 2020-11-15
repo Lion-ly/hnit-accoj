@@ -457,19 +457,20 @@ function vii2PaddingData(data, isFromButton) {
             $thisInputs.each(function (t_index, item) {
                 let $item = $(item),
                     value = info[index][keys[inputIndex]],
-                    value_cp = "";
+                    value_cp = t_info_cp ? t_info_cp[keys[inputIndex]] : "";
+                value = value ? value : 0;
                 if (subject === "sum" && t_index === 0) {
                     $item.val(value);
-                    if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex++];
-                        if (value_cp != value) error_pos.push($item);
-                    }
+                    if (value_cp != value) error_pos.push($item);
+                    //if (value_cp == 0 && !value) error_pos.pop();
+                    inputIndex++;
                 } else if (t_index !== 0) {
                     $item.val(value);
                     if (t_info_cp) {
-                        value_cp = t_info_cp[inputIndex++];
                         if (value_cp != value) error_pos.push($item);
+                        //if (value_cp == 0 && !value) error_pos.pop();
                     } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
+                    inputIndex++;
                 }
             });
             index++;
