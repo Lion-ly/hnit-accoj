@@ -185,14 +185,17 @@ function v2PaddingData(data, isFromButton) {
                 let $item = $(item),
                     value = info[index][keys[inputIndex]],
                     value_cp = t_info_cp ? t_info_cp[keys[inputIndex]] : "";
+                value = value ? value : 0;
                 if (subject === "sum" && t_index === 0) {
                     $item.val(value);
                     if (value_cp != value) error_pos.push($item);
+                    //if (value_cp == 0 && !value) error_pos.pop();
                     inputIndex++;
                 } else if (t_index !== 0) {
                     $item.val(value);
                     if (t_info_cp) {
                         if (value_cp != value) error_pos.push($item);
+                        //if (value_cp == 0 && !value) error_pos.pop();
                     } else if (isFromButton === 1 && !t_info_cp) error_pos.push($item);
                     inputIndex++;
                 }
