@@ -236,8 +236,8 @@ function viPaddingData(data, isFromButton) {
                     push_err_pos(thisId, flag);
                 }
 
-                dr_money = dr_money ? dr_money * 1000/10 : dr_money;
-                cr_money = cr_money ? cr_money * 1000/10 : cr_money;
+                dr_money = dr_money ? dr_money * 1000 / 10 : dr_money;
+                cr_money = cr_money ? cr_money * 1000 / 10 : cr_money;
                 dr_money = dr_money ? parseInt(dr_money).toString() : dr_money;
                 cr_money = cr_money ? parseInt(cr_money).toString() : cr_money;
                 dr_money = dr_money ? prefix.substring(0, 10 - dr_money.length) + dr_money : dr_money;
@@ -289,9 +289,10 @@ function viPaddingData(data, isFromButton) {
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         index = nowBusinessNo - 1, t_contentLen = 0, answer_info = "", contents_cp = "";
     if (isFromButton) {
-        let nowScore = scores[index * 2],
-            nowTotalScore = scores[index * 2 + 1],
+        let nowScore = scores[index * 3],
+            nowTotalScore = scores[3*index+2],
             totalScore = scores[scores.length - 1];
+
         showScoreEm(nowScore, nowTotalScore, totalScore);
         if (isFromButton === 1) {
             answer_info = answer_infos[index];
