@@ -884,3 +884,79 @@ function bind_score(id, title, messageDivID, category) {
         click_fun(score);
     });
 }
+
+/**
+ * 输入替换
+ */
+function input_replace_on(ev) {
+    let sign = $(ev.target).parent().parent().attr("class");
+    $("." + sign).hide();
+    $("#" + sign).show();
+    $("#" + sign).children().children().focus();
+}
+
+function input_replace_blur(ev) {
+    let sign = $(ev.target).parent().parent().attr("id");
+    $("#" + sign).hide();
+    $("." + sign).show();
+    let num = ev.target.value.split('.');
+    let i;
+    let positive = num[0];
+    let decimal = num[1];
+    //输入数字填充
+    {
+        let n = 7;
+        //清空
+        $("." + sign).find("input").val("");
+        //填充正数
+        for (i = positive.length - 1; i >= 0; i--) {
+
+            $("." + sign).find("input").eq(n).val(positive[i]);
+            n--;
+        }
+
+
+    }
+    {
+
+        let n = 8;
+        if (decimal) {
+            for (i = 0; i < 2; i++) {
+                if (decimal[i]) {
+                    $("." + sign).find("input").eq(n).val(decimal[i]);
+                } else {
+                    $("." + sign).find("input").eq(n).val(0);
+                }
+                n++;
+            }
+        } else {
+            if (ev.target.value.length != 0) {
+                $("." + sign).find("input").eq(8).val(0);
+                $("." + sign).find("input").eq(9).val(0);
+            }
+
+        }
+
+
+    }
+}
+
+/**
+ * 限制输入
+ * value=value.replace(/[^\-?\d.]/g,'')
+ */
+var limit = 0;
+
+function limit_input(ev) {
+    let num = ev.value.split('.');
+    let positive = num[0];
+    let decimal = num[1];
+    //限制数字输入
+    ev.value = ev.value.replace(/[^\-?\d.]/g, '');
+    //限制位数输入
+    if (num.length > 1) {
+        if (decimal.length > 2) ev.value = ev.value.slice(0, positive.length + 3);
+    } else {
+        if (ev.value.length > 8) ev.value = ev.value.slice(0, 8);
+    }
+}

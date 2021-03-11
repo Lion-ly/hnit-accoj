@@ -1,6 +1,6 @@
 $(document).ready(function () {
     getStudentInfo();
-    $("#correct_homework").click(correct_homework);
+    $("#correct_homework").click(correct_homework_input);
     $("#export_grades").click(export_grade);
 });
 
@@ -15,7 +15,7 @@ function getStudentInfo() {
             }
         }
     });
-    $('#data-table').DataTable({
+    let table = $('#data-table').DataTable({
         ajax: {url: '/api/get_student_info_correct'},
         order: [[4, 'desc']],
         "columns": [
@@ -37,15 +37,25 @@ function getStudentInfo() {
             {"data": "correct_schedule"}
         ]
     });
+    $('#data-table tbody').on('click', 'tr', function () {
+
+        correct_homework(table.row(this).data().student_no);
+    });
 }
 
-function correct_homework() {
+
+function correct_homework_input() {
+    correct_homework($("#input_sdudent_no").val());
+}
+
+
+function correct_homework(sid) {
     function successFun(data) {
         window.location.replace('/courseix');
     }
 
     let data = {api: 'correct_homework'};
-    data.student_no = $("#input_sdudent_no").val();
+    data.student_no = sid
     get_data(data, successFun, '/api/teacher_api', 'messageInfoBox');
 }
 

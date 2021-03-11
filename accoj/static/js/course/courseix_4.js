@@ -145,8 +145,7 @@ function Ix4PaddingData(data, isFromButton) {
         removeAllError();
         let nowTotalScore = 20,
             totalScore = 100;
-        score = scores["student_score"];
-        showScoreEm(score, nowTotalScore, score, 1, 1);
+        showScoreEm(scores, nowTotalScore, totalScore);
         if (isFromButton === 2) ix4ResetInfo();
     }
     padding();

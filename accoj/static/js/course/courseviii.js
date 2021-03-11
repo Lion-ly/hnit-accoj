@@ -17,6 +17,7 @@ $(document).ready(function () {
         viiiBind();
         get_new_balance_sheet_info(true);
         get_profit_statement_info(true);
+        get_company_info();
     }
 
     init();
@@ -65,6 +66,26 @@ function get_new_balance_sheet_info(isFromSubmit = false) {
         successFunc = map_new_balance_sheet_info,
         messageDivID = "course_viii1_message";
     get_info(data, url, successFunc, messageDivID);
+
+}
+
+/**
+ * 从后端获取获取公司信息
+ */
+function get_company_info() {
+    let data = {},
+        url = "/get_company_info",
+        successFunc = paddingCompany,
+        messageDivID = "course_i1_message";
+    get_info(data, url, successFunc, messageDivID);
+}
+
+//填充公司名称
+function paddingCompany(data) {
+
+    let company_info = data["company_info"];
+    console.log(company_info.com_name);
+    $("#com_name_1,#com_name_2").html("编制单位：" + company_info.com_name);
 
 }
 

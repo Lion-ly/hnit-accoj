@@ -1,14 +1,15 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
-<link href="http://cdn.accoj.top/static/accoj-1.0.0/coursevi.css" rel="stylesheet">
-<script src="{{ url_for('static', filename='js/course/coursevi.js') }}" charset="UTF-8"></script>
-<!--第六次课程-->
-<div class="courseBody">
-    <!--习题主体-->
-    <div class="container">
-        <div class="panel panel-default">
-            <!--作业要求-->
-            <div class="panel-heading">
+    <!-- <link href="http://cdn.accoj.top/static/accoj-1.0.0/coursevi.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='css/course/coursevi.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/course/coursevi.js') }}" charset="UTF-8"></script>
+    <!--第六次课程-->
+    <div class="courseBody">
+        <!--习题主体-->
+        <div class="container">
+            <div class="panel panel-default">
+                <!--作业要求-->
+                <div class="panel-heading">
 				<span>
                     1、理解会计凭证的分类。
                     <br/>
@@ -59,13 +60,46 @@
                             <div class="form-group">
 
                                 <br>
-                                <label for="uploadFiles">
-                                    <span class="glyphicon glyphicon-upload"></span> 上传文件
-                                </label>
-                                <input style="display: inline" type="file" id="uploadFiles" accept=".jpg , .png"
-                                       multiple="multiple" data-get-file>
+                                <button type="button" data-toggle="modal" data-target="#uploader">
+                                    上传图片
+                                </button>
+                                <div class="modal fade" id="uploader" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">图片上传</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ...
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    关闭
+                                                </button>
+                                                <button type="button" class="btn btn-primary">选择文件</button>
+
+                                                <!-- <label for="uploadFiles">
+                                           <span class="glyphicon glyphicon-upload"></span> 上传文件
+
+                                       </label> -->
+
+                                                <!-- <input class="btn btn-primary" style="display: inline" type="file" id="uploadFiles" accept=".jpg , .png" multiple="multiple" data-get-file> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <p class="help-block">支持jpg和png格式, 只支持上传一个附件，重复上传将会被覆盖。</p>
 
+                                <!-- 文件名 -->
+                                <!-- <div>
+                                    <span class="border-left"></span>
+                                </div> -->
 
                                 <!-- Button trigger modal -->
                                 <button id="preview" type="button" onclick="previewpic()" data-toggle="modal">
@@ -155,7 +189,8 @@
                                     <th>分</th>
                                     <th class="acc-unborder">
                                         <div class="acc-plus">
-                                            <a type="button" class="btn" data-vi-addRow data-toggle="tooltip" data-placement="left" title="增加行">
+                                            <a type="button" class="btn" data-vi-addRow data-toggle="tooltip"
+                                               data-placement="left" title="增加行">
                                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                             </a>
                                         </div>
@@ -167,50 +202,102 @@
                                     </td>
                                     <td><label><input name="detail_account" data-illegal-char></label>
                                     </td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
+
+                                    <td colspan='10' id="borrow1" style="display: none;"><label><input
+                                            onblur="input_replace_blur(event)" oninput="limit_input(this)"></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+
+                                    <td colspan='10' id="lend1" style="display: none;"><label><input
+                                            onblur="input_replace_blur(event)" oninput="limit_input(this)"></label></td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
+                                    </td>
+
                                 </tr>
                                 <!-- 合计 -->
                                 <tr id="vi_rowLast">
                                     <th colspan="3" class="acc-unedit">合计</th>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
-                                    <td><label><input data-limit-number></label></td>
+                                    <td colspan='10' id="borrow_sum" style="display: none;"><label><input
+                                            onblur="input_replace_blur(event)" oninput="limit_input(this)"></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+
+                                    <td colspan='10' id="borrow_lend" style="display: none;"><label><input
+                                            onblur="input_replace_blur(event)" oninput="limit_input(this)"></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
+                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                            data-limit-number></label></td>
                                 </tr>
                                 <tr class="acc-unedit">
                                     <th colspan="23" style="text-align: left">制表人：{{ username }}</th>

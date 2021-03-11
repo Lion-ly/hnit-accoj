@@ -49,15 +49,12 @@ function get_ixFirst_info(isFromSubmit = false) {
 
     // 重置信息
     ix1ResetInfo();
-    /**
-     if (!isFromSubmit) {
+    if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!ixFirst_saved)
             //  若未保存，则不向后台请求数据
             return;
     }
-     **/
-
     // 若ixFirst_infos不为空且已经确认提交过，则不再发送数据请求
     if (ixFirst_infos && ixFirst_confirmed) {
         map_ixFirst_info();
@@ -125,14 +122,12 @@ function submit_ixSecond_info(submit_type) {
 function get_ixSecond_info(isFromSubmit = false) {
     // 重置信息
     ix2ResetInfo();
-    /**
-     if (!isFromSubmit) {
+    if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!ixSecond_saved)
             //  若未保存，则不向后台请求数据
             return;
     }
-     **/
     // 若ixSecond_infos不为空且已经确认提交过，则不再发送数据请求
     if (ixSecond_infos && ixSecond_confirmed) {
         map_ixSecond_info();
@@ -327,12 +322,6 @@ function ix2ResetInfo() {
  * @param obj
  */
 function eventChangeIx(obj) {
-    function dealResult(name) {
-        let v = data.hasOwnProperty(name) ? data[name] : 0;
-        v = v ? v : 0;
-        return parseFloat(v);
-    }
-
     let name = $(obj).attr("name"),
         isEnd = name.endsWith("End"),
         value = $(obj).val();
@@ -362,35 +351,33 @@ function eventChangeIx(obj) {
     let inputName = isEnd ? "营业利润End" : "营业利润Last",
         data = isEnd ? periodEndData : periodLastData,
         result = 0;
-    result += dealResult("营业收入");
-    result -= dealResult("营业成本");
-    result -= dealResult("税金及附加");
-    result -= dealResult("销售费用");
-    result -= dealResult("管理费用");
-    result -= dealResult("财务费用");
-    result -= dealResult("资产减值损失");
-    result += dealResult("公允价值变动收益");
-    result += dealResult("投资收益");
+    result += data.hasOwnProperty("营业收入") ? data["营业收入"] : result;
+    result -= data.hasOwnProperty("营业成本") ? data["营业成本"] : result;
+    result -= data.hasOwnProperty("税金及附加") ? data["税金及附加"] : result;
+    result -= data.hasOwnProperty("销售费用") ? data["销售费用"] : result;
+    result -= data.hasOwnProperty("管理费用") ? data["管理费用"] : result;
+    result -= data.hasOwnProperty("财务费用") ? data["财务费用"] : result;
+    result -= data.hasOwnProperty("资产减值损失") ? data["资产减值损失"] : result;
+    result += data.hasOwnProperty("公允价值变动收益") ? data["公允价值变动收益"] : result;
+    result += data.hasOwnProperty("投资收益") ? data["投资收益"] : result;
     if (isEnd) {
         periodEndData["营业利润"] = result;
     } else {
         periodLastData["营业利润"] = result;
-        result = result.toFixed(2) + "%";
     }
     $("#ixSecond").find("input[name=" + inputName + "]").val(result);
 
-    //润总额 计算利
+    // 计算利润总额
     inputName = isEnd ? "利润总额End" : "利润总额Last";
     data = isEnd ? periodEndData : periodLastData;
     result = 0;
-    result += dealResult("营业利润")
-    result += dealResult("营业外收入")
-    result -= dealResult("营业外支出")
+    result += data.hasOwnProperty("营业利润") ? data["营业利润"] : result;
+    result += data.hasOwnProperty("营业外收入") ? data["营业外收入"] : result;
+    result -= data.hasOwnProperty("营业外支出") ? data["营业外支出"] : result;
     if (isEnd) {
         periodEndData["利润总额"] = result;
     } else {
         periodLastData["利润总额"] = result;
-        result = result.toFixed(2) + "%";
     }
     $("#ixSecond").find("input[name=" + inputName + "]").val(result);
 
@@ -398,8 +385,7 @@ function eventChangeIx(obj) {
     inputName = isEnd ? "净利润End" : "净利润Last";
     data = isEnd ? periodEndData : periodLastData;
     result = 0;
-    result += dealResult("利润总额")
-    result -= dealResult("所得税费用")
-    result = isEnd ? result : result.toFixed(2) + "%";
+    result += data.hasOwnProperty("利润总额") ? data["利润总额"] : result;
+    result -= data.hasOwnProperty("所得税费用") ? data["所得税费用"] : result;
     $("#ixSecond").find("input[name=" + inputName + "]").val(result);
 }

@@ -1,7 +1,7 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
     <link href="http://cdn.accoj.top/static/accoj-1.0.0/courseviii.css" rel="stylesheet">
-    <script src="{{ url_for('static', filename="js/course/courseviii.js") }}" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/course/courseviii.js') }}" charset="UTF-8"></script>
     <!--第八次课程-->
     <div class="courseBody">
         <!-- 习题主体 -->
@@ -12,16 +12,16 @@
                 <span>1、掌握资产负债表和利润表的填制方法。
                 </span>
                 </div>
-            <div class="panel-body">
-                <!-- 作业标签 -->
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active">
-                        <a href="#viiiFirst" aria-controls="viiiFirst" role="tab" data-toggle="tab">资产负债表</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#viiiSecond" aria-controls="viiiSecond" role="tab" data-toggle="tab">利润表</a>
-                    </li>
-                </ul>
+                <div class="panel-body">
+                    <!-- 作业标签 -->
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active">
+                            <a href="#viiiFirst" aria-controls="viiiFirst" role="tab" data-toggle="tab">资产负债表</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#viiiSecond" aria-controls="viiiSecond" role="tab" data-toggle="tab">利润表</a>
+                        </li>
+                    </ul>
 
                 <div class="tab-content">
                     <!-- 第一标签 -->
@@ -39,21 +39,21 @@
                             <em data-now-score-1></em>
                         </div>
                         <div class="table-responsive">
-                        <table class="table table-bordered acc-container-tableformat acc-table-sm">
-                            <tbody>
-                            <tr class="acc-unedit">
-                                <th colspan="2">
-                                    <span style="float: left;">编制单位：{{ username }}</span>
-                                </th>
-                                <th colspan="2">
-                                    <span>2020年2月28日</span>
-                                </th>
-                                <th colspan="2">
-                                    <span style="float: right;">单位：元</span>
-                                </th>
-                            </tr>
-                            <tr class="acc-unedit acc-table-format-8-1">
-                                <th>资产</th>
+                            <table class="table table-bordered acc-container-tableformat acc-table-sm">
+                                <tbody>
+                                <tr class="acc-unedit">
+                                    <th colspan="2">
+                                        <span id="com_name_1" style="float: left;">编制单位：{{ username }}</span>
+                                    </th>
+                                    <th colspan="2">
+                                        <span>2020年2月28日</span>
+                                    </th>
+                                    <th colspan="2">
+                                        <span style="float: right;">单位：元</span>
+                                    </th>
+                                </tr>
+                                <tr class="acc-unedit acc-table-format-8-1">
+                                    <th>资产</th>
                                 <th>期末余额</th>
                                 <th>上期余额</th>
                                 <th>负债及所有者权益</th>
@@ -334,21 +334,21 @@
                             <em data-now-score-2></em>
                         </div>
                         <div class="table-responsive">
-                        <table class="table table-bordered acc-container-tableformat acc-table-sm">
-                            <tbody>
-                            <tr class="acc-unedit">
-                                <th colspan="3">
-                                    <span style="float: left;">编制单位：{{ username }}</span>
-                                    <span>2020年2月</span>
-                                    <span style="float: right;">单位：元</span>
-                                </th>
-                            </tr>
-                            <tr class="acc-unedit acc-table-format-8-2">
-                                <th>项目</th>
-                                <th>本期金额</th>
-                                <th>上期金额</th>
-                            </tr>
-                            <tr>
+                            <table class="table table-bordered acc-container-tableformat acc-table-sm">
+                                <tbody>
+                                <tr class="acc-unedit">
+                                    <th colspan="3">
+                                        <span id="com_name_2" style="float: left;">编制单位：{{ username }}</span>
+                                        <span>2020年2月</span>
+                                        <span style="float: right;">单位：元</span>
+                                    </th>
+                                </tr>
+                                <tr class="acc-unedit acc-table-format-8-2">
+                                    <th>项目</th>
+                                    <th>本期金额</th>
+                                    <th>上期金额</th>
+                                </tr>
+                                <tr>
                                 <th class="acc-unedit" style="text-align: left">一、营业收入</th>
                                 <td><label><input name="营业收入End"></label></td>
                                 <td><label><input name="营业收入Last"></label></td>

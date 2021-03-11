@@ -117,9 +117,9 @@ function coursexGetInput() {
 function CoursexPaddingData(data, isFromButton) {
     function padding() {
         let divID = "coursexData",
-            $inputs = $("#" + divID).find("input");
+            inputs = $("#" + divID).find("input");
 
-        $.each($inputs, function (index, item) {
+        $.each(inputs, function (index, item) {
             if (index !== $inputs.length - 1) {
                 let name = $(item).attr("name"),
                     value = data[name] ? data[name] : "";
@@ -137,8 +137,7 @@ function CoursexPaddingData(data, isFromButton) {
         removeAllError();
         let nowTotalScore = 100,
             totalScore = 100;
-        score = scores["student_score"];
-        showScoreEm(score, nowTotalScore, score, 1, 1);
+        showScoreEm(scores, nowTotalScore, totalScore, 1, 1);
         if (isFromButton === 2) xResetInfo();
     }
     padding();
