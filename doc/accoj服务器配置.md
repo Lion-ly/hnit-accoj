@@ -61,6 +61,14 @@ db.createUser(
     }
 );
 
+db.createUser(
+    {
+        user:"accojOwner",
+        pwd:"Love199805#",
+        roles:["dbOwner"]
+    }
+);
+
 # /var/lib/mongo 数据目录
 # /var/log/mongodb 日志目录
 # 更改配置文件 mongodb配置文件位置 /etc/mongo.conf

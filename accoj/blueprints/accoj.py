@@ -188,7 +188,11 @@ def submit_business_info():
     if not company:
         return jsonify(result=False, message="公司未创立")
     schedule_confirm = company.get("schedule_confirm")
+    businesses = company.get("businesses")
     business_confirm = schedule_confirm.get("business_confirm")
+
+    if len(businesses) == 0:
+        return jsonify(result=False, message="未生成业务！")
 
     if not business_confirm:
         cal_answer()  # 计算答案
