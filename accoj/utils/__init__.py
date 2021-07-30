@@ -55,7 +55,7 @@ def login_required_student(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get("role") == "student":
+        if session.get("role") in ["student", "team"]:
             return func(*args, **kwargs)
         else:
             return redirect(url_for('index.index'))
@@ -993,48 +993,53 @@ def manage_team_infos(class_name: str, teacher: str, teams: dict = None):
                    members:[["",""],["",""],["",""],["",""]]}
     计算得：   team_no,
              team_name:
-    :param class_name:
+    :param class_name: "湖南工学院-软件1801“
     :param teacher:
 
     创建团队时，同步插入团队成绩：
     return 团队信息
     """
 
-    def update_user_team_infos(class_name: str):
-        mongo.db.user.update_Many({"class_name": class_name}, {"$set": {"team_no": ""}})
+    def update_user_team_infos(student_class: str):
+        """ 重置学员team_no 信息 """
+        mongo.db.user.update_Many({"student_class": student_class}, {"$set": {"team_no": ""}})
 
-    def insert_rank_team_infos(team_no, team_name, score_infos):
-        infos = {"team_no": team_no, "team_class": class_name, "team_name": team_name}
+    def insert_rank_team_infos():
+        infos = {"team_no": team_no, "team_class": team_class, "team_name": team_name, "members": members}
         infos.update(score_infos)
         mongo.db.rank_team.insert(infos)
 
+    class_name = class_name.split('-')
     score_keys = ['sum_score', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
     score = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     score_infos = dict(zip(score_keys, score))
 
-    update_user_team_infos(class_name=class_name)
-    mongo.db.teams.dalete_Many({"class_name": class_name, "school_name": session["school_name"]})
-    mongo.db.rank_team.delete_Many({"team_class": class_name})
-    school_name = session["school_name"]
+    update_user_team_infos(class_name[1])
+    mongo.db.team.dalete_Many({"team_class": class_name[1], "team_school": class_name[0]})
+    mongo.db.rank_team.delete_Many({"team_class": class_name[1]})
+    team_school = class_name[0]
+    team_class = class_name[1]
     for team in teams:
         leader_name = team.get("leader_name")
         leader_no = team.get("leader_no")
         members = team.get("members")
-        team_no = 1
+        team_no = leader_no[:-2]
+        classes_teams = []
         for member in members:
-            team_no *= int(member[1][-3:])
-        team_no = str(team_no)
+            team_no += member[1][-2:]
+        classes_teams.append(team_no)
         team_name = team_no
-        mongo.db.teams.insert(dict(leader_name=leader_name,
-                                   leader_no=leader_no,
-                                   members=members,
-                                   team_no=team_no,
-                                   team_name=team_name,
-                                   class_name=class_name,
-                                   school_name=school_name,
-                                   teacher=teacher))
-        insert_rank_team_infos(team_no=team_no, team_name=team_name, score_infos=score_infos)
-    data = mongo.db.teams.find()
+        mongo.db.team.insert(dict(team_no=team_no,
+                                  leader_name=leader_name,
+                                  leader_no=leader_no,
+                                  members=members,
+                                  team_name=team_name,
+                                  team_class=team_class,
+                                  team_school=team_school,
+                                  teacher=teacher))
+        insert_rank_team_infos()
+    # mongo.db.classes.update_One({})
+    data = mongo.db.team.find({"team_class": team_class, "team_school": team_school})
     return data
 
 
@@ -1046,7 +1051,7 @@ def availability_of_the_team(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get("team_no") is None:
+        if session.get("team_no") == "" or session.get("team_no") is None:
             return jsonify(result=False, message="未组队，无法进入！")
         return func(*args, **kwargs)
 
@@ -1061,8 +1066,8 @@ def is_leader(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        leader_no = mongo.db.teams.find({"team_no": "{}".format(session.get("team_no"))},
-                                        dict(_id=0, leader_no=1))
+        leader_no = mongo.db.team.find({"team_no": "{}".format(session.get("team_no"))},
+                                       dict(_id=0, leader_no=1))
         if session.get("username") != leader_no:
             return jsonify(result=False, message="leader 才能提交！")
         return func(*args, **kwargs)
@@ -1102,7 +1107,7 @@ def manage_exercises_permission(team_no: str):
     #                   "acc_balance_sheet_permission", "new_balance_sheet_permission", "profit_statement_permission",
     #                   "trend_analysis_permission", "common_ratio_analysis_permission", "ratio_analysis_permission",
     #                   "dupont_analysis_permission"]
-    team_info = mongo.db.teams.find(dict(team_no=team_no))
+    team_info = mongo.db.team.find(dict(team_no=team_no))
     members = team_info["members"]
     member_length = len(members)
     permission = {}
@@ -1124,29 +1129,30 @@ def manage_exercises_permission(team_no: str):
                           "ratio_analysis_permission": 1,
                           "dupont_analysis_permission": 1}
 
-    def get_schedule_dict(schedule_type, i):
+    def get_schedule_dict(schedule_type, num):
         def format_key(t_key):
             return "{}_{}".format(t_key, schedule_type)
 
-        return {format_key("key_element"): array_all[2][i],
-                format_key("subject"): array_all[3][i],
-                format_key("entry"): array_all[4][i],
-                format_key("ledger"): {format_key("ledger1"): array_all[5][i][0],
-                                       format_key("ledger2"): array_all[5][i][1]},
-                format_key("balance_sheet"): array_all[5][i][2],
-                format_key("acc_document"): array_all[6][i],
-                format_key("subsidiary_account"): array_all[7][i][0],
-                format_key("acc_balance_sheet"): array_all[7][i][1],
-                format_key("new_balance_sheet"): array_all[8][i][0],
-                format_key("profit_statement"): array_all[8][i][1],
-                format_key("trend_analysis"): {"first": array_all[9][i][0], "second": array_all[9][i][1]},
-                format_key("common_ratio_analysis"): {"first": array_all[9][i][2], "second": array_all[9][i][3]},
+        return {format_key("key_element"): array_all[2][num],
+                format_key("subject"): array_all[3][num],
+                format_key("entry"): array_all[4][num],
+                format_key("ledger"): {format_key("ledger1"): array_all[5][num][0],
+                                       format_key("ledger2"): array_all[5][num][1]},
+                format_key("balance_sheet"): array_all[5][num][2],
+                format_key("acc_document"): array_all[6][num],
+                format_key("subsidiary_account"): array_all[7][num][0],
+                format_key("acc_balance_sheet"): array_all[7][num][1],
+                format_key("new_balance_sheet"): array_all[8][num][0],
+                format_key("profit_statement"): array_all[8][num][1],
+                format_key("trend_analysis"): {"first": array_all[9][num][0], "second": array_all[9][num][1]},
+                format_key("common_ratio_analysis"): {"first": array_all[9][num][2], "second": array_all[9][num][3]},
                 format_key("ratio_analysis"): 1,
-                format_key("dupont_analysis"): 1, }
+                format_key("dupont_analysis"): 1}
 
     def first_allocation():
         """
         II、III、IV、VI
+        list[member][权限，权限，权限，······]
         """
         arr = []
         j = 0
@@ -1159,63 +1165,89 @@ def manage_exercises_permission(team_no: str):
     def second_allocation():
         """
         V
+        list[member][?] = 1  有权限
+        list[member][?] = 0  没有权限
         """
         arr = []
         j = 0
         a = []
-        for i in range(member_length):
-            a.append(i)
-            for k in range(3):
-                arr[i][k] = 0
-        random.shuffle(a)
-        for i in a:
-            arr[i][j] = 1
-            if j < 2:
+        title = list(range(3))
+        title_length = len(title)
+        for num in range(member_length):
+            a.append(num)
+            for k in title:
+                arr[num][k] = 0
+        if member_length >= title_length:
+            random.shuffle(a)
+            for num in a:
+                arr[num][j % title_length] = 1
+                j += 1
+        else:
+            random.shuffle(title)
+            for k in title:
+                arr[j % member_length][k] = 1
                 j += 1
         return arr
 
-    def third_permission():
+    def third_allocation():
         """
         VII、VIII
         """
         arr = []
         j = 0
         a = []
-        for i in range(member_length):
-            a.append(i)
-            for k in range(2):
-                arr[i][k] = 0
-        random.shuffle(a)
-        for i in a:
-            arr[i][j] = 1
-            if j == (member_length - 1) / 2:
+        title = list(range(2))
+        title_length = len(title)
+        for num in range(member_length):
+            a.append(num)
+            for k in title:
+                arr[num][k] = 0
+        if member_length >= title_length:
+            random.shuffle(a)
+            for num in a:
+                arr[num][j % title_length] = 1
+                j += 1
+        else:
+            random.shuffle(title)
+            for k in title:
+                arr[j % member_length][k] = 1
                 j += 1
         return arr
 
-    def fourth_permission():
+    def fourth_allocation():
         """
         IX
         """
         arr = []
         j = 0
         a = []
-        for i in range(member_length):
-            a.append(i)
-            for k in range(4):
-                arr[i][k] = 0
-        random.shuffle(a)
-        for i in range(4):
-            arr[a[i]][i] = 1
+        title = list(range(4))
+        title_length = len(title)
+        for num in range(member_length):
+            a.append(num)
+            for k in title:
+                arr[num][k] = 0
+        if member_length >= title_length:
+            random.shuffle(a)
+            for num in a:
+                arr[num][j % title_length] = 1
+                j += 1
+        else:
+            random.shuffle(title)
+            for k in title:
+                arr[j % member_length][k] = 1
+                j += 1
         return arr
 
     array_all = [None, None]
     array_function = [first_allocation, first_allocation, first_allocation, second_allocation, first_allocation,
-                      third_permission, third_permission, fourth_permission]
+                      third_allocation, third_allocation, fourth_allocation]
     for i in array_function:
         array_all.append(i())
 
     for i in range(member_length):
         permission["{}_permission".format(members[i][1])] = get_schedule_dict("permission", i)
 
-    permission.update({"{}_permission".format(team_no): team_no_permission})
-    mongo.db.teams.update_Many({"team_no": team_no}, {"$set": permission})
+    # permission.update({"{}_permission".format(team_no): team_no_permission})
+    mongo.db.team.update_Many(
+        {"team_no": team_no}, {"$set": {"team_permission": team_no_permission, "student_permission": permission}})

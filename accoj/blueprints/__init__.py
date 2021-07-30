@@ -50,9 +50,7 @@ def _submit_infos1(infos: dict, submit_type: str, infos_name: str):
         result = False
         message = "提交类型错误"
     else:
-        # company = mongo.db.company.find_one({"student_no": session.get("username")},
-        #                                     dict(schedule_confirm=1))
-        company = mongo.db.company.find_one({"team_no": session.get("team_no")},
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
                                             dict(schedule_confirm=1))
         _id = company.get("_id")
         schedule_confirm = company.get("schedule_confirm")
@@ -90,9 +88,7 @@ def _submit_infos2(infos: dict, submit_type: str, infos_name: str, is_first: boo
         result = False
         message = "提交类型错误"
     else:
-        # company = mongo.db.company.find_one({"student_no": session.get("username")},
-        #                                     dict(schedule_confirm=1))
-        company = mongo.db.company.find_one({"team_no": session.get("team_no")},
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
                                             dict(schedule_confirm=1))
         _id = company.get("_id")
         schedule_confirm = company.get("schedule_confirm")
@@ -140,9 +136,7 @@ def _submit_infos3(infos, submit_type, infos_name, business_no):
         except ValueError:
             return False, "日期格式错误！"
 
-    # company = mongo.db.company.find_one({"student_no": session.get("username")},
-    #                                     dict(businesses=1, schedule_confirm=1))
-    company = mongo.db.company.find_one({"team_no": session.get("team_no")},
+    company = mongo.db.company.find_one({"student_no": session.get("username")},
                                         dict(businesses=1, schedule_confirm=1))
     _id = company.get("_id")
     schedule_confirm = company.get("schedule_confirm")
@@ -193,9 +187,7 @@ def _submit_infos4(infos, submit_type, infos_name, subject, ledger_period=False)
     if submit_type not in ["confirm", "save"]:
         return False, "提交类型错误！"
 
-    # company = mongo.db.company.find_one({"student_no": session.get("username")},
-    #                                     dict(businesses=1, schedule_confirm=1, involve_subjects=1))
-    company = mongo.db.company.find_one({"team_no": session.get("team_no")},
+    company = mongo.db.company.find_one({"student_no": session.get("username")},
                                         dict(businesses=1, schedule_confirm=1, involve_subjects=1))
     _id = company.get("_id")
     schedule_confirm = company.get("schedule_confirm")
@@ -260,17 +252,14 @@ def _get_infos(infos_name):
         nonlocal infos_name
         t_company = None
         t_company_cp = None
-        # username = session.get("username")
-        team_no = session.get("team_no")
+        username = session.get("username")
         if infos_name in {"key_element", "subject", "entry", "acc_document"}:
             filter_dict.update({"businesses": 1})
         if infos_name in {"ledger", "subsidiary_account"}:
             filter_dict.update({"involve_subjects": 1})
-        # companies = mongo.db.company.find({"student_no": {"$regex": r"^{}".format(username)}}, filter_dict)
-        companies = mongo.db.company.find({"team_no": {"$regex": r"^{}".format(team_no)}}, filter_dict)
+        companies = mongo.db.company.find({"student_no": {"$regex": r"^{}".format(username)}}, filter_dict)
         for company_t in companies:
-            # if company_t.get("student_no").endswith("_cp"):
-            if company_t.get("team_no").endswith("_cp"):
+            if company_t.get("student_no").endswith("_cp"):
                 t_company_cp = company_t
             else:
                 t_company = company_t
@@ -308,7 +297,7 @@ def get_data(type_num, infos_name, info_keys):
     scores = None
     confirm_flag = False
     infos, answer_infos, confirmed, saved, company, company_cp = _get_infos(infos_name=infos_name)
-    evaluation = company_cp.get("evaluation")
+    evaluation = company.get("evaluation")
     if type_num == 1:
         # 1.“二三四”以及“六的会计凭证部分”
         if len(confirmed) == MAX_BUSINESS_NO:

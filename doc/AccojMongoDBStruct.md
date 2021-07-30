@@ -124,7 +124,7 @@ db.accoj.question.insert({"questions_no": int， 			# 题库号
 
 用户成立公司的时候同时创建一个公司副本，保存正确答案,所属用户为"student_no_cp"
 
-```
+```redis
 db.accoj.company.insert({"student_no": student_no,			# 用户ID
 						 "com_name": string,	  			# 公司名称
 						 "com_address": string,	  			# 公司地址
@@ -357,3 +357,18 @@ db.accoj.company.insert({"student_no": student_no,			# 用户ID
 												 }
 						})
 ```
+
+## 10、学生申请重做集合
+
+```
+db.accoj.reform.insert({
+				"student_no": "18020440125",
+				"class_name": "湖南工学院-软件1801"，
+				"course_no": "1",
+				"tudent_name": "Lion",
+				"teacher": "yangying",
+				"reason": ".....",
+				"time": time
+})
+```
+

@@ -1,0 +1,125 @@
+{% extends 'teacher/teacher-base.html' %}
+{% block page_title %}小组管理{% endblock %}
+{% block page_title_li %}
+    <li><a href="#">班级管理</a></li>
+    <li class="active">小组管理</li>
+{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">小组管理</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="input-group mb-2 col-lg-4">
+                                <select class="custom-select" id="classSelect">
+
+                                </select>
+
+
+                            </div>
+                            <div class="col-lg-5">
+
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-outline-info">自动生成小组</button>
+                                <button id="addteam" type="button" class="btn btn-outline-info">新增小组</button>
+                            </div>
+
+                        </div>
+
+                        <br>
+                    </div>
+                    <ul id="team-box" class="list-group list-group-flush" style="min-height:600px;">
+                        <div id="empty" style="margin:auto 0px;">
+                            <h3 style="text-align: center;">当前班级未分配小组！</h3>
+                        </div>
+
+                    </ul>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <form class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">新增成员</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">姓名</th>
+                                            <th scope="col">学号</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="model-box">
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="sid" type="checkbox"
+                                                           value="18020440112&何汶强">
+                                                </div>
+                                            </th>
+                                            <td>何汶强</td>
+                                            <td>18020440112</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="sid" type="checkbox"
+                                                           value="18020440113&王兵">
+                                                </div>
+                                            </th>
+                                            <td>王兵</td>
+                                            <td>18020440113</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="sid" type="checkbox"
+                                                           value="18020440114&李勇">
+                                                </div>
+                                            </th>
+                                            <td>李勇</td>
+                                            <td>18020440114</td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button onclick="adds(this)" type="button" class="btn btn-primary">添加</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+
+                    <div id="show-tips-box"></div>
+                    <div class="text-center" style="margin-top: 2%;margin-bottom: 2%;">
+                        <button id="" class="btn btn-outline-info btn-group-vertical" type="button">保存设置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        td > i {
+            margin-right: 8px;
+            font-size: 20px !important;
+        }
+    </style>
+    <script type="application/javascript" src="/../../../static/js/teacher/team-manage.js"></script>
+{% endblock %}

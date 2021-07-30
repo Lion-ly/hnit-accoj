@@ -217,8 +217,9 @@ def teacher_api():
                 return jsonify(result=result, data=data, message=message)
             class_name = _data.get("class_name")
             teams = _data.get("team_infos")
-            team_infos = manage_team_infos(class_name=class_name, teams=teams, teacher=teacher)
-            result, data, message = True, team_infos, "保存成功！"
+            if class_name is not None:
+                team_infos = manage_team_infos(class_name=class_name, teams=teams, teacher=teacher)
+                result, data, message = True, team_infos, "保存成功！"
             data.update(dict(class_name=class_name))
             return jsonify(result, data, message)
 

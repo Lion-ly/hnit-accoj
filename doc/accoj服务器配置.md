@@ -198,6 +198,12 @@ chmod +x runCelery.sh
 chmod +x ./run.sh
 python3 -m pipenv run nohup ./runCelery.sh >> celery.log &
 python3 -m pipenv run nohup ./run.sh >> accoj.log &
+
+服务为两个服务，1. accoj 2.accoj-celery
+启动：supervisorctl reload
+重启：同上
+停止：supervisorctl stop all
+supervisor 官方文档链接：http://supervisord.org/running.html
 ```
 
 ## 12 备份与恢复
@@ -219,7 +225,8 @@ cp /var/lib/redis/dump.rdb /home/dump/accoj-2020-10-26-bk/accoj-redis-2020-10-26
 ```
 ## 13 安装ssh
 
-```
+```                                                         
 yum install -y openssl-devel
 systemctl start sshd
 ```
+

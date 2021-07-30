@@ -144,6 +144,7 @@ def evaluate_key_element(company, company_cp):
     :return:
     """
     scores = 0
+    total_scores = 0
     key_element_score = []
     username = company.get("student_no")
     key_element_infos = company.get("key_element_infos")
@@ -180,9 +181,11 @@ def evaluate_key_element(company, company_cp):
         score *= score_point / total_point
         score = round(score, 2)
         scores += score
+        total_scores += total_score
         key_element_score.extend([score, total_score])
 
-    scores = round(scores / 2, 2)
+    # scores = round(scores / 2, 2)
+    scores = round(scores / total_scores * 100, 2)
     key_element_score.append(scores)
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.key_element_score": key_element_score}}, multi=True)
@@ -198,6 +201,7 @@ def evaluate_subject(company, company_cp):
     :return:
     """
     scores = 0
+    total_scores = 0
     subject_score = []
     username = company.get("student_no")
     subject_infos = company.get("subject_infos")
@@ -229,9 +233,11 @@ def evaluate_subject(company, company_cp):
         score *= score_point / total_point
         score = round(score, 2)
         scores += score
+        total_scores += total_score
         subject_score.extend([score, total_score])
 
-    scores = round(scores / 2, 2)
+    # scores = round(scores / 2, 2)
+    scores = round(scores / total_scores * 100, 2)
     subject_score.append(scores)
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.subject_score": subject_score}}, multi=True)
@@ -247,6 +253,7 @@ def evaluate_entry(company, company_cp):
     :return:
     """
     scores = 0
+    total_scores = 0
     entry_score = []
     username = company.get("student_no")
     entry_infos = company.get("entry_infos")
@@ -282,9 +289,11 @@ def evaluate_entry(company, company_cp):
         score *= score_point / total_point
         score = round(score, 2)
         scores += score
+        total_scores += total_score
         entry_score.extend([score, total_score])
 
-    scores = round(scores / 2, 2)
+    # scores = round(scores / 2, 2)
+    scores = round(scores / total_scores * 100, 2)
     entry_score.append(scores)
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.entry_score": entry_score}}, multi=True)
@@ -400,6 +409,7 @@ def evaluate_acc_document(company, company_cp):
     :return:
     """
     scores = 0
+    total_scores = 0
     acc_document_score = []
     username = company.get("student_no")
     acc_document_infos = company.get("acc_document_infos")
@@ -444,9 +454,11 @@ def evaluate_acc_document(company, company_cp):
         score *= score_point / total_point
         score = round(score, 2)
         scores += score
+        total_scores += total_score
         acc_document_score.extend([score, teacher_score, total_score])
 
-    scores = round(scores / 2, 2)
+    # scores = round(scores / 2, 2)
+    scores = round(scores / total_scores * 100, 2)
     acc_document_score.append(scores)
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.acc_document_score": acc_document_score}}, multi=True)
