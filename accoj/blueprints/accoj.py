@@ -47,12 +47,7 @@ def get_company_info():
     """
     获取公司信息
     """
-    #         company = mongo.db.company.find_one(dict(student_no=session.get("username")),
-    #     #                                     dict(_id=0, com_name=1, com_address=1, com_business_addr=1,
-    #     #                                          com_legal_rep=1,
-    #     #                                          com_regist_cap=1, com_operate_period=1, com_business_scope=1,
-    #     #                                  com_shareholder=1))
-    company = mongo.db.company.find_one(dict(team_no=session.get("team_no")),
+    company = mongo.db.company.find_one(dict(student_no=session.get("username")),
                                         dict(_id=0, com_name=1, com_address=1, com_business_addr=1,
                                              com_legal_rep=1,
                                              com_regist_cap=1, com_operate_period=1, com_business_scope=1,
@@ -75,12 +70,12 @@ def submit_company_info():
         def format_key(t_key):
             return "{}_{}".format(t_key, schedule_type)
 
-        return {format_key("business")             : False,
-                format_key("key_element")          : [],
-                format_key("subject")              : [],
-                format_key("entry")                : [],
-                format_key("ledger")               : {format_key("ledger1"): [], format_key("ledger2"): []},
-                format_key("balance_sheet")        : False,
+        return {format_key("business"): False,
+                format_key("key_element"): [],
+                format_key("subject"): [],
+                format_key("entry"): [],
+                format_key("ledger"): {format_key("ledger1"): [], format_key("ledger2"): []},
+                format_key("balance_sheet"): False,
                 format_key("acc_document"): [],
                 format_key("subsidiary_account"): [],
                 format_key("acc_balance_sheet"): False,
@@ -91,8 +86,7 @@ def submit_company_info():
                 format_key("ratio_analysis"): False,
                 format_key("dupont_analysis"): False, }
 
-    # company = mongo.db.company.find_one({"student_no": session.get("username")})
-    company = mongo.db.company.find_one({"team_no": session.get("team_no")})
+    company = mongo.db.company.find_one({"student_no": session.get("username")})
     if company is not None:
         return jsonify(result=False, message="已经创立过公司！")
     json_data = request.get_json()
@@ -103,8 +97,7 @@ def submit_company_info():
     data_dict["com_shareholder"] = []
     err_pos = []
 
-    # data_dict["student_no"] = session.get("username")
-    data_dict["team_no"] = session.get("team_no")
+    data_dict["student_no"] = session.get("username")
     for data_name in data_list:
         data_dict[data_name] = json_data.get(data_name)
 
@@ -168,8 +161,7 @@ def submit_company_info():
                               acc_document_infos=[]))
         data_dict_cp = data_dict.copy()
         # 副本公司同时创建
-        # data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
-        data_dict_cp["team_no"] = "{}_cp".format(data_dict["team_no"])
+        data_dict_cp["student_no"] = "{}_cp".format(data_dict["student_no"])
         mongo.db.company.insert_many([data_dict, data_dict_cp])
         return jsonify(result=True, message="公司创建成功！")
 
@@ -181,9 +173,7 @@ def submit_business_info():
     """
     提交业务内容信息，提交成功后不可修改
     """
-    # company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
-    #                                     dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
-    company = mongo.db.company.find_one(dict(team_no="{}".format(session.get("team_no"))),
+    company = mongo.db.company.find_one(dict(student_no="{}".format(session.get("username"))),
                                         dict(businesses=1, business_num=1, schedule_confirm=1, _id=0, ))
     if not company:
         return jsonify(result=False, message="公司未创立")
@@ -197,9 +187,7 @@ def submit_business_info():
     if not business_confirm:
         cal_answer()  # 计算答案
 
-        # company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
-        #                                        dict(ledger_infos=1, _id=0))
-        company_cp = mongo.db.company.find_one(dict(team_no="{}_cp".format(session.get("team_no"))),
+        company_cp = mongo.db.company.find_one(dict(student_no="{}_cp".format(session.get("username"))),
                                                dict(ledger_infos=1, _id=0))
         ledger_infos = company_cp.get("ledger_infos")
         ledger_infos_1 = ledger_infos.get("ledger_infos_1")
@@ -209,11 +197,7 @@ def submit_business_info():
 
         involve_subjects = dict(involve_subjects_1=subjects_tmp1, involve_subjects_2=subjects_tmp2)
 
-        # mongo.db.company.update({"student_no": {"$regex": r"^{}".format(session.get("username"))}},
-        #                         {"$set": {"schedule_confirm.business_confirm": True,
-        #                                   "involve_subjects"                 : involve_subjects}},
-        #                         multi=True)
-        mongo.db.company.update({"team_no": {"$regex": r"^{}".format(session.get("team_no"))}},
+        mongo.db.company.update({"student_no": {"$regex": r"^{}".format(session.get("username"))}},
                                 {"$set": {"schedule_confirm.business_confirm": True,
                                           "involve_subjects": involve_subjects}},
                                 multi=True)
@@ -232,11 +216,8 @@ def get_business_info():
     """
     获取业务内容信息
     """
-    # username = session.get("username")
-    team_no = session.get("team_no")
-    # company = mongo.db.company.find_one(dict(student_no="{}".format(username)),
-    #                                     dict(businesses=1, schedule_confirm=1, _id=0))
-    company = mongo.db.company.find_one(dict(team_no="{}".format(team_no)),
+    username = session.get("username")
+    company = mongo.db.company.find_one(dict(student_no="{}".format(username)),
                                         dict(businesses=1, schedule_confirm=1, _id=0))
     if company:
         schedule_confirm = company.get("schedule_confirm")
@@ -256,10 +237,8 @@ def create_business():
     生成业务
     """
     result, message = False, "公司未创立！"
-    # username = session.get("username")
-    team_no = session.get("team_no")
-    # company = mongo.db.company.find_one({"student_no": "{}".format(username)})
-    company = mongo.db.company.find_one({"team_no": "{}".format(team_no)})
+    username = session.get("username")
+    company = mongo.db.company.find_one({"student_no": "{}".format(username)})
     if not company:
         return jsonify(result=result, message=message)
 
@@ -293,17 +272,36 @@ def submit_key_element_info():
     """
     提交会计要素信息
     """
+    result, message, wrong_number = False, "错误提交", ""
     json_data = request.get_json()
-    business_no = json_data.get("business_no")
-    infos = json_data.get("key_element_infos")
-    submit_type = json_data.get("submit_type")
-
     infos_name = "key_element"
-    result, message = submit_infos(type_num=3, infos=infos,
-                                   submit_type=submit_type,
-                                   infos_name=infos_name,
-                                   business_no=business_no)
-    return jsonify(result=result, message=message)
+    submit_type = json_data.get("submit_type")
+    key_element_infos = json_data.get("key_element_infos")
+
+    if submit_type == "confirm":
+        for i in range(len(key_element_infos)):
+            business_no = i + 1
+            infos = key_element_infos[i]
+
+            result, message = submit_infos(type_num=3, infos=infos,
+                                           submit_type=submit_type,
+                                           infos_name=infos_name,
+                                           business_no=business_no)
+            if not result:
+                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+    elif submit_type == "save":
+        business_no = json_data.get("business_no")
+        infos = key_element_infos
+
+        result, message = submit_infos(type_num=3, infos=infos,
+                                       submit_type=submit_type,
+                                       infos_name=infos_name,
+                                       business_no=business_no)
+    if wrong_number == "":
+        return jsonify(result=result, message=message)
+    else:
+        result, message = False, wrong_number
+        return jsonify(result=result, message=message)
 
 
 @accoj_bp.route('/get_key_element_info', methods=['POST'])
@@ -337,18 +335,38 @@ def submit_subject_info():
     """
     提交会计科目信息
     """
+    result, message, wrong_number = False, "错误提交", ""
     json_data = request.get_json()
-    business_no = json_data.get("business_no")
-    infos = json_data.get("subject_infos")
-    submit_type = json_data.get("submit_type")
-
     infos_name = "subject"
-    result, message = submit_infos(type_num=3, infos=infos,
-                                   submit_type=submit_type,
-                                   infos_name=infos_name,
-                                   business_no=business_no
-                                   )
-    return jsonify(result=result, message=message)
+    submit_type = json_data.get("submit_type")
+    subject_infos = json_data.get("subject_infos")
+
+    if submit_type == "confirm":
+        for i in range(len(subject_infos)):
+            business_no = i + 1
+            infos = subject_infos[i]
+
+            result, message = submit_infos(type_num=3, infos=infos,
+                                           submit_type=submit_type,
+                                           infos_name=infos_name,
+                                           business_no=business_no
+                                           )
+            if not result:
+                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+    elif submit_type == "save":
+        business_no = json_data.get("business_no")
+        infos = subject_infos
+
+        result, message = submit_infos(type_num=3, infos=infos,
+                                       submit_type=submit_type,
+                                       infos_name=infos_name,
+                                       business_no=business_no
+                                       )
+    if wrong_number == "":
+        return jsonify(result=result, message=message)
+    else:
+        result, message = False, wrong_number
+        return jsonify(result=result, message=message)
 
 
 @accoj_bp.route('/get_subject_info', methods=['POST'])
@@ -383,18 +401,37 @@ def submit_entry_info():
     提交会计分录信息
 
     """
+    result, message, wrong_number = False, "错误提交", ""
     json_data = request.get_json()
-    business_no = json_data.get("business_no")
-    infos = json_data.get("entry_infos")
-    submit_type = json_data.get("submit_type")
-
     infos_name = "entry"
-    result, message = submit_infos(type_num=3, infos=infos,
-                                   submit_type=submit_type,
-                                   infos_name=infos_name,
-                                   business_no=business_no)
+    submit_type = json_data.get("submit_type")
+    entry_infos = json_data.get("entry_infos")
 
-    return jsonify(result=result, message=message)
+    if submit_type == "confirm":
+        for i in range(len(entry_infos)):
+            business_no = i + 1
+            infos = entry_infos[i]
+
+            result, message = submit_infos(type_num=3, infos=infos,
+                                           submit_type=submit_type,
+                                           infos_name=infos_name,
+                                           business_no=business_no)
+
+            if not result:
+                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+    elif submit_type == "save":
+        business_no = json_data.get("business_no")
+        infos = entry_infos
+
+        result, message = submit_infos(type_num=3, infos=infos,
+                                       submit_type=submit_type,
+                                       infos_name=infos_name,
+                                       business_no=business_no)
+    if wrong_number == "":
+        return jsonify(result=result, message=message)
+    else:
+        result, message = False, wrong_number
+        return jsonify(result=result, message=message)
 
 
 @accoj_bp.route('/get_entry_info', methods=['POST'])
@@ -464,9 +501,7 @@ def delete_ledger_info():
     subject = json_data.get("subject")
     ledger_period = json_data.get("ledger_period")
     if subject:
-        # company = mongo.db.company.find_one({"student_no": session.get("username")},
-        #                                     {"involve_subjects": 1, "schedule_confirm": 1, "_id": 0})
-        company = mongo.db.company.find_one({"team_no": session.get("team_no")},
+        company = mongo.db.company.find_one({"student_no": session.get("username")},
                                             {"involve_subjects": 1, "schedule_confirm": 1, "_id": 0})
         schedule_confirm = company.get("schedule_confirm")
         involve_subjects = company.get("involve_subjects")
@@ -487,11 +522,7 @@ def delete_ledger_info():
             pull_key1 = "schedule_confirm.ledger{}_confirm.ledger_confirm".format(ledger_period)
             pull_key2 = "schedule_saved.ledger{}_saved.ledger_saved".format(ledger_period)
 
-            # mongo.db.company.update({"student_no": session.get("username")},
-            #                         {"$unset": {unset_key: True},
-            #                          "$pull" : {pull_key1: subject,
-            #                                     pull_key2: subject}})
-            mongo.db.company.update({"team_no": session.get("team_no")},
+            mongo.db.company.update({"student_no": session.get("username")},
                                     {"$unset": {unset_key: True},
                                      "$pull": {pull_key1: subject,
                                                pull_key2: subject}})
@@ -559,18 +590,37 @@ def submit_acc_document_info():
     """
     提交会计凭证信息
     """
+    result, message, wrong_number = False, "错误提交", ""
     json_data = request.get_json()
-    infos = json_data.get("acc_document_infos")
-    submit_type = json_data.get("submit_type")
-    business_no = json_data.get("business_no")
-
     infos_name = "acc_document"
-    result, message = submit_infos(type_num=3, infos=infos,
-                                   submit_type=submit_type,
-                                   infos_name=infos_name,
-                                   business_no=business_no)
+    submit_type = json_data.get("submit_type")
+    acc_document_infos = json_data.get("acc_document_infos")
 
-    return jsonify(result=result, message=message)
+    if submit_type == "confirm":
+        for i in range(len(acc_document_infos)):
+            business_no = i + 1
+
+            infos = acc_document_infos[i]
+
+            result, message = submit_infos(type_num=3, infos=infos,
+                                           submit_type=submit_type,
+                                           infos_name=infos_name,
+                                           business_no=business_no)
+            if not result:
+                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+    elif submit_type == "save":
+        business_no = json_data.get("business_no")
+        infos = acc_document_infos
+
+        result, message = submit_infos(type_num=3, infos=infos,
+                                       submit_type=submit_type,
+                                       infos_name=infos_name,
+                                       business_no=business_no)
+    if wrong_number == "":
+        return jsonify(result=result, message=message)
+    else:
+        result, message = False, wrong_number
+        return jsonify(result=result, message=message)
 
 
 @accoj_bp.route('/get_acc_document_info', methods=['POST'])
@@ -585,7 +635,7 @@ def get_acc_document_info():
 
 
 @accoj_bp.route('/download_acc_document_info', methods=['POST'])
-# @course_time_not_end_required(6)
+@course_time_not_end_required(6)
 def download_acc_document_info():
     """
     下载会计凭证信息
@@ -595,14 +645,10 @@ def download_acc_document_info():
     business_no_tmp = int(business_no) - 1
     if business_no_tmp > 19 or business_no_tmp < 0:
         return jsonify(result=False, message="题号不存在")
-    # document_no = session["username"] + str(business_no_tmp)
-    document_no = session["team_no"] + str(business_no_tmp)
+    document_no = session["username"] + str(business_no_tmp)
     file_cp = mongo.db.file.find_one({"document_no": "{}".format(document_no)}, dict(_id=0))
-    content = file_cp.get("content")
-    if content == "[]":
-        return jsonify(result=False, message="文件内容为空！")
     if file_cp:
-        file = dict(filename=file_cp.get("filename"), content=content)
+        file = dict(filename=file_cp.get("filename"), content=file_cp.get("content"))
         return jsonify(result=True, file=file)
     else:
         return jsonify(result=False, message="文件不存在！")
@@ -735,7 +781,6 @@ def submit_profit_statement_info():
 
 
 @accoj_bp.route('/get_profit_statement_info', methods=['POST'])
-@course_time_not_end_required(8)
 def get_profit_statement_info():
     """
     获取利润表信息
@@ -973,9 +1018,7 @@ def get_business_list():
     """
     获取业务信息列表
     """
-    # company = mongo.db.company.find_one({"student_no": session.get("username")},
-    #                                     {"businesses": 1, "involve_subjects": 1, "_id": 0})
-    company = mongo.db.company.find_one({"team_no": session.get("team_no")},
+    company = mongo.db.company.find_one({"student_no": session.get("username")},
                                         {"businesses": 1, "involve_subjects": 1, "_id": 0})
     businesses = company.get("businesses")
     involve_subjects = company.get("involve_subjects")

@@ -35,18 +35,21 @@ def signin():
             class_name = user["student_school"] + "-" + user["student_class"]
             if check_password_hash(user_password, password):
                 role = user.get("role")
-                session["username"] = user.get("team_no")
                 session["student_name"] = user.get("student_name")
                 session["nick_name"] = user.get("nick_name")
                 session["role"] = role
                 session["school_name"] = user.get("student_school")
                 session["class_name"] = class_name
-                session["member"] = student_no
-                permission = mongo.db.team.find_one({"student_no": session.get("username")},
-                                                    {"student_permission.{}_permission".format(session.get("member"))})
-                permission = permission.get("student_permission")
-                session["permission"] = permission
-                return jsonify(result="true", data=permission)
+                if role == "student":
+                    session["member"] = student_no
+                    session["username"] = user.get("team_no")
+                    permission = mongo.db.team.find_one({"student_no": session.get("username")},
+                                                        {"permission.{}_permission".format(session.get("member"))})
+                    session["permission"] = permission.get("permission") if permission else None
+                    return jsonify(result="true", data=permission)
+                else:
+                    session["username"] = student_no
+                    return jsonify(result="true")
             else:
                 message = "密码错误"
                 return jsonify(result="false", message="{}".format(message))
