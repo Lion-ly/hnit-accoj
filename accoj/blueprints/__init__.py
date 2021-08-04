@@ -293,6 +293,7 @@ def get_data(type_num, infos_name, info_keys):
     :param info_keys:
     """
     info_keys.append("scores")
+    info_keys.append("permission")
     info_len = len(info_keys)
     scores = None
     confirm_flag = False
@@ -349,6 +350,7 @@ def get_data(type_num, infos_name, info_keys):
 
     if not confirm_flag:
         answer_infos = None
-    info_values = [infos, answer_infos, confirmed, saved, scores]
+    permission = session.get("permission").get("{}_permission".format(infos_name))
+    info_values = [infos, answer_infos, confirmed, saved, scores, permission]
     data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
     return data

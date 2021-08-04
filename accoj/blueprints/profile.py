@@ -34,12 +34,14 @@ def message_whisper():
     """
     return render_template('profile/message_whisper.html')
 
+
 @profile_bp.route('/manage_time', methods=['GET'])
 def manage_time():
     """
     时间管理
     """
     return render_template('profile/manage-time.html')
+
 
 @profile_bp.route('/profile_schedule', methods=['GET'])
 def profile_schedule():

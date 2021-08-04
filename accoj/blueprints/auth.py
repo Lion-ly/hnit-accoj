@@ -40,11 +40,12 @@ def signin():
                 session["role"] = role
                 session["school_name"] = user.get("student_school")
                 session["class_name"] = class_name
-                if role == "student":
-                    session["member"] = student_no
+                session["team_no"] = user.get("team_no")
+                session["member_no"] = student_no
+                if role == "student" and (user.get("team_no") and user.get("team_no") == ""):
                     session["username"] = user.get("team_no")
                     permission = mongo.db.team.find_one({"student_no": session.get("username")},
-                                                        {"permission.{}_permission".format(session.get("member"))})
+                                                        {"permission.{}_permission".format(session.get("member_no"))})
                     session["permission"] = permission.get("permission") if permission else None
                     return jsonify(result="true", data=permission)
                 else:

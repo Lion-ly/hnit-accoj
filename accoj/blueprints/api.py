@@ -32,7 +32,7 @@ api_bp = Blueprint('api', __name__)
 
 @api_bp.route('/get_user_rank', methods=['GET'])
 def get_user_rank():
-    # 获取排行榜
+    # 获取user 排行榜
     result, data = True, []
     scores_infos = redis_cli.zrange('rank', 0, -1, desc=True, withscores=True)
     scores_infos_len = len(scores_infos)
@@ -40,6 +40,20 @@ def get_user_rank():
         scores_info = [json.loads(scores_info[0]) for scores_info in scores_infos]
         for i in range(0, scores_infos_len):
             scores_info[i]['rank'] = i + 1
+        result, data = True, scores_info
+    return jsonify(result=result, data=data)
+
+
+@api_bp.route('/get_team_rank', methods=['GET'])
+def get_team_rank():
+    # 获取team 排行榜
+    result, data = True, []
+    scores_infos = redis_cli.zrange('rank_team', 0, -1, desc=True, withscores=True)
+    scores_infos_len = len(scores_infos)
+    if scores_infos_len:
+        scores_info = [json.loads(scores_info[0]) for scores_info in scores_infos]
+        for i in range(0, scores_infos_len):
+            scores_info[i]['rank_rank'] = i + 1
         result, data = True, scores_info
     return jsonify(result=result, data=data)
 
@@ -73,7 +87,7 @@ def profile_api():
     def get_user_profile():
         """获取用户个人信息"""
         result, data = False, None
-        user = mongo.db.user.find_one(dict(student_no=student_no),
+        user = mongo.db.user.find_one(dict(student_no=member_no),
                                       dict(_id=0, password=0, role=0))
         if user:
             result, data = True, user
@@ -83,7 +97,7 @@ def profile_api():
         """保存用户个人信息"""
         result, data, message = False, None, ''
 
-        user = mongo.db.user.find_one(dict(student_no=student_no),
+        user = mongo.db.user.find_one(dict(student_no=member_no),
                                       dict(_id=1))
         if user:
             _data.pop('api')
@@ -92,12 +106,13 @@ def profile_api():
                 student_sex=_data.get('student_sex'),
                 personalized_signature=_data.get('personalized_signature'),
                 student_borth=_data.get('student_borth'))
-            mongo.db.user.update(dict(student_no=student_no),
+            mongo.db.user.update(dict(student_no=member_no),
                                  {'$set': update_data})
             result, data, message = True, None, '保存成功！'
         return jsonify(result=result, data=data, message=message)
 
     def get_user_schedule():
+        """学生团队做题进度"""
         data = get_student_schedule(student_no)
         if data:
             result, data = True, data
@@ -107,26 +122,30 @@ def profile_api():
         return jsonify(result=result, data=data)
 
     def get_user_score():
+        """获取各个(user and team)成绩"""
         a_keys = ['_id', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
         a_values = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         search_dict = dict(zip(a_keys, a_values))
-        data_tmp = mongo.db.rank.find_one({'student_no': student_no}, search_dict)
-        if data_tmp:
-            data = list(data_tmp.values())
+        data = []
+        data_tmp = mongo.db.rank_team.find_one({'team_no': student_no}, search_dict)
+        data_tmp2 = mongo.db.rank.find_one({'student_no': member_no}, search_dict)
+        if data_tmp and data_tmp2:
+            data[0] = list(data_tmp.values())
+            data[1] = list(data_tmp2.values())
             result = True
-            print('score')
+            # print('score')
         else:
             result = True
-            data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            print('no score')
+            data[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            # print('no score')
         return jsonify(result=result, data=data)
 
     def get_team_info():
+        """获取团队信息"""
         result, data = False, None
-        user = mongo.db.user.find_one(dict(student_no=student_no),
-                                      dict(_id=0, password=0, role=0))
-        team = mongo.db.teams.find_One(dict(team_no=user['team_no']),
-                                       dict(_id=0, team_no=0))
+        team = mongo.db.team.find_One(dict(team_no=student_no),
+                                      dict(_id=0, team_no=0))
         if team:
             result, data = True, team
         return jsonify(result=result, data=data)
@@ -140,6 +159,7 @@ def profile_api():
                         get_team_info=get_team_info)
     submit_api_dict = dict(submit_user_profile=submit_user_profile)
     student_no = session.get('username')
+    member_no = session.get("member_no")
     if _api in get_api_dict:
         return get_api_dict[_api]()
     elif _api in submit_api_dict:
@@ -196,18 +216,20 @@ def teacher_api():
 
     def no_group_student(_data: dict):
         """分班級，获取未分组的同学"""
-        result, data = False, None
-        class_name = _data.get('class_name')
-        data_ = mongo.db.user.find(dict(class_name=class_name, team_no=''),
-                                   dict(_id=0, student_name=1, student_no=1))
-        data_.update(mongo.db.teams.find(dict(class_name=class_name),
-                                         dict(_id=0, leader=1, members=1)))
+        result, data, data_ = False, None, []
+        school_class = _data.get('class_name').split('-')
+        school_name = school_class[0]
+        class_name = school_class[1]
+        data_[0] = mongo.db.user.find(dict(student_class=class_name, student_school=school_name, team_no=None),
+                                      dict(_id=0, student_name=1, student_no=1))
+        data_[1] = mongo.db.team.find(dict(team_calss=class_name, team_school=school_name),
+                                      dict(_id=0, leader=1, members=1))
         if data_:
             result, data = True, data_
         return jsonify(result=result, data=data)
 
     def submit_manage_group_info(_data: dict):
-        """提交班级分组信息"""
+        """提交班级分组团队信息"""
 
         @all_course_time_open_required
         def intermediate_functions(flag=True):
@@ -223,7 +245,6 @@ def teacher_api():
             data.update(dict(class_name=class_name))
             return jsonify(result, data, message)
 
-        session["class_name"] = _data.get("class_name")
         return intermediate_functions()
 
     def correct_homework(_data: dict):

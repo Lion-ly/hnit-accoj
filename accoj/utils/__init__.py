@@ -1340,13 +1340,13 @@ def manage_team_infos(class_name: str, teacher: str, teams: dict = None):
     管理保存团队信息:
     创建team：
 
-    :param teams:{ leader_name:
+    :param teams:[{ leader_name:
                    leader_no:
-                   members:[["",""],["",""],["",""],["",""]]}
+                   members:[["",""],["",""],["",""],["",""]]}]
     计算得：   team_no,
              team_name:
     :param class_name: "湖南工学院-软件1801“
-    :param teacher:
+    :param teacher: "yangying"
 
     创建团队时，同步插入团队成绩：
     return 团队信息
@@ -1354,7 +1354,7 @@ def manage_team_infos(class_name: str, teacher: str, teams: dict = None):
 
     def update_user_team_infos(student_class: str):
         """ 重置学员team_no 信息 """
-        mongo.db.user.update_Many({"student_class": student_class}, {"$set": {"team_no": ""}})
+        mongo.db.user.update_many({"student_class": student_class}, {"$set": {"team_no": None}})
 
     def insert_rank_team_infos():
         """创建团队时存入团队成绩"""
@@ -1603,5 +1603,5 @@ def manage_exercises_permission(team_no: str):
 
     # permission.update({"{}_permission".format(team_no): team_no_permission})
     permission["{}_permission".format(team_no)] = team_no_permission
-    mongo.db.team.update_Many(
+    mongo.db.team.update_many(
         {"team_no": team_no}, {"$set": {"permission": permission}})

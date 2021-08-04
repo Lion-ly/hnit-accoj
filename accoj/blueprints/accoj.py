@@ -17,7 +17,7 @@ from accoj.utils import (login_required,
                          course_time_not_end_required,
                          availability_of_the_team,
                          is_leader,
-                         manage_exercises_permission)
+                         manage_exercises_permission, login_required_student)
 from accoj.blueprints import submit_infos, get_data
 from accoj.utils import (is_number,
                          limit_content_length,
@@ -1045,3 +1045,54 @@ def accoj_bp_before_request():
         return redirect(url_for('admin.index'))
     elif role == 'dbadmin':
         return redirect(url_for('dbadmin.index'))
+
+
+@accoj_bp.before_request
+@login_required_student
+def submit_info_before_request():
+    url_path = request.path
+    last_name = url_path.split("/")[-1]
+    name_list = last_name.split('_', 1)
+    submit_type = name_list[0]
+    if submit_type == "submit":
+        member_permission = session.get("permission")
+        infos_name = name_list[1][:-5]
+        if infos_name in ["key_element", "subject", "entry", "acc_document"]:
+            permission = member_permission.get("{}_permission".format(infos_name))
+            business_no = request.get_json().get("business_no") - 1
+            if business_no not in permission:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "ledger":
+            permission = member_permission.get("{}_permission".format(infos_name))
+            ledger_period = request.get_json().get("ledger_period")
+            if permission.get("ledger{}_permission".format(ledger_period)) == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == ["balance_sheet", "subsidiary_account", "acc_balance_sheet", "new_balance_sheet",
+                            "profit_statement"]:
+            permission = member_permission.get("{}_permission".format(infos_name))
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "ix_first":
+            permission = member_permission.get("trend_analysis_permission").get("first")
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "ix_second":
+            permission = member_permission.get("trend_analysis_permission").get("second")
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "ix2_first":
+            permission = member_permission.get("common_ratio_analysis_permission").get("first")
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "ix2_second":
+            permission = member_permission.get("common_ratio_analysis_permission").get("second")
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "ix4_":
+            permission = member_permission.get("ratio_analysis_permission")
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
+        elif infos_name == "coursex":
+            permission = member_permission.get("dupont_analysis_permission")
+            if permission == 0:
+                return jsonify(result=False, message="无此题权限！")
