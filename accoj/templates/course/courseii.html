@@ -30,9 +30,11 @@
                 <hr class="simple"/>
                 <!-- 业务 -->
                 <div>
-                    <p class="help-block">温馨提示：完成当前业务信息后应手动保存，防止信息丢失。
-                        <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
-                        <em class="acc-score-help">当前</em>
+                    <p class="help-block">温馨提示：
+                    <p class="help-block">1.完成当前业务信息后应手动保存，防止信息丢失。</p>
+                    <p class="help-block">2.提交前确保所有题目已保存，防止丢分。</p>
+                    <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                    <em class="acc-score-help">当前</em>
                     </p>
                     <h4>
                         <span class="glyphicon glyphicon-bookmark"></span>
@@ -273,7 +275,8 @@
                         <button type="button" class="btn btn-info" data-save>
                             <span class="glyphicon"></span>保存
                         </button>
-                        <button type="button" class="btn btn-success" data-confirm>
+                        <button type="button" class="btn btn-success " data-toggle="tooltip" data-placement="top"
+                                title="请保存所有题目再提交" data-confirm>
                             <span class="glyphicon"></span>提交
                         </button>
                     </div>
@@ -283,8 +286,8 @@
     </div>
 </div>
 
-<!-- 防尾前移 -->
-<div class="acc-container-separate"></div>
+    <!-- 防尾前移 -->
+    <div class="acc-container-separate"></div>
 
 
 {% endblock courseBody %}

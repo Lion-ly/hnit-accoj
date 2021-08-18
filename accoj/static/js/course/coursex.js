@@ -2,7 +2,8 @@ let coursex_infos,
     coursex_confirmed,
     coursex_saved,
     answer_infos = "",
-    scores = "";
+    scores = "",
+    teacher_scores = 0;
 $(document).ready(function () {
     function init() {
         xBind();
@@ -69,7 +70,8 @@ function map_coursex_info(data, isFromButton) {
     coursex_confirmed = data ? data["coursex_confirmed"] : coursex_confirmed;
     coursex_saved = data ? data["coursex_saved"] : coursex_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
-    scores = data ? data["scores"] : scores;
+    scores = data ? data["scores"]["student_score"] : scores;
+    teacher_scores = data ? data["scores"]["teacher_score"] : teacher_scores;
 
     if (answer_infos) {
         showAnswerButton();
@@ -97,7 +99,7 @@ function coursexGetInput() {
         $inputs = $(divId).find("input");
 
     $.each($inputs, function (index, item) {
-        if (index !== $inputs.length - 1) {
+        if (index !== $inputs.length) {
             let project = $(item).attr("name"),
                 value = $(item).val();
 
@@ -117,13 +119,13 @@ function coursexGetInput() {
 function CoursexPaddingData(data, isFromButton) {
     function padding() {
         let divID = "coursexData",
-            inputs = $("#" + divID).find("input");
+            $inputs = $("#" + divID).find("input");
 
-        $.each(inputs, function (index, item) {
-            if (index !== $inputs.length - 1) {
+        $.each($inputs, function (index, item) {
+            if (index !== $inputs.length) {
                 let name = $(item).attr("name"),
                     value = data[name] ? data[name] : "";
-
+                console.log(name);
                 value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
                 $(item).val(value);
             }
@@ -138,6 +140,7 @@ function CoursexPaddingData(data, isFromButton) {
         let nowTotalScore = 100,
             totalScore = 100;
         showScoreEm(scores, nowTotalScore, totalScore, 1, 1);
+        showScoreEm(teacher_scores, nowTotalScore, teacher_scores, 2, 2);
         if (isFromButton === 2) xResetInfo();
     }
     padding();

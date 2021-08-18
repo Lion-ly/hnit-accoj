@@ -5,6 +5,8 @@
     <li class="active">小组管理</li>
 {% endblock %}
 {% block content %}
+    <link href="{{ url_for('static', filename='css/teacher/team.css') }}" rel="stylesheet">
+
     <div class="animated fadeIn">
         <div class="row">
             <div class="col-md-12">
@@ -25,7 +27,7 @@
 
                             </div>
                             <div class="col-lg-3">
-                                <button type="button" class="btn btn-outline-info">自动生成小组</button>
+                                <button id="autoteam" type="button" class="btn btn-outline-info">自动生成小组</button>
                                 <button id="addteam" type="button" class="btn btn-outline-info">新增小组</button>
                             </div>
 
@@ -33,19 +35,19 @@
 
                         <br>
                     </div>
-                    <ul id="team-box" class="list-group list-group-flush" style="min-height:600px;">
+                    <div id="team-box" class="card" style="min-height:400px;">
                         <div id="empty" style="margin:auto 0px;">
                             <h3 style="text-align: center;">当前班级未分配小组！</h3>
                         </div>
 
-                    </ul>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    </div>
+                    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog"
+                         aria-labelledby="studentModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                             <form class="modal-content">
 
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增成员</h5>
+                                    <h5 class="modal-title" id="studentModalLabel">新增成员</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -60,45 +62,15 @@
                                         </tr>
                                         </thead>
                                         <tbody id="model-box">
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="sid" type="checkbox"
-                                                           value="18020440112&何汶强">
-                                                </div>
-                                            </th>
-                                            <td>何汶强</td>
-                                            <td>18020440112</td>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="sid" type="checkbox"
-                                                           value="18020440113&王兵">
-                                                </div>
-                                            </th>
-                                            <td>王兵</td>
-                                            <td>18020440113</td>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="sid" type="checkbox"
-                                                           value="18020440114&李勇">
-                                                </div>
-                                            </th>
-                                            <td>李勇</td>
-                                            <td>18020440114</td>
-
-                                        </tr>
+                                        <!-- 未分组队员 -->
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                    <button onclick="adds(this)" type="button" class="btn btn-primary">添加</button>
+                                    <button onclick="adds()" id="addStudent" data-dismiss="modal" type="button"
+                                            class="btn btn-primary">添加
+                                    </button>
                                 </div>
 
                             </form>
@@ -108,8 +80,9 @@
 
 
                     <div id="show-tips-box"></div>
+
                     <div class="text-center" style="margin-top: 2%;margin-bottom: 2%;">
-                        <button id="" class="btn btn-outline-info btn-group-vertical" type="button">保存设置</button>
+                        <button id="subTeam" class="btn btn-outline-info btn-group-vertical" type="button">保存设置</button>
                     </div>
                 </div>
             </div>
@@ -121,5 +94,5 @@
             font-size: 20px !important;
         }
     </style>
-    <script type="application/javascript" src="/../../../static/js/teacher/team-manage.js"></script>
+    <script src="{{ url_for('static', filename='js/teacher/team-manage.js') }}"></script>
 {% endblock %}

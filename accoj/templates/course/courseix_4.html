@@ -1,7 +1,7 @@
 {% extends 'course/courseBase.html' %}
 {% block courseBody %}
     <link href="http://cdn.accoj.top/static/accoj-1.0.0/courseix.css" rel="stylesheet">
-    <script src="http://cdn.accoj.top/static/accoj-1.0.0/courseix_4.js" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/course/courseix_4.js') }}" charset="UTF-8"></script>
     <!--第九次课程-->
     <div class="courseBody">
         <!-- 习题主体 -->
@@ -97,9 +97,9 @@
                             <td><label><input name="营业利润率Last"></label></td>
                         </tr>
                         <tr>
-                            <th class="acc-unedit">成本费用利润率</th>
-                            <td><label><input name="成本费用利润率End"></label></td>
-                            <td><label><input name="成本费用利润率Last"></label></td>
+                            <th class="acc-unedit">成本费用营业利润率</th>
+                            <td><label><input name="成本费用营业利润率End"></label></td>
+                            <td><label><input name="成本费用营业利润率Last"></label></td>
                         </tr>
                         <tr>
                             <th class="acc-unedit">净利润率</th>

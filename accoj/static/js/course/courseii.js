@@ -19,9 +19,26 @@ $(document).ready(function () {
  * @param submit_type confirm or save
  */
 function submit_key_element_info(submit_type) {
+    let data = {};
+    let emptyinfos = {"affect_type": 0, "info": []};
+    //提交保存数据
+    if (submit_type == 'save') {
+        data = iiGetInput();
+        data["submit_type"] = submit_type;
 
-    let data = iiGetInput();
-    data["submit_type"] = submit_type;
+    }
+    //提交提交数据
+    if (submit_type == 'confirm') {
+        data["key_element_infos"] = key_element_infos;
+        data["submit_type"] = submit_type;
+        for (let i = 0; i < 20; i++) {
+            if (!data.key_element_infos[i]) {
+                data.key_element_infos[i] = emptyinfos
+            }
+        }
+    }
+    console.log(data)
+
     data = JSON.stringify(data);
 
     // 提交数据
@@ -39,9 +56,17 @@ function submit_key_element_info(submit_type) {
 function get_key_element_info(isFromSubmit = false) {
     iiDisabledInput(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
+
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
     }
+    if (nowBusinessNo == 20) {
+        $("button[data-confirm]").show();
+    } else {
+        $("button[data-confirm]").hide();
+    }
+
+
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!key_element_saved.length || key_element_saved.indexOf(nowBusinessNo - 1) === -1) {
@@ -58,10 +83,12 @@ function get_key_element_info(isFromSubmit = false) {
     }
     // 获取数据
     let data = {},
+
         url = "/get_key_element_info",
         successFunc = map_key_element_info,
         messageDivID = "course_ii_message";
     get_info(data, url, successFunc, messageDivID);
+
 }
 
 /**
@@ -223,7 +250,8 @@ function iiPaddingData(data, isFromButton) {
             // 标出错误位置
             for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
         }
-        if (key_element_confirmed.indexOf(index) !== -1) iiDisabledInput(true);
+        // if (key_element_confirmed.indexOf(index) !== -1) iiDisabledInput(true);
+        if (key_element_confirmed.length > 0) iiDisabledInput(true);
     }
 
     if (!data && !isFromButton) return;

@@ -1,8 +1,20 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     getStudentInfo();
+    getclass();
+    $("#classSelect").change(classSelectval);
     $("#correct_homework").click(correct_homework_input);
     $("#export_grades").click(export_grade);
+
 });
+
+//班级分类
+function classSelectval() {
+    let nowClass = $("#classSelect").val();
+
+    $("form").find("input[type=search]").val(nowClass.split("-")[1]).keyup();
+
+
+}
 
 function getStudentInfo() {
 
@@ -37,6 +49,7 @@ function getStudentInfo() {
             {"data": "correct_schedule"}
         ]
     });
+    console.log(table);
     $('#data-table tbody').on('click', 'tr', function () {
 
         correct_homework(table.row(this).data().student_no);
@@ -169,8 +182,8 @@ function exportExcel(JSONData, FileName, title, filter) {
     excelFile += "</body>";
     excelFile += "</html>";
     let uri =
-      "data:application/vnd.ms-excel;charset=utf-8," +
-      encodeURIComponent(excelFile);
+        "data:application/vnd.ms-excel;charset=utf-8," +
+        encodeURIComponent(excelFile);
     let link = document.createElement("a");
     link.href = uri;
     link.style = "visibility:hidden";
@@ -178,5 +191,30 @@ function exportExcel(JSONData, FileName, title, filter) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
+}
 
+//班级获取
+let IsFirst = true;
+
+function getclass() {
+    function successFunc(data) {
+        data = JSON.parse(data);
+
+        let flag = false;
+        if (IsFirst) flag = true;
+        //console.log("data.length: " + data.length);
+        for (let i = 0; i < data.length; i++) {
+            let className = data[i]["class_name"];
+
+            if (flag)
+                $("#classSelect").append(new Option(className, className));
+
+        }
+        //console.log("TimeInfos: " + TimeInfos);
+        if (flag) IsFirst = false;
+    }
+
+    let data = {"api": "get_manage_time_info"},
+        url = "/api/teacher_api";
+    get_data(data, successFunc, url)
+}

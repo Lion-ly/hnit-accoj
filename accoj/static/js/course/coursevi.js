@@ -4,7 +4,8 @@ let acc_document_infos = Array(),
     answer_infos = "",
     scores = "",
     row_num = 2,
-    fileContent;
+    fileContent
+;
 
 $(document).ready(function () {
     function init() {
@@ -14,7 +15,9 @@ $(document).ready(function () {
     }
 
     init();
+
 });
+
 
 //==================================提交会计凭证信息==================================//
 /**
@@ -22,8 +25,57 @@ $(document).ready(function () {
  * @param submit_type confirm or save
  */
 function submit_acc_document_info(submit_type) {
-    let data = viGetInput();
-    data["submit_type"] = submit_type;
+    DisableButton(false);
+
+    let data = {};
+    let file = {filename: "", content: "[]"};
+    //提交保存数据
+    if (submit_type == 'save') {
+        data = viGetInput();
+        data["submit_type"] = submit_type;
+
+    }
+
+    //提交提交数据
+    if (submit_type == 'confirm') {
+        let allData = [];
+        let emptyinfos = {
+            "doc_no": '',
+            "date": '',
+            "doc_nums": '',
+            "contents": [],
+            "filename": ''
+        };
+
+        //拷贝数据
+        acc_document_infos.forEach(function (item) {
+            allData.push(item);
+        })
+        for (i = 0; i < 20; i++) {
+            if (!allData[i]) {
+
+                allData[i] = emptyinfos
+            }
+        }
+        nowPageData = viGetInput();
+        allData[19] = nowPageData.acc_document_infos;
+
+        allData.forEach(function (item, index) {
+            if (item.date) {
+                item.date = formatDate(item.date)
+            }
+
+            if (index < 19) {
+                item.file = file
+            }
+        })
+
+
+        data["acc_document_infos"] = allData;
+        data["submit_type"] = submit_type;
+
+    }
+    console.log(data)
     data = JSON.stringify(data);
     // 提交数据
     let url = "/submit_acc_document_info",
@@ -40,6 +92,11 @@ function get_acc_document_info(isFromSubmit = false) {
     DisableButton(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
+    if (nowBusinessNo == 20) {
+        $("button[data-confirm]").show();
+    } else {
+        $("button[data-confirm]").hide();
+    }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!acc_document_saved.length || acc_document_saved.indexOf(nowBusinessNo - 1) === -1) {
@@ -59,6 +116,8 @@ function get_acc_document_info(isFromSubmit = false) {
         successFunc = map_acc_document_info,
         messageDivID = "course_vi_message";
     get_info(data, url, successFunc, messageDivID);
+
+
 }
 
 /**
@@ -151,6 +210,7 @@ function viGetInput() {
     fileContent = fileContent ? fileContent : {"filename": "", "content": ""};
     let filename = fileContent["filename"] ? fileContent["filename"] : $("#vi_downloadSpan").text();
     fileContent["content"] = JSON.stringify(Array.from(new Uint8Array(fileContent["content"])));
+
 
     acc_document_infos = {
         "doc_no": doc_no,
@@ -304,9 +364,9 @@ function viPaddingData(data, isFromButton) {
 }
 
 /**
- * 下载文件
+ * 从后端获取文件
  */
-function vi_downloadFile() {
+function get_File(control) {
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         data = {"business_no": nowBusinessNo};
 
@@ -317,14 +377,62 @@ function vi_downloadFile() {
             filename = file["filename"],
             content = file["content"],
             arrayBuffer = new Uint8Array(JSON.parse(content)).buffer;
-        downloadFile(arrayBuffer, filename);
+        control(arrayBuffer, filename);
     }
 
     // 获取数据
     let url = "/download_acc_document_info",
-        messageDivID = "course_vi_message";
+        messageDivID = "download_message";
     get_info(data, url, successFunc, messageDivID);
+
 }
+
+
+/**
+ * 下载文件
+ */
+function vi_downloadFile() {
+
+    get_File(control);
+
+    function control(arrayBuffer, filename) {
+
+        downloadFile(arrayBuffer, filename);
+    }
+
+
+}
+
+//获取临时url
+function getObjectURL(file) {
+    var url = null;
+    if (window.createObjectURL != undefined) { // basic
+        url = window.createObjectURL(file);
+    } else if (window.URL != undefined) { // mozilla(firefox)
+        url = window.URL.createObjectURL(file);
+    } else if (window.webkitURL != undefined) { // webkit or chrome
+        url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+}
+
+/**
+ * 预览文件
+ */
+function previewpic() {
+
+    get_File(control);
+
+    function control(arrayBuffer, filename) {
+
+        let blob = new Blob([arrayBuffer], {type: "application/jpg;charset=UTF-8"});
+
+        $('#imga').attr('src', getObjectURL(blob));
+        $('#exampleModal').modal('show');
+    }
+
+}
+
 
 // ==================================事件控制==================================//
 /**
@@ -348,14 +456,28 @@ function viBind() {
     $("input[data-get-file]").change(function () {
         getfileContents();
     });
-    $("button[data-download-file]").change(function () {
+    $("button[data-download-file]").click(function () {
         vi_downloadFile();
     });
+
     pageSplitBind(function (business_no) {
-        businessLiControl(business_no);
+
         get_acc_document_info();
+        businessLiControl(business_no);
+
+        nowpage = business_no;
+
     }, 20);
-    bind_score("teacher_correct", "acc_document", "correct_message")
+    bind_score("teacher_correct", "acc_document", "correct_message");
+    //上传模态框居中
+    $('#uploader').on('show.bs.modal', function (e) {
+        // 关键代码，如没将modal设置为 block，则$modala_dialog.height() 为零
+        $(this).css('display', 'block');
+        var modalHeight = $(window).height() / 2 - $('#uploader .modal-dialog').height() / 2;
+        $(this).find('.modal-dialog').css({
+            'margin-top': modalHeight
+        });
+    });
 }
 
 /**
@@ -392,26 +514,28 @@ function vi_AddRow() {
         "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='general_account' onkeyup='illegalCharFilter(this)'></label></td>" +
         "<td><label><input name='detail_account' onkeyup='illegalCharFilter(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>" +
-        "<td><label><input onkeyup='limit_number(this)'></label></td>"
+        "<td colspan='10' id='borrow" + row_num + "' style='display: none;'  ></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='borrow" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td colspan='10' id='lend" + row_num + "' style='display: none;' ></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>" +
+        "<td class='lend" + row_num + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>"
         + "<th class='acc-unborder'>"
         + "<div class='acc-minus'>"
         + "<a type='button' "
@@ -438,17 +562,99 @@ function vi_DeleteRow(obj) {
  */
 function getfileContents() {
     let files = $("#uploadFiles").prop("files");
-
     function setupReader(file) {
         let reader = new FileReader(),
             name = file.name;
-        reader.readAsArrayBuffer(file);
-        reader.onload = function (e) {
-            // get file content
-            let content = e.target.result;
-            fileContent = {"filename": name, "content": content};
+        if (file.size / 1024 > 100) { //大于100k，进行压缩上传
+            photoCompress(file, {
+                quality: 0.2
+            }, function (base64Codes) {
+                let bl = convertBase64UrlToBlob(base64Codes);
+
+                reader.readAsArrayBuffer(bl);
+                reader.onload = function (e) {
+                    // get file content
+                    let content = e.target.result;
+                    fileContent = {"filename": name, "content": content};
+                }
+            });
+        } else {
+            reader.readAsArrayBuffer(file);
+            reader.onload = function (e) {
+                // get file content
+                let content = e.target.result;
+                fileContent = {"filename": name, "content": content};
+            }
         }
+
     }
 
-    for (let i = 0; i < files.length; i++) setupReader(files[i]);
+    for (let i = 0; i < files.length; i++) {
+        setupReader(files[i]);
+    }
+}
+
+/**
+ *压缩图片
+ *三个参数
+ *file：一个是文件(类型是图片格式)，
+ *w：一个是文件压缩的后宽度，宽度越小，字节越小
+ *objDiv：一个是容器或者回调函数
+ *photoCompress()
+ **/
+function photoCompress(file, w, objDiv) {
+    let ready = new FileReader();
+    ready.readAsDataURL(file);
+    ready.onload = function () {
+        let re = this.result;
+        canvasDataURL(re, w, objDiv)
+    }
+}
+
+function canvasDataURL(path, obj, callback) {
+    let img = new Image();
+    img.src = path;
+    img.onload = function () {
+        let that = this;
+        // 默认按比例压缩
+        let w = that.width,
+            h = that.height,
+            scale = w / h;
+        w = obj.width || w;
+        h = obj.height || (w / scale);
+        let quality = 0.7;  // 默认图片质量为0.7
+        //生成canvas
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        // 创建属性节点
+        let anw = document.createAttribute("width");
+        anw.nodeValue = w;
+        let anh = document.createAttribute("height");
+        anh.nodeValue = h;
+        canvas.setAttributeNode(anw);
+        canvas.setAttributeNode(anh);
+        ctx.drawImage(that, 0, 0, w, h);
+        // 图像质量
+        if (obj.quality && obj.quality <= 1 && obj.quality > 0) {
+            quality = obj.quality;
+        }
+        // quality值越小，所绘制出的图像越模糊
+        let base64 = canvas.toDataURL('image/jpeg', quality);
+        // 回调函数返回base64的值
+        callback(base64);
+    }
+}
+
+/**
+ * 将以base64的图片url数据转换为Blob
+ * @param urlData
+ * 用url方式表示的base64图片数据
+ */
+function convertBase64UrlToBlob(urlData) {
+    let arr = urlData.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});
 }

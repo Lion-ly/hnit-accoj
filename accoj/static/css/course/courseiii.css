@@ -1,0 +1,30 @@
+.accsub {
+    font-size: 13px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+
+}
+
+#plusbox, #minusbox {
+    width: 100%;
+    min-height: 50%;
+    max-height: 180px;
+}
+
+span > input {
+    display: none;
+}
+
+.push-background {
+    background: url(../../img/push.png) no-repeat center center;
+    background-size: 90px;
+}
+
+.reduce-background {
+    background: url(../../img/reduce.png) no-repeat center center;
+    background-size: 90px;
+}

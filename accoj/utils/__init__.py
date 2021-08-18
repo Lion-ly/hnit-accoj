@@ -113,6 +113,9 @@ def course_time_open_required(course_no: int):
     def func_wrapper(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            if session.get('role') == "teacher":
+                print(request.path)
+                return render_template("course/{}.html".format(request.path))
             flag = is_course_time_open(course_no)
             if not flag:
                 return render_template('course/notOpen.html')
@@ -1368,31 +1371,35 @@ def manage_team_infos(class_name: str, teacher: str, teams: dict = None):
     score_infos = dict(zip(score_keys, score))
 
     update_user_team_infos(class_name[1])
-    mongo.db.team.dalete_Many({"team_class": class_name[1], "team_school": class_name[0]})
-    mongo.db.rank_team.delete_Many({"team_class": class_name[1]})
+    mongo.db.team.delete_many({"team_class": class_name[1], "team_school": class_name[0]})
+    mongo.db.rank_team.delete_many({"team_class": class_name[1], "team_school": class_name[0]})
     team_school = class_name[0]
     team_class = class_name[1]
     for team in teams:
-        leader_name = team.get("leader_name")
         leader_no = team.get("leader_no")
-        members = team.get("members")
-        team_no = leader_no[:-2]
-        classes_teams = []
-        for member in members:
-            team_no += member[1][-2:]
-        classes_teams.append(team_no)
-        team_name = team_no
-        mongo.db.team.insert(dict(team_no=team_no,
-                                  leader_name=leader_name,
-                                  leader_no=leader_no,
-                                  member=members,
-                                  team_name=team_name,
-                                  team_class=team_class,
-                                  team_school=team_school,
-                                  teacher=teacher))
-        insert_rank_team_infos()
+        if leader_no != "":
+            leader_name = team.get("leader_name")
+            members = team.get("members")
+            member_no_list = []
+            team_no = leader_no[:-2]
+            for member in members:
+                member_no = member[1]
+                team_no += member_no[-2:]
+                member_no_list.append(member_no)
+            mongo.db.user.update_many({"student_no": {"$in": member_no_list}}, {"$set": dict(team_no=team_no)})
+            team_name = team_no
+            mongo.db.team.insert(dict(team_no=team_no,
+                                      leader_name=leader_name,
+                                      leader_no=leader_no,
+                                      member=members,
+                                      team_name=team_name,
+                                      team_class=team_class,
+                                      team_school=team_school,
+                                      teacher=teacher))
+            insert_rank_team_infos()
     # mongo.db.classes.update_One({})
-    data = mongo.db.team.find({"team_class": team_class, "team_school": team_school})
+    data = mongo.db.team.find({"team_class": team_class, "team_school": team_school},
+                              dict(_id=0, leader_name=1, leader_no=1, member=1))
     return data
 
 
@@ -1404,7 +1411,7 @@ def availability_of_the_team(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get("team_no") == "" or session.get("team_no") is None:
+        if session.get("role") != "teacher" and session.get("team_no") == "" or session.get("team_no") is None:
             return jsonify(result=False, message="未组队，无法进入！")
         return func(*args, **kwargs)
 

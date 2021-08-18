@@ -1,0 +1,70 @@
+{% extends 'profile/profile-base.html' %}
+{% block page_title %}我的团队{% endblock %}
+{% block page_title_li %}我的团队{% endblock %}
+{% block content %}
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">我的团队</strong>
+
+                    </div>
+                    <div class="card-body" style="height: 60%;width: 80%">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">团队成员</th>
+                                <th scope="col">得分</th>
+                                <th scope="col">完成进度</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row"><i class="fa fa-star"></i></th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                             aria-valuemax="100"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 25%"
+                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 50%"
+                                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <hr/>
+                        <canvas id="pie-chart" width="600" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+    <!-- Scripts -->
+    <script src="/static/js/profile/profile-team.js"></script>
+{% endblock %}

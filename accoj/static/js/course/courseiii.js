@@ -4,6 +4,10 @@ let subject_infos = Array(),
     answer_infos = "",
     scores = "";
 
+document.body.onselectstart = function () {
+    return false;
+}
+
 $(document).ready(function () {
     function init() {
         iiiBind();
@@ -21,8 +25,22 @@ $(document).ready(function () {
  */
 function submit_subject_info(submit_type) {
 
-    let data = iiiGetInput();
-    data["submit_type"] = submit_type;
+
+    let data = {};
+    //提交保存数据
+    if (submit_type == 'save') {
+        data = iiiGetInput();
+        data["submit_type"] = submit_type;
+
+    }
+    //提交提交数据
+    if (submit_type == 'confirm') {
+        data["subject_infos"] = subject_infos;
+        data["submit_type"] = submit_type;
+
+    }
+    console.log(data);
+
 
     data = JSON.stringify(data);
 
@@ -44,6 +62,12 @@ function get_subject_info(isFromSubmit = false) {
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) {
         return;
+    }
+
+    if (nowBusinessNo == 20) {
+        $("button[data-confirm]").show();
+    } else {
+        $("button[data-confirm]").hide();
     }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
@@ -191,7 +215,8 @@ function iiiPaddingData(data, isFromButton) {
             // 标出错误位置
             for (let i = 0; i < error_pos.length; i++) hasError(error_pos[i]);
         }
-        if (subject_confirmed.indexOf(index) !== -1) iiiDisabledInput(true);
+        // if (subject_confirmed.indexOf(index) !== -1) iiiDisabledInput(true);
+        if (subject_confirmed.length > 0) iiiDisabledInput(true);
     }
 
     if (!data) return;
@@ -224,17 +249,18 @@ function iiiBind() {
     bind_save_info(submit_subject_info);
     bindAnswerSource("", map_subject_info, map_answer);
     $("button[data-to-all-1]").click(function () {
-        to_all('plusbox');
+        clearbox('plusbox');
     });
     $("button[data-to-all-2]").click(function () {
-        to_all('minusbox');
+        clearbox('minusbox');
     });
-    $("button[data-all-to-1]").click(function () {
-        all_to('plusbox');
-    });
-    $("button[data-all-to-2]").click(function () {
-        all_to('minusbox');
-    });
+
+    // $("button[data-all-to-1]").click(function () {
+    //     append_all_to('plusbox');
+    // });
+    // $("button[data-all-to-2]").click(function () {
+    //     append_all_to('minusbox');
+    // });
     pageSplitBind(function (business_no) {
         businessLiControl(business_no);
         get_subject_info();
@@ -253,9 +279,9 @@ function input_moveTo_center(box, subject_array) {
         $(input_tmp).prop("checked", true);
     }
     if (box === "plusbox") {
-        all_to('plusbox');
+        append_all_to('plusbox');
     } else if (box === "minusbox") {
-        all_to('minusbox');
+        append_all_to('minusbox');
     }
     let input_tmp = $("#minusbox, #plusbox").children().children(":input");
     for (let i = 0; i < input_tmp.length; i++) {
@@ -273,29 +299,34 @@ function iiiResetInfo() {
     for (let i = 0; i < input_tmpLen; i++) {
         $(input_tmp[i]).prop("checked", true);
     }
-    to_all('plusbox');
-    to_all('minusbox');
+    clearbox('plusbox');
+    clearbox('minusbox');
     $("#allbox").find("input").prop("checked", false);
 }
 
 /**
- *  穿梭框
+ *  填充框
  */
-function all_to(obj) {
+function append_all_to(obj) {
     let $objbox = $('#' + obj),
-        $allboxChecked = $('#allbox input:checked');
+        $allboxChecked = $('#allbox span').children();
     for (let i = 0; i < $allboxChecked.length; i++) {
-        $objbox.append(
-            $($allboxChecked[i]).parent()
-        );
+        if ($($allboxChecked[i]).prop("checked") == true) {
+            $objbox.append(
+                $($allboxChecked[i]).parent()
+            );
+        }
+
     }
 }
 
-function to_all(obj) {
-    let $objboxChecked = $('#' + obj + ' input:checked');
+function clearbox(obj) {
+    let $objboxChecked = $('#' + obj + ' span').children();
+    console.log($objboxChecked);
     for (let i = 0; i < $objboxChecked.length; i++) {
-        let data_type = $($objboxChecked[i]).attr("data-type"),
-            objbox = $('#' + data_type);
+        let data_type = $($objboxChecked[i]).attr("data-type");
+
+        objbox = $('#' + data_type);
         objbox.append(
             $($objboxChecked[i]).parent()
         );
@@ -308,4 +339,62 @@ function iiiDisabledInput(flag) {
     buttons = buttons.join();
     flag = flag ? flag : false;
     $(buttons).prop("disabled", flag);
+}
+
+/**
+ *  拖拽
+ */
+var dt;//拖拽目标data-type
+function allowDrop(ev) {
+    ev.preventDefault();
+
+}
+
+//放下
+function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+    $(ev.target).prop("checked", true);
+    console.log($(ev.target).prop("checked"));
+    dt = $(ev.target).children().attr("data-type")
+}
+
+//拿起
+function drop(ev) {
+
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("Text");
+    return data;
+
+
+}
+
+function all_to(ev) {
+
+    let data = drop(ev);
+    if (ev.target.id == 'minusbox' || $(ev.target).parent().attr('id') == 'minusbox') {
+
+        document.getElementById("minusbox").append(document.getElementById(data));
+    }
+    if (ev.target.id == 'plusbox' || $(ev.target).parent().attr('id') == 'plusbox') {
+        document.getElementById("plusbox").append(document.getElementById(data));
+    }
+}
+
+function to_all(ev) {
+    let data = drop(ev);
+    if (dt == "assetbox") {
+        document.getElementById("assetbox").append(document.getElementById(data));
+    }
+    if (dt == "liabilitiesbox") {
+        document.getElementById("liabilitiesbox").append(document.getElementById(data));
+    }
+    if (dt == "equitybox") {
+        document.getElementById("equitybox").append(document.getElementById(data));
+    }
+    if (dt == "costbox") {
+        document.getElementById("costbox").append(document.getElementById(data));
+    }
+    if (dt == "profitlossbox") {
+        document.getElementById("profitlossbox").append(document.getElementById(data));
+    }
 }

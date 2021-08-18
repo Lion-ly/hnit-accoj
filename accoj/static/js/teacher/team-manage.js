@@ -1,112 +1,379 @@
-/// <reference path="C:/Users/a1375/Desktop/hnit/typings/jquery/jquery.d.ts" />
-let IsFirst = true;
-$(function () {
-    var tid = 1;
-    getclass();
-    $('#addteam').click(function () {
-        $('#empty').hide();
-        newteams(tid);
-        tid++;
-    });
-    if (($('#team-box').children().length) != 1) {
-        $('#empty').hide();
-    }
+// <reference path="C:/Users/a1375/Desktop/hnit/typings/jquery/jquery.d.ts" />
+let IsFirst = true,
+    //小组标记
+    tid = 0,
+    messageDivID = "show-tips-box",
+    teamInfos = [];
 
+$(function () {
+    getclass();
+    bind();
 });
 
-
-function newteams(tid) {
-    let newteam = $('<a id="' + tid + '" data-toggle="collapse" href="#collapseExample' + tid + '" role="button" aria-expanded="false" aria-controls="collapseExample"></a>');
-    let newlist = $('<li class="list-group-item d-flex justify-content-between align-items-center "></li>').text('Newteam:');
-    newlist.append('<span class="fa fa-angle-down" style="font-size: 20px;"></span>');
-    newteam.append(newlist);
-    let tbox = $(' <div class="collapse" id="collapseExample' + tid + '"> <div class="card card-body"><table class="table" ><thead><tr><th scope="col"></th><th scope="col">团队成员</th><th scope="col">学号</th><th scope="col"></th><th scope="col"></th><th scope="col">操作/组长</th></tr></thead><tbody id="tbox-' + tid + '">    </tbody></table></div></div>');
-    $('#team-box').append(newteam, tbox);
-    $('#tbox-' + tid + '').append('<tr><th scope="row"></th><td></td><td></td><td></td><td></td><td><i id="add" onclick="signtid(this,' + tid + ')" class="fa fa-plus" aria-hidden="true" style="color: green;"></i><i onclick="del(this)" id="del" class="fa fa-minus ' + tid + '" aria-hidden="true" style="color: red;"></i></td></tr>')
-}
-
-
-//标记模态框
-function signtid(self, tid) {
-
-    $(self).attr({
-        'data-toggle': 'modal',
-        'data-target': '#exampleModal'
+function bind() {
+    //添加组队按钮
+    $("#addteam").click(function () {
+        let studentList = $("#studentModal").find("input[type='checkbox']");
+        if (studentList.length > 0) {
+            signtid(this, tid);
+            newteams(tid);
+            tid++;
+        } else {
+            show_message(messageDivID, "已全部分配完成！", "danger", 1000);
+        }
     });
-    $('#exampleModal').attr('class', 'modal fade ' + tid + '');
+    $("#autoteam").click(function () {
+        let studentList = $("#studentModal").find("input[type='checkbox']");
+        if (studentList.length > 0) {
+            autoteam();
+        } else {
+            show_message(messageDivID, "已全部分配完成！", "danger", 1000);
+        }
+    });
+    $("#subTeam").click(subTeam);
+    $("#classSelect").change(function () {
+        reflash();
+    });
 }
 
+function reflash() {
+    $("#studentModal")
+        .find("input[type='checkbox']")
+        .each(function () {
+            $(this).remove();
+        });
+    $("#team-box")
+        .children()
+        .each(function () {
+            $(this).remove();
+        });
+    getclass();
+}
 
-//删除节点
+/**
+ * 自动组队
+ */
+function autoteam() {
+    //学生列表
+    let studentList = $("#studentModal").find("input[type='checkbox']"),
+        //组队最大人数
+        maxTeamSize = 5,
+        //总队伍数
+        totalTeam = Math.ceil(studentList.length / maxTeamSize),
+        teamBox = $("#team-box").find("a"),
+        addStudent = (tid, num) => {
+            $("#studentModal").attr("class", "modal fade " + tid + "");
+            for (let j = 0; j < num; j++) {
+                studentList.eq(j).attr("checked", true);
+            }
+            //调用添加按钮
+            $("#addStudent").click();
+        };
+
+    if (teamBox.length > 0) {
+        teamBox.each(function () {
+            let curTid = $(this).attr("id"),
+                teamLength =
+                    $(`#member_box${curTid}`).find("div.member_item").length - 1,
+                addStudentNum = maxTeamSize - teamLength;
+            if (addStudentNum > 0) {
+                addStudent(curTid, addStudentNum);
+            }
+        });
+    }
+    if (studentList.length > 0) {
+        if (totalTeam - teamBox.length > 0) {
+            for (let i = 0; i < totalTeam - teamBox.length; i++) {
+                studentList = $("#studentModal").find("input[type='checkbox']");
+                newteams(tid);
+                addStudent(tid, studentList.length > 5 ? 5 : studentList.length);
+                tid++;
+            }
+        }
+    }
+}
+
+/**
+ * 添加新小组
+ * @param {*} tid 小组记号
+ */
+function newteams(tid) {
+    $("#empty").hide();
+    let newteam = $(`<a id="${tid}"></a>`),
+        newItem = $(
+            `<div class="card-body team_item  align-items-center" > </div>`
+        ),
+        infoBox = $(
+            `<div class="infobox d-flex justify-content-between"  data-toggle="collapse" data-target="#collapseExample${tid}" ></div>`
+        )
+            .append(`<span id="teamleader_name${tid}">Newteam:</span>`)
+            .append(
+                `<span class="fa fa-angle-down" style="font-size: 20px;"></span>`
+            ),
+        tbox = $(
+            ` <div class="collapse" id="collapseExample${tid}">
+        <div id="member_box${tid}" class="member_box"></div>
+    </div>
+    `
+        );
+    newItem.append(infoBox, tbox);
+    newteam.append(newItem);
+    $("#team-box").append(newteam);
+    let add = $(
+        `<div id="add" class="member_item" onclick="signtid(this,${tid})">
+        <svg t="1627964484820" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2622" width="128" height="128">
+        <path d="M810.666667 554.666667H554.666667v256h-85.333334V554.666667H213.333333v-85.333334h256V213.333333h85.333334v256h256v85.333334z" p-id="2623" fill="#bfbfbf"></path>
+        </svg>
+    </div>`
+    );
+    $("#member_box" + tid + "").append(add);
+    teamInfos[tid] = {
+        leader_name: "",
+        leader_no: "",
+        members: [],
+    };
+}
+
+/**
+ * 删除一个空小组
+ * @param {*} tid
+ */
+function removeNewTeam(tid) {
+    if ($("#member_box" + tid + "").length < 2) {
+        $("#" + tid + "").remove();
+    }
+}
+
+/**
+ * 标记模态框
+ * @param {*} self dom对象的this
+ * @param {*} tid 小组标记
+ */
+function signtid(self, tid) {
+    $(self).attr({
+        "data-toggle": "modal",
+        "data-target": "#studentModal",
+    });
+    $("#studentModal").attr("class", "modal fade " + tid + "");
+}
+
+/**
+ * 删除节点
+ * @param {*} self 删除图标的this
+ */
 function del(self) {
-    let reg = /[1-9][0-9]*/;
-    let tid = $(self).attr('class').match(reg);
-    let len = $(self).parent().parent().parent().children().length;
-    let sname = $(self).parent().parent().children().get(1).innerHTML;
-    let sid = $(self).parent().parent().children().get(2).innerHTML
-
-    if (len == 1) {
-        if (($('#team-box').children().length) == 3) {
-            $('#empty').show();
+    let reg = /[0-9][0-9]*/,
+        tid = $(self).attr("class").match(reg),
+        len = $("#member_box" + tid + "").children().length,
+        //获取学生信息
+        sname = $(self).parent().children().get(0).innerHTML,
+        sid = $(self).parent().children().get(1).innerHTML;
+    if (len == 2) {
+        //若为最后一名队员则删除队伍
+        $("#model-box").append(
+            `<tr>
+        <th scope="row">
+        <div class="form-check">
+             <input class="form-check-input" name="sid" type="checkbox" value="${sid}&${sname}">
+        </div>
+        </th>
+        <td>${sname}</td>
+        <td>${sid}</td>
+      </tr>`
+        );
+        $("#" + tid + "").remove();
+        teamInfos.splice(tid, 1);
+        $("#collapseExample" + tid + "").remove();
+        //若没有队伍则显示空提示
+        if ($("#team-box").children().length == 1) {
+            $("#empty").show();
         }
-
-        if (($('#tbox-' + tid + '').children().children().get(2).innerHTML) != '') {
-
-            $('#model-box').append('<tr><th scope="row"><div class="form-check"><input class="form-check-input" name="sid" type="checkbox" value="' + sid + '&' + sname + '"></div></th><td>' + sname + '</td><td>' + sid + '</td></tr>');
-        }
-        $('#' + tid + '').remove();
-        $('#collapseExample' + tid + '').remove();
     } else {
-        $(self).parent().parent().remove();
-        $('#model-box').append('<tr><th scope="row"><div class="form-check"><input class="form-check-input" name="sid" type="checkbox" value="' + sid + '&' + sname + '"></div></th><td>' + sname + '</td><td>' + sid + '</td></tr>');
+        //判断删除的是否为组长
+        let isTeamLeader =
+            $(`input[name='tlc_${tid}']:checked`).val().split("&")[0] === sname;
+        $(self).parent().remove();
+        $("#model-box").append(
+            `<tr>
+        <th scope="row">
+        <div class="form-check">
+            <input class="form-check-input" name="sid" type="checkbox" value="${sid}&${sname}">
+        </div>
+        </th>
+        <td>${sname}</td>
+        <td>${sid}</td>
+      </tr>
+      `
+        );
+        //若删除的为组长则设置第一个为组长
+        if (isTeamLeader) {
+            (teamInfos[+tid].leader_name = ""), (teamInfos[+tid].leader_no = "");
+            $(`input[name='tlc_${tid}']`).get(0).click();
+        }
+        teamInfos[+tid].members.forEach(function (item, index) {
+            if (item[1] === sid) {
+                teamInfos[+tid].members.splice(index, 1);
+                return;
+            }
+        });
+    }
+}
+
+/**
+ * 新增成员
+ *
+ */
+function prependMember(tid, sname, sid, tlName) {
+    let new_member_box = $(`
+  <div class="member_item">
+    <div class="student_name student_msg">${sname}</div>
+    <div class="student_no student_msg">${sid}</div>
+    <i class="fa fa-minus-circle del ${tid}" onclick='del(this)' aria-hidden="true"></i>
+    
+  </div>
+`);
+    if (sname === tlName) {
+        new_member_box.append(
+            `<input onclick='starchange(${tid},this)' type="radio" checked  name='tlc_${tid}' value='${sname}&${sid}'  class="team_leader_check">`
+        );
+    } else {
+        new_member_box.append(
+            `<input onclick='starchange(${tid},this)' type="radio"   name='tlc_${tid}' value='${sname}&${sid}'  class="team_leader_check">`
+        );
     }
 
+    $("#member_box" + tid + "").prepend(new_member_box);
+    $("#teamleader_name" + tid + "").text("team:" + tlName + "");
 }
 
-//新增成员
-function adds(self) {
-    $('input[type="checkbox"]:checked').each(function () {
-        let number = /[1-9][0-9]*/;
-        let name = /[\u4e00-\u9fa5]+/;
-        let student = $(this).val();
-        let tid = $('#exampleModal').attr('class').match(number);
-        let sid = student.match(number);
-        let sname = student.match(name);
-        if (($('#tbox-' + tid + '').children().children().get(2).innerHTML) == '') {
-            $('#tbox-' + tid + '').children().get(0).remove();
-        }
+/**
+ * 添加小组成员
+ */
+function adds() {
+    let number = /[1-9][0-9]*/,
+        name = /[\u4e00-\u9fa5]+/,
+        tid = +$("#studentModal").attr("class").match(number),
+        studentSelect = $('input[type="checkbox"]:checked');
+    if (studentSelect.length > 0) {
+        studentSelect.each(function () {
+            let student = $(this).val(),
+                sid = student.split("&")[0],
+                sname = student.split("&")[1];
 
-        $(this).parent().parent().parent().remove();
-        $('#tbox-' + tid + '').prepend('<tr><th scope="row"></th><td>' + sname + '</td><td>' + sid + '</td><td></td><td></td><td><i id="add" onclick="signtid(this,' + tid + ')" class="fa fa-plus" aria-hidden="true" style="color: green;"></i><i onclick="del(this)" id="del" class="fa fa-minus ' + tid + '" aria-hidden="true" style="color: red;"></i><input onclick="starchange(' + tid + ',\'' + sname + '\')" type="radio" name="leader' + tid + '" value="' + sid + '"></td></tr>')
-        $('#' + tid + '').children().text('team:' + sname + '').append('<span class="fa fa-angle-down" style="font-size: 20px;"></span>');
-    });
+            teamInfos[+tid].leader_name = sname;
+            teamInfos[+tid].leader_no = sid;
+            teamInfos[tid].members.unshift([sname + "", sid + ""]);
+            $(this).parent().parent().parent().remove();
+            //添加到团队信息数组
+            prependMember(tid, sname, sid, sname);
+        });
+    } else {
+        removeNewTeam(tid);
+    }
 }
 
-//组长设置
-function starchange(tid, sname) {
-    $('#' + tid + '').children().text('team:' + sname + '').append('<span class="fa fa-angle-down" style="font-size: 20px;"></span>');
+/**
+ * 组长设置
+ * @param {*} tid 小组标记
+ * @param {*} self radio选择框this
+ */
+function starchange(tid, self) {
+    let teamLeaderName = $(self).val().split("&")[0],
+        teamLeaderno = $(self).val().split("&")[1];
+    teamInfos[+tid].leader_name = teamLeaderName;
+    teamInfos[+tid].leader_no = teamLeaderno;
+    $("#teamleader_name" + tid + "").text("team:" + teamLeaderName + "");
 }
 
-//班级获取
+/**
+ * 班级获取
+ */
 function getclass() {
     function successFunc(data) {
         data = JSON.parse(data);
 
         let flag = false;
         if (IsFirst) flag = true;
-        //console.log("data.length: " + data.length);
         for (let i = 0; i < data.length; i++) {
             let className = data[i]["class_name"];
 
-            if (flag)
+            if (flag) {
                 $("#classSelect").append(new Option(className, className));
-
+                $("#classSelect").append(
+                    new Option("湖南工学院-软件工程1801", "湖南工学院-软件工程1801")
+                );
+            }
         }
-        //console.log("TimeInfos: " + TimeInfos);
         if (flag) IsFirst = false;
+        getClassTeamInfo(); //获取未分组的学生和已分组的
     }
 
-    let data = {"api": "get_manage_time_info"},
+    let data = {api: "get_manage_time_info"},
         url = "/api/teacher_api";
-    get_data(data, successFunc, url)
+    get_data(data, successFunc, url);
+}
+
+/**
+ * 获取班级队伍信息
+ */
+function getClassTeamInfo() {
+    let nowClassName = $("#classSelect").find("option:selected").val();
+    console.log(nowClassName);
+    let successFunc = (data) => {
+        if (data.team_info) {
+            data.team_info.forEach((element, index) => {
+                newteams(index);
+                tid = index + 1;
+                let tlName = element.leader_name,
+                    tlNo = element.leader_no;
+                teamInfos[index].leader_name = tlName;
+                teamInfos[index].leader_no = tlNo;
+                teamInfos[index].members = element.member;
+
+                element.member.forEach((element) => {
+                    prependMember(index, element[0], element[1], tlName);
+                });
+            });
+        }
+
+        if (data.student_info) {
+            data.student_info.forEach((element) => {
+                $("#model-box").append(` 
+      <tr>
+        <th scope="row">
+            <div class="form-check">
+                <input class="form-check-input" name="sid" type="checkbox"
+                    value="${element.student_no}&${element.student_name}">
+            </div>
+        </th>
+        <td>${element.student_name}</td>
+        <td>${element.student_no}</td>
+      </tr>
+      `);
+            });
+        }
+        console.log($("#model-box").length);
+        console.log(teamInfos);
+    };
+    let data = {api: "no_group_student", class_name: nowClassName},
+        url = "/api/teacher_api";
+    get_data(data, successFunc, url);
+}
+
+function subTeam() {
+    let nowClassName = $("#classSelect").find("option:selected").val(),
+        data = {
+            api: "submit_manage_group_info",
+            class_name: nowClassName,
+            team_infos: teamInfos,
+        },
+        url = "/api/teacher_api";
+    successFunc = function (data) {
+        // setTimeout(function () {
+        //   location.reload();
+        // }, 1000);
+        reflash();
+    };
+
+    get_data(data, successFunc, url, messageDivID);
 }

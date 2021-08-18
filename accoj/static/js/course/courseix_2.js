@@ -10,7 +10,9 @@ let firstChange = true,
     answer_infos1 = "",
     answer_infos2 = "",
     scores1 = 0,
-    scores2 = 0;
+    scores2 = 0,
+    teacher_scores1 = 0,
+    teacher_scores2 = 0;
 
 $(document).ready(function () {
     function init() {
@@ -81,6 +83,7 @@ function map_ix2First_info(data, isFromButton) {
     answer_infos1 = data ? data["answer_infos"] : answer_infos1;
     let scores = data ? data["scores"] : "";
     scores1 = scores ? scores["first"]["student_score"] : scores1;
+    teacher_scores1 = scores ? scores["first"]["teacher_score"] : teacher_scores1;
 
     if (answer_infos1) {
         let $answer = $("button[data-answer-1]");
@@ -155,7 +158,7 @@ function map_ix2Second_info(data, isFromButton) {
     answer_infos2 = data ? data["answer_infos"] : answer_infos2;
     let scores = data ? data["scores"] : "";
     scores2 = scores ? scores["second"]["student_score"] : scores2;
-
+    teacher_scores2 = scores ? scores["second"]["teacher_score"] : teacher_scores2;
 
     if (answer_infos2) {
         let $answer = $("button[data-answer-2]");
@@ -210,7 +213,6 @@ function ix2GetInput(isFirst) {
  */
 function Ix2PaddingData(data, isFirst, isFromButton) {
     function padding() {
-
         data = isFirst ? data["new_balance_sheet_infos"] : data["profit_statement_infos"];
         let divID = isFirst ? "ix2First" : "ix2Second",
             inputs = $("#" + divID).find("input"),
@@ -220,13 +222,15 @@ function Ix2PaddingData(data, isFirst, isFromButton) {
             let $item = $(item),
                 name = $item.attr("name").replace(/End|Last/, ""),
                 period = "period_end";
-
+            //剔除分数输入框
+            if (name == 'score') return;
             if (!flag) period = "period_last";
             let value = data[name][period] ? data[name][period] + "%" : "";
             $item.val(value);
             flag = !flag;
         });
         let conclusion = data["conclusion"];
+        console.log(conclusion);
         $("#" + divID + "Conclusion").val(conclusion);
     }
 
@@ -237,6 +241,10 @@ function Ix2PaddingData(data, isFirst, isFromButton) {
             totalScore = scores1 + scores2,
             scores = isFirst ? scores1 : scores2,
             nowNum = isFirst ? 1 : 2;
+        showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
+        totalScore = teacher_scores1 + teacher_scores2,
+            scores = isFirst ? teacher_scores1 : teacher_scores2,
+            nowNum = isFirst ? 3 : 4;
         showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
         if (isFromButton === 2) {
             if (isFirst) ix21ResetInfo();

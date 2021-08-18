@@ -2,7 +2,8 @@ let ix4_infos,
     ix4_confirmed,
     ix4_saved,
     answer_infos = "",
-    scores = "";
+    scores = 0,
+    teacher_scores = 0;
 
 $(document).ready(function () {
     function init() {
@@ -70,7 +71,8 @@ function map_ix4_info(data, isFromButton) {
     ix4_confirmed = data ? data["ix4_confirmed"] : ix4_confirmed;
     ix4_saved = data ? data["ix4_saved"] : ix4_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
-    scores = data ? data["scores"] : scores;
+    scores = data["scores"] ? data["scores"]["student_score"] : scores;
+    teacher_scores = data["scores"] ? data["scores"]["teacher_score"] : teacher_scores;
 
     if (answer_infos) {
         showAnswerButton();
@@ -98,6 +100,7 @@ function ix4GetInput() {
         flag = true,
         inputs = $("#" + divId).find("input");
 
+
     $.each(inputs, function (index, item) {
         let project = $(item).attr("name").replace(/End|Last/, ""),
             value = $(item).val(),
@@ -108,7 +111,7 @@ function ix4GetInput() {
         infos[project][period] = parseFloat(value);
         flag = !flag;
     });
-    infos["conclusion"] = $("#" + divId + "Conclusion").val();
+    infos["conclusion"] = $("#Conclusion").val();
     return {[infosName]: infos};
 }
 
@@ -137,7 +140,7 @@ function Ix4PaddingData(data, isFromButton) {
             flag = !flag;
         });
         let conclusion = data["conclusion"];
-        $("#" + divID + "Conclusion").val(conclusion);
+        $("#Conclusion").val(conclusion);
     }
 
     if (!data) return;
@@ -145,7 +148,8 @@ function Ix4PaddingData(data, isFromButton) {
         removeAllError();
         let nowTotalScore = 20,
             totalScore = 100;
-        showScoreEm(scores, nowTotalScore, totalScore);
+        showScoreEm(scores, nowTotalScore, totalScore, 1, 1);
+        showScoreEm(teacher_scores, nowTotalScore, teacher_scores, 2, 2);
         if (isFromButton === 2) ix4ResetInfo();
     }
     padding();

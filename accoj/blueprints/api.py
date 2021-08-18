@@ -130,22 +130,22 @@ def profile_api():
         data_tmp = mongo.db.rank_team.find_one({'team_no': student_no}, search_dict)
         data_tmp2 = mongo.db.rank.find_one({'student_no': member_no}, search_dict)
         if data_tmp and data_tmp2:
-            data[0] = list(data_tmp.values())
-            data[1] = list(data_tmp2.values())
+            data.append(list(data_tmp.values()))
+            data.append(list(data_tmp2.values()))
             result = True
             # print('score')
         else:
             result = True
-            data[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            data[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            data.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
             # print('no score')
         return jsonify(result=result, data=data)
 
     def get_team_info():
         """获取团队信息"""
         result, data = False, None
-        team = mongo.db.team.find_One(dict(team_no=student_no),
-                                      dict(_id=0, team_no=0))
+        team = mongo.db.team.find_one(dict(team_no=student_no),
+                                      dict(_id=0, leader_name=1, leader_no=1, team_name=1, member=1))
         if team:
             result, data = True, team
         return jsonify(result=result, data=data)
@@ -216,14 +216,18 @@ def teacher_api():
 
     def no_group_student(_data: dict):
         """分班級，获取未分组的同学"""
-        result, data, data_ = False, None, []
+        result, data = False, None
+        data_ = {}
         school_class = _data.get('class_name').split('-')
         school_name = school_class[0]
         class_name = school_class[1]
-        data_[0] = mongo.db.user.find(dict(student_class=class_name, student_school=school_name, team_no=None),
-                                      dict(_id=0, student_name=1, student_no=1))
-        data_[1] = mongo.db.team.find(dict(team_calss=class_name, team_school=school_name),
-                                      dict(_id=0, leader=1, members=1))
+        student_info = mongo.db.user.find(dict(student_class=class_name, student_school=school_name, team_no=None),
+                                          dict(_id=0, student_name=1, student_no=1))
+        data_['student_info'] = list(student_info) if student_info.count() != 0 else None
+        team_info = mongo.db.team.find(dict(team_class=class_name, team_school=school_name),
+                                       dict(_id=0, leader_name=1, leader_no=1, member=1))
+        data_['team_info'] = list(team_info) if team_info.count() != 0 else None
+        # data_ = dumps(data_, ensure_ascii=False)
         if data_:
             result, data = True, data_
         return jsonify(result=result, data=data)
@@ -235,15 +239,15 @@ def teacher_api():
         def intermediate_functions(flag=True):
             result, data, message = False, None, "保存失败！"
             if not flag:
-                data, message = _data, "保存失败，课程已开始或已结束！"
+                data, message = None, "保存失败，课程已开始或已结束！"
                 return jsonify(result=result, data=data, message=message)
             class_name = _data.get("class_name")
             teams = _data.get("team_infos")
-            if class_name is not None:
+            if class_name is not None and teams:
                 team_infos = manage_team_infos(class_name=class_name, teams=teams, teacher=teacher)
-                result, data, message = True, team_infos, "保存成功！"
-            data.update(dict(class_name=class_name))
-            return jsonify(result, data, message)
+                data = dict(team_infos=(list(team_infos if team_infos else None)))
+                result, message = True, "保存成功！"
+            return jsonify(result=result, data=data, message=message)
 
         return intermediate_functions()
 

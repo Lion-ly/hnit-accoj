@@ -67,6 +67,14 @@ def rank():
     return render_template('profile/rank.html')
 
 
+@profile_bp.route('/profile_team')
+def profile_team():
+    """
+    团队
+    """
+    return render_template('profile/profile-team.html')
+
+
 @profile_bp.before_request
 @login_required_student
 def profile_bp_before_request():

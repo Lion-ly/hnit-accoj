@@ -109,6 +109,11 @@ def get_class_list():
     return jsonify(result=result, data=data)
 
 
+@teacher_bp.route('/team', methods=['GET'])
+def team():
+    return render_template('teacher/team.html')
+
+
 @teacher_bp.before_request
 @login_required_teacher
 def teacher_bp_before_request():

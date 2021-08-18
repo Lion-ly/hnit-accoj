@@ -4,6 +4,7 @@ $(document).ready(function () {
     pwdRevealInit();
     tooltipInit();
     navigationLiInit();
+    sideMenuCon();
 });
 
 /*	@ 导航当前位置
@@ -461,7 +462,7 @@ function submit_info(submit_type, url, data, messageDivID, successFunc, failedFu
                 } else if (type_flag === false) {
                     show_message(messageDivID, "保存成功！", "info", 1000);
                 }
-                successFunc(true);
+                successFunc(data);
             } else {
                 if (type_flag === true) {
                     show_message("submit_confirm_message", data["message"], "danger", 1000, "提交失败！");
@@ -586,8 +587,8 @@ function showScoreEm(nowScore, nowTotalScore, totalScore, nowSelectorNum, totalS
     if (nowScore || nowScore === nowTotalScore) nowClass = nowScore === nowTotalScore ? nowClass + "1" : nowClass + "2";
     else nowClass = nowClass + "3";
 
-    nowScore = nowScore.toFixed(2);
-    totalScore = totalScore.toFixed(2);
+    nowScore = nowScore == -1 ? '未评分' : parseFloat(nowScore).toFixed(2);
+    totalScore = totalScore == -1 ? '未评分' : totalScore.toFixed(2);
     totalScore = "&nbsp;/&nbsp;" + totalScore;
     $nowSelector.removeClass(function (index, className) {
         return t_reg(className);
@@ -688,7 +689,8 @@ function pageSplitBind(callbackFuc, maxPage = 20) {
             activeNoInt = parseInt($activeLi.children().text()),
             activeNoAfter = activeNoInt,
             clickedSpanNo = $this.children().text();
-
+        // 换页前调用保存按钮
+        // $("button[ data-save]").click();
         let clickedSpanNoInt = parseInt(clickedSpanNo);
         if (clickedSpanNoInt === activeNoInt) return;
 
@@ -872,7 +874,9 @@ function bind_score(id, title, messageDivID, category) {
             return;
         }
         let data = {'title': title, 'category': category, 'score': score},
-            successFun = function () {
+            successFun = function (data) {
+                show_message(messageDivID, data.message, "success", 2000, "评分成功!");
+                console.log(data);
             };
 
         commit_correct(data, '', successFun, messageDivID);
@@ -890,14 +894,32 @@ function bind_score(id, title, messageDivID, category) {
  */
 function input_replace_on(ev) {
     let sign = $(ev.target).parent().parent().attr("class");
+    let startnum = "";
+    let input = $('<label><input onblur="input_replace_blur(event)" oninput="limit_input(this)"></label>')
+
     $("." + sign).hide();
+    $("#" + sign).append(input)
+
+
+    $("." + sign).find("input").each(function (index) {
+
+        if ($(this).val() !== "") {
+            startnum = startnum + $(this).val() + ""
+        }
+
+    })
+    if (startnum !== "") {
+        startnum = startnum.slice(0, startnum.length - 2) + "." + startnum.slice(startnum.length - 2)
+    }
+
+    $("#" + sign).find("input").val(startnum);
     $("#" + sign).show();
     $("#" + sign).children().children().focus();
 }
-
 function input_replace_blur(ev) {
     let sign = $(ev.target).parent().parent().attr("id");
     $("#" + sign).hide();
+    $("#" + sign).find('label').remove()
     $("." + sign).show();
     let num = ev.target.value.split('.');
     let i;
@@ -960,3 +982,113 @@ function limit_input(ev) {
         if (ev.value.length > 8) ev.value = ev.value.slice(0, 8);
     }
 }
+
+/**
+ * 侧边弹出按钮
+ *
+ */
+function sideMenuCon() {
+    $(".sideBox").hover(function () {
+        $(this).stop();
+        $(this).animate({right: '-2px'});
+    }, function () {
+        $(this).stop();
+        $(this).animate({right: '-82px'});
+    });
+    sidehref();
+    //绑定重做按钮
+    showRedoBox();
+    $("button[data-submit-redo]").click(subRedoinfo);
+}
+
+//跳转控制
+function sidehref() {
+
+    $("#correct").click(function () {
+        window.location.href = "teacher/teacher_correct"
+    })
+
+
+}
+
+function getNowCourse() {
+    let nowUrl = window.location.href,
+        courseNo = nowUrl.split("/")
+    switch (courseNo[courseNo.length - 1]) {
+        case 'coursei' :
+            return '1'
+        case 'courseii' :
+            return '2'
+        case 'courseiii' :
+            return '3'
+        case 'courseiv' :
+            return '4'
+        case 'coursev' :
+            return '5'
+        case 'coursev_2':
+            return '5'
+        case 'coursevi' :
+            return '6'
+        case 'coursevii' :
+            return '7'
+        case 'courseviii' :
+            return '8'
+        case 'courseix' :
+            return '9'
+        case 'courseix#' :
+            return '9'
+        case 'courseix_2' :
+            return '9'
+        case 'courseix_3' :
+            return '9'
+        case 'courseix_4' :
+            return '9'
+        case 'courseix_4#' :
+            return '9'
+        case 'coursex' :
+            return '10'
+    }
+}
+
+//redo模态框
+function showRedoBox() {
+    $('#redo').click(function () {
+        $("#redoModel").modal('toggle')
+    })
+}
+
+//提交redo信息
+function subRedoinfo() {
+    let data = $("#redo_info").serializeArray();
+    let redo_info = {};
+    data.forEach(function (item) {
+        redo_info[item.name] = item.value;
+    });
+    redo_info["course_no"] = getNowCourse()
+    data = JSON.stringify(redo_info)
+    let submit_type = "confirm",
+        url = "api/submit_redo",
+        messageDivID = "redo_message",
+        successFunc = function (data) {
+            show_message('redo_message', data.message, 'info', 1000);
+            // 延时关闭模态框
+            setTimeout(function () {
+                $("#redoModel").modal('toggle')
+
+            }, 1500);
+
+        },
+        failedFunc = function (data) {
+            show_message('redo_message', data.message, 'danger', 1000);
+            // 延时关闭模态框
+            setTimeout(function () {
+                $("#redoModel").modal('toggle')
+
+            }, 1500);
+        }
+    submit_info(submit_type, url, data, messageDivID, successFunc, failedFunc);
+
+}
+
+
+ 

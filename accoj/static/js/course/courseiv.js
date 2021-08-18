@@ -21,7 +21,23 @@ $(document).ready(function () {
  */
 function submit_entry_info(submit_type) {
 
-    let data = ivGetInput();
+
+    let data = {};
+    //提交保存数据
+    if (submit_type == 'save') {
+        data = ivGetInput();
+        data["submit_type"] = submit_type;
+
+    }
+    //提交提交数据
+    if (submit_type == 'confirm') {
+        data["entry_infos"] = entry_infos;
+        data["submit_type"] = submit_type;
+
+    }
+    console.log(data);
+
+
     data["submit_type"] = submit_type;
     data = JSON.stringify(data);
 
@@ -41,6 +57,11 @@ function get_entry_info(isFromSubmit = false) {
     DisableButton(false);
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text());
     if (nowBusinessNo < 0 || nowBusinessNo > 20) return;
+    if (nowBusinessNo == 20) {
+        $("button[data-confirm]").show();
+    } else {
+        $("button[data-confirm]").hide();
+    }
     if (!isFromSubmit) {
         //  若不是从按钮或第一次加载调用
         if (!entry_saved.length || entry_saved.indexOf(nowBusinessNo - 1) === -1) {

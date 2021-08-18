@@ -22,6 +22,7 @@
     <link href="http://cdn.accoj.top/static/cdn/1.2.3.pe-icon-7-stroke.css" rel="stylesheet">
     <link href="http://cdn.accoj.top/static/cdn/3.2.0.flag-icon.css" rel="stylesheet">
 
+
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <link href="http://cdn.accoj.top/static/cdn/back-stage/style.css" rel="stylesheet">
@@ -29,10 +30,10 @@
     <link href="http://cdn.accoj.top/static/cdn/back-stage/cs-skin-elastic.css" rel="stylesheet">
     <!-- Scripts -->
     <script src="http://cdn.accoj.top/static/cdn/2.7.2.Chart.js" charset="UTF-8"></script>
-    <script src="http://cdn.accoj.top/static/cdn/3.5.1.jquery.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/0.7.0.chartjs-plugin-datalabels.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/2.3.0.socket.io.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/2.2.4.jquery.js" charset="UTF-8"></script>
+    <script src="http://cdn.accoj.top/static/cdn/3.5.1.jquery.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/1.14.4.popper.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/4.1.3.bootstrap.js" charset="UTF-8"></script>
     <script src="http://cdn.accoj.top/static/cdn/0.7.2.matchHeight.js" charset="UTF-8"></script>
@@ -78,7 +79,9 @@
                     <ul class="sub-menu children dropdown-menu">
                         <li><i class="fa fa-plus-square"></i><a href="{{ url_for('teacher.add_class') }}"> 添加班级</a></li>
                         <li><i class="fa fa-clock-o"></i><a href="{{ url_for('teacher.manage_time') }}"> 课程时间</a></li>
-                        <li><i class="fa fa-life-bouy"></i><a href="{{ url_for('teacher.restart_course') }}"> 题目重做</a></li>
+                        <li><i class="fa fa-life-bouy"></i><a href="{{ url_for('teacher.restart_course') }}"> 题目重做</a>
+                        </li>
+                        <li><i class="fa fa-users"></i><a href="{{ url_for('teacher.team') }}"> 小组管理</a></li>
                     </ul>
                 </li>
 

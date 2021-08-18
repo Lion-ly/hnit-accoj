@@ -10,7 +10,9 @@ let ixFirst_infos, // 保存本次课程全部信息，减少后端数据请求�
     answer_infos1 = "",
     answer_infos2 = "",
     scores1 = 0,
-    scores2 = 0;
+    scores2 = 0,
+    teacher_scores1 = 0,
+    teacher_scores2 = 0;
 
 
 $(document).ready(function () {
@@ -82,6 +84,7 @@ function map_ixFirst_info(data, isFromButton) {
     answer_infos1 = data ? data["answer_infos"] : answer_infos1;
     let scores = data ? data["scores"] : "";
     scores1 = scores ? scores["first"]["student_score"] : scores1;
+    teacher_scores1 = scores ? scores["first"]["teacher_score"] : teacher_scores1;
 
     if (answer_infos1) {
         let $answer = $("button[data-answer-1]");
@@ -156,6 +159,7 @@ function map_ixSecond_info(data, isFromButton) {
     answer_infos2 = data ? data["answer_infos"] : answer_infos2;
     let scores = data ? data["scores"] : "";
     scores2 = scores ? scores["second"]["student_score"] : scores2;
+    teacher_scores2 = scores ? scores["second"]["teacher_score"] : teacher_scores2;
 
     if (answer_infos2) {
         let $answer = $("button[data-answer-2]");
@@ -193,9 +197,9 @@ function ixGetInput(isFirst) {
             project = $item.attr("name").replace(/End|Last/, ""),
             value = $item.val(),
             period = "period_end";
-
         if (!flag) period = "period_last";
         if (!infos.hasOwnProperty(project)) infos[project] = Object();
+        infos[project][period] = parseFloat(value);
         infos[project][period] = parseFloat(value);
         flag = !flag;
     });
@@ -227,7 +231,11 @@ function IxPaddingData(data, isFirst, isFromButton) {
                 percent = "%"
             }
             if (data.hasOwnProperty(name)) {
-                let value = data[name][period] ? data[name][period] + percent : "";
+                let value = data[name][period] ? data[name][period] + '' : "";
+                //2021.6.10
+                if (value.indexOf('%') == -1 && value !== '') {
+                    value += percent
+                }
                 $item.val(value);
             }
             flag = !flag;
@@ -243,6 +251,10 @@ function IxPaddingData(data, isFirst, isFromButton) {
             totalScore = scores1 + scores2,
             scores = isFirst ? scores1 : scores2,
             nowNum = isFirst ? 1 : 2;
+        showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
+        totalScore = teacher_scores1 + teacher_scores2,
+            scores = isFirst ? teacher_scores1 : teacher_scores2,
+            nowNum = isFirst ? 3 : 4;
         showScoreEm(scores, nowTotalScore, totalScore, nowNum, nowNum);
         if (isFromButton === 2) {
             if (isFirst) ix1ResetInfo();
@@ -288,7 +300,7 @@ function ixBind() {
     });
     flag = true;
     $inputs2.each(function (index, item) {
-        $(item).change(function () {
+        $(item).blur(function () {
             eventChangeIx(item);
         });
         if (flag) bindRealNumber($(item));
@@ -317,6 +329,7 @@ function ix2ResetInfo() {
     $("#ixSecond").find("input").val("");
 }
 
+
 /**
  * 用户输入数据改变事件响应函数
  * @param obj
@@ -325,6 +338,8 @@ function eventChangeIx(obj) {
     let name = $(obj).attr("name"),
         isEnd = name.endsWith("End"),
         value = $(obj).val();
+    //空白不作处理
+    if (value === "") return;
     if (value === "格式错误") return;
     value = parseFloat(value);
     if (firstChange) {
@@ -332,9 +347,10 @@ function eventChangeIx(obj) {
         Data = Data["ixSecond_infos"];
         for (let key in Data) {
             if (Data.hasOwnProperty(key)) {
-                periodEndData[key] = Data[key]["period_end"];
-                periodLastData[key] = Data[key]["period_last"];
+                periodEndData[key] = isNaN(parseFloat(Data[key]["period_end"])) ? '' : parseFloat(Data[key]["period_end"]);
+                periodLastData[key] = isNaN(parseFloat(Data[key]["period_last"])) ? '' : parseFloat(Data[key]["period_last"]);
             }
+
         }
         firstChange = false;
     }
@@ -362,10 +378,12 @@ function eventChangeIx(obj) {
     result += data.hasOwnProperty("投资收益") ? data["投资收益"] : result;
     if (isEnd) {
         periodEndData["营业利润"] = result;
+        $("#ixSecond").find("input[name=" + inputName + "]").val(result);
     } else {
         periodLastData["营业利润"] = result;
+        $("#ixSecond").find("input[name=" + inputName + "]").val(result + '%');
     }
-    $("#ixSecond").find("input[name=" + inputName + "]").val(result);
+
 
     // 计算利润总额
     inputName = isEnd ? "利润总额End" : "利润总额Last";
@@ -376,10 +394,12 @@ function eventChangeIx(obj) {
     result -= data.hasOwnProperty("营业外支出") ? data["营业外支出"] : result;
     if (isEnd) {
         periodEndData["利润总额"] = result;
+        $("#ixSecond").find("input[name=" + inputName + "]").val(result);
     } else {
         periodLastData["利润总额"] = result;
+        $("#ixSecond").find("input[name=" + inputName + "]").val(result + '%');
     }
-    $("#ixSecond").find("input[name=" + inputName + "]").val(result);
+
 
     // 计算净利润
     inputName = isEnd ? "净利润End" : "净利润Last";
@@ -387,5 +407,12 @@ function eventChangeIx(obj) {
     result = 0;
     result += data.hasOwnProperty("利润总额") ? data["利润总额"] : result;
     result -= data.hasOwnProperty("所得税费用") ? data["所得税费用"] : result;
-    $("#ixSecond").find("input[name=" + inputName + "]").val(result);
+    if (isEnd) {
+        $("#ixSecond").find("input[name=" + inputName + "]").val(result);
+
+    } else {
+
+        $("#ixSecond").find("input[name=" + inputName + "]").val(result + '%');
+    }
+
 }

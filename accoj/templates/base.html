@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 <head>
     <meta charset="UTF-8">
@@ -19,7 +19,7 @@
     <!-- font-awesome -->
     <link href="http://cdn.accoj.top/static/cdn/4.7.0.font-awesome.css" rel="stylesheet">
     <!-- base -->
-    <!--<link href="http://cdn.accoj.top/static/accoj-1.0.0/base.css" rel="stylesheet">-->
+    <!-- <link href="http://cdn.accoj.top/static/accoj-1.0.0/base.css" rel="stylesheet"> -->
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
 
     <script type="text/javascript" charset="UTF-8">
@@ -31,7 +31,7 @@
             return "{{ username }}";
         }
     </script>
-    <script src="{{ url_for("static", filename="js/base.js") }}" charset="UTF-8"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}" charset="UTF-8"></script>
     <!-- local -->
     <link href="http://cdn.accoj.top/static/accoj-1.0.0/main.css"
           rel="stylesheet">
@@ -46,7 +46,7 @@
     <nav class="navbar navbar-default" id="project-title">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{{ url_for('index.index') }}">会计实训系统 Accounting training system</a>
+                <a class="navbar-brand" href="{{ url_for('index.index') }}">会计学实训系统&nbsp;-&nbsp;陌上实训</a>
             </div>
             <div class="navbar-form navbar-right" id="login_signin">
                 <!-- 登录验证 -->
