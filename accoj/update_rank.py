@@ -40,6 +40,6 @@ def periodic_update_user_rank():
 
 
 @celery.task
-def periodic_update_user_and_team_rank():
+def periodic_update_user_rank():
     """周期定时更新排行榜信息"""
     update_user_rank_start()

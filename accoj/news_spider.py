@@ -19,6 +19,12 @@ def news_spider():
     """
     把src a等等数据放进数据库
     """
+    news = redis_cli.lrange('news', 0, 20)
+    if news:
+        # mongo.db.news_spider.delete_many({})
+        # 删除新闻
+        redis_cli.delete('news')
+
     header = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
     }
@@ -26,55 +32,41 @@ def news_spider():
     response = requests.get(url=url, headers=header)
     response.encoding = 'utf-8'
     doc = pq(response.text)
-    a = doc('div.search-result>ul li div.desc a:first-child')
-    result = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+    a = doc('div.flex.box>div.flex.f-d_c.flex_1.j-c_s-b div:first-child>a')
+    result = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     index = 0
-    # cnt = mongo.db.news_spider.find().count()
-    news = redis_cli.lrange('news', 0, 10)
-    if news:
-        # mongo.db.news_spider.delete_many({})
-        # 删除新闻
-        redis_cli.delete('news')
     for item in a.items():
         a_href = item.attr('href')
-        a_href_all = url + a_href
+        a_href_all = a_href
         result[index]['a_href'] = a_href_all
         index += 1
 
-    img = doc('div.search-result>ul li div.img img')
+    img = doc('div.flex.box>div.article-list-img.img-item a>img')
     index = 0
     for item in img.items():
         img_src = item.attr('src')
         result[index]['img_src'] = img_src
         index += 1
 
-    title = doc('div.search-result>ul li div.desc a:first-child>h3')
+    title = doc('div.flex.box>div.flex.f-d_c.flex_1.j-c_s-b div:first-child a div:first-child')
     index = 0
     for item in title.items():
         title_text = item.text()
         result[index]['title_text'] = title_text
         index += 1
 
-    content = doc('div.search-result>ul li div.desc a:nth-child(2)>p')
+    content = doc('div.flex.box>div.flex.f-d_c.flex_1.j-c_s-b div:first-child a div:nth-child(2)')
     index = 0
     for item in content.items():
         content_text = item.text()
         result[index]['content_text'] = content_text
         index += 1
 
-    time = doc('div.search-result>ul li div.desc>div.info>span.time')
+    time = doc('div.flex.box>div.flex.f-d_c.flex_1.j-c_s-b div.infos.flex-space-between span:first-child')
     index = 0
     for item in time.items():
         time_text = item.text()
         result[index]['time_text'] = time_text
-        index += 1
-
-    span = doc('div.search-result>ul li div.desc div.info')
-    span.find('span').remove()
-    index = 0
-    for item in span.items():
-        span_text = item.text()
-        result[index]['span_text'] = span_text
         index += 1
     result = [dumps(r) for r in result]
     redis_multi_push(redis_cli, 'news', result)

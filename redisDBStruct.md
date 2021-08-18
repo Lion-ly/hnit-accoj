@@ -60,6 +60,6 @@ json_str:
 "title_text": "", # 标题
 "content_text": "", # 摘要
 "time_text": "", # 时间
-"span_text": "" # 责编
+# "span_text": "" # 责编
 }'
 ```
