@@ -388,6 +388,7 @@ def create_business_2(company, questions, max_question_no, question_no=False):
         question_set.add(com_business["question_no"])
         question_list.append(com_business["question_no"])
     random_list = list(range(2, max_question_no - 1))
+    print("1: " + str(random_list))
     for question_no_tmp in question_set:
         if question_no_tmp in random_list:
             _remove(random_list, question_no_tmp)
@@ -413,6 +414,7 @@ def create_business_2(company, questions, max_question_no, question_no=False):
         random_tmp = [26, 28, 31]
         random_list = [k for k in random_tmp if k not in question_set]
         question_no = random.choice(random_list)
+        print("2: " + str(random_list))
     elif business_num == 13:
         question_no = 36
     elif business_num == 14:
@@ -423,9 +425,11 @@ def create_business_2(company, questions, max_question_no, question_no=False):
         random_tmp = {26, 28, 31}
         random_list = [k for k in random_tmp if question_list.count(k) == 1]
         question_no = random.choice(random_list)
+        print("3: " + str(random_list))
     else:
         no_random = {5, 8, 7, 17, 18, 25, 26, 27, 28, 31, 33, 34, 36, 37}
         random_list = [k for k in random_list if k not in no_random]
+        print("4: " + str(random_list))
         while True:
             # 随机选择题目
             if not random_list:
@@ -488,6 +492,7 @@ def create_business_2(company, questions, max_question_no, question_no=False):
                 continue
             else:
                 break
+    print("5: " + str(random_list))
     company = deal_with_question_2(company=company, question_no=question_no, questions=questions)
     return True, company
 

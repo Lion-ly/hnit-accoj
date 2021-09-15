@@ -6,7 +6,6 @@
     $("#export_grades").click(export_grade);
 
 });
-
 //班级分类
 function classSelectval() {
     let nowClass = $("#classSelect").val();
@@ -32,9 +31,8 @@ function getStudentInfo() {
         order: [[4, 'desc']],
         "columns": [
             {"data": "rank"},
-            {"data": "student_no"},
-            {"data": "student_class"},
-            {"data": "student_name"},
+            {"data": "team_no"},
+            {"data": "team_class"},
             {"data": "sum_score"},
             {"data": "one"},
             {"data": "two"},
@@ -52,7 +50,7 @@ function getStudentInfo() {
     console.log(table);
     $('#data-table tbody').on('click', 'tr', function () {
 
-        correct_homework(table.row(this).data().student_no);
+        correct_homework(table.row(this).data().team_no);
     });
 }
 
@@ -195,7 +193,6 @@ function exportExcel(JSONData, FileName, title, filter) {
 
 //班级获取
 let IsFirst = true;
-
 function getclass() {
     function successFunc(data) {
         data = JSON.parse(data);

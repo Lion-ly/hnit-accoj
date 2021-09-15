@@ -1,70 +1,67 @@
-{% extends 'profile/profile-base.html' %}
-{% block page_title %}我的团队{% endblock %}
-{% block page_title_li %}我的团队{% endblock %}
-{% block content %}
+{% extends 'profile/profile-base.html' %} {% block page_title %}我的团队{% endblock %} {% block page_title_li %}
+    我的团队{% endblock %} {% block content %}
+    <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/profile/team.css') }}"
+    />
     <div class="animated fadeIn">
         <div class="row">
             <div class="col-md-12">
+                <!-- 成员信息 -->
                 <div class="card">
-                    <div class="card-header">
-                        <strong class="card-title">我的团队</strong>
+                    <div class="card-body">
+                        <div id="teamInfo">
+                            <span class="team-title" style='margin-top:10px;'>团队成员</span>
+                            <button id="changeTeamName" type="button" class="btn btn-primary btn-sm"><i
+                                    class="fa fa-pencil" style="margin-right:2px" aria-hidden="true"></i>修改队名
+                            </button>
+                        </div>
 
-                    </div>
-                    <div class="card-body" style="height: 60%;width: 80%">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">团队成员</th>
-                                <th scope="col">得分</th>
-                                <th scope="col">完成进度</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row"><i class="fa fa-star"></i></th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 25%"
-                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 50%"
-                                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div id="teamInput" style="display:none;">
+                            <input id="teamNameInput" style="width:350px;height:30px;display:inline-block" type="text"
+                                   class="form-control" placeholder="请输入新组名" aria-describedby="basic-addon1">
+                            <button id="sureChangeTeamName" type="button" class="btn btn-warning btn-sm"><i
+                                    class="fa fa-pencil" style="margin-right:2px" aria-hidden="true"></i>确定修改
+                            </button>
+                        </div>
+
+
                         <hr/>
-                        <canvas id="pie-chart" width="600" height="400"></canvas>
+                        <div id="member-box" class="member-box">
+                            <!-- 团队成员 -->
+                        </div>
+                    </div>
+
+                </div>
+                <div></div>
+                <div class="card teamInfo">
+                    <div class="card-body">
+                        <div class="teamInfo">
+                            <div class="teamInfo-item">
+                                <div class="team-title">团队进度</div>
+                                <hr/>
+                                <div class="teamSchedule">
+                                    <canvas id="myChart" width="300" height="200"></canvas>
+                                </div>
+                            </div>
+                            <div class="teamInfoSplit"></div>
+                            <div class="teamInfo-item">
+                                <div class="team-title">团队成绩</div>
+                                <hr/>
+                                <div class="teamScore">
+                                    <canvas id="teamScore" width="300" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
-    </div><!-- .animated -->
+    </div>
+    <!-- .animated -->
     <!-- Scripts -->
-    <script src="/static/js/profile/profile-team.js"></script>
+    <script src="{{ url_for('static', filename='js/profile/profile-team.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile/profile-score.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile/profile-schedule.js') }}"></script>
+
 {% endblock %}

@@ -1,6 +1,21 @@
+.select_header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.select_btn {
+    display: flex;
+    justify-content: space-around;
+    width: 250px;
+}
+
 .member_box {
     display: flex;
     justify-content: flex-start;
+}
+
+.select_class {
+    width: 350px;
 }
 
 .team_item {
@@ -8,18 +23,23 @@
     margin: 5px 10px 5px 10px !important;
     border-radius: 5px;
     position: static !important;
-    width: auto !important;
     float: none !important;
     cursor: pointer;
-    width: 80%;
 }
 
 .card {
     box-shadow: none !important;
 }
 
+.team-box {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: start;
+}
+
 .member_box {
-    margin-top: 15px;
+    /* margin-top: 15px; */
     display: flex;
     flex-wrap: wrap;
 }
@@ -30,7 +50,7 @@
 }
 
 .member_item {
-    width: 300px;
+    width: 200px;
     height: 60px;
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 5px;
@@ -42,7 +62,6 @@
     margin: 7px;
     position: relative;
 }
-
 .del {
     position: absolute;
     right: 10px;
@@ -58,4 +77,14 @@
 .team_leader_check {
     position: absolute;
     left: 10px;
+}
+
+.messageBox {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.studentModalBox {
+    height: 600px;
+    overflow: auto;
 }

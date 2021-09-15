@@ -3,6 +3,7 @@ let ix4_infos,
     ix4_saved,
     answer_infos = "",
     scores = 0,
+    permission = 0,
     teacher_scores = 0;
 
 $(document).ready(function () {
@@ -73,6 +74,16 @@ function map_ix4_info(data, isFromButton) {
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data["scores"] ? data["scores"]["student_score"] : scores;
     teacher_scores = data["scores"] ? data["scores"]["teacher_score"] : teacher_scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    if (permission) {
+        $("#selfQuestion").html("本题");
+
+    } else {
+        $("#selfQuestion").html("无");
+    }
+
 
     if (answer_infos) {
         showAnswerButton();

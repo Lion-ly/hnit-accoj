@@ -1,7 +1,8 @@
 let subject_infos = Array(),
     subject_confirmed = Array(),
     subject_saved = Array(),
-    answer_infos = "",
+    permission = Array();
+answer_infos = "",
     scores = "";
 
 document.body.onselectstart = function () {
@@ -104,6 +105,12 @@ function map_subject_info(data, isFromButton) {
     subject_saved = data ? data["subject_saved"] : subject_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    $("#selfQuestion").html('' + permission.sort((a, b) => {
+        return a - b
+    }).join(","));
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
@@ -357,7 +364,6 @@ function drag(ev) {
     console.log($(ev.target).prop("checked"));
     dt = $(ev.target).children().attr("data-type")
 }
-
 //拿起
 function drop(ev) {
 

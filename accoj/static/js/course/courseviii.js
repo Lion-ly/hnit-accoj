@@ -9,6 +9,7 @@ let firstChange = true,
     periodLastData = Object(),
     answer_infos1 = "",
     answer_infos2 = "",
+    permission = 0,
     scores1 = 0,
     scores2 = 0;
 
@@ -101,6 +102,16 @@ function map_new_balance_sheet_info(data, isFromButton) {
     new_balance_sheet_saved = data ? data["new_balance_sheet_infos"] : new_balance_sheet_saved;
     answer_infos1 = data ? data["answer_infos"] : answer_infos1;
     scores1 = data ? data["scores"] : scores1;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    if (permission) {
+        $("#selfQuestion").html("资产负债表");
+    }
+    if (!permission) {
+        $("#selfQuestion").html("利润表");
+    }
+
 
     if (answer_infos1) {
         let $answer = $("button[data-answer-1]");

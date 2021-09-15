@@ -45,8 +45,9 @@ def signin():
                 session["member_no"] = student_no
                 if role == "student" and (user.get("team_no") and user.get("team_no") != ""):
                     session["username"] = user.get("team_no")
-                    permission = mongo.db.team.find_one({"student_no": session.get("username")},
-                                                        {"permission.{}_permission".format(session.get("member_no"))})
+                    permission = mongo.db.team.find_one({"team_no": session.get("username")},
+                                                        {"_id": 0, "permission.{}_permission"
+                                                        .format(session.get("member_no")): 1})
                     session["permission"] = permission.get("permission") if permission else None
                 else:
                     session["username"] = student_no

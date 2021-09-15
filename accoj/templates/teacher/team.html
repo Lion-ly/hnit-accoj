@@ -1,58 +1,67 @@
-{% extends 'teacher/teacher-base.html' %}
-{% block page_title %}小组管理{% endblock %}
-{% block page_title_li %}
+{% extends 'teacher/teacher-base.html' %} {% block page_title %}小组管理{% endblock %} {% block page_title_li %}
     <li><a href="#">班级管理</a></li>
     <li class="active">小组管理</li>
-{% endblock %}
-{% block content %}
-    <link href="{{ url_for('static', filename='css/teacher/team.css') }}" rel="stylesheet">
+{% endblock %} {% block content %}
+    <link
+            href="{{ url_for('static', filename='css/teacher/team.css') }}"
+            rel="stylesheet"
+    />
 
     <div class="animated fadeIn">
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card" style="min-height: 800px">
                     <div class="card-header">
                         <strong class="card-title">小组管理</strong>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="input-group mb-2 col-lg-4">
-                                <select class="custom-select" id="classSelect">
-
-                                </select>
-
-
+                        <div class="select_header">
+                            <div class="input-group mb-2 select_class">
+                                <select class="custom-select" id="classSelect"></select>
                             </div>
-                            <div class="col-lg-5">
-
+                            <div class="select_btn">
+                                <button id="autoteam" type="button" class="btn btn-outline-info">
+                                    自动生成小组
+                                </button>
+                                <button id="addteam" type="button" class="btn btn-outline-info">
+                                    新增小组
+                                </button>
                             </div>
-                            <div class="col-lg-3">
-                                <button id="autoteam" type="button" class="btn btn-outline-info">自动生成小组</button>
-                                <button id="addteam" type="button" class="btn btn-outline-info">新增小组</button>
-                            </div>
-
                         </div>
+                        <hr size="1"/>
 
-                        <br>
-                    </div>
-                    <div id="team-box" class="card" style="min-height:400px;">
-                        <div id="empty" style="margin:auto 0px;">
-                            <h3 style="text-align: center;">当前班级未分配小组！</h3>
+                        <div id="team-box" class="card team-box">
+                            <!-- 小组 -->
                         </div>
-
+                        <div id="empty" style="margin: 300px auto">
+                            <h3 style="text-align: center">当前班级未分配小组！</h3>
+                        </div>
                     </div>
-                    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog"
-                         aria-labelledby="studentModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+
+                    <div
+                            class="modal fade"
+                            id="studentModal"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="studentModalLabel"
+                            aria-hidden="true"
+                    >
+                        <div
+                                class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                        >
                             <form class="modal-content">
-
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="studentModalLabel">新增成员</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button
+                                            type="button"
+                                            class="close"
+                                            data-dismiss="modal"
+                                            aria-label="Close"
+                                    >
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body studentModalBox">
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
@@ -67,23 +76,37 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                    <button onclick="adds()" id="addStudent" data-dismiss="modal" type="button"
-                                            class="btn btn-primary">添加
+                                    <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            data-dismiss="modal"
+                                    >
+                                        关闭
+                                    </button>
+                                    <button
+                                            onclick="adds()"
+                                            id="addStudent"
+                                            type="button"
+                                            data-dismiss="modal"
+                                            class="btn btn-primary"
+                                    >
+                                        添加
                                     </button>
                                 </div>
-
                             </form>
-
                         </div>
                     </div>
 
-
-                    <div id="show-tips-box"></div>
-
-                    <div class="text-center" style="margin-top: 2%;margin-bottom: 2%;">
-                        <button id="subTeam" class="btn btn-outline-info btn-group-vertical" type="button">保存设置</button>
+                    <div class="text-center" style="margin-top: 2%; margin-bottom: 2%">
+                        <button
+                                id="subTeam"
+                                class="btn btn-outline-info btn-group-vertical"
+                                type="button"
+                        >
+                            保存设置
+                        </button>
                     </div>
+                    <div id="show-tips-box" class="messageBox"></div>
                 </div>
             </div>
         </div>

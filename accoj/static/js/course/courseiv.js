@@ -1,6 +1,7 @@
 let entry_infos = Array(),
     entry_confirmed = Array(),
     entry_saved = Array(),
+    permission = Array(),
     answer_infos = "",
     scores = "",
     rowNumIv = 1;
@@ -99,6 +100,12 @@ function map_entry_info(data, isFromButton) {
     entry_saved = data ? data["entry_saved"] : entry_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    $("#selfQuestion").html('' + permission.sort((a, b) => {
+        return a - b
+    }).join(","));
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,

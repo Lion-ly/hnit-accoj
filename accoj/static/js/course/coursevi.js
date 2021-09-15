@@ -1,6 +1,7 @@
 let acc_document_infos = Array(),
     acc_document_confirmed = Array(),
     acc_document_saved = Array(),
+    permission = Array(),
     answer_infos = "",
     scores = "",
     row_num = 2,
@@ -133,6 +134,12 @@ function map_acc_document_info(data, isFromButton) {
     acc_document_saved = data ? data["acc_document_saved"] : acc_document_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    $("#selfQuestion").html('' + permission.sort((a, b) => {
+        return a - b
+    }).join(","));
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,
@@ -371,7 +378,6 @@ function get_File(control) {
         data = {"business_no": nowBusinessNo};
 
     data = JSON.stringify(data);
-
     function successFunc(data) {
         let file = data["file"],
             filename = file["filename"],
@@ -379,7 +385,6 @@ function get_File(control) {
             arrayBuffer = new Uint8Array(JSON.parse(content)).buffer;
         control(arrayBuffer, filename);
     }
-
     // 获取数据
     let url = "/download_acc_document_info",
         messageDivID = "download_message";
@@ -610,7 +615,6 @@ function photoCompress(file, w, objDiv) {
         canvasDataURL(re, w, objDiv)
     }
 }
-
 function canvasDataURL(path, obj, callback) {
     let img = new Image();
     img.src = path;
@@ -644,7 +648,6 @@ function canvasDataURL(path, obj, callback) {
         callback(base64);
     }
 }
-
 /**
  * 将以base64的图片url数据转换为Blob
  * @param urlData

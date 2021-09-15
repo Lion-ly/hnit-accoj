@@ -4,7 +4,9 @@ let IsFirst = true,
     tid = 0,
     messageDivID = "show-tips-box",
     teamInfos = [];
-
+/**
+ * 初始化函数
+ */
 $(function () {
     getclass();
     bind();
@@ -16,7 +18,6 @@ function bind() {
         let studentList = $("#studentModal").find("input[type='checkbox']");
         if (studentList.length > 0) {
             signtid(this, tid);
-            newteams(tid);
             tid++;
         } else {
             show_message(messageDivID, "已全部分配完成！", "danger", 1000);
@@ -35,18 +36,20 @@ function bind() {
         reflash();
     });
 }
-
 function reflash() {
+    teamInfos = [];
     $("#studentModal")
-        .find("input[type='checkbox']")
+        .find("tr")
         .each(function () {
             $(this).remove();
         });
     $("#team-box")
         .children()
-        .each(function () {
+        .each(function (index) {
             $(this).remove();
         });
+    $("#empty").show();
+
     getclass();
 }
 
@@ -57,10 +60,12 @@ function autoteam() {
     //学生列表
     let studentList = $("#studentModal").find("input[type='checkbox']"),
         //组队最大人数
-        maxTeamSize = 5,
+        maxTeamSize = 4,
         //总队伍数
         totalTeam = Math.ceil(studentList.length / maxTeamSize),
+        //现有的队伍数
         teamBox = $("#team-box").find("a"),
+        //模拟选择
         addStudent = (tid, num) => {
             $("#studentModal").attr("class", "modal fade " + tid + "");
             for (let j = 0; j < num; j++) {
@@ -69,15 +74,19 @@ function autoteam() {
             //调用添加按钮
             $("#addStudent").click();
         };
-
+    //如果已有队伍，先将已有队伍加满
     if (teamBox.length > 0) {
         teamBox.each(function () {
-            let curTid = $(this).attr("id"),
-                teamLength =
-                    $(`#member_box${curTid}`).find("div.member_item").length - 1,
-                addStudentNum = maxTeamSize - teamLength;
-            if (addStudentNum > 0) {
-                addStudent(curTid, addStudentNum);
+            studentList = $("#studentModal").find("input[type='checkbox']");
+            if (studentList.length > 0) {
+                let curTid = $(this).attr("id"),
+                    teamLength =
+                        $(`#member_box${curTid}`).find("div.member_item").length - 1,
+                    addStudentNum = maxTeamSize - teamLength;
+                tid = curTid + 1;
+                if (addStudentNum > 0) {
+                    addStudent(curTid, addStudentNum);
+                }
             }
         });
     }
@@ -85,8 +94,10 @@ function autoteam() {
         if (totalTeam - teamBox.length > 0) {
             for (let i = 0; i < totalTeam - teamBox.length; i++) {
                 studentList = $("#studentModal").find("input[type='checkbox']");
-                newteams(tid);
-                addStudent(tid, studentList.length > 5 ? 5 : studentList.length);
+                addStudent(
+                    tid,
+                    studentList.length > maxTeamSize ? maxTeamSize : studentList.length
+                );
                 tid++;
             }
         }
@@ -99,7 +110,9 @@ function autoteam() {
  */
 function newteams(tid) {
     $("#empty").hide();
-    let newteam = $(`<a id="${tid}"></a>`),
+    let newteam =
+            $(`<a id="${tid}" style="width:45%; margin: 0px 15px !important;  height: auto;
+  " ></a>`),
         newItem = $(
             `<div class="card-body team_item  align-items-center" > </div>`
         ),
@@ -132,16 +145,6 @@ function newteams(tid) {
         leader_no: "",
         members: [],
     };
-}
-
-/**
- * 删除一个空小组
- * @param {*} tid
- */
-function removeNewTeam(tid) {
-    if ($("#member_box" + tid + "").length < 2) {
-        $("#" + tid + "").remove();
-    }
 }
 
 /**
@@ -183,9 +186,10 @@ function del(self) {
         );
         $("#" + tid + "").remove();
         teamInfos.splice(tid, 1);
+        console.log(teamInfos);
         $("#collapseExample" + tid + "").remove();
         //若没有队伍则显示空提示
-        if ($("#team-box").children().length == 1) {
+        if ($("#team-box").children().length == 0) {
             $("#empty").show();
         }
     } else {
@@ -218,7 +222,6 @@ function del(self) {
         });
     }
 }
-
 /**
  * 新增成员
  *
@@ -245,7 +248,6 @@ function prependMember(tid, sname, sid, tlName) {
     $("#member_box" + tid + "").prepend(new_member_box);
     $("#teamleader_name" + tid + "").text("team:" + tlName + "");
 }
-
 /**
  * 添加小组成员
  */
@@ -255,6 +257,9 @@ function adds() {
         tid = +$("#studentModal").attr("class").match(number),
         studentSelect = $('input[type="checkbox"]:checked');
     if (studentSelect.length > 0) {
+        if (!$(`#${tid}`)[0]) {
+            newteams(tid);
+        }
         studentSelect.each(function () {
             let student = $(this).val(),
                 sid = student.split("&")[0],
@@ -267,8 +272,6 @@ function adds() {
             //添加到团队信息数组
             prependMember(tid, sname, sid, sname);
         });
-    } else {
-        removeNewTeam(tid);
     }
 }
 
@@ -299,9 +302,6 @@ function getclass() {
 
             if (flag) {
                 $("#classSelect").append(new Option(className, className));
-                $("#classSelect").append(
-                    new Option("湖南工学院-软件工程1801", "湖南工学院-软件工程1801")
-                );
             }
         }
         if (flag) IsFirst = false;
@@ -312,13 +312,11 @@ function getclass() {
         url = "/api/teacher_api";
     get_data(data, successFunc, url);
 }
-
 /**
  * 获取班级队伍信息
  */
 function getClassTeamInfo() {
     let nowClassName = $("#classSelect").find("option:selected").val();
-    console.log(nowClassName);
     let successFunc = (data) => {
         if (data.team_info) {
             data.team_info.forEach((element, index) => {
@@ -352,8 +350,6 @@ function getClassTeamInfo() {
       `);
             });
         }
-        console.log($("#model-box").length);
-        console.log(teamInfos);
     };
     let data = {api: "no_group_student", class_name: nowClassName},
         url = "/api/teacher_api";
@@ -365,15 +361,13 @@ function subTeam() {
         data = {
             api: "submit_manage_group_info",
             class_name: nowClassName,
-            team_infos: teamInfos,
+            team_infos: teamInfos.filter(function (e) {
+                return e;
+            }), //过滤空元素
         },
-        url = "/api/teacher_api";
-    successFunc = function (data) {
-        // setTimeout(function () {
-        //   location.reload();
-        // }, 1000);
-        reflash();
-    };
-
+        url = "/api/teacher_api",
+        successFunc = function (data) {
+            // reflash();
+        };
     get_data(data, successFunc, url, messageDivID);
 }

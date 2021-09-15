@@ -16,6 +16,8 @@
                     2、了解各类原始凭证。
                     <br/>
                     3、掌握记账凭证的填制方法。
+                    <br/>
+                    <strong>4、你需要完成的题目有：</strong><strong id="selfQuestion"></strong>
 				</span>
                 </div>
                 <div class="panel-body">
@@ -132,21 +134,21 @@
                                     {% endif %}
                                 </div>
                             </form>
-                        <p class="acc-title">2、填制记账凭证：</p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered acc-container-tableformat acc-unborder acc-table-md">
-                                <tbody>
-                                <tr>
-                                    <th colspan="23" class="acc-unedit">记账凭证</th>
-                                </tr>
-                                <tr>
-                                    <th colspan="23">
+                            <p class="acc-title">2、填制记账凭证：</p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered acc-container-tableformat acc-unborder acc-table-md">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="23" class="acc-unedit">记账凭证</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="23">
 										<span style="float: left">记
                                             <label>
                                                 <input class="acc-input-vi" min="1" name="doc_no" type="number">
                                             </label>号
                                         </span>
-                                        <span>日期：
+                                            <span>日期：
                                             <label>
                                                 <input class="acc-unborder" type="date" name="date">
                                             </label>
@@ -196,111 +198,111 @@
                                         </div>
                                     </th>
                                 </tr>
-                                <tr id="vi_row1">
-                                    <td><label><input name="summary" data-illegal-char></label></td>
-                                    <td><label><input name="general_account" data-illegal-char></label>
-                                    </td>
-                                    <td><label><input name="detail_account" data-illegal-char></label>
-                                    </td>
+                                    <tr id="vi_row1">
+                                        <td><label><input name="summary" data-illegal-char></label></td>
+                                        <td><label><input name="general_account" data-illegal-char></label>
+                                        </td>
+                                        <td><label><input name="detail_account" data-illegal-char></label>
+                                        </td>
 
-                                    <td colspan='10' id="borrow1" style="display: none;"></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow1" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
+                                        <td colspan='10' id="borrow1" style="display: none;"></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
 
-                                    <td colspan='10' id="lend1" style="display: none;"></td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
-                                    <td class="lend1" onclick="input_replace_on(event)"><label><input data-limit-number></label>
-                                    </td>
+                                        <td colspan='10' id="lend1" style="display: none;"></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="lend1" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
 
-                                </tr>
-                                <!-- 合计 -->
-                                <tr id="vi_rowLast">
-                                    <th colspan="3" class="acc-unedit">合计</th>
-                                    <td colspan='10' id="borrow_sum" style="display: none;"></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
+                                    </tr>
+                                    <!-- 合计 -->
+                                    <tr id="vi_rowLast">
+                                        <th colspan="3" class="acc-unedit">合计</th>
+                                        <td colspan='10' id="borrow_sum" style="display: none;"></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_sum" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
 
-                                    <td colspan='10' id="borrow_lend" style="display: none;"></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                    <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
-                                            data-limit-number></label></td>
-                                </tr>
-                                <tr class="acc-unedit">
-                                    <th colspan="23" style="text-align: left">制表人：{{ username }}</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        <td colspan='10' id="borrow_lend" style="display: none;"></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                        <td class="borrow_lend" onclick="input_replace_on(event)"><label><input
+                                                data-limit-number></label></td>
+                                    </tr>
+                                    <tr class="acc-unedit">
+                                        <th colspan="23" style="text-align: left">制表人：{{ username }}</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <hr class="simple"/>

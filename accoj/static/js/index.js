@@ -16,7 +16,7 @@ let template = '<div class="media">' +
     '                </p>\n' +
     '            </div>\n' +
     '            <div class="item-info">\n' +
-    '                <span>{AUTHOR}</span>\n' +
+    // '                <span>{AUTHOR}</span>\n' +
     '                <time class="small">{TIME}</time>\n' +
     '            </div>\n' +
     '        </div>' +
@@ -102,7 +102,7 @@ function items(limit) {
             template.replace("{HREF}", newsJSON[itemNum].a_href)
                 .replace("{TITLE}", newsJSON[itemNum].title_text)
                 .replace("{CONTENT}", newsJSON[itemNum].content_text)
-                .replace("{AUTHOR}", newsJSON[itemNum].span_text)
+                // .replace("{AUTHOR}", newsJSON[itemNum].span_text)
                 .replace("{TIME}", newsJSON[itemNum].time_text)
         );
     }

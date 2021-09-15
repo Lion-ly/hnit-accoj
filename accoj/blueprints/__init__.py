@@ -350,7 +350,8 @@ def get_data(type_num, infos_name, info_keys):
 
     if not confirm_flag:
         answer_infos = None
-    permission = session.get("permission").get("{}_permission".format(infos_name))
+    permission = session.get("permission").get("{}_permission".format(session.get("member_no"))) \
+        .get("{}_permission".format(infos_name))
     info_values = [infos, answer_infos, confirmed, saved, scores, permission]
     data = {info_keys[i]: info_values[i] for i in range(0, info_len)}
     return data

@@ -10,6 +10,8 @@
                 <!--作业要求-->
                 <div class="panel-heading">
                     <span>1、掌握并识记常用会计科目。 </span>
+                    </br>
+                    <strong>2、你需要完成的题目有：</strong><strong id="selfQuestion"></strong>
                 </div>
                 <div class="panel-body">
                     <div class="acc-pn-center">
@@ -34,6 +36,7 @@
                         <p class="help-block">1.完成当前业务信息后应手动保存，防止信息丢失。</p>
                         <p class="help-block">2.提交前确保所有题目已保存，防止丢分。</p>
                         <p class="help-block">3.本课程采用<span style="color:black; font-weight: 700;">拖拽</span>方式添加科目。</p>
+
                         <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
                         <em class="acc-score-help">当前</em>
                         </p>
@@ -46,26 +49,27 @@
                         <div class="acc-container-answer">
                             <blockquote>
                                 <label id="business_type" class="label label-success"></label>
-                            <p id="business_content"></p>
-                        </blockquote>
-                    </div>
-                    <div class="acc-container-answer">
-                        <p class="acc-title">涉及到的会计科目及增减变化</p>
-                        <p class="help-block">温馨提示：可通过 <kbd>Ctrl + f</kbd> 快速搜索所需会计科目。</p>
-                        <!--三色盒子-->
-                        <!--默认盒子-->
-                        <div class="row">
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="panel panel-default acc-tricolor-default">
-                                    <div class="panel-heading">
-                                        <!--选项目录-->
-                                        <nav class="navbar navbar-default">
-                                            <ul class="nav navbar-nav">
-                                                <li class="active" role="presentation">
-                                                    <a aria-controls="Asset" data-toggle="tab" href="#Asset" role="tab">
-                                                        资产类
-                                                    </a>
-                                                </li>
+                                <p id="business_content"></p>
+                            </blockquote>
+                        </div>
+                        <div class="acc-container-answer">
+                            <p class="acc-title">涉及到的会计科目及增减变化</p>
+                            <p class="help-block">温馨提示：可通过 <kbd>Ctrl + f</kbd> 快速搜索所需会计科目。</p>
+                            <!--三色盒子-->
+                            <!--默认盒子-->
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="panel panel-default acc-tricolor-default">
+                                        <div class="panel-heading">
+                                            <!--选项目录-->
+                                            <nav class="navbar navbar-default">
+                                                <ul class="nav navbar-nav">
+                                                    <li class="active" role="presentation">
+                                                        <a aria-controls="Asset" data-toggle="tab" href="#Asset"
+                                                           role="tab">
+                                                            资产类
+                                                        </a>
+                                                    </li>
                                                 <li role="presentation">
                                                     <a aria-controls="Liabilities" data-toggle="tab" href="#Liabilities"
                                                        role="tab">
@@ -603,67 +607,67 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--增加/减少/撤销按钮-->
-                            <!--<div class="acc-tricolor-btn">
-                                <div>
-                                    <div>
-                                        <button class="btn btn-success" data-all-to-1 type="button">增加
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-primary" data-to-all-1 type="button">撤销
-                                        </button>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div>
-                                        <button class="btn btn-danger" data-all-to-2 type="button">减少
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-primary" data-to-all-2 type="button">撤销
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>-->
-                            <!--增加盒子 浅绿-->
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="acc-tricolor-scsAndDg">
-                                    <div class="panel panel-success">
-                                        <div class="panel-heading push-background">
-                                            <!-- <span class="btn btn-success" data-all-to-1 >增加
-                                            </span> -->
-                                            <button class="btn btn-success" data-to-all-1 type="button">撤销
-                                            </button>
-                                            <hr class="simple"/>
-                                            <div class="pre-scrollable" id="plusbox" ondrop="all_to(event)"
-                                                 ondragover="allowDrop(event)">
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!--减少盒子 浅红-->
-                                <div class="acc-tricolor-scsAndDg">
-                                    <div class="panel panel-danger">
-                                        <div class="panel-heading reduce-background">
-                                            <!-- <span class="btn btn-danger" data-all-to-2 >减少
-                                            </span> -->
-                                            <button class="btn btn-danger" data-to-all-2 type="button">撤销
+                                <!--增加/减少/撤销按钮-->
+                                <!--<div class="acc-tricolor-btn">
+                                    <div>
+                                        <div>
+                                            <button class="btn btn-success" data-all-to-1 type="button">增加
                                             </button>
-                                            <hr class="simple"/>
-                                            <div class="pre-scrollable" id="minusbox" ondrop="all_to(event)"
-                                                 ondragover="allowDrop(event)">
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-primary" data-to-all-1 type="button">撤销
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <button class="btn btn-danger" data-all-to-2 type="button">减少
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-primary" data-to-all-2 type="button">撤销
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!--增加盒子 浅绿-->
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="acc-tricolor-scsAndDg">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading push-background">
+                                                <!-- <span class="btn btn-success" data-all-to-1 >增加
+                                                </span> -->
+                                                <button class="btn btn-success" data-to-all-1 type="button">撤销
+                                                </button>
+                                                <hr class="simple"/>
+                                                <div class="pre-scrollable" id="plusbox" ondrop="all_to(event)"
+                                                     ondragover="allowDrop(event)">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--减少盒子 浅红-->
+                                    <div class="acc-tricolor-scsAndDg">
+                                        <div class="panel panel-danger">
+                                            <div class="panel-heading reduce-background">
+                                                <!-- <span class="btn btn-danger" data-all-to-2 >减少
+                                                </span> -->
+                                                <button class="btn btn-danger" data-to-all-2 type="button">撤销
+                                                </button>
+                                                <hr class="simple"/>
+                                                <div class="pre-scrollable" id="minusbox" ondrop="all_to(event)"
+                                                     ondragover="allowDrop(event)">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                     <hr class="simple"/>
                     <!--信息提示窗口-->

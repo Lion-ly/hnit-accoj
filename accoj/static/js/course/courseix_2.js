@@ -7,6 +7,7 @@ let ix2Second_infos, // 保存本次课程全部信息，减少后端数据请�
 let firstChange = true,
     periodEndData = Object(),
     periodLastData = Object(),
+    permission = Object,
     answer_infos1 = "",
     answer_infos2 = "",
     scores1 = 0,
@@ -84,6 +85,18 @@ function map_ix2First_info(data, isFromButton) {
     let scores = data ? data["scores"] : "";
     scores1 = scores ? scores["first"]["student_score"] : scores1;
     teacher_scores1 = scores ? scores["first"]["teacher_score"] : teacher_scores1;
+    permission = data ? data["permission"] : permission;
+
+    let selfQue = "无"
+    //填充团队题目
+    if (permission.first) {
+        selfQue = "资产负债表"
+
+    }
+    if (permission.second) {
+        selfQue += ",利润表"
+    }
+    $("#selfQuestion").html(selfQue);
 
     if (answer_infos1) {
         let $answer = $("button[data-answer-1]");

@@ -3,6 +3,7 @@ let involve_subjects = Object(),  // 正确答案中包含的所有科目列表
     ledger_infos,                // 嵌套字典，保存本次课程全部信息，减少后端数据请求次数
     ledger_confirmed = Object(),
     ledger_saved = Object(),
+    permission = Object(),
     now_subject = "",            // 当前所选科目
     first = true,
     involve_subjects_len = 0,
@@ -106,6 +107,15 @@ function map_ledger_info(data, isFromButton) {
     ledger_saved = data ? data["ledger_saved"] : ledger_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    if (permission.ledger1_permission) {
+        $("#selfQuestion").html("期间一");
+    }
+    if (permission.ledger2_permission) {
+        $("#selfQuestion").html("期间二");
+    }
 
     if (!ledger_infos) return;
     let info_key = "ledger_infos_" + now_period,

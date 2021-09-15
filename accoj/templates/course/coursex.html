@@ -12,6 +12,7 @@
                     <span>1、熟悉杜邦分析体系及其运用。 </span>
                     <br/>
                     <span>2、杜邦分析只分析第二期数据，所有公式均采集第二期资产负债表和利润表数据，不使用平均数。</span>
+                    <strong>3、本题需要团队共同完成。</strong><strong id="selfQuestion"></strong>
                 </div>
                 <div class="panel-body">
                     <p class="acc-title">1、杜邦分析
@@ -44,26 +45,26 @@
                                 <td colspan="8" class="acc-unborder"></td>
                                 <td colspan="3"><label><input name="总资产净利率"></label></td>
                                 <th colspan="3" class="acc-unborder">x</th>
-                        <td><label><input name="权益乘数"></label></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="acc-unborder"></td>
-                        <th colspan="4" class="acc-unedit">销售净利率</th>
-                        <td colspan="3" class="acc-unborder"></td>
-                        <th colspan="2" class="acc-unedit">总资产周转率</th>
-                        <td colspan="2" class="acc-unborder"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="acc-unborder"></td>
-                        <td colspan="4"><label><input name="销售净利率"></label></td>
-                        <th colspan="3" class="acc-unborder">x</th>
-                        <td colspan="2"><label><input name="总资产周转率"></label></td>
-                        <td colspan="2" class="acc-unborder"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="acc-unborder"></td>
-                        <th class="acc-unedit">净利润</th>
-                        <td colspan="4" class="acc-unborder"></td>
+                                <td><label><input name="权益乘数"></label></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="acc-unborder"></td>
+                                <th colspan="4" class="acc-unedit">销售净利率</th>
+                                <td colspan="3" class="acc-unborder"></td>
+                                <th colspan="2" class="acc-unedit">总资产周转率</th>
+                                <td colspan="2" class="acc-unborder"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="acc-unborder"></td>
+                                <td colspan="4"><label><input name="销售净利率"></label></td>
+                                <th colspan="3" class="acc-unborder">x</th>
+                                <td colspan="2"><label><input name="总资产周转率"></label></td>
+                                <td colspan="2" class="acc-unborder"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="acc-unborder"></td>
+                                <th class="acc-unedit">净利润</th>
+                                <td colspan="4" class="acc-unborder"></td>
                         <th class="acc-unedit">营业收入</th>
                         <td class="acc-unborder"></td>
                         <th class="acc-unedit">营业收入</th>
@@ -127,24 +128,24 @@
                             </tr>
                         </table>
                     </div>
-                <p class="acc-title">2、分析报告</p>
-                <p>结合杜邦分析与前述分析结论，对企业财务状况和经营状况进行分析和评价，并为企业未来的发展提出建议，形成报告，800字左右。
-                    <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
-                    <em class="acc-score-help">当前</em>
-                </p>
-                <em data-total-score-2></em>
-                <em data-now-score-2></em>
-                {% if role == "教师" %}
-                    <div class="col-lg-2">
-                        <div class="input-group">
-                            <input name="score" type="text" class="form-control" placeholder="满分70">
-                            <span class="input-group-btn">
+                    <p class="acc-title">2、分析报告</p>
+                    <p>结合杜邦分析与前述分析结论，对企业财务状况和经营状况进行分析和评价，并为企业未来的发展提出建议，形成报告，800字左右。
+                        <em class="acc-score-help">&nbsp;/&nbsp;总得分</em>
+                        <em class="acc-score-help">当前</em>
+                    </p>
+                    <em data-total-score-2></em>
+                    <em data-now-score-2></em>
+                    {% if role == "教师" %}
+                        <div class="col-lg-2">
+                            <div class="input-group">
+                                <input name="score" type="text" class="form-control" placeholder="满分70">
+                                <span class="input-group-btn">
                                 <button id="teacher_correct" class="btn btn-info" type="button">教师评分</button>
                             </span>
+                            </div>
+                            <hr>
+                            <div id="course_x_message_1"></div>
                         </div>
-                        <hr>
-                        <div id="course_x_message_1"></div>
-                    </div>
                 {% endif %}
                 <label for="coursexDataConclusion" hidden></label>
                 <textarea id="coursexDataConclusion" class="form-control acc-unresize" rows="10"></textarea>

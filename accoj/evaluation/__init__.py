@@ -186,6 +186,7 @@ def evaluate_key_element(company, company_cp):
 
     # scores = round(scores / 2, 2)
     scores = round(scores / total_scores * 100, 2)
+    print(scores)
     key_element_score.append(scores)
     mongo.db.company.update({"student_no": {"$regex": r"^{}".format(username)}},
                             {"$set": {"evaluation.key_element_score": key_element_score}}, multi=True)

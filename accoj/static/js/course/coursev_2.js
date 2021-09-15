@@ -4,6 +4,7 @@ let balance_sheet_infos = "",
     period1_row = 2,
     period2_row = 2,
     answer_infos = "",
+    permission = 0,
     scores = "";
 
 $(document).ready(function () {
@@ -74,6 +75,14 @@ function map_balance_sheet_info(data, isFromButton) {
     balance_sheet_saved = data ? data["balance_sheet_saved"] : balance_sheet_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    if (permission) {
+        $("#selfQuestion").html("本表");
+    } else {
+        $("#selfQuestion").html("无");
+    }
 
     if (!balance_sheet_infos) return;
 

@@ -2,11 +2,9 @@ $(document).ready(function () {
     _init_();
     getRedoList();
 });
-
 function _init_() {
     getClassNameList();
 }
-
 /**
  * 提交绑定
  *
@@ -39,14 +37,14 @@ function bindButton(url, type, ifclass) {
             messageDivID = "show-tips-box";
 
         if (!ifclass) {
-            data["class_name"] = '0';
+            data["team_class"] = '0';
             data["course_no"] = $('#data-table').DataTable().row(row).data().course_no;
-            data["student_no"] = $('#data-table').DataTable().row(row).data().student_no;
+            data["team_no"] = $('#data-table').DataTable().row(row).data().team_no;
             data["submit_type"] = type;
         } else {
             data["course_no"] = $("#courseSelect").val();
-            data["class_name"] = $("#classSelect").val();
-            data["student_no"] = '0'
+            data["team_class"] = $("#classSelect").val();
+            data["team_no"] = '0'
             $('#reodo_Class_Modal').modal('hide');
             $('.modal-backdrop').remove();
 
@@ -57,7 +55,6 @@ function bindButton(url, type, ifclass) {
 
     conBtn();
 }
-
 /**
  * 获取班级信息
  */
@@ -74,7 +71,6 @@ function getClassNameList() {
         url = "/api/get_class_name_list";
     get_data(data, successFunc, url);
 }
-
 /**
  * 获取重做申请的学生的信息
  */
@@ -96,9 +92,9 @@ function getRedoList() {
                 info: "",
                 sScrollyY: true,
                 columns: [
-                    {data: 'student_no'},
-                    {data: 'class_name'},
-                    {data: 'student_name'},
+                    {data: 'team_no'},
+                    {data: 'team_class'},
+                    {data: 'team_name'},
                     {data: 'time'},
                     {data: 'course_no'},
                     {data: 'reason'},

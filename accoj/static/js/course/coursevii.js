@@ -2,6 +2,7 @@ let subsidiary_account_infos = "",
     subsidiary_account_confirmed = Array(),
     subsidiary_account_saved = Array(),
     involve_subjects = Array(),
+    permission = 0,
     period1Vii1Row = 2, period2Vii1Row = 2,
     acc_balance_sheet_infos = "",
     acc_balance_sheet_confirmed = "",
@@ -212,6 +213,15 @@ function map_acc_balance_sheet_info(data, isFromButton) {
     acc_balance_sheet_saved = data ? data["acc_balance_sheet_infos"] : acc_balance_sheet_saved;
     answer_infos2 = data ? data["answer_infos"] : answer_infos2;
     scores2 = data ? data["scores"] : scores2;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    if (permission) {
+        $("#selfQuestion").html("登记各账户明细账");
+    }
+    if (!permission) {
+        $("#selfQuestion").html("登记科目余额表");
+    }
 
     if (answer_infos2) {
         let $answer = $("button[data-answer-2]");

@@ -196,16 +196,20 @@ def submit_business_info():
         subjects_tmp2 = [key for key in ledger_infos_2]
 
         involve_subjects = dict(involve_subjects_1=subjects_tmp1, involve_subjects_2=subjects_tmp2)
-
+        # 完成第一模块， 分配组队题目权限
+        manage_exercises_permission(team_no=session.get("username"))
         mongo.db.company.update({"student_no": {"$regex": r"^{}".format(session.get("username"))}},
                                 {"$set": {"schedule_confirm.business_confirm": True,
                                           "involve_subjects": involve_subjects}},
                                 multi=True)
         # 更新成绩进排行榜集合
         update_business_rank_score()
-        # 分配题目所有权限
-        # 完成第一模块， 分配组队题目权限
-        manage_exercises_permission()
+        # session 注入permission
+        permission = mongo.db.team.find_one({"team_no": session.get("username")},
+                                            {"_id": 0, "permission.{}_permission"
+                                            .format(session.get("member_no")): 1})
+        session["permission"] = permission.get("permission") if permission else None
+
         return jsonify(result=True)
     else:
         return jsonify(result=False, message="已经提交过！")
@@ -279,16 +283,19 @@ def submit_key_element_info():
     key_element_infos = json_data.get("key_element_infos")
 
     if submit_type == "confirm":
-        for i in range(len(key_element_infos)):
-            business_no = i + 1
-            infos = key_element_infos[i]
+        if not all_save(infos_name):
+            result, message = False, "未全部保存！"
+        else:
+            for i in range(len(key_element_infos)):
+                business_no = i + 1
+                infos = key_element_infos[i]
 
-            result, message = submit_infos(type_num=3, infos=infos,
-                                           submit_type=submit_type,
-                                           infos_name=infos_name,
-                                           business_no=business_no)
-            if not result:
-                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+                result, message = submit_infos(type_num=3, infos=infos,
+                                               submit_type=submit_type,
+                                               infos_name=infos_name,
+                                               business_no=business_no)
+                if not result:
+                    wrong_number += "business_" + str(i + 1) + ":" + message + "、"
     elif submit_type == "save":
         business_no = json_data.get("business_no")
         infos = key_element_infos
@@ -1033,6 +1040,16 @@ def get_business_list():
 
 
 # 通用视图----end-----------------------------------------------------------------------------------
+def all_save(infos_name):
+    """
+    II、III、IV、VI 是否全部保存决定是否可以提交
+    """
+    save_info = mongo.db.company.find_one({"student_no": session.get("username")},
+                                          {"schedule_saved.{}_saved".format(infos_name): 1, "_id": 0})
+    if len(save_info.get("schedule_saved").get("{}_saved".format(infos_name))) == 20:
+        return True
+    return False
+
 
 @accoj_bp.before_request
 @login_required
@@ -1048,18 +1065,22 @@ def accoj_bp_before_request():
 
 
 @accoj_bp.before_request
-@login_required_student
+# @login_required_student
 def submit_info_before_request():
     url_path = request.path
     last_name = url_path.split("/")[-1]
     name_list = last_name.split('_', 1)
-    submit_type = name_list[0]
-    if submit_type == "submit":
-        member_permission = session.get("permission")
+    submit_name = name_list[0]
+    if submit_name == "submit":
         infos_name = name_list[1][:-5]
+        if infos_name not in ["company", "business"]:
+            member_permission = session.get("permission").get("{}_permission".format(session.get("member_no")))
         if infos_name in ["key_element", "subject", "entry", "acc_document"]:
             permission = member_permission.get("{}_permission".format(infos_name))
-            business_no = request.get_json().get("business_no") - 1
+            if request.get_json().get("submit_type") == "confirm":
+                business_no = 19
+            else:
+                business_no = request.get_json().get("business_no") - 1
             if business_no not in permission:
                 return jsonify(result=False, message="无此题权限！")
         elif infos_name == "ledger":
@@ -1067,7 +1088,7 @@ def submit_info_before_request():
             ledger_period = request.get_json().get("ledger_period")
             if permission.get("ledger{}_permission".format(ledger_period)) == 0:
                 return jsonify(result=False, message="无此题权限！")
-        elif infos_name == ["balance_sheet", "subsidiary_account", "acc_balance_sheet", "new_balance_sheet",
+        elif infos_name in ["balance_sheet", "subsidiary_account", "acc_balance_sheet", "new_balance_sheet",
                             "profit_statement"]:
             permission = member_permission.get("{}_permission".format(infos_name))
             if permission == 0:

@@ -92,7 +92,7 @@ def login_required_teacher(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if session.get("role") == "teacher":
-            if session.get("teacher"):
+            if session.get("teacher") and func.__name__ != "commit_correct":
                 # 状态切换，从批改学生作业返回后台的时候
                 session["username"] = session.get("teacher")
                 session["teacher"] = None
@@ -114,7 +114,7 @@ def course_time_open_required(course_no: int):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if session.get('role') == "teacher":
-                print(request.path)
+                # print(request.path)
                 return render_template("course/{}.html".format(request.path))
             flag = is_course_time_open(course_no)
             if not flag:
@@ -550,11 +550,11 @@ def update_business_rank_score():
     score_keys = ['sum_score', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
     score_infos = dict(zip(score_keys, score))
     # infos = insert_rank_score(student_no=student_no, score=score)
-    mongo.db.rank_team.update({"team_no": student_no}, score_infos)
+    mongo.db.rank_team.update_one({"team_no": student_no}, {"$set": score_infos})
     team_member = mongo.db.team.find_one({"team_no": student_no}, dict(_id=0, member=1))
-    for member in team_member:
+    for member in team_member["member"]:
         member_no = member[1]
-        mongo.db.rank.update({"student_no": member_no}, score_infos)
+        mongo.db.rank.update_one({"student_no": member_no}, {"$set": score_infos})
 
 
 def update_rank(schedule_name, scores=None, student_no=None):
@@ -578,8 +578,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('two')
         sum_score -= now_score if now_score else 0
         sum_score = round(sum_score + key_element_sum_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, two=key_element_sum_score)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, two=key_element_sum_score)})
         return key_element_sum_score
 
     def update_subject():
@@ -588,8 +588,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('three')
         sum_score -= now_score if now_score else 0
         sum_score = round(sum_score + subject_sum_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, three=subject_sum_score)})
         return subject_sum_score
 
     def update_entry():
@@ -598,8 +598,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('four')
         sum_score -= now_score if now_score else 0
         sum_score = round(sum_score + entry_sum_score, 2)
-        mongo.db.rank_team.update(dict(student_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
+        mongo.db.rank_team.update_one(dict(student_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
         return entry_sum_score
 
     # 第五部分得分
@@ -610,8 +610,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('five')
         sum_score -= now_score if now_score else 0
         sum_score = round(sum_score + ledger_score_sum, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, five=round(ledger_score_sum, 2))})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, five=round(ledger_score_sum, 2))})
         return ledger_score_sum
 
     # 平衡表得分
@@ -620,8 +620,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         ledger_score_sum += scores
         sum_score = team_score_info.get("sum_score")
         sum_score += scores
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=round(sum_score, 2), five=round(ledger_score_sum, 2))})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=round(sum_score, 2), five=round(ledger_score_sum, 2))})
         return ledger_score_sum
 
     # 第六部分 会计凭证部分得分
@@ -631,8 +631,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('six')
         sum_score -= now_score if now_score else 0
         sum_score = round(acc_sum_score + sum_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, six=acc_sum_score)})
         return acc_sum_score
 
     # 会计账簿部分得分
@@ -642,8 +642,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('seven')
         sum_score -= now_score if now_score else 0
         sum_score = round(scores + sum_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, seven=scores)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, seven=scores)})
         return scores
 
     # 科目余额表
@@ -651,8 +651,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         sum_score = round(scores + team_score_info.get("sum_score"), 2)
         this_sum_score = team_score_info.get("seven")
         this_sum_score = round(this_sum_score + scores, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, seven=this_sum_score)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, seven=this_sum_score)})
         return this_sum_score
 
     # 会计报表部分得分
@@ -662,8 +662,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('eight')
         sum_score -= now_score if now_score else 0
         sum_score = round(scores + sum_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, eight=scores)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, eight=scores)})
         return scores
 
     # 利润表
@@ -671,8 +671,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         sum_score = round(scores + team_score_info.get("sum_score"), 2)
         this_sum_score = team_score_info.get("eight")
         this_sum_score = round(this_sum_score + scores, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, eight=round(this_sum_score, 2))})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, eight=round(this_sum_score, 2))})
         return this_sum_score
 
     # 会计报表分析得分
@@ -691,8 +691,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
         if trend_teacher_score_2 >= 0:
             trend_analysis_score_sum += trend_teacher_score_2
         sum_score = round(sum_score + trend_analysis_score_sum, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, nine=round(trend_analysis_score_sum, 2))})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, nine=round(trend_analysis_score_sum, 2))})
         return trend_analysis_score_sum
 
     # 共同比分析法
@@ -708,8 +708,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
             common_analysis_score += common_ratio_teacher_score_2
         analysis_sum_score = round(analysis_sum_score + common_analysis_score, 2)
         sum_score = round(team_score_info.get("sum_score") + common_analysis_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, nine=analysis_sum_score)})
         return analysis_sum_score
 
     def update_ratio_analysis():
@@ -721,8 +721,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
 
         analysis_sum_score += ratio_analysis_score
         sum_score = round(team_score_info.get("sum_score") + ratio_analysis_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, nine=round(analysis_sum_score, 2))})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, nine=round(analysis_sum_score, 2))})
         return analysis_sum_score
 
     def update_dupont_analysis():
@@ -735,8 +735,8 @@ def update_rank(schedule_name, scores=None, student_no=None):
             dupont_analysis_sum_score += dupont_analysis_teacher_score
 
         sum_score = round(sum_score + dupont_analysis_sum_score, 2)
-        mongo.db.rank_team.update(dict(team_no=student_no),
-                                  {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_sum_score, 2))})
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
+                                      {"$set": dict(sum_score=sum_score, ten=round(dupont_analysis_sum_score, 2))})
         return dupont_analysis_sum_score
 
     update_schedule_dict = dict(key_element=update_key_element,
@@ -777,22 +777,22 @@ def update_rank_member(schedule_name, score=None, team_no=None):
         for member in members:
             member_no = member[1]
             sum_score, member_score = resolve_member(member_no)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, two=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, two=member_score)})
 
     def update_subject():
         for member in members:
             member_no = member[1]
             sum_score, member_score = resolve_member(member_no)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, three=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, three=member_score)})
 
     def update_entry():
         for member in members:
             member_no = member[1]
             sum_score, member_score = resolve_member(member_no)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, four=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, four=member_score)})
 
     def resolve_member(member_no):
         member_score_info = mongo.db.rank.find_one(dict(student_no=member_no), dict(_id=0))
@@ -817,8 +817,10 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             all_score += schedule_score[i * 2 + 1]
             right_score += schedule_score[i * 2]
         second_score = right_score / all_score * 100 * 0.40
+        print(right_score, all_score, sep="   ")
         third_score = len(permission_member_schedule) / round(20 / len(members)) * 100 * 0.10
         member_score = min(round(first_score + second_score + third_score, 2), 100)
+        print(first_score, second_score, third_score, sep="   ")
         sum_score = round(sum_score + member_score, 2)
         return sum_score, member_score
 
@@ -843,13 +845,14 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             if permission_member_ledger.get("ledger1_permission") == 1:
                 title_num += 1
                 all_score += 30
+                print(evaluation.get("ledger_score"))
                 right_score += evaluation.get("ledger_score").get("first") \
-                    if evaluation.get("ledger_score").get("first") else 0
+                    if evaluation.get("ledger_score") else 0
             elif permission_member_ledger.get("ledger2_permission") == 1:
                 title_num += 1
                 all_score += 30
                 right_score += evaluation.get("ledger_score").get("second") \
-                    if evaluation.get("ledger_score").get("second") else 0
+                    if evaluation.get("ledger_score") else 0
             elif permission_member_balance_sheet == 1:
                 title_num += 1
                 all_score += 40
@@ -859,8 +862,8 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             member_score = min(round(first_score + second_score + third_score, 2), 100)
             sum_score -= now_score if now_score else 0
             sum_score = round(sum_score + member_score, 2)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, five=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, five=member_score)})
 
     # 第六部分 会计凭证部分得分
     def update_acc_document():
@@ -882,8 +885,8 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             third_score = len(permission_member_acc_document) / round(20 / len(members)) * 100 * 0.10
             member_score = min(round(first_score + second_score + third_score, 2), 100)
             sum_score = round(sum_score + member_score, 2)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, six=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, six=member_score)})
 
     # 会计账簿部分得分
     # 明细账
@@ -914,8 +917,8 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             member_score = min(round(first_score + second_score + third_score, 2), 100)
             sum_score -= now_score if now_score else 0
             sum_score = round(sum_score + member_score, 2)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, seven=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, seven=member_score)})
 
     # 科目余额表
     def update_acc_balance_sheet():
@@ -950,8 +953,8 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             member_score = min(round(first_score + second_score + third_score, 2), 100)
             sum_score -= now_score if now_score else 0
             sum_score = round(sum_score + member_score, 2)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, eight=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, eight=member_score)})
 
     # 利润表
     def update_profit_statement():
@@ -975,45 +978,45 @@ def update_rank_member(schedule_name, score=None, team_no=None):
                 title_num += 1
                 all_score += 20
                 right_score += evaluation.get("trend_analysis_score").get("first").get("student_score") \
-                    if evaluation.get("trend_analysis_score").get("first").get("student_score") else 0
+                    if evaluation.get("trend_analysis_score") else 0
                 right_score += evaluation.get("trend_analysis_score").get("first").get("teacher_score") \
-                    if evaluation.get("trend_analysis_score").get("first").get("teacher_score") and \
+                    if evaluation.get("trend_analysis_score") and \
                        evaluation.get("trend_analysis_score").get("first").get("teacher_score") != -1 else 0
             elif permission_member_trend_analysis.get("second") == 1:
                 title_num += 1
                 all_score += 20
                 right_score += evaluation.get("trend_analysis_score").get("second").get("student_score") \
-                    if evaluation.get("trend_analysis_score").get("second").get("student_score") else 0
+                    if evaluation.get("trend_analysis_score") else 0
                 right_score += evaluation.get("trend_analysis_score").get("second").get("teacher_score") \
-                    if evaluation.get("trend_analysis_score").get("second").get("teacher_score") and \
+                    if evaluation.get("trend_analysis_score") and \
                        evaluation.get("trend_analysis_score").get("second").get("teacher_score") != -1 else 0
             elif permission_member_common_ratio_analysis.get("first") == 1:
                 title_num += 1
                 all_score += 20
                 right_score += evaluation.get("common_ratio_analysis_score").get("first").get("student_score") \
-                    if evaluation.get("common_ratio_analysis").get("first").get("student_score") else 0
+                    if evaluation.get("common_ratio_analysis_score") else 0
                 right_score += evaluation.get("common_ratio_analysis_score").get("first").get("teacher_score") \
-                    if evaluation.get("common_ratio_analysis_score").get("first").get("teacher_score") and \
+                    if evaluation.get("common_ratio_analysis_score") and \
                        evaluation.get("common_ratio_analysis_score").get("first").get("teacher_score") != -1 else 0
             elif permission_member_common_ratio_analysis.get("second") == 1:
                 title_num += 1
                 all_score += 20
                 right_score += evaluation.get("common_ratio_analysis_score").get("second").get("student_score") \
-                    if evaluation.get("common_ratio_analysis").get("second").get("student_score") else 0
+                    if evaluation.get("common_ratio_analysis_score") else 0
                 right_score += evaluation.get("common_ratio_analysis_score").get("second").get("teacher_score") \
-                    if evaluation.get("common_ratio_analysis_score").get("second").get("teacher_score") and \
+                    if evaluation.get("common_ratio_analysis_score") and \
                        evaluation.get("common_ratio_analysis_score").get("second").get("teacher_score") != -1 else 0
             second_score = right_score / all_score * 80 * 0.4
             third_score = title_num / (round(4 / len(members)) if round(4 / len(members)) > 1 else 1) * 80 * 0.1
-            dupont_analysis_score = evaluation.get("dupont_analysis_score").get("student_score") + evaluation.get(
-                "dupont_analysis").get("teacher_score") \
-                if evaluation.get("dupont_analysis").get("teacher_score") != -1 else 0
+            dupont_analysis_score = evaluation.get("ratio_analysis_score").get("student_score")
+            dupont_analysis_score = dupont_analysis_score + evaluation.get("ratio_analysis_score").get("teacher_score") \
+                if evaluation.get("ratio_analysis_score").get("teacher_score") != -1 else 0
             member_score = min(round(first_score + second_score + third_score, 2), 80)
             member_score += round(member_score + dupont_analysis_score, 2)
             sum_score -= now_score if now_score else 0
             sum_score = round(sum_score + member_score, 2)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, nine=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, nine=member_score)})
 
     # 共同比分析法
     def update_common_ratio_analysis():
@@ -1031,8 +1034,8 @@ def update_rank_member(schedule_name, score=None, team_no=None):
             sum_score -= now_score if now_score else 0
             member_score = score
             sum_score = round(sum_score + member_score, 2)
-            mongo.db.rank.update(dict(student_no=member_no),
-                                 {"$set": dict(sum_score=sum_score, ten=member_score)})
+            mongo.db.rank.update_one(dict(student_no=member_no),
+                                     {"$set": dict(sum_score=sum_score, ten=member_score)})
 
     update_schedule_dict = dict(key_element=update_key_element,
                                 subject=update_subject,
@@ -1194,7 +1197,7 @@ def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: st
                   8: ["new_balance_sheet", "profit_statement"],
                   9: ["trend_analysis", "common_ratio_analysis", "ratio_analysis"],
                   10: ["dupont_analysis"]}
-        num_dic = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
+        num_dic = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
         users, set_dict, unset_dict = [], {}, {}
         if students:
             for student in students:
@@ -1209,7 +1212,7 @@ def init_course_confirm(course_no: int = 0, class_name: str = "", student_no: st
         t_users = filter(lambda x: not x.endswith("_cp"), users)
         for user in t_users:
             score_key = num_dic.get(course_no)
-            scores = mongo.db.rank.find_one({"student_no": user}, {score_key: True})
+            scores = mongo.db.rank_team.find_one({"team_no": user}, {score_key: True})
             old_score = scores.get(score_key)
             mongo.db.rank.update({"student_no": user},
                                  {"$set": {score_key: 0},
@@ -1357,7 +1360,7 @@ def manage_team_infos(class_name: str, teacher: str, teams: dict = None):
 
     def update_user_team_infos(student_class: str):
         """ 重置学员team_no 信息 """
-        mongo.db.user.update_many({"student_class": student_class}, {"$set": {"team_no": None}})
+        mongo.db.user.update_many({"student_class": student_class}, {"$set": {"team_no": ""}})
 
     def insert_rank_team_infos():
         """创建团队时存入团队成绩"""
@@ -1426,9 +1429,9 @@ def is_leader(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        leader_no = mongo.db.team.find({"team_no": "{}".format(session.get("team_no"))},
-                                       dict(_id=0, leader_no=1))
-        if session.get("username") != leader_no:
+        leader_no = mongo.db.team.find_one({"team_no": "{}".format(session.get("team_no"))},
+                                           dict(_id=0, leader_no=1))
+        if session.get("member_no") != leader_no["leader_no"]:
             return jsonify(result=False, message="leader 才能提交！")
         return func(*args, **kwargs)
 
@@ -1467,8 +1470,8 @@ def manage_exercises_permission(team_no: str):
     #                   "acc_balance_sheet_permission", "new_balance_sheet_permission", "profit_statement_permission",
     #                   "trend_analysis_permission", "common_ratio_analysis_permission", "ratio_analysis_permission",
     #                   "dupont_analysis_permission"]
-    team_info = mongo.db.team.find(dict(team_no=team_no))
-    members = team_info["members"]
+    team_info = mongo.db.team.find_one(dict(team_no=team_no))
+    members = team_info["member"]
     member_length = len(members)
     permission = {}
     team_no_permission = {"key_element_permission": array,
@@ -1514,7 +1517,7 @@ def manage_exercises_permission(team_no: str):
         II、III、IV、VI
         list[member][权限，权限，权限，······]
         """
-        arr = []
+        arr = [[] for i in range(member_length)]
         j = 0
         random.shuffle(array)
         for i in array:
@@ -1528,15 +1531,15 @@ def manage_exercises_permission(team_no: str):
         list[member][?] = 1  有权限
         list[member][?] = 0  没有权限
         """
-        arr = []
         j = 0
         a = []
         title = list(range(3))
         title_length = len(title)
+        arr = [[] for i in range(member_length)]
         for num in range(member_length):
             a.append(num)
             for k in title:
-                arr[num][k] = 0
+                arr[num].append(0)
         if member_length >= title_length:
             random.shuffle(a)
             for num in a:
@@ -1553,15 +1556,16 @@ def manage_exercises_permission(team_no: str):
         """
         VII、VIII
         """
-        arr = []
+
         j = 0
         a = []
         title = list(range(2))
         title_length = len(title)
+        arr = [[] for i in range(member_length)]
         for num in range(member_length):
             a.append(num)
             for k in title:
-                arr[num][k] = 0
+                arr[num].append(0)
         if member_length >= title_length:
             random.shuffle(a)
             for num in a:
@@ -1578,7 +1582,7 @@ def manage_exercises_permission(team_no: str):
         """
         IX
         """
-        arr = []
+        arr = [[] for i in range(member_length)]
         j = 0
         a = []
         title = list(range(4))
@@ -1586,7 +1590,7 @@ def manage_exercises_permission(team_no: str):
         for num in range(member_length):
             a.append(num)
             for k in title:
-                arr[num][k] = 0
+                arr[num].append(0)
         if member_length >= title_length:
             random.shuffle(a)
             for num in a:

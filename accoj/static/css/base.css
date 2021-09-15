@@ -371,7 +371,6 @@ body {
     cursor: pointer;
     z-index: 99;
 }
-
 .sideBox > a {
     float: left;
     width: 44px;
@@ -386,12 +385,10 @@ body {
     border-bottom-right-radius: 0px;
     background-color: #337ab7;
 }
-
 .sideBox > a > i {
     padding-top: 9px;
     font-size: 23px;
 }
-
 .sideBox-tips {
     float: left;
     line-height: 42px;

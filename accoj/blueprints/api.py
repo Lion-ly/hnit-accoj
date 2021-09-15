@@ -24,7 +24,7 @@ from accoj.utils import (parse_class_xlrd,
                          get_student_schedule,
                          init_course_confirm,
                          manage_team_infos,
-                         all_course_time_open_required)
+                         all_course_time_open_required, availability_of_the_team, send_system_message)
 from accoj.extensions import mongo, redis_cli
 
 api_bp = Blueprint('api', __name__)
@@ -130,8 +130,8 @@ def profile_api():
         data_tmp = mongo.db.rank_team.find_one({'team_no': student_no}, search_dict)
         data_tmp2 = mongo.db.rank.find_one({'student_no': member_no}, search_dict)
         if data_tmp and data_tmp2:
-            data.append(list(data_tmp.values()))
             data.append(list(data_tmp2.values()))
+            data.append(list(data_tmp.values()))
             result = True
             # print('score')
         else:
@@ -150,6 +150,19 @@ def profile_api():
             result, data = True, team
         return jsonify(result=result, data=data)
 
+    def submit_team_infos(_data: dict):
+        """提交团队信息, 修改团队姓名"""
+        result, data, message = False, None, ""
+        team_name = ""
+        team_name = _data.get("team_name")
+        if team_name != "":
+            mongo.db.team.update_one({"team_no": student_no},
+                                     {"$set": {"team_name": team_name}})
+            mongo.db.rank_team.update_one({"team_no": student_no},
+                                          {"$set": {"team_name": team_name}})
+            result, data, message = True, None, "修改成功"
+        return jsonify(result=result, data=data, message=message)
+
     json_data = request.get_json()
     _api = json_data.get('api')
     get_api_dict = dict(get_manage_time_info=get_manage_time_info,
@@ -157,7 +170,8 @@ def profile_api():
                         get_user_schedule=get_user_schedule,
                         get_user_score=get_user_score,
                         get_team_info=get_team_info)
-    submit_api_dict = dict(submit_user_profile=submit_user_profile)
+    submit_api_dict = dict(submit_user_profile=submit_user_profile,
+                           submit_team_infos=submit_team_infos)
     student_no = session.get('username')
     member_no = session.get("member_no")
     if _api in get_api_dict:
@@ -165,6 +179,39 @@ def profile_api():
     elif _api in submit_api_dict:
         return submit_api_dict[_api](json_data)
     return jsonify(result=False, data=None)
+
+
+@api_bp.route('/submit_redo', methods=['POST'])
+@login_required
+@availability_of_the_team
+def submit_redo():
+    """学生申请重做"""
+    result, data, message = False, None, "申请失败！"
+    json_data = request.get_json()
+    course_no = json_data.get("course_no")
+    reason = json_data.get("reason")
+    team_no = session["username"]
+    if int(course_no) in range(2, 11):
+        flag = mongo.db.reform.find_one(dict(team_no=team_no,
+                                             course_no=course_no))
+        if flag:
+            result, data, message = False, None, "已申请，教师还未处理！"
+        else:
+            time = datetime.datetime.now().strftime('%Y-%m-%d')
+            team = mongo.db.team.find_one({"team_no": team_no}, {"_id": 0, "team_name": 1})
+            team_name = team.get("team_no")
+            mongo.db.reform.insert(dict(team_no=team_no,
+                                        team_name=team_name,
+                                        team_class=session["class_name"],
+                                        team_student=session["student_name"],
+                                        teacher=session["teacher"],
+                                        course_no=course_no,
+                                        reason=reason,
+                                        time=time))
+            result, data, message = True, None, "等待审核！"
+    elif int(course_no) == 1:
+        result, data, message = True, None, "不被允许！"
+    return jsonify(result=result, data=data, message=message)
 
 
 @api_bp.route('/teacher_api', methods=['POST'])
@@ -214,6 +261,15 @@ def teacher_api():
             result, data = True, class_info
         return jsonify(result=result, data=data)
 
+    def get_reform_infos():
+        """获取申请重做学生信息"""
+        result, data = False, None
+        reform_infos = mongo.db.reform.find(dict(teacher=teacher),
+                                            dict(_id=0, teacher=0))
+        result, data = True, dumps(reform_infos)
+
+        return jsonify(result=result, data=data)
+
     def no_group_student(_data: dict):
         """分班級，获取未分组的同学"""
         result, data = False, None
@@ -221,7 +277,7 @@ def teacher_api():
         school_class = _data.get('class_name').split('-')
         school_name = school_class[0]
         class_name = school_class[1]
-        student_info = mongo.db.user.find(dict(student_class=class_name, student_school=school_name, team_no=None),
+        student_info = mongo.db.user.find(dict(student_class=class_name, student_school=school_name, team_no=""),
                                           dict(_id=0, student_name=1, student_no=1))
         data_['student_info'] = list(student_info) if student_info.count() != 0 else None
         team_info = mongo.db.team.find(dict(team_class=class_name, team_school=school_name),
@@ -241,7 +297,6 @@ def teacher_api():
             if not flag:
                 data, message = None, "保存失败，课程已开始或已结束！"
                 return jsonify(result=result, data=data, message=message)
-            class_name = _data.get("class_name")
             teams = _data.get("team_infos")
             if class_name is not None and teams:
                 team_infos = manage_team_infos(class_name=class_name, teams=teams, teacher=teacher)
@@ -249,6 +304,8 @@ def teacher_api():
                 result, message = True, "保存成功！"
             return jsonify(result=result, data=data, message=message)
 
+        class_name = _data.get("class_name")
+        session["class_name"] = class_name
         return intermediate_functions()
 
     def correct_homework(_data: dict):
@@ -257,12 +314,17 @@ def teacher_api():
         student_no = _data.get('student_no')
         company = mongo.db.company.find_one({'student_no': student_no})
         if company:
-            user = mongo.db.user.find_one({'student_no': student_no})
+            user = mongo.db.team.find_one({'team_no': student_no})
             if user.get('teacher') == teacher:
                 # teacher字段记录教师账号id（状态记忆，role不变，返回教师后台的时候会再次转换回去,teacher字段设为空）
                 session['teacher'] = teacher
                 session['username'] = student_no  # 权限转换
-                session['class_name'] = user.get('student_school') + '-' + user.get('student_class')
+                session['class_name'] = user.get('team_school') + '-' + user.get('team_class')
+                permission = mongo.db.team.find_one({"team_no": student_no},
+                                                    {"_id": 0, "permission.{}_permission"
+                                                    .format(student_no): 1})
+                session["member_no"] = student_no
+                session["permission"] = permission.get("permission") if permission else None
                 result = True
             else:
                 message = "输入的学号班级错误！"
@@ -343,7 +405,8 @@ def teacher_api():
     json_data = request.get_json()
     _api = json_data.get('api')
     get_api_dict = dict(get_class_list=get_class_list,
-                        get_manage_time_info=get_manage_time_info)
+                        get_manage_time_info=get_manage_time_info,
+                        get_reform_infos=get_reform_infos)
     submit_api_dict = dict(correct_homework=correct_homework,
                            submit_manage_time_info=submit_manage_time_info,
                            send_class_notify=send_class_notify,
@@ -443,28 +506,30 @@ def get_student_info_correct():
     classes_infos = mongo.db.classes.find({}, dict(class_name=1, teacher=1))
     for c in classes_infos:
         classes_dict[c.get('class_name').split('-')[-1]] = c.get('teacher')
-    scores_infos = redis_cli.zrange('rank', 0, -1, desc=True, withscores=True)
+    scores_infos = redis_cli.zrange('rank_team', 0, -1, desc=True, withscores=True)
     scores_infos_len = len(scores_infos)
     if scores_infos_len:
         scores_info = [json.loads(scores_info[0]) for scores_info in scores_infos]
         for i in range(0, scores_infos_len):
             scores_info[i]['rank'] = i + 1
             scores_info[i]['correct_schedule'] = "0%"
-        scores_info = list(filter(lambda x: classes_dict.get(x['student_class']) == teacher, scores_info))
+        scores_info = list(filter(lambda x: classes_dict.get(x['team_class']) == teacher, scores_info))
         result, data = True, scores_info
     return jsonify(result=result, data=data)
 
 
 @api_bp.route('/commit_correct', methods=['POST'])
-# @login_required_teacher
+@login_required_teacher
 def commit_correct():
     """教师提交作业评分"""
     result, data = False, {'message': ''}
     if session.get('role') != 'teacher':
         return jsonify(result=result, data=data)
     err_message = '评分不符合规范或学生未完成作业'
-    username = session.get('username')
-    schedule_confirm = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1))
+    username = session.get("username")
+    company = mongo.db.company.find_one(dict(student_no=username), dict(schedule_confirm=1, evaluation=1))
+    schedule_confirm = company.get("schedule_confirm")
+    evaluation = company.get("evaluation")
     if not schedule_confirm:
         err_message = '所选账号不存在或该用户未完成作业'
         return jsonify(result=False, data={'message': err_message})
@@ -477,34 +542,47 @@ def commit_correct():
     score = int(json_data.get('score'))  # 分数
     if title in titles:
         t_confirm = schedule_confirm.get(f'{title}_confirm')
-        if t_confirm:
-            if title == 'acc_document':
-                if category in t_confirm:
-                    result = True
-                    mongo.db.company.update({'student_no': username},
-                                            {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
-            elif title in {'trend_analysis', 'common_ratio_analysis'}:
-                # 趋势分析法 / 共同比分析法
-                if score and 0 <= score <= 5 and category in categories and t_confirm.get(
-                        category):
-                    result = True
-                    mongo.db.company.update({'student_no': username},
-                                            {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
-            elif title == 'ratio_analysis':
-                # 比率分析法
-                if score and 0 <= score <= 5 and t_confirm:
-                    result = True
-                    mongo.db.company.update({'student_no': username},
-                                            {'$set': {f'evaluation.{title}_score.teacher_score': score}})
-            elif title == 'dupont_analysis':
-                # 杜邦分析法
-                if score and 0 <= score <= 70 and t_confirm:
-                    result = True
-                    mongo.db.company.update({'student_no': username},
-                                            {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+        if not t_confirm:
+            data['message'] = err_message
+            return jsonify(result=result, data=data)
+        if title == 'acc_document':
+            if category in t_confirm:
+                result, data['message'] = True, "评分成功"
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
+        elif title in {'trend_analysis', 'common_ratio_analysis'}:
+            # 趋势分析法 / 共同比分析法
+            if score and 0 <= score <= 5 and category in categories and t_confirm.get(category):
+                result, data['message'] = True, "评分成功"
+                old_score = evaluation.get(f"{title}_score").get(category).get("teacher_score")
+                new_score = score - old_score if old_score >= 0 else score
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.{category}.teacher_score': score}})
+                mongo.db.rank.update({'student_no': username},
+                                     {'$inc': {'sum_score': new_score, 'nine': new_score}})
+        elif title == 'ratio_analysis':
+            # 比率分析法
+            if score and 0 <= score <= 5 and t_confirm:
+                result, data['message'] = True, "评分成功"
+                old_score = evaluation.get(f"{title}_score").get("teacher_score")
+                new_score = score - old_score if old_score >= 0 else score
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+                mongo.db.rank.update({'student_no': username},
+                                     {'$inc': {'sum_score': new_score, 'nine': new_score}})
+        elif title == 'dupont_analysis':
+            # 杜邦分析法
+            if score and 0 <= score <= 70 and t_confirm:
+                result, data['message'] = True, "评分成功"
+                old_score = evaluation.get(f"{title}_score").get("teacher_score")
+                new_score = score - old_score if old_score >= 0 else score
+                mongo.db.company.update({'student_no': username},
+                                        {'$set': {f'evaluation.{title}_score.teacher_score': score}})
+                mongo.db.rank.update({'student_no': username},
+                                     {'$inc': {'sum_score': new_score, 'ten': new_score}})
     if not result:
         data['message'] = err_message
-    return jsonify(result=result, data=data)
+    return jsonify(result=result, data=data, message=data['message'])
 
 
 @api_bp.route('/get_student_info_notify_c', methods=['GET'])
@@ -676,3 +754,30 @@ def course_redo():
                                        student_no=student_no) if users else False
     message = "操作成功！" if flag else "操作失败!"
     return jsonify(result=flag, data=None, message=message)
+
+
+@api_bp.route('/course_reform', methods=['POST'])
+@login_required_teacher
+def course_reform():
+    flag, data, message = False, None, "操作失败！"
+    data = request.get_json()
+    course_no = int(data.get('course_no'))
+    class_name = data.get('class_name')
+    team_no = data.get('team_no')
+    submit_type = data.get('submit_type')
+    message_body = ''
+    mongo.db.reform.delete_one({'team_no': team_no, 'course_no': str(course_no)})
+    if submit_type == 'agree':
+        message_body = '通过申请！'
+        flag = init_course_confirm(course_no=course_no, class_name=class_name,
+                                   student_no=team_no)
+        message = "操作成功！" if flag else "操作失败!"
+    elif submit_type == 'refuse':
+        message_body = '未通过申请！'
+        flag, data, message = True, None, "操作成功！"
+    message_head = '模块' + str(course_no) + '重做申请通知:'
+    members = mongo.db.team.find_one({"team_no": team_no}, {"_id": 0, "member": 1}).get("member")
+    for member in members:
+        send_system_message(message_head=message_head, message_body=message_body,
+                            room=team_no, username=member[1])
+    return jsonify(result=flag, data=data, message=message)

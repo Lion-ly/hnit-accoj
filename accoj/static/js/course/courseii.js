@@ -1,6 +1,7 @@
 let key_element_infos = Array(), // 保存本次课程全部信息，减少后端数据请求次数，分页由前端完成
     key_element_confirmed = Array(),
     key_element_saved = Array(),
+    permission = Array(),
     answer_infos = "",
     scores = "";
 $(document).ready(function () {
@@ -37,8 +38,6 @@ function submit_key_element_info(submit_type) {
             }
         }
     }
-    console.log(data)
-
     data = JSON.stringify(data);
 
     // 提交数据
@@ -105,6 +104,12 @@ function map_key_element_info(data, isFromButton) {
     key_element_saved = data ? data["key_element_saved"] : key_element_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
+    permission = data ? data["permission"] : permission;
+
+    //填充团队题目
+    $("#selfQuestion").html('' + permission.sort((a, b) => {
+        return a - b
+    }).join(","));
 
     let nowBusinessNo = parseInt($("li[data-page-control][class=active]").children().text()),
         business_index = nowBusinessNo - 1,

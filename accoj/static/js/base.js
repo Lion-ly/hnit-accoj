@@ -136,6 +136,7 @@ function check_email(email) {
  * @param message_head
  */
 function show_message(id, message, message_type, timeout, message_head = false) {
+    console.log(1111);
     if (document.getElementById("show_message")) $("#show_message").remove();
     let div_content_base = "<div class='alert alert-" + message_type + "' id='show_message' style='text-align: center;display: none;margin-top: 20px;'> <strong>";
     let type = "提示！";
@@ -149,6 +150,7 @@ function show_message(id, message, message_type, timeout, message_head = false) 
     }
     let div_content = div_content_base + type + "</strong>" + message + "</div>";
     $('#' + id).append(div_content);
+    console.log("message", $('#' + id));
     let show_message_tmp = $('#show_message');
     // 淡入效果
     show_message_tmp.fadeIn(timeout);
@@ -1049,14 +1051,12 @@ function getNowCourse() {
             return '10'
     }
 }
-
 //redo模态框
 function showRedoBox() {
     $('#redo').click(function () {
         $("#redoModel").modal('toggle')
     })
 }
-
 //提交redo信息
 function subRedoinfo() {
     let data = $("#redo_info").serializeArray();
