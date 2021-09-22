@@ -100,7 +100,7 @@ function map_entry_info(data, isFromButton) {
     entry_saved = data ? data["entry_saved"] : entry_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
-    permission = data ? data["permission"] : permission;
+    permission = (data ? data["permission"] : permission) + 1;
 
     //填充团队题目
     $("#selfQuestion").html('' + permission.sort((a, b) => {

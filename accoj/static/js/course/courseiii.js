@@ -105,7 +105,7 @@ function map_subject_info(data, isFromButton) {
     subject_saved = data ? data["subject_saved"] : subject_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
-    permission = data ? data["permission"] : permission;
+    permission = (data ? data["permission"] : permission) + 1;
 
     //填充团队题目
     $("#selfQuestion").html('' + permission.sort((a, b) => {
