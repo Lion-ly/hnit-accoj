@@ -1,0 +1,57 @@
+.member-box {
+    display: flex;
+    min-width: 800px;
+}
+
+.member-item {
+    display: flex;
+    width: 25%;
+    height: 60px;
+    margin: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #c9c7c7;
+    justify-content: space-around;
+    position: relative;
+    flex-wrap: wrap;
+}
+
+.member-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.item {
+    width: 100%;
+    text-align: center;
+}
+
+.leader-sign {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+}
+
+.teamInfo {
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.teamInfo-item {
+    flex: 0.49;
+}
+
+.team-title {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-weight: 600px;
+    font-size: 18px;
+}
+
+.teamInfoSplit {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    flex: 0.02;
+    margin-right: 15px;
+}
