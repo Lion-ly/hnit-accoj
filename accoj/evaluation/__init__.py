@@ -212,7 +212,7 @@ def evaluate_subject(company, company_cp):
     info_len = len(subject_infos_cp)
 
     for i in range(0, info_len):
-        info = subject_infos[i]
+        info = subject_infos[i] if subject_infos[i] else []
         info_cp = subject_infos_cp[i]
         total_score = TotalScore[indexes[i] - 1]
         score = total_score

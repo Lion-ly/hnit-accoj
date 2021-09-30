@@ -6,7 +6,7 @@ let acc_document_infos = Array(),
     scores = "",
     row_num = 2,
     fileContent
-;
+    ;
 
 $(document).ready(function () {
     function init() {
@@ -134,10 +134,12 @@ function map_acc_document_info(data, isFromButton) {
     acc_document_saved = data ? data["acc_document_saved"] : acc_document_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
     scores = data ? data["scores"] : scores;
-    permission = (data ? data["permission"] : permission) + 1;
+    permission = data ? data["permission"] : permission;
 
     //填充团队题目
-    $("#selfQuestion").html('' + permission.sort((a, b) => {
+    $("#selfQuestion").html('' + permission.map((cur) => {
+        return cur + 1
+    }).sort((a, b) => {
         return a - b
     }).join(","));
 
@@ -437,6 +439,7 @@ function previewpic() {
     }
 
 }
+
 
 
 // ==================================事件控制==================================//
