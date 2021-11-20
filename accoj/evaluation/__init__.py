@@ -264,7 +264,7 @@ def evaluate_entry(company, company_cp):
     info_len = len(entry_infos_cp)
 
     for i in range(0, info_len):
-        info = entry_infos[i]
+        info = entry_infos[i] if entry_infos[i] else []
         info_cp = entry_infos_cp[i]
         total_score = TotalScore[indexes[i] - 1]
         score = total_score
@@ -420,7 +420,7 @@ def evaluate_acc_document(company, company_cp):
     info_len = len(acc_document_infos_cp)
 
     for i in range(0, info_len):
-        info = acc_document_infos[i]
+        info = acc_document_infos[i] if acc_document_infos[i] else []
         info_cp = acc_document_infos_cp[i]
         info = info.get("contents")
         info_cp = info_cp.get("contents")

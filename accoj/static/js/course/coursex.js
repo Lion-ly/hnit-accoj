@@ -70,8 +70,8 @@ function map_coursex_info(data, isFromButton) {
     coursex_confirmed = data ? data["coursex_confirmed"] : coursex_confirmed;
     coursex_saved = data ? data["coursex_saved"] : coursex_saved;
     answer_infos = data ? data["answer_infos"] : answer_infos;
-    scores = data ? data["scores"]["student_score"] : scores;
-    teacher_scores = data ? data["scores"]["teacher_score"] : teacher_scores;
+    scores = data["scores"] ? data["scores"]["student_score"] : scores;
+    teacher_scores = data["scores"] ? data["scores"]["teacher_score"] : teacher_scores;
 
     if (answer_infos) {
         showAnswerButton();
@@ -125,7 +125,6 @@ function CoursexPaddingData(data, isFromButton) {
             if (index !== $inputs.length) {
                 let name = $(item).attr("name"),
                     value = data[name] ? data[name] : "";
-                console.log(name);
                 value = name.match(/[率数]$/) ? (value ? value + "%" : "") : value;
                 $(item).val(value);
             }

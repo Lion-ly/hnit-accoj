@@ -216,10 +216,10 @@ function map_acc_balance_sheet_info(data, isFromButton) {
     permission = data ? data["permission"] : permission;
 
     //填充团队题目
-    if (permission) {
+    if (!permission) {
         $("#selfQuestion").html("登记各账户明细账");
     }
-    if (!permission) {
+    if (permission) {
         $("#selfQuestion").html("登记科目余额表");
     }
 
@@ -587,8 +587,8 @@ function vii1_AddRow(flag) {
         "<tr id='" + now_id + "'>"
         + "<td><label><input name='month' title='月' onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input name='day' title='日' onkeyup='limit_number(this)'></label></td>"
-        + "<td><label><input name='word' title='字' onkeyup='limit_number(this)'></label></td>"
-        + "<td><label><input name='no' title='号' onkeyup='limit_number(this)'></label></td>"
+        + "<td><label><input name='word' title='字' data-illegal-char></label></td>"
+        + "<td><label><input name='no' title='号'onkeyup='limit_number(this)'></label></td>"
         + "<td><label><input name='summary' onkeyup='illegalCharFilter(this)'></label></td>"
         + "<td colspan='10' id='borrow" + now_id + "' style='display: none;'  ></td>"
         + "<td class='borrow" + now_id + "' onclick='input_replace_on(event)'><label><input onkeyup='limit_number(this)'></label></td>"

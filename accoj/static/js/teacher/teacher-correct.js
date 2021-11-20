@@ -32,6 +32,7 @@ function getStudentInfo() {
         "columns": [
             {"data": "rank"},
             {"data": "team_no"},
+            {"data": "team_name"},
             {"data": "team_class"},
             {"data": "sum_score"},
             {"data": "one"},

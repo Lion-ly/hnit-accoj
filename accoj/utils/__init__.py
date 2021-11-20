@@ -598,7 +598,7 @@ def update_rank(schedule_name, scores=None, student_no=None):
         now_score = team_score_info.get('four')
         sum_score -= now_score if now_score else 0
         sum_score = round(sum_score + entry_sum_score, 2)
-        mongo.db.rank_team.update_one(dict(student_no=student_no),
+        mongo.db.rank_team.update_one(dict(team_no=student_no),
                                       {"$set": dict(sum_score=sum_score, four=entry_sum_score)})
         return entry_sum_score
 
@@ -616,13 +616,15 @@ def update_rank(schedule_name, scores=None, student_no=None):
 
     # 平衡表得分
     def update_balance_sheet():
-        ledger_score_sum = team_score_info.get("five")
-        ledger_score_sum += scores
+        balance_sheet_score = scores
         sum_score = team_score_info.get("sum_score")
-        sum_score += scores
+        five_sum = team_score_info.get("five")
+        sum_score -= five_sum if five_sum else 0
+        five_sum += balance_sheet_score
+        sum_score = round(sum_score + five_sum, 2)
         mongo.db.rank_team.update_one(dict(team_no=student_no),
-                                      {"$set": dict(sum_score=round(sum_score, 2), five=round(ledger_score_sum, 2))})
-        return ledger_score_sum
+                                      {"$set": dict(sum_score=sum_score, five=round(five_sum, 2))})
+        return five_sum
 
     # 第六部分 会计凭证部分得分
     def update_acc_document():
@@ -723,7 +725,7 @@ def update_rank(schedule_name, scores=None, student_no=None):
         sum_score = round(team_score_info.get("sum_score") + ratio_analysis_score, 2)
         mongo.db.rank_team.update_one(dict(team_no=student_no),
                                       {"$set": dict(sum_score=sum_score, nine=round(analysis_sum_score, 2))})
-        return analysis_sum_score
+        return ratio_analysis_score
 
     def update_dupont_analysis():
         sum_score = team_score_info.get("sum_score")
@@ -962,7 +964,7 @@ def update_rank_member(schedule_name, score=None, team_no=None):
 
     # 会计报表分析得分
     # 趋势分析法得分
-    def update_trend_analysis():
+    def update_trend_analysis(name=None):
         for member in members:
             title_num = 0
             member_no = member[1]
@@ -990,7 +992,7 @@ def update_rank_member(schedule_name, score=None, team_no=None):
                 right_score += evaluation.get("trend_analysis_score").get("second").get("teacher_score") \
                     if evaluation.get("trend_analysis_score") and \
                        evaluation.get("trend_analysis_score").get("second").get("teacher_score") != -1 else 0
-            elif permission_member_common_ratio_analysis.get("first") == 1:
+            if permission_member_common_ratio_analysis.get("first") == 1:
                 title_num += 1
                 all_score += 20
                 right_score += evaluation.get("common_ratio_analysis_score").get("first").get("student_score") \

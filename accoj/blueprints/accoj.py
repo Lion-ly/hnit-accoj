@@ -349,17 +349,20 @@ def submit_subject_info():
     subject_infos = json_data.get("subject_infos")
 
     if submit_type == "confirm":
-        for i in range(len(subject_infos)):
-            business_no = i + 1
-            infos = subject_infos[i]
+        if not all_save(infos_name):
+            result, message = False, "未全部保存！"
+        else:
+            for i in range(len(subject_infos)):
+                business_no = i + 1
+                infos = subject_infos[i]
 
-            result, message = submit_infos(type_num=3, infos=infos,
-                                           submit_type=submit_type,
-                                           infos_name=infos_name,
-                                           business_no=business_no
-                                           )
-            if not result:
-                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+                result, message = submit_infos(type_num=3, infos=infos,
+                                               submit_type=submit_type,
+                                               infos_name=infos_name,
+                                               business_no=business_no
+                                               )
+                if not result:
+                    wrong_number += "business_" + str(i + 1) + ":" + message + "、"
     elif submit_type == "save":
         business_no = json_data.get("business_no")
         infos = subject_infos
@@ -415,17 +418,19 @@ def submit_entry_info():
     entry_infos = json_data.get("entry_infos")
 
     if submit_type == "confirm":
-        for i in range(len(entry_infos)):
-            business_no = i + 1
-            infos = entry_infos[i]
+        if not all_save(infos_name):
+            result, message = False, "未全部保存！"
+        else:
+            for i in range(len(entry_infos)):
+                business_no = i + 1
+                infos = entry_infos[i]
 
-            result, message = submit_infos(type_num=3, infos=infos,
-                                           submit_type=submit_type,
-                                           infos_name=infos_name,
-                                           business_no=business_no)
-
-            if not result:
-                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+                result, message = submit_infos(type_num=3, infos=infos,
+                                               submit_type=submit_type,
+                                               infos_name=infos_name,
+                                               business_no=business_no)
+                if not result:
+                    wrong_number += "business_" + str(i + 1) + ":" + message + "、"
     elif submit_type == "save":
         business_no = json_data.get("business_no")
         infos = entry_infos
@@ -604,17 +609,20 @@ def submit_acc_document_info():
     acc_document_infos = json_data.get("acc_document_infos")
 
     if submit_type == "confirm":
-        for i in range(len(acc_document_infos)):
-            business_no = i + 1
+        if not all_save(infos_name):
+            result, message = False, "未全部保存！"
+        else:
+            for i in range(len(acc_document_infos)):
+                business_no = i + 1
 
-            infos = acc_document_infos[i]
+                infos = acc_document_infos[i]
 
-            result, message = submit_infos(type_num=3, infos=infos,
-                                           submit_type=submit_type,
-                                           infos_name=infos_name,
-                                           business_no=business_no)
-            if not result:
-                wrong_number += "business_" + str(i + 1) + ":" + message + "、"
+                result, message = submit_infos(type_num=3, infos=infos,
+                                               submit_type=submit_type,
+                                               infos_name=infos_name,
+                                               business_no=business_no)
+                if not result:
+                    wrong_number += "business_" + str(i + 1) + ":" + message + "、"
     elif submit_type == "save":
         business_no = json_data.get("business_no")
         infos = acc_document_infos
